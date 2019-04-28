@@ -16,7 +16,7 @@ sodass die Nutzer spielend leicht das Pi-Kalkül erlernen können.
 * Product-Owner: @algorithmv3, adrian
 * Merge-Request-Manager: @larsh, larsh; backup: @pheydenreich, patrick
 * DevOps-Engineer: @p.berner.1
-
+* Entwickler: @jkassing98, jkassing
 
 ## Concept Art
 ![Concept Art](concept_artv3.png)
