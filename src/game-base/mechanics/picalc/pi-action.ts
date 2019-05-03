@@ -1,8 +1,9 @@
 import {PiSymbol} from "./pi-symbol";
 import {PiSystem} from "./pi-system";
 import {PiProcess} from "./pi-process";
+import {PiResolvable} from "./pi-resolvable";
 
-export abstract class PiAction extends PiSymbol{
+export abstract class PiAction extends PiResolvable{
     protected next: PiSymbol;
     protected inOutPut: string;
     protected isInput: boolean;
@@ -41,9 +42,7 @@ export abstract class PiAction extends PiSymbol{
         this.next.rename(argName, argValue);
     }
 
-    public resolve(argValue: string=""): PiSymbol{
-        return this.next;
-    }
+    public abstract resolve(other: PiResolvable): PiSymbol;
 
     public getOutputName(): string{
         return this.inOutPut;

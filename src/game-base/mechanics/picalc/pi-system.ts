@@ -3,7 +3,7 @@ import {PiSum} from "./pi-sum";
 import {PiSystemAdd} from "./pi-system-add";
 import {PiChannelIn} from "./pi-channel-in";
 import {PiChannelOut} from "./pi-channel-out";
-import {PiResolving} from "./pi-resolving";
+import {PiResolvingPair} from "./pi-resolving-pair";
 import {PiReplication} from "./pi-replication";
 
 export class PiSystem {
@@ -18,7 +18,7 @@ export class PiSystem {
 
     private curChannelIn: PiChannelIn[];
     private curChannelOut: PiChannelOut[];
-    private potentiallyResolving: PiResolving[]; // all current Channels that can be resolved
+    private potentiallyResolving: PiResolvingPair[]; // all current Channels that can be resolved
     private curReplications: PiReplication[];
     private curSums: PiSum[];
     private curActiveSymbols: PiSymbol[];  // current Symbols that will get triggered in the cleanUpPhase
@@ -67,28 +67,18 @@ export class PiSystem {
         else {
             console.log("Symbol already exists: "+symbol.getName());
         }
-        if (symbol instanceof PiChannelIn){
-            this.curChannelIn.push(symbol);
-        }
-        else if (symbol instanceof PiChannelOut){
-            this.curChannelOut.push(symbol);
-        }
-        else if (symbol instanceof PiSum){
-            this.curSums.push(symbol);
-        }
-        else if (symbol instanceof PiReplication){
-            this.curReplications.push(symbol);
-        }
-        else {
-            this.curActiveSymbols.push(symbol);
-        }
+        if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
+        else if (symbol instanceof PiChannelOut) this.curChannelOut.push(symbol);
+        else if (symbol instanceof PiSum) this.curSums.push(symbol);
+        else if (symbol instanceof PiReplication) this.curReplications.push(symbol);
+        else this.curActiveSymbols.push(symbol);
     }
 
     /**
      * Returns true if both channels are active.
      * @param resolve - The container of an input and output channel.
      */
-    private canResolve(resolve: PiResolving){
+    private canResolve(resolve: PiResolvingPair){
         return this.curChannelIn.indexOf(resolve.chanIn)>-1 &&
             this.curChannelOut.indexOf(resolve.chanOut)>-1
     }
@@ -147,8 +137,8 @@ export class PiSystem {
         this.moveActiveChannelIn(chanIn);
         this.moveActiveChannelOut(chanOut);
 
-        this.activeSymbolsQueue.push(chanIn.resolve(chanOut.getOutputName()));
-        this.activeSymbolsQueue.push(chanOut.resolve());
+        this.activeSymbolsQueue.push(chanIn.resolve(chanOut));
+        this.activeSymbolsQueue.push(chanOut.resolve(chanIn));
     }
 
     /**
@@ -164,7 +154,7 @@ export class PiSystem {
             let curIn: PiChannelIn = this.curChannelIn[idxIn];
             for (let idxOut in this.curChannelOut){
                 let curOut: PiChannelIn = this.curChannelOut[idxIn];
-                if(curIn.getName() == curOut.getName()) this.potentiallyResolving.push(new PiResolving(curIn, curOut));
+                if(curIn.getName() == curOut.getName()) this.potentiallyResolving.push(new PiResolvingPair(curIn, curOut));
             }
         }
         let execTime = this.scene.time.now - startT;
@@ -191,7 +181,7 @@ export class PiSystem {
             let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
             console.log("Resolving: "+this.potentiallyResolving[randIdx].chanIn.getSymbolSequence());
             console.log("and: "+this.potentiallyResolving[randIdx].chanOut.getSymbolSequence());
-            let resolve: PiResolving = this.potentiallyResolving[randIdx];
+            let resolve: PiResolvingPair = this.potentiallyResolving[randIdx];
             if(this.canResolve(resolve)) resolve.resolve(this);
             this.potentiallyResolving.splice(randIdx, 1);
         }

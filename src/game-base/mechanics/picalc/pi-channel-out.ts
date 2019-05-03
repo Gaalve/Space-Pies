@@ -1,5 +1,7 @@
 import {PiSystem} from "./pi-system";
 import {PiAction} from "./pi-action";
+import {PiResolvable} from "./pi-resolvable";
+import {PiChannelIn} from "./pi-channel-in";
 
 export class PiChannelOut extends PiAction{
 
@@ -17,5 +19,16 @@ export class PiChannelOut extends PiAction{
 
     public getSymbolSequence(): string{
         return this.getFullName() + '.' + this.next.getSymbolSequence();
+    }
+
+    public resolve(other: PiResolvable) {
+        if(!this.canResolve(other)){
+            console.log("Error: resolved channel with wrong symbol")
+        }
+        return this.next;
+    }
+
+    canResolve(other: PiResolvable): boolean {
+        return other instanceof PiChannelIn && other.getName() == this.getName();
     }
 }
