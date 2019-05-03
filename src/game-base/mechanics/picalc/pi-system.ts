@@ -18,7 +18,7 @@ export class PiSystem {
 
     private curChannelIn: PiChannelIn[];
     private curChannelOut: PiChannelOut[];
-    private potentialResolving: PiResolving[]; // all current Channels that can be resolved
+    private potentiallyResolving: PiResolving[]; // all current Channels that can be resolved
     private curReplications: PiReplication[];
     private curSums: PiSum[];
     private curActiveSymbols: PiSymbol[];  // current Symbols that will get triggered in the cleanUpPhase
@@ -38,7 +38,7 @@ export class PiSystem {
         this.existing = [];
         this.curChannelIn = [];
         this.curChannelOut = [];
-        this.potentialResolving = [];
+        this.potentiallyResolving = [];
         this.curReplications = [];
         this.curSums = [];
         this.curActiveSymbols = [];
@@ -48,6 +48,10 @@ export class PiSystem {
 
     }
 
+    /**
+     * Adds a symbol as concurrent term.
+     * @param symbol
+     */
     public addSymbol(symbol: PiSymbol): void{
         if(this.existing.indexOf(symbol)==-1){
             this.existing.push(symbol);
@@ -82,6 +86,10 @@ export class PiSystem {
     }
 
 
+    /**
+     * Remove active symbol from the list. Should be used after the symbol got triggered.
+     * @param symbol
+     */
     private removeActiveSymbol(symbol: PiSymbol): void{
         let idx: number = this.curActiveSymbols.indexOf(symbol, 0);
         if(idx == -1){
@@ -92,6 +100,10 @@ export class PiSystem {
         }
     }
 
+    /**
+     * Moves the channelIn from curChannelIn to curActiveSymbols.
+     * @param chanIn
+     */
     private moveActiveChannelIn(chanIn: PiChannelIn): void{
         let idx: number = this.curChannelIn.indexOf(chanIn, 0);
         if(idx == -1){
@@ -103,6 +115,10 @@ export class PiSystem {
         this.curActiveSymbols.push(chanIn);
     }
 
+    /**
+     * Moves the channelOut from curChannelIn to curActiveSymbols.
+     * @param chanOut
+     */
     private moveActiveChannelOut(chanOut: PiChannelOut): void{
         let idx: number = this.curChannelOut.indexOf(chanOut, 0);
         if(idx == -1){
@@ -114,50 +130,62 @@ export class PiSystem {
         this.curActiveSymbols.push(chanOut);
     }
 
+    /**
+     * Resolves to channels. Should only be called by pi-resolving!
+     * @param chanIn
+     * @param chanOut
+     */
     public resolveAction(chanIn: PiChannelIn, chanOut: PiChannelOut): void{
         this.moveActiveChannelIn(chanIn);
         this.moveActiveChannelOut(chanOut);
-
 
         this.activeSymbolsQueue.push(chanIn.resolve(chanOut.getOutputName()));
         this.activeSymbolsQueue.push(chanOut.resolve());
     }
 
+    /**
+     * First phase:
+     *
+     * Find blocking input and output channels and add the as potentially resolving channels
+     *
+     * Calls the second phase.
+     */
     private phaseFindResolvingActions(): void{
         let startT = this.scene.time.now;
-        /** Idee:
-         * + finde alle out-channels und in-channels und packe diese in jeweilige Listen
-         * + vergleiche namen von in- und out-channels
-         * + bei namensgleichheit erstelle pi-resolving
-         */
-
         for (let idxIn in this.curChannelIn){
             let curIn: PiChannelIn = this.curChannelIn[idxIn];
             for (let idxOut in this.curChannelOut){
                 let curOut: PiChannelIn = this.curChannelOut[idxIn];
-                if(curIn.getName() == curOut.getName()) this.potentialResolving.push(new PiResolving(curIn, curOut));
+                if(curIn.getName() == curOut.getName()) this.potentiallyResolving.push(new PiResolving(curIn, curOut));
             }
         }
-
-
         let execTime = this.scene.time.now - startT;
         this.scene.time.delayedCall(this.resolveTimeOut - execTime, ()=>{this.phaseResolveActions()}, [], this);
     }
 
+    /**
+     * Second phase:
+     *
+     * 1. Pick a random pair of potentially resolving channels,
+     * 2. Check if both of them are unresolved:
+     *      2.1 If true: resolve the pair:
+     *      2.1.1 Move the pair from curChannel to activeSymbols (marks both channels as resolved)
+     *      2.1.2 Add the following symbol of both channels to activeSymbolQueue
+     * 3. Remove the pair
+     * 4. Repeat until no potentially resolving channels exists.
+     *
+     * Calls the third phase.
+     */
     private phaseResolveActions(): void{
         let startT = this.scene.time.now;
 
-        /** Idee:
-         * + nimm zufälligen resolving-container
-         */
-
-        while(this.potentialResolving.length > 0){
-            let randIdx = Math.floor(Math.random() * this.potentialResolving.length);
-            console.log("Resolving: "+this.potentialResolving[randIdx].chanIn.getSymbolSequence());
-            console.log("and: "+this.potentialResolving[randIdx].chanOut.getSymbolSequence());
-            let resolve: PiResolving = this.potentialResolving[randIdx];
+        while(this.potentiallyResolving.length > 0){
+            let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
+            console.log("Resolving: "+this.potentiallyResolving[randIdx].chanIn.getSymbolSequence());
+            console.log("and: "+this.potentiallyResolving[randIdx].chanOut.getSymbolSequence());
+            let resolve: PiResolving = this.potentiallyResolving[randIdx];
             if(this.canResolve(resolve)) resolve.resolve(this);
-            this.potentialResolving.splice(randIdx, 1);
+            this.potentiallyResolving.splice(randIdx, 1);
         }
 
 
@@ -166,6 +194,17 @@ export class PiSystem {
 
     }
 
+    /**
+     * Third phase:
+     *
+     * 1. Trigger all active symbols
+     *      1.1 Processes will call their callback function
+     *      1.2 Every other Symbol will do nothing
+     * 2. Delete triggered symbols
+     * 3. Add Symbols from activeSymbolsQueue to curActiveSymbols (make Symbols active)
+     *
+     * Calls the first phase.
+     */
     private phaseCleanUpActive(): void{
         let startT = this.scene.time.now;
         for(let idx in this.curActiveSymbols){
@@ -182,12 +221,18 @@ export class PiSystem {
         if(this.running)this.scene.time.delayedCall(this.findResolvingTimeOut - execTime, ()=>{this.phaseFindResolvingActions()}, [], this);
     }
 
+    /**
+     * Starts the Pi-Calc-System by calling the first phase.
+     */
     public start(): void{
         console.log("Starting Pi-Calc-Simulation");
         this.running = true;
-        this.scene.time.delayedCall(this.findResolvingTimeOut, ()=>{this.phaseCleanUpActive()}, [], this);
+        this.scene.time.delayedCall(this.findResolvingTimeOut, ()=>{this.phaseFindResolvingActions()}, [], this);
     }
 
+    /**
+     * Stops the Pi-Calc-System after the third phase has ended.
+     */
     public stop(): void{
         this.running = false;
     }
