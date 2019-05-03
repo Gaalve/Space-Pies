@@ -2,23 +2,40 @@ import {PiSystem} from "../mechanics/picalc/pi-system";
 
 export class PiCalcTests {
 
-    static runTests(scene: Phaser.Scene): boolean{
+    static runTests(scene: Phaser.Scene): void{
         console.log("Running tests");
-        if(!this.runTestPiSequential(scene))return false;
-        if(!this.runTestPiSequentialParallel(scene))return false;
-        return true;
+        scene.time.delayedCall(1000*0, ()=>{this.runTestPiSequential1(scene)}, [], this);
+        scene.time.delayedCall(1000*1, ()=>{this.runTestPiSequential2(scene)}, [], this);
+        scene.time.delayedCall(1000*2, ()=>{this.runTestPiSequentialParallel(scene)}, [], this);
     }
 
-    static runTestPiSequential(scene: Phaser.Scene): boolean{
+    static runTestPiSequential1(scene: Phaser.Scene): void{
+        console.log("-----------------------------------");
+        console.log("Running Test: runTestPiSequential#1");
+        console.log("-----------------------------------");
         let system: PiSystem = new PiSystem(scene, 1, 1, 1);
-        system.add.channelIn("x", "*").process("Out", ()=>{console.log("runTestPiSequential: success")});
+        system.add.channelIn("x", "*").process("Out", ()=>{console.log("runTestPiSequential#1: success")});
         system.add.channelOut("x", "*").nullProcess();
         system.start();
-        return true;
+
     }
 
-    static runTestPiSequentialParallel(scene: Phaser.Scene): boolean{
-
-        return true;
+    static runTestPiSequential2(scene: Phaser.Scene): void{
+        console.log("-----------------------------------");
+        console.log("Running Test: runTestPiSequential#2");
+        console.log("-----------------------------------");
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1);
+        system.add.channelIn("x", "*").channelOut("x", "*").process("Out", ()=>{console.log("runTestPiSequential#2: success")});
+        system.add.channelOut("x", "*").channelIn("x", "*").nullProcess();
+        system.start();
     }
+
+    static runTestPiSequentialParallel(scene: Phaser.Scene): void{
+        console.log("-----------------------------------");
+        console.log("Running Test: runTestPiSequentialParallel#1");
+        console.log("-----------------------------------");
+
+    }
+
+
 }
