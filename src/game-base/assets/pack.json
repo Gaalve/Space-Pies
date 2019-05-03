@@ -1,0 +1,131 @@
+{
+  "preload": {
+    "files": [
+      {
+        "type": "image",
+        "key": "armor",
+        "url": "assets/sprites/armor.png"
+      },
+      {
+        "type": "image",
+        "key": "big_oval_light",
+        "url": "assets/sprites/big_oval_light.png"
+      },
+      {
+        "type": "image",
+        "key": "button_energy",
+        "url": "assets/sprites/button_energy.png"
+      },
+      {
+        "type": "image",
+        "key": "button_shield",
+        "url": "assets/sprites/button_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "button_skip",
+        "url": "assets/sprites/button_skip.png"
+      },
+      {
+        "type": "image",
+        "key": "button_shadow",
+        "url": "assets/sprites/button_shadow.png"
+      },
+      {
+        "type": "image",
+        "key": "button_bg",
+        "url": "assets/sprites/button_bg.png"
+      },
+      {
+        "type": "image",
+        "key": "button_fg",
+        "url": "assets/sprites/button_fg.png"
+      },
+      {
+        "type": "image",
+        "key": "button_wext",
+        "url": "assets/sprites/button_wext.png"
+      },
+      {
+        "type": "image",
+        "key": "button_wmod",
+        "url": "assets/sprites/button_wmod.png"
+      },
+      {
+        "type": "image",
+        "key": "checkbox",
+        "url": "assets/sprites/checkbox.png"
+      },
+      {
+        "type": "image",
+        "key": "core_explosion",
+        "url": "assets/sprites/core_explosion.png"
+      },
+      {
+        "type": "image",
+        "key": "shield",
+        "url": "assets/sprites/shield.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_ship",
+        "url": "assets/sprites/ssb_ship.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_ship_on",
+        "url": "assets/sprites/ssb_ship_on.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_weap_las",
+        "url": "assets/sprites/ssb_weap_las.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_weap_pro",
+        "url": "assets/sprites/ssb_weap_pro.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_wmod",
+        "url": "assets/sprites/ssb_wmod.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_ship",
+        "url": "assets/sprites/ssr_ship.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_ship_on",
+        "url": "assets/sprites/ssr_ship_on.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_weap_las",
+        "url": "assets/sprites/ssr_weap_las.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_weap_pro",
+        "url": "assets/sprites/ssr_weap_pro.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_wmod",
+        "url": "assets/sprites/ssr_wmod.png"
+      },
+      {
+        "type": "image",
+        "key": "star",
+        "url": "assets/sprites/star.png"
+      },
+      {
+        "type": "image",
+        "key": "weapon",
+        "url": "assets/sprites/weapon.png"
+      }
+    ]
+  }
+}
