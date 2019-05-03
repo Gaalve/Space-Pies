@@ -12,7 +12,12 @@ export class PiChannelIn extends PiAction{
         return super.resolve(argValue);
     }
 
+    public getFullName(): string {
+        return this.name+"("+this.inOutPut+")";
+    }
+
+
     public getSymbolSequence(): string{
-        return this.name + '(' + this.inOutPut + ")" + '.' + this.next.getSymbolSequence();
+        return this.getFullName() + '.' + this.next.getSymbolSequence();
     }
 }

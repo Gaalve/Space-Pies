@@ -11,4 +11,8 @@ export class PiSum extends PiSymbol{
         super(system, "PiSum");
         this.actions = actions;
     }
+
+    public getFullName(): string {
+        return "TODO";
+    }
 }

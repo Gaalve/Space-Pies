@@ -7,8 +7,15 @@ export class PiChannelOut extends PiAction{
         super(system, name, output, false);
     }
 
-    public getSymbolSequence(): string{
-        return this.name + '<' + this.inOutPut + ">" + '.' + this.next.getSymbolSequence();
+    public getOutputName(): string{
+        return this.inOutPut;
     }
 
+    public getFullName(): string {
+        return this.name+"<"+this.inOutPut+">";
+    }
+
+    public getSymbolSequence(): string{
+        return this.getFullName() + '.' + this.next.getSymbolSequence();
+    }
 }

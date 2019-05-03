@@ -12,4 +12,8 @@ export class PiProcess extends PiSymbol{
     public trigger(): void {
         this.callback();
     }
+
+    public getFullName(): string {
+        return this.getName();
+    }
 }

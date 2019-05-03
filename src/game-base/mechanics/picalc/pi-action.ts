@@ -2,7 +2,7 @@ import {PiSymbol} from "./pi-symbol";
 import {PiSystem} from "./pi-system";
 import {PiProcess} from "./pi-process";
 
-export class PiAction extends PiSymbol{
+export abstract class PiAction extends PiSymbol{
     protected next: PiSymbol;
     protected inOutPut: string;
     protected isInput: boolean;
@@ -11,11 +11,11 @@ export class PiAction extends PiSymbol{
         super(system, name.toLowerCase());
         this.inOutPut = inOutPut;
         this.next = new PiProcess(system);
+        this.isInput = isInput;
     }
 
-    public getSymbolSequence(): string{
-        return this.name + '.' + this.next.getSymbolSequence();
-    }
+
+    public abstract getSymbolSequence(): string;
 
 
     public setNextSymbol(symbol: PiSymbol): void{

@@ -4,9 +4,10 @@ export class PiCalcTests {
 
     static runTests(scene: Phaser.Scene): void{
         console.log("Running tests");
-        scene.time.delayedCall(1000*0, ()=>{this.runTestPiSequential1(scene)}, [], this);
-        scene.time.delayedCall(1000*1, ()=>{this.runTestPiSequential2(scene)}, [], this);
-        scene.time.delayedCall(1000*2, ()=>{this.runTestPiSequentialParallel(scene)}, [], this);
+        let seconds: number = 0;
+        scene.time.delayedCall(1000*seconds++, ()=>{this.runTestPiSequential1(scene)}, [], this);
+        scene.time.delayedCall(1000*seconds++, ()=>{this.runTestPiSequential2(scene)}, [], this);
+        scene.time.delayedCall(1000*seconds++, ()=>{this.runTestPiSequentialParallel(scene)}, [], this);
     }
 
     static runTestPiSequential1(scene: Phaser.Scene): void{

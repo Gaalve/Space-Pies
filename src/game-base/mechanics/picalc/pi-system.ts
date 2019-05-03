@@ -1,11 +1,10 @@
 import {PiSymbol} from "./pi-symbol";
-import {PiAction} from "./pi-action";
-import {PiTerm} from "./pi-term";
 import {PiSum} from "./pi-sum";
 import {PiSystemAdd} from "./pi-system-add";
 import {PiChannelIn} from "./pi-channel-in";
 import {PiChannelOut} from "./pi-channel-out";
 import {PiResolving} from "./pi-resolving";
+import {PiReplication} from "./pi-replication";
 
 export class PiSystem {
 
@@ -15,12 +14,16 @@ export class PiSystem {
     private cleanUpTimeOut: number;
 
 
-    private existing: PiSymbol[];                   // all existing symbols
-    private currentSums: PiSum[];
-    private terms: PiTerm[];                        // all defined pi-terms
-    private currentActions: PiAction[];             // all current Actions that are be blocking
-    private potentialTriggeringActions: PiResolving[]; // all current Actions that can be resolved
-    private active: PiSymbol[];                     // current Symbols that will get triggered in the cleanUpPhase
+    private existing: PiSymbol[];                   // all existing symbols; may get delete later
+
+    private curChannelIn: PiChannelIn[];
+    private curChannelOut: PiChannelOut[];
+    private potentialResolving: PiResolving[]; // all current Channels that can be resolved
+    private curReplications: PiReplication[];
+    private curSums: PiSum[];
+    private curActiveSymbols: PiSymbol[];  // current Symbols that will get triggered in the cleanUpPhase
+    private activeSymbolsQueue: PiSymbol[];
+
 
     public add = new PiSystemAdd(this);
     private running;
@@ -33,17 +36,17 @@ export class PiSystem {
         this.cleanUpTimeOut = cleanUpTimeOut;
 
         this.existing = [];
-        this.currentSums = [];
-        this.terms = [];
-        this.currentActions = [];
-        this.potentialTriggeringActions = [];
-        this.active = [];
+        this.curChannelIn = [];
+        this.curChannelOut = [];
+        this.potentialResolving = [];
+        this.curReplications = [];
+        this.curSums = [];
+        this.curActiveSymbols = [];
+        this.activeSymbolsQueue = [];
 
         this.running = false;
 
     }
-
-    // public add: NextSymbol;
 
     public addSymbol(symbol: PiSymbol): void{
         if(this.existing.indexOf(symbol)==-1){
@@ -52,46 +55,72 @@ export class PiSystem {
         else {
             console.log("Symbol already exists: "+symbol.getName());
         }
-        if (symbol instanceof PiAction){
-            this.currentActions.push(symbol);
+        if (symbol instanceof PiChannelIn){
+            this.curChannelIn.push(symbol);
+        }
+        else if (symbol instanceof PiChannelOut){
+            this.curChannelOut.push(symbol);
         }
         else if (symbol instanceof PiSum){
-            this.currentSums.push(symbol);
+            this.curSums.push(symbol);
+        }
+        else if (symbol instanceof PiReplication){
+            this.curReplications.push(symbol);
         }
         else {
-            this.active.push(symbol);
+            this.curActiveSymbols.push(symbol);
         }
     }
 
+    /**
+     * Returns true if both channels are active.
+     * @param resolve - The container of an input and output channel.
+     */
     private canResolve(resolve: PiResolving){
-        return this.currentActions.indexOf(resolve.chanIn)>-1 && this.currentActions.indexOf(resolve.chanOut)>-1
+        return this.curChannelIn.indexOf(resolve.chanIn)>-1 &&
+            this.curChannelOut.indexOf(resolve.chanOut)>-1
     }
 
-    private removeCurrentAction(action: PiAction): void{
-        let idx: number = this.currentActions.indexOf(action, 0);
+
+    private removeActiveSymbol(symbol: PiSymbol): void{
+        let idx: number = this.curActiveSymbols.indexOf(symbol, 0);
         if(idx == -1){
-            console.log("Error! removed Action that is not active");
+            console.log("Error! Removed Action that is not active");
         }
         else {
-            this.currentActions.splice(idx, 1);
+            this.curActiveSymbols.splice(idx, 1);
         }
     }
 
-    private removeActive(symbol: PiSymbol): void{
-        let idx: number = this.active.indexOf(symbol, 0);
+    private moveActiveChannelIn(chanIn: PiChannelIn): void{
+        let idx: number = this.curChannelIn.indexOf(chanIn, 0);
         if(idx == -1){
-            console.log("Error! removed Symbol that is not active");
+            console.log("Error! Removed Symbol that is not active");
         }
         else {
-            this.active.splice(idx, 1);
+            this.curChannelIn.splice(idx, 1);
         }
+        this.curActiveSymbols.push(chanIn);
+    }
+
+    private moveActiveChannelOut(chanOut: PiChannelOut): void{
+        let idx: number = this.curChannelOut.indexOf(chanOut, 0);
+        if(idx == -1){
+            console.log("Error! Removed Symbol that is not active");
+        }
+        else {
+            this.curChannelOut.splice(idx, 1);
+        }
+        this.curActiveSymbols.push(chanOut);
     }
 
     public resolveAction(chanIn: PiChannelIn, chanOut: PiChannelOut): void{
-        this.removeCurrentAction(chanIn);
-        this.removeCurrentAction(chanOut);
-        this.addSymbol(chanIn.resolve(chanOut.getOutputName()));
-        this.addSymbol(chanOut.resolve());
+        this.moveActiveChannelIn(chanIn);
+        this.moveActiveChannelOut(chanOut);
+
+
+        this.activeSymbolsQueue.push(chanIn.resolve(chanOut.getOutputName()));
+        this.activeSymbolsQueue.push(chanOut.resolve());
     }
 
     private phaseFindResolvingActions(): void{
@@ -102,19 +131,11 @@ export class PiSystem {
          * + bei namensgleichheit erstelle pi-resolving
          */
 
-        let ins: PiChannelIn[] = [];
-        let outs: PiChannelOut[] = [];
-        for (let idx in this.currentActions){
-            console.log("FindResolving: "+this.currentActions[idx].getSymbolSequence());
-            if(this.currentActions[idx] instanceof PiChannelIn) ins.push(this.currentActions[idx]);
-            else if(this.currentActions[idx] instanceof PiChannelOut) outs.push(this.currentActions[idx]);
-        }
-
-        for (let idxIn in ins){
-            let curIn: PiChannelIn = ins[idxIn];
-            for (let idxOut in outs){
-                let curOut: PiChannelIn = outs[idxIn];
-                if(curIn.getName() == curOut.getName()) this.potentialTriggeringActions.push(new PiResolving(curIn, curOut));
+        for (let idxIn in this.curChannelIn){
+            let curIn: PiChannelIn = this.curChannelIn[idxIn];
+            for (let idxOut in this.curChannelOut){
+                let curOut: PiChannelIn = this.curChannelOut[idxIn];
+                if(curIn.getName() == curOut.getName()) this.potentialResolving.push(new PiResolving(curIn, curOut));
             }
         }
 
@@ -130,13 +151,13 @@ export class PiSystem {
          * + nimm zufälligen resolving-container
          */
 
-        while(this.potentialTriggeringActions.length > 0){
-            let randIdx = Math.floor(Math.random() * this.potentialTriggeringActions.length);
-            console.log("Resolving: "+this.potentialTriggeringActions[randIdx].chanIn.getSymbolSequence());
-            console.log("and: "+this.potentialTriggeringActions[randIdx].chanOut.getSymbolSequence());
-            let resolve: PiResolving = this.potentialTriggeringActions[randIdx];
+        while(this.potentialResolving.length > 0){
+            let randIdx = Math.floor(Math.random() * this.potentialResolving.length);
+            console.log("Resolving: "+this.potentialResolving[randIdx].chanIn.getSymbolSequence());
+            console.log("and: "+this.potentialResolving[randIdx].chanOut.getSymbolSequence());
+            let resolve: PiResolving = this.potentialResolving[randIdx];
             if(this.canResolve(resolve)) resolve.resolve(this);
-            this.potentialTriggeringActions.splice(randIdx, 1);
+            this.potentialResolving.splice(randIdx, 1);
         }
 
 
@@ -147,12 +168,16 @@ export class PiSystem {
 
     private phaseCleanUpActive(): void{
         let startT = this.scene.time.now;
-        for(let idx in this.active){
-            //console.log("Triggering: "+this.active[idx].getSymbolSequence());
-            this.active[idx].trigger();
-            this.removeActive(this.active[idx]);
+        for(let idx in this.curActiveSymbols){
+            console.log("Triggering Symbol: " + this.curActiveSymbols[idx].getFullName());
+            this.curActiveSymbols[idx].trigger();
+            this.removeActiveSymbol(this.curActiveSymbols[idx]);
         }
 
+        for(let idx in this.activeSymbolsQueue){
+            this.addSymbol(this.activeSymbolsQueue[idx]);
+        }
+        this.activeSymbolsQueue = [];
         let execTime = this.scene.time.now - startT;
         if(this.running)this.scene.time.delayedCall(this.findResolvingTimeOut - execTime, ()=>{this.phaseFindResolvingActions()}, [], this);
     }
