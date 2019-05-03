@@ -17,7 +17,10 @@ export class PiSymbol {
     }
 
     public trigger(): void{
-        // Do nothing
+        // Should only be used by pi-process
     }
 
+    public rename(argName: string, argValue: string){
+        // should only be used by pi-action
+    }
 }
