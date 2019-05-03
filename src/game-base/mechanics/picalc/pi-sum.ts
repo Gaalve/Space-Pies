@@ -12,7 +12,18 @@ export class PiSum extends PiSymbol{
         this.actions = actions;
     }
 
+    public getSymbolSequence(): string{
+        let str = "(";
+        let idx: number;
+        for(idx = 0; idx < this.actions.length - 1; ++idx){
+            str += this.actions[idx].getSymbolSequence();
+            str += " + ";
+        }
+        str += this.actions[idx].getSymbolSequence();
+        return str + ")";
+    }
+
     public getFullName(): string {
-        return "TODO";
+        return this.getSymbolSequence();
     }
 }

@@ -44,6 +44,14 @@ export class PiSystem {
         this.curActiveSymbols = [];
         this.activeSymbolsQueue = [];
 
+        /**
+         * Blocking
+         * Potentially Resolving
+         * Active (Triggering)
+         * Removing
+         */
+
+
         this.running = false;
 
     }
@@ -93,7 +101,7 @@ export class PiSystem {
     private removeActiveSymbol(symbol: PiSymbol): void{
         let idx: number = this.curActiveSymbols.indexOf(symbol, 0);
         if(idx == -1){
-            console.log("Error! Removed Action that is not active");
+            console.log("Error! Symbol is not active");
         }
         else {
             this.curActiveSymbols.splice(idx, 1);
@@ -107,7 +115,7 @@ export class PiSystem {
     private moveActiveChannelIn(chanIn: PiChannelIn): void{
         let idx: number = this.curChannelIn.indexOf(chanIn, 0);
         if(idx == -1){
-            console.log("Error! Removed Symbol that is not active");
+            console.log("Error! ChannelIn is not active");
         }
         else {
             this.curChannelIn.splice(idx, 1);
@@ -122,7 +130,7 @@ export class PiSystem {
     private moveActiveChannelOut(chanOut: PiChannelOut): void{
         let idx: number = this.curChannelOut.indexOf(chanOut, 0);
         if(idx == -1){
-            console.log("Error! Removed Symbol that is not active");
+            console.log("Error! ChannelOut is not active");
         }
         else {
             this.curChannelOut.splice(idx, 1);
@@ -188,10 +196,8 @@ export class PiSystem {
             this.potentiallyResolving.splice(randIdx, 1);
         }
 
-
         let execTime = this.scene.time.now - startT;
-        this.scene.time.delayedCall(this.cleanUpTimeOut - execTime, ()=>{this.phaseCleanUpActive()}, [], this);
-
+        this.scene.time.delayedCall(this.cleanUpTimeOut - execTime, ()=>{this.phaseTriggerSymbols()}, [], this);
     }
 
     /**
@@ -205,7 +211,7 @@ export class PiSystem {
      *
      * Calls the first phase.
      */
-    private phaseCleanUpActive(): void{
+    private phaseTriggerSymbols(): void{
         let startT = this.scene.time.now;
         for(let idx in this.curActiveSymbols){
             console.log("Triggering Symbol: " + this.curActiveSymbols[idx].getFullName());
