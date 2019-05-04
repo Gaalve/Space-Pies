@@ -2,6 +2,7 @@ import {Turn} from "../mechanics/turn";
 import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
 import {PiCalcTests} from "../tests/pi-calc-tests";
+import {HealthBar} from "./objects/HealthBar";
 
 
 export class MainScene extends Phaser.Scene {
@@ -30,12 +31,15 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.players = [new Player("P1"), new Player("P2")];
+        this.add.image(1920/2, 1080/2, "background_space")
+        this.players = [new Player("P1", 20, true), new Player("P2", 20, false)];
         this.turn = new Turn(this, this.players);
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",
             ()=>{this.turn.nextPlayer();});
         this.buttonEndTurn.setPosition(1920/2, 500);
+        const healthbarP1 = new HealthBar(this, this.players[0]);
+        const healthbarP2 = new HealthBar(this, this.players[1]);
     }
 
 
