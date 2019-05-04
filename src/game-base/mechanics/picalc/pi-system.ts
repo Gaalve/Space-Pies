@@ -25,12 +25,14 @@ export class PiSystem {
     private curActiveSymbols: PiSymbol[];  // current Symbols that will get triggered in the cleanUpPhase
     private activeSymbolsQueue: PiSymbol[];
 
+    private enableDebugLogging: boolean;
 
     public add = new PiSystemAdd(this);
+
     private running;
 
     public constructor(scene: Phaser.Scene, findResolvingTimeOut: number,
-                       resolveTimeOut: number, cleanUpTimeOut: number){
+                       resolveTimeOut: number, cleanUpTimeOut: number, enableDebugLogging: boolean){
         this.scene = scene;
         this.findResolvingTimeOut = findResolvingTimeOut;
         this.resolveTimeOut = resolveTimeOut;
@@ -53,6 +55,7 @@ export class PiSystem {
          */
 
 
+        this.enableDebugLogging = enableDebugLogging;
         this.running = false;
 
     }
@@ -66,7 +69,7 @@ export class PiSystem {
             this.existing.push(symbol);
         }
         else {
-            console.log("Symbol already exists: "+symbol.getName());
+            console.log("Warning: Symbol already exists: "+symbol.getName());
         }
         if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
         else if (symbol instanceof PiChannelOut) this.curChannelOut.push(symbol);
@@ -81,13 +84,6 @@ export class PiSystem {
      * @param symbol
      */
     private removeActiveSymbol(symbol: PiSymbol): void{
-        // let idx: number = this.curActiveSymbols.indexOf(symbol, 0);
-        // if(idx == -1){
-        //     console.log("Error! Symbol is not active");
-        // }
-        // else {
-        //     this.curActiveSymbols.splice(idx, 1);
-        // }
         PiSystem.removeFromList(this.curActiveSymbols, symbol);
     }
 
@@ -136,8 +132,14 @@ export class PiSystem {
         for (let idxIn in this.curChannelIn){
             let curIn: PiChannelIn = this.curChannelIn[idxIn];
             for (let idxOut in this.curChannelOut){
-                let curOut: PiChannelIn = this.curChannelOut[idxIn];
-                if(curIn.getName() == curOut.getName()) this.potentiallyResolving.push(new PiResolvingPair(curIn, curOut));
+                let curOut: PiChannelOut = this.curChannelOut[idxIn];
+                if(curIn.canResolve(curOut)) this.potentiallyResolving.push(new PiResolvingPair(curIn, curOut));
+                for (let idxSum in this.curSums){
+                    let curSum: PiSum = this.curSums[idxSum];
+                    if (curSum.canResolve(curIn)) this.potentiallyResolving.push(new PiResolvingPair(curSum, curIn));
+                    if (curSum.canResolve(curOut)) this.potentiallyResolving.push(new PiResolvingPair(curSum, curOut));
+                }
+
             }
         }
         let execTime = this.scene.time.now - startT;
@@ -162,8 +164,8 @@ export class PiSystem {
 
         while(this.potentiallyResolving.length > 0){
             let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
-            console.log("Resolving: "+this.potentiallyResolving[randIdx].left.getSymbolSequence());
-            console.log("and: "+this.potentiallyResolving[randIdx].right.getSymbolSequence());
+            if (this.enableDebugLogging) console.log("Resolving: "+this.potentiallyResolving[randIdx].left.getSymbolSequence());
+            if (this.enableDebugLogging) console.log("and: "+this.potentiallyResolving[randIdx].right.getSymbolSequence());
             let resolvablePair: PiResolvingPair = this.potentiallyResolving[randIdx];
             if(resolvablePair.canResolve()) this.resolve(resolvablePair);
             this.potentiallyResolving.splice(randIdx, 1);
@@ -187,7 +189,7 @@ export class PiSystem {
     private phaseTriggerSymbols(): void{
         let startT = this.scene.time.now;
         for(let idx in this.curActiveSymbols){
-            console.log("Triggering Symbol: " + this.curActiveSymbols[idx].getFullName());
+            if (this.enableDebugLogging) console.log("Triggering Symbol: " + this.curActiveSymbols[idx].getFullName());
             this.curActiveSymbols[idx].trigger();
             this.removeActiveSymbol(this.curActiveSymbols[idx]);
         }
@@ -204,7 +206,7 @@ export class PiSystem {
      * Starts the Pi-Calc-System by calling the first phase.
      */
     public start(): void{
-        console.log("Starting Pi-Calc-Simulation");
+        if (this.enableDebugLogging) console.log("Starting Pi-Calc-Simulation");
         this.running = true;
         this.scene.time.delayedCall(this.findResolvingTimeOut, ()=>{this.phaseFindResolvingActions()}, [], this);
     }

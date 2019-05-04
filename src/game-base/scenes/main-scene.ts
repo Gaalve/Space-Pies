@@ -36,7 +36,6 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_skip",
             ()=>{this.turn.nextPlayer();});
         this.buttonEndTurn.setPosition(1920/2, 500);
-        PiCalcTests.runTests(this);
     }
 
 

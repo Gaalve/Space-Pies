@@ -1,5 +1,6 @@
-
 /** Scene for user interface elements. */
+import {PiCalcTests} from "../tests/pi-calc-tests";
+
 export class GuiScene extends Phaser.Scene {
 
     constructor() {
@@ -36,6 +37,10 @@ export class GuiScene extends Phaser.Scene {
         roundActionText.setOrigin(0.5, 0.5);
         roundNumberText.setOrigin(0.5, 0.5);
         roundPlayerText.setOrigin(0.5, 0.5);
+
+
+
+        PiCalcTests.runTests(this);
     }
 
 }

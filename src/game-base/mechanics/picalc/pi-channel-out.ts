@@ -2,6 +2,7 @@ import {PiSystem} from "./pi-system";
 import {PiAction} from "./pi-action";
 import {PiResolvable} from "./pi-resolvable";
 import {PiChannelIn} from "./pi-channel-in";
+import {PiSum} from "./pi-sum";
 
 export class PiChannelOut extends PiAction{
 
@@ -28,7 +29,21 @@ export class PiChannelOut extends PiAction{
         return this.next;
     }
 
+    private canResolveChannelIn(other: PiChannelIn): boolean{
+        return other.getName() == this.getName();
+    }
+
+    private canResolvePiSum(other: PiSum): boolean{
+        let resolvables: PiResolvable[] = other.getResolvables();
+        for (let idx in resolvables){
+            if(this.canResolve(resolvables[idx])) return true;
+        }
+        return false;
+    }
+
     canResolve(other: PiResolvable): boolean {
-        return other instanceof PiChannelIn && other.getName() == this.getName();
+        if(other instanceof PiChannelIn) return this.canResolveChannelIn(other);
+        else if(other instanceof PiSum) return this.canResolvePiSum(other);
+        return false;
     }
 }
