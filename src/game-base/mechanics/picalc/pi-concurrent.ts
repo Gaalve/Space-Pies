@@ -1,7 +1,7 @@
 import {PiSymbol} from "./pi-symbol";
 import {PiSystem} from "./pi-system";
 
-export abstract class PiConcurrent extends PiSymbol{
+export class PiConcurrent extends PiSymbol{
 
     symbols: PiSymbol[];
 
@@ -10,7 +10,19 @@ export abstract class PiConcurrent extends PiSymbol{
         this.symbols = actions;
     }
 
-    public getFullName(): string {
-        return "TODO";
+    public getSymbolSequence(): string{
+        let str = "(";
+        let idx: number;
+        for(idx = 0; idx < this.symbols.length - 1; ++idx){
+            str += this.symbols[idx].getSymbolSequence();
+            str += " | ";
+        }
+        str += this.symbols[idx].getSymbolSequence();
+        return str + ")";
     }
+
+    public getFullName(): string {
+        return this.getSymbolSequence();
+    }
+
 }
