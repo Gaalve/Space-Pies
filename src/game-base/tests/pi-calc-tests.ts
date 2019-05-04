@@ -7,10 +7,12 @@ export class PiCalcTests {
         scene.time.delayedCall(0, ()=>{this.runTestPiSequential1(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiSequential2(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiSequentialND(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequentialNDStatistic(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiSequentialNDStatistic(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiSum(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiSum2(scene)}, [], this);
-        // scene.time.delayedCall(0, ()=>{this.runTestPiSequentialParallel(scene)}, [], this);
+        scene.time.delayedCall(0, ()=>{this.runTestPiSequentialParallel(scene)}, [], this);
+        scene.time.delayedCall(0, ()=>{this.runTestPiReplication1(scene)}, [], this);
+        scene.time.delayedCall(0, ()=>{this.runTestPiReplication2(scene)}, [], this);
     }
 
     static runTestPiSequential1(scene: Phaser.Scene): void{
@@ -163,6 +165,45 @@ export class PiCalcTests {
     }
 
 
+    static runTestPiReplication1(scene: Phaser.Scene): void{
+        let runs = 0;
+        let maxRuns = 10;
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.addSymbol(
+            system.add.replication(system.add.channelIn("x", "*").process("Out", ()=>{
+                if(++runs == maxRuns){
+                    console.log("runTestPiReplication1: success, runs: "+runs);
+                    system.stop();
+                }
+            }))
+        );
+        for (let i = 0; i < maxRuns; i++) {
+            system.addSymbol(
+                system.add.channelOut('x', '*').nullProcess()
+            );
+        }
+        system.start();
+    }
+
+    static runTestPiReplication2(scene: Phaser.Scene): void{
+        let runs = 0;
+        let maxRuns = 10;
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.addSymbol(
+            system.add.replication(system.add.channelOut("x", "*").process("Out", ()=>{
+                if(++runs == maxRuns){
+                    console.log("runTestPiReplication2: success, runs: "+runs);
+                    system.stop();
+                }
+            }))
+        );
+        for (let i = 0; i < maxRuns; i++) {
+            system.addSymbol(
+                system.add.channelIn('x', '*').nullProcess()
+            );
+        }
+        system.start();
+    }
 
 
 }

@@ -69,7 +69,7 @@ export class PiSystem {
             this.existing.push(symbol);
         }
         else {
-            console.log("Warning: Symbol already exists: "+symbol.getName());
+            if(this.enableDebugLogging) console.log("Warning: Symbol already exists: "+symbol.getName());
         }
         if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
         else if (symbol instanceof PiChannelOut) this.curChannelOut.push(symbol);
@@ -91,7 +91,7 @@ export class PiSystem {
     private static removeFromList(list: any[], item: any): void{
         let idx: number = list.indexOf(item, 0);
         if(idx == -1){
-            console.log("Error! Symbol is not active");
+            console.log("Warning! Symbol is not active");
         }
         else {
             list.splice(idx, 1);
@@ -106,6 +106,7 @@ export class PiSystem {
         if (resolvable instanceof PiChannelIn) PiSystem.removeFromList(this.curChannelIn, resolvable);
         else if (resolvable instanceof PiChannelOut) PiSystem.removeFromList(this.curChannelOut, resolvable);
         else if (resolvable instanceof PiSum) PiSystem.removeFromList(this.curSums, resolvable);
+        else if (resolvable instanceof PiReplication) PiSystem.removeFromList(this.curReplications, resolvable);
         else console.log("Error: Tried to move unknown Resolvable");
         this.curActiveSymbols.push(resolvable);
     }
@@ -115,6 +116,7 @@ export class PiSystem {
         if (resolvable instanceof PiChannelIn) return PiSystem.containedInList(this.curChannelIn, resolvable);
         else if (resolvable instanceof PiChannelOut) return PiSystem.containedInList(this.curChannelOut, resolvable);
         else if (resolvable instanceof PiSum) return PiSystem.containedInList(this.curSums, resolvable);
+        else if (resolvable instanceof PiReplication) return PiSystem.containedInList(this.curReplications, resolvable);
         else console.log("Error: Tried to find unknown Resolvable");
         return false;
     }
@@ -130,7 +132,10 @@ export class PiSystem {
      */
     private resolve(resolvablePair: PiResolvingPair): void{
 
-        if(!this.isResolvePairActive(resolvablePair)) return;
+        if(!this.isResolvePairActive(resolvablePair)) {
+            // if(this.enableDebugLogging ) console.log("Can not resolve pair: not active: "+resolvablePair.left.getFullName()+" and "+resolvablePair.right.getFullName());
+            return;
+        }
         this.moveResolvable(resolvablePair.left);
         this.moveResolvable(resolvablePair.right);
 
@@ -163,11 +168,11 @@ export class PiSystem {
      * Calls the second phase.
      */
     private phaseFindResolvingActions(): void{
+        // if(this.enableDebugLogging) console.log("phase 1");
         let startT = this.scene.time.now;
 
-
         let allResolvables: PiResolvable[] = [];
-        allResolvables = allResolvables.concat(this.curChannelIn, this.curChannelOut, this.curSums);
+        allResolvables = allResolvables.concat(this.curChannelIn, this.curChannelOut, this.curSums, this.curReplications);
         for (let i = 0; i < allResolvables.length; i++) {
             for (let j = 0; j < allResolvables.length; j++) {
                 if(i != j){
@@ -195,6 +200,7 @@ export class PiSystem {
      * Calls the third phase.
      */
     private phaseResolveActions(): void{
+        // if(this.enableDebugLogging) console.log("phase 2");
         let startT = this.scene.time.now;
 
         while(this.potentiallyResolving.length > 0){
@@ -222,6 +228,7 @@ export class PiSystem {
      * Calls the first phase.
      */
     private phaseTriggerSymbols(): void{
+        // if(this.enableDebugLogging) console.log("phase 3");
         let startT = this.scene.time.now;
         for(let idx in this.curActiveSymbols){
             if (this.enableDebugLogging) console.log("Triggering Symbol: " + this.curActiveSymbols[idx].getFullName());

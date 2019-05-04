@@ -7,6 +7,7 @@ import {PiAction} from "./pi-action";
 import {PiSum} from "./pi-sum";
 import {PiSymbol} from "./pi-symbol";
 import {PiConcurrent} from "./pi-concurrent";
+import {PiReplication} from "./pi-replication";
 
 export  class PiSystemAdd{
     private readonly system: PiSystem;
@@ -33,5 +34,9 @@ export  class PiSystemAdd{
 
     public concurrent(symbols: PiSymbol[]): PiSymbol{
         return new PiConcurrent(this.system, symbols);
+    }
+
+    public replication(action: PiAction): PiSymbol{
+        return new PiReplication(this.system, action);
     }
 }
