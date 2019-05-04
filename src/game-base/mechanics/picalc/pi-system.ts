@@ -137,6 +137,7 @@ export class PiSystem {
         this.activeSymbolsQueue.push(resolvablePair.getRightResolvedSymbol());
     }
 
+
     /**
      * First phase:
      *
@@ -146,21 +147,35 @@ export class PiSystem {
      */
     private phaseFindResolvingActions(): void{
         let startT = this.scene.time.now;
-        for (let idxIn in this.curChannelIn){
-            let curIn: PiChannelIn = this.curChannelIn[idxIn];
-            for (let idxOut in this.curChannelOut){
-                let curOut: PiChannelOut = this.curChannelOut[idxOut];
-                if(curIn.canResolve(curOut)){
-                    this.potentiallyResolving.push(new PiResolvingPair(curIn, curOut));
-                }
-                for (let idxSum in this.curSums){
-                    let curSum: PiSum = this.curSums[idxSum];
-                    if (curSum.canResolve(curIn)) this.potentiallyResolving.push(new PiResolvingPair(curSum, curIn));
-                    if (curSum.canResolve(curOut)) this.potentiallyResolving.push(new PiResolvingPair(curSum, curOut));
-                }
+        // for (let idxIn in this.curChannelIn){
+        //     let curIn: PiChannelIn = this.curChannelIn[idxIn];
+        //     for (let idxOut in this.curChannelOut){
+        //         let curOut: PiChannelOut = this.curChannelOut[idxOut];
+        //         if(curIn.canResolve(curOut)){
+        //             this.potentiallyResolving.push(new PiResolvingPair(curIn, curOut));
+        //         }
+        //         for (let idxSum in this.curSums){
+        //             let curSum: PiSum = this.curSums[idxSum];
+        //             if (curSum.canResolve(curIn)) this.potentiallyResolving.push(new PiResolvingPair(curSum, curIn));
+        //             if (curSum.canResolve(curOut)) this.potentiallyResolving.push(new PiResolvingPair(curSum, curOut));
+        //         }
+        //
+        //     }
+        // }
 
+        let allResolvables: PiResolvable[] = [];
+        allResolvables = allResolvables.concat(this.curChannelIn, this.curChannelOut, this.curSums);
+        for (let i = 0; i < allResolvables.length; i++) {
+            for (let j = 0; j < allResolvables.length; j++) {
+                if(i != j){
+                    if(allResolvables[i].canResolve(allResolvables[j])){
+                        this.potentiallyResolving.push(new PiResolvingPair(allResolvables[i], allResolvables[j]));
+                    }
+                }
             }
         }
+
+
         let execTime = this.scene.time.now - startT;
         this.scene.time.delayedCall(this.resolveTimeOut - execTime, ()=>{this.phaseResolveActions()}, [], this);
     }
@@ -214,6 +229,7 @@ export class PiSystem {
         }
 
         for(let idx in this.activeSymbolsQueue){
+            if (this.enableDebugLogging) console.log("Adding Symbol to active from queue: " + this.activeSymbolsQueue[idx].getFullName());
             this.addSymbol(this.activeSymbolsQueue[idx]);
         }
         this.activeSymbolsQueue = [];

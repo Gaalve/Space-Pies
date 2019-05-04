@@ -3,6 +3,7 @@ import {PiAction} from "./pi-action";
 import {PiChannelIn} from "./pi-channel-in";
 import {PiChannelOut} from "./pi-channel-out";
 import {PiProcess} from "./pi-process";
+import {PiSymbol} from "./pi-symbol";
 
 export  class PiSystemAddAction{
     private readonly system: PiSystem;
@@ -29,12 +30,14 @@ export  class PiSystemAddAction{
         return this.nextAction(new PiChannelOut(this.system, name, output))
     }
 
-    public process(name: string, callback: Function): void{
+    public process(name: string, callback: Function): PiAction{
         this.action.setNextSymbol(new PiProcess(this.system, name, callback));
-        this.nullProcess();
+        return this.startAction;
     }
 
-    public nullProcess(): void{
-        this.system.addSymbol(this.startAction);
+    public nullProcess(): PiAction{
+        this.action.setNextSymbol(new PiProcess(this.system));
+        return this.startAction;
     }
+
 }

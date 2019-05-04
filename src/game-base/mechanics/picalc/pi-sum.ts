@@ -53,7 +53,7 @@ export class PiSum extends PiResolvable{
     }
 
     public resolve(other: PiResolvable): PiSymbol {
-        return undefined;
+        return this.actions[this.getResolvableIndex(other)].resolve(other);
     }
 
     public getResolvables(): PiResolvable[] {

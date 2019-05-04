@@ -3,6 +3,9 @@ import {PiChannelOut} from "./pi-channel-out";
 import {PiProcess} from "./pi-process";
 import {PiSystem} from "./pi-system";
 import {PiSystemAddAction} from "./pi-system-add-action";
+import {PiAction} from "./pi-action";
+import {PiSum} from "./pi-sum";
+import {PiSymbol} from "./pi-symbol";
 
 export  class PiSystemAdd{
     private readonly system: PiSystem;
@@ -19,8 +22,12 @@ export  class PiSystemAdd{
         return new PiSystemAddAction(this.system, new PiChannelOut(this.system, name, output))
     }
 
-    public process(name: string, callback: Function): void{
-        this.system.addSymbol(new PiProcess(this.system, name, callback));
+    public process(name: string, callback: Function): PiSymbol{
+        return new PiProcess(this.system, name, callback);
+    }
+
+    public sum(actions: PiAction[]): PiSymbol{
+        return new PiSum(this.system, actions);
     }
 
 }
