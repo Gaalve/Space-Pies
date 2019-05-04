@@ -1,8 +1,6 @@
 import {PiSystem} from "./pi-system";
 import {PiAction} from "./pi-action";
-import {PiResolvable} from "./pi-resolvable";
 import {PiChannelOut} from "./pi-channel-out";
-import {PiSum} from "./pi-sum";
 
 export class PiChannelIn extends PiAction{
 
@@ -20,9 +18,13 @@ export class PiChannelIn extends PiAction{
         return this.getFullName() + '.' + this.next.getSymbolSequence();
     }
 
-    public resolve(other: PiResolvable) {
+    canResolve(other: PiAction): boolean {
+        return other instanceof  PiChannelOut && other.getName() == this.getName()
+    }
+
+    public resolve(other: PiAction) {
         if(!this.canResolve(other)){
-            console.log("Error: resolved channel with wrong symbol")
+            throw new Error("Error: resolved channel with wrong action! This: "+this.getFullName()+" other: "+other.getFullName())
         }
         else {
             let argValue = (<PiChannelOut>other).getOutputName();
@@ -31,23 +33,11 @@ export class PiChannelIn extends PiAction{
         return this.next;
     }
 
-    private canResolveChannelOut(other: PiChannelOut): boolean{
-        return other.getName() == this.getName();
+    getAllActions(): PiAction[] {
+        return [this];
     }
 
-    private canResolvePiSum(other: PiSum): boolean{
-        let resolvables: PiResolvable[] = other.getResolvables();
-        for (let idx in resolvables){
-            if(this.canResolve(resolvables[idx])) return true;
-        }
-        return false;
-    }
 
-    canResolve(other: PiResolvable): boolean {
-        if(other instanceof PiChannelOut) return this.canResolveChannelOut(other);
-        else if(other instanceof PiSum) return this.canResolvePiSum(other);
-        return false;
-    }
 
 
 }

@@ -42,7 +42,9 @@ export abstract class PiAction extends PiResolvable{
         this.next.rename(argName, argValue);
     }
 
-    public abstract resolve(other: PiResolvable): PiSymbol;
+    public abstract canResolve(other: PiAction): boolean;
+
+    public abstract resolve(other: PiAction): PiSymbol;
 
     public getOutputName(): string{
         return this.inOutPut;

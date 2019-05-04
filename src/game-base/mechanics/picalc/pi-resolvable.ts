@@ -1,5 +1,6 @@
 import {PiSymbol} from "./pi-symbol";
 import {PiSystem} from "./pi-system";
+import {PiAction} from "./pi-action";
 
 export abstract class PiResolvable extends PiSymbol{
 
@@ -7,7 +8,6 @@ export abstract class PiResolvable extends PiSymbol{
         super(system, name);
     }
 
-    public abstract canResolve(other: PiResolvable): boolean;
-    public abstract resolve(other: PiResolvable): PiSymbol;
+    public abstract getAllActions(): PiAction[];
 
 }

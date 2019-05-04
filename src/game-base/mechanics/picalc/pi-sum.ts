@@ -1,4 +1,3 @@
-import {PiSymbol} from "./pi-symbol";
 import {PiAction} from "./pi-action";
 import {PiSystem} from "./pi-system";
 import {PiResolvable} from "./pi-resolvable";
@@ -41,22 +40,7 @@ export class PiSum extends PiResolvable{
         return this.getSymbolSequence();
     }
 
-    private getResolvableIndex(other: PiResolvable){
-        for (let i = 0; i < this.actions.length; i++) {
-            if (this.actions[i].canResolve(other))return i;
-        }
-        return -1;
-    }
-
-    public canResolve(other: PiResolvable): boolean {
-        return this.getResolvableIndex(other) > -1;
-    }
-
-    public resolve(other: PiResolvable): PiSymbol {
-        return this.actions[this.getResolvableIndex(other)].resolve(other);
-    }
-
-    public getResolvables(): PiResolvable[] {
+    getAllActions(): PiAction[] {
         return this.actions;
     }
 }
