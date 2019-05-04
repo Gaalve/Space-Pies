@@ -88,7 +88,7 @@ export class PiSystem {
     }
 
 
-    private static removeFromList(list: any[], item: any){
+    private static removeFromList(list: any[], item: any): void{
         let idx: number = list.indexOf(item, 0);
         if(idx == -1){
             console.log("Error! Symbol is not active");
@@ -96,6 +96,10 @@ export class PiSystem {
         else {
             list.splice(idx, 1);
         }
+    }
+
+    private static containedInList(list: any[], item: any): boolean{
+        return list.indexOf(item, 0) > -1;
     }
 
     private moveResolvable(resolvable: PiResolvable){
@@ -107,12 +111,25 @@ export class PiSystem {
     }
 
 
+    private isResolvableActive(resolvable: PiResolvable): boolean{
+        if (resolvable instanceof PiChannelIn) return PiSystem.containedInList(this.curChannelIn, resolvable);
+        else if (resolvable instanceof PiChannelOut) return PiSystem.containedInList(this.curChannelOut, resolvable);
+        else if (resolvable instanceof PiSum) return PiSystem.containedInList(this.curSums, resolvable);
+        else console.log("Error: Tried to find unknown Resolvable");
+        return false;
+    }
+
+    private isResolvePairActive(resolvablePair: PiResolvingPair): boolean{
+        return this.isResolvableActive(resolvablePair.left) && this.isResolvableActive(resolvablePair.right);
+    }
+
 
     /**
      * Resolves to channels. Should only be called by pi-resolving!
      * @param resolvablePair
      */
     private resolve(resolvablePair: PiResolvingPair): void{
+        if(!this.isResolvePairActive(resolvablePair)) return;
         this.moveResolvable(resolvablePair.left);
         this.moveResolvable(resolvablePair.right);
 
@@ -132,8 +149,10 @@ export class PiSystem {
         for (let idxIn in this.curChannelIn){
             let curIn: PiChannelIn = this.curChannelIn[idxIn];
             for (let idxOut in this.curChannelOut){
-                let curOut: PiChannelOut = this.curChannelOut[idxIn];
-                if(curIn.canResolve(curOut)) this.potentiallyResolving.push(new PiResolvingPair(curIn, curOut));
+                let curOut: PiChannelOut = this.curChannelOut[idxOut];
+                if(curIn.canResolve(curOut)){
+                    this.potentiallyResolving.push(new PiResolvingPair(curIn, curOut));
+                }
                 for (let idxSum in this.curSums){
                     let curSum: PiSum = this.curSums[idxSum];
                     if (curSum.canResolve(curIn)) this.potentiallyResolving.push(new PiResolvingPair(curSum, curIn));
