@@ -9,6 +9,7 @@ export class PiCalcTests {
         scene.time.delayedCall(0, ()=>{this.runTestPiSequentialND(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiSequentialNDStatistic(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiSum(scene)}, [], this);
+        scene.time.delayedCall(0, ()=>{this.runTestPiSequentialParallel(scene)}, [], this);
     }
 
     static runTestPiSequential1(scene: Phaser.Scene): void{
@@ -121,6 +122,21 @@ export class PiCalcTests {
     }
 
     static runTestPiSequentialParallel(scene: Phaser.Scene): void{
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.addSymbol(
+            system.add.channelIn("x", "*").concurrent([
+                    system.add.channelOut('y', '*').nullProcess(),
+                    system.add.channelIn('y', '*').process('Out', ()=>{
+                        console.log("runTestPiSequentialParallel: success");
+                        system.stop();
+                    })
+                ]
+            )
+        );
+        system.addSymbol(
+            system.add.channelOut('x', '*').nullProcess()
+        );
+        system.start();
     }
 
 

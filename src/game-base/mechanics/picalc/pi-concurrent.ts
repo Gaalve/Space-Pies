@@ -6,7 +6,7 @@ export class PiConcurrent extends PiSymbol{
     symbols: PiSymbol[];
 
     public constructor(system: PiSystem, actions: PiSymbol[]){
-        super(system, "PiSum");
+        super(system, "PiConcurrent");
         this.symbols = actions;
     }
 
@@ -25,4 +25,8 @@ export class PiConcurrent extends PiSymbol{
         return this.getSymbolSequence();
     }
 
+    public trigger(): void {
+        for(let idx in this.symbols)
+            this.system.addSymbol(this.symbols[idx]);
+    }
 }

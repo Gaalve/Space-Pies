@@ -4,6 +4,8 @@ import {PiChannelIn} from "./pi-channel-in";
 import {PiChannelOut} from "./pi-channel-out";
 import {PiProcess} from "./pi-process";
 import {PiSymbol} from "./pi-symbol";
+import {PiConcurrent} from "./pi-concurrent";
+import {PiSum} from "./pi-sum";
 
 export  class PiSystemAddAction{
     private readonly system: PiSystem;
@@ -28,6 +30,16 @@ export  class PiSystemAddAction{
 
     public channelOut(name: string, output: string): this{
         return this.nextAction(new PiChannelOut(this.system, name, output))
+    }
+
+    public concurrent(symbols: PiSymbol[]): PiAction{
+        this.action.setNextSymbol(new PiConcurrent(this.system, symbols));
+        return this.startAction;
+    }
+
+    public sum(actions: PiAction[]): PiAction{
+        this.action.setNextSymbol(new PiSum(this.system, actions));
+        return this.startAction;
     }
 
     public process(name: string, callback: Function): PiAction{
