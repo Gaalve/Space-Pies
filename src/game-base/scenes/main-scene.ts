@@ -2,7 +2,6 @@ import {Turn} from "../mechanics/turn";
 import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
 import {PiCalcTests} from "../tests/pi-calc-tests";
-import {HealthBar} from "./objects/HealthBar";
 
 
 export class MainScene extends Phaser.Scene {
@@ -38,8 +37,6 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_skip",
             ()=>{this.turn.nextPlayer();});
         this.buttonEndTurn.setPosition(1920/2, 500);
-        const healthbarP1 = new HealthBar(this, this.players[0]);
-        const healthbarP2 = new HealthBar(this, this.players[1]);
     }
 
 
