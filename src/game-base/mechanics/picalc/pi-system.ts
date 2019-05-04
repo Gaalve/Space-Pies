@@ -5,6 +5,7 @@ import {PiChannelIn} from "./pi-channel-in";
 import {PiChannelOut} from "./pi-channel-out";
 import {PiResolvingPair} from "./pi-resolving-pair";
 import {PiReplication} from "./pi-replication";
+import {PiResolvable} from "./pi-resolvable";
 
 export class PiSystem {
 
@@ -74,71 +75,53 @@ export class PiSystem {
         else this.curActiveSymbols.push(symbol);
     }
 
-    /**
-     * Returns true if both channels are active.
-     * @param resolve - The container of an input and output channel.
-     */
-    private canResolve(resolve: PiResolvingPair){
-        return this.curChannelIn.indexOf(resolve.chanIn)>-1 &&
-            this.curChannelOut.indexOf(resolve.chanOut)>-1
-    }
-
 
     /**
      * Remove active symbol from the list. Should be used after the symbol got triggered.
      * @param symbol
      */
     private removeActiveSymbol(symbol: PiSymbol): void{
-        let idx: number = this.curActiveSymbols.indexOf(symbol, 0);
+        // let idx: number = this.curActiveSymbols.indexOf(symbol, 0);
+        // if(idx == -1){
+        //     console.log("Error! Symbol is not active");
+        // }
+        // else {
+        //     this.curActiveSymbols.splice(idx, 1);
+        // }
+        PiSystem.removeFromList(this.curActiveSymbols, symbol);
+    }
+
+
+    private static removeFromList(list: any[], item: any){
+        let idx: number = list.indexOf(item, 0);
         if(idx == -1){
             console.log("Error! Symbol is not active");
         }
         else {
-            this.curActiveSymbols.splice(idx, 1);
+            list.splice(idx, 1);
         }
     }
 
-    /**
-     * Moves the channelIn from curChannelIn to curActiveSymbols.
-     * @param chanIn
-     */
-    private moveActiveChannelIn(chanIn: PiChannelIn): void{
-        let idx: number = this.curChannelIn.indexOf(chanIn, 0);
-        if(idx == -1){
-            console.log("Error! ChannelIn is not active");
-        }
-        else {
-            this.curChannelIn.splice(idx, 1);
-        }
-        this.curActiveSymbols.push(chanIn);
+    private moveResolvable(resolvable: PiResolvable){
+        if (resolvable instanceof PiChannelIn) PiSystem.removeFromList(this.curChannelIn, resolvable);
+        else if (resolvable instanceof PiChannelOut) PiSystem.removeFromList(this.curChannelOut, resolvable);
+        else if (resolvable instanceof PiSum) PiSystem.removeFromList(this.curSums, resolvable);
+        else console.log("Error: Tried to move unknown Resolvable");
+        this.curActiveSymbols.push(resolvable);
     }
 
-    /**
-     * Moves the channelOut from curChannelIn to curActiveSymbols.
-     * @param chanOut
-     */
-    private moveActiveChannelOut(chanOut: PiChannelOut): void{
-        let idx: number = this.curChannelOut.indexOf(chanOut, 0);
-        if(idx == -1){
-            console.log("Error! ChannelOut is not active");
-        }
-        else {
-            this.curChannelOut.splice(idx, 1);
-        }
-        this.curActiveSymbols.push(chanOut);
-    }
+
 
     /**
      * Resolves to channels. Should only be called by pi-resolving!
-     * @param chanIn
-     * @param chanOut
+     * @param resolvablePair
      */
-    public resolveAction(chanIn: PiChannelIn, chanOut: PiChannelOut): void{
-        this.moveActiveChannelIn(chanIn);
-        this.moveActiveChannelOut(chanOut);
+    private resolve(resolvablePair: PiResolvingPair): void{
+        this.moveResolvable(resolvablePair.left);
+        this.moveResolvable(resolvablePair.right);
 
-        this.activeSymbolsQueue.push(chanIn.resolve(chanOut));
-        this.activeSymbolsQueue.push(chanOut.resolve(chanIn));
+        this.activeSymbolsQueue.push(resolvablePair.getLeftResolvedSymbol());
+        this.activeSymbolsQueue.push(resolvablePair.getRightResolvedSymbol());
     }
 
     /**
@@ -179,10 +162,10 @@ export class PiSystem {
 
         while(this.potentiallyResolving.length > 0){
             let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
-            console.log("Resolving: "+this.potentiallyResolving[randIdx].chanIn.getSymbolSequence());
-            console.log("and: "+this.potentiallyResolving[randIdx].chanOut.getSymbolSequence());
-            let resolve: PiResolvingPair = this.potentiallyResolving[randIdx];
-            if(this.canResolve(resolve)) resolve.resolve(this);
+            console.log("Resolving: "+this.potentiallyResolving[randIdx].left.getSymbolSequence());
+            console.log("and: "+this.potentiallyResolving[randIdx].right.getSymbolSequence());
+            let resolvablePair: PiResolvingPair = this.potentiallyResolving[randIdx];
+            if(resolvablePair.canResolve()) this.resolve(resolvablePair);
             this.potentiallyResolving.splice(randIdx, 1);
         }
 

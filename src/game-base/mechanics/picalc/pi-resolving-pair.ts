@@ -1,16 +1,24 @@
-import {PiChannelIn} from "./pi-channel-in";
 import {PiChannelOut} from "./pi-channel-out";
-import {PiSystem} from "./pi-system";
+import {PiResolvable} from "./pi-resolvable";
+import {PiSymbol} from "./pi-symbol";
 
 export class PiResolvingPair {
-    public readonly chanIn: PiChannelIn;
-    public readonly chanOut: PiChannelOut
-    public constructor(chanIn: PiChannelIn, chanOut: PiChannelOut){
-        this.chanIn = chanIn;
-        this.chanOut = chanOut;
+    public readonly left: PiResolvable;
+    public readonly right: PiResolvable
+    public constructor(left: PiResolvable, right: PiResolvable){
+        this.left = left;
+        this.right = right;
     }
 
-    public resolve(system: PiSystem){
-        system.resolveAction(this.chanIn, this.chanOut);
+    public canResolve(): boolean{
+        return this.left.canResolve(this.right) && this.right.canResolve(this.left);
+    }
+
+    public getLeftResolvedSymbol(): PiSymbol{
+        return this.left.resolve(this.right);
+    }
+
+    public getRightResolvedSymbol(): PiSymbol{
+        return this.right.resolve(this.left);
     }
 }
