@@ -23,7 +23,7 @@ export class PiTerm extends PiSymbol{
     }
 
     trigger(): void {
-        this.system.addSymbol(this.symbol);
+        this.system.addSymbol(this.symbol.copy());
     }
 
 }

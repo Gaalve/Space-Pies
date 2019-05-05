@@ -7,6 +7,7 @@ import {PiSymbol} from "./pi-symbol";
 import {PiConcurrent} from "./pi-concurrent";
 import {PiSum} from "./pi-sum";
 import {PiReplication} from "./pi-replication";
+import {PiTerm} from "./pi-term";
 
 export  class PiSystemAddAction{
     private readonly system: PiSystem;
@@ -55,6 +56,16 @@ export  class PiSystemAddAction{
 
     public nullProcess(): PiAction{
         this.action.setNextSymbol(new PiProcess(this.system));
+        return this.startAction;
+    }
+
+    public term(name: string, symbol: PiSymbol): PiAction{
+        this.action.setNextSymbol(new PiTerm(this.system, name, symbol));
+        return this.startAction;
+    }
+
+    public next(symbol: PiSymbol): PiAction{
+        this.action.setNextSymbol(symbol);
         return this.startAction;
     }
 

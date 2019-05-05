@@ -8,6 +8,7 @@ import {PiSum} from "./pi-sum";
 import {PiSymbol} from "./pi-symbol";
 import {PiConcurrent} from "./pi-concurrent";
 import {PiReplication} from "./pi-replication";
+import {PiTerm} from "./pi-term";
 
 export  class PiSystemAdd{
     private readonly system: PiSystem;
@@ -24,19 +25,23 @@ export  class PiSystemAdd{
         return new PiSystemAddAction(this.system, new PiChannelOut(this.system, name, output))
     }
 
-    public process(name: string, callback: Function): PiSymbol{
+    public process(name: string, callback: Function): PiProcess{
         return new PiProcess(this.system, name, callback);
     }
 
-    public sum(actions: PiAction[]): PiSymbol{
+    public sum(actions: PiAction[]): PiSum{
         return new PiSum(this.system, actions);
     }
 
-    public concurrent(symbols: PiSymbol[]): PiSymbol{
+    public concurrent(symbols: PiSymbol[]): PiConcurrent{
         return new PiConcurrent(this.system, symbols);
     }
 
-    public replication(action: PiAction): PiSymbol{
+    public replication(action: PiAction): PiReplication{
         return new PiReplication(this.system, action);
+    }
+
+    public term(name: string, symbol: PiSymbol): PiTerm{
+        return new PiTerm(this.system, name, symbol);
     }
 }

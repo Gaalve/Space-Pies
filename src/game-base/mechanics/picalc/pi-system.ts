@@ -6,6 +6,7 @@ import {PiChannelOut} from "./pi-channel-out";
 import {PiResolvingPair} from "./pi-resolving-pair";
 import {PiReplication} from "./pi-replication";
 import {PiResolvable} from "./pi-resolvable";
+import {PiTerm} from "./pi-term";
 
 export class PiSystem {
 
@@ -68,7 +69,7 @@ export class PiSystem {
         if(this.existing.indexOf(symbol)==-1){
             this.existing.push(symbol);
         }
-        else {
+        else if (!(symbol instanceof PiTerm)){
             console.log("Warning: Symbol already exists: "+symbol.getName());
         }
         if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);

@@ -13,6 +13,8 @@ export class PiCalcTests {
         scene.time.delayedCall(0, ()=>{this.runTestPiSequentialParallel(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiReplication1(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiReplication2(scene)}, [], this);
+        scene.time.delayedCall(0, ()=>{this.runTestPiTerm(scene)}, [], this);
+        scene.time.delayedCall(0, ()=>{this.runTestPiTermRecursion(scene)}, [], this);
     }
 
     static runTestPiSequential1(scene: Phaser.Scene): void{
@@ -205,5 +207,46 @@ export class PiCalcTests {
         system.start();
     }
 
+    static runTestPiTerm(scene: Phaser.Scene): void{
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.addSymbol(
+            system.add.channelIn('x', '*').term('Term21', system.add.process("Out", ()=>{
+                console.log("runTestPiTerm: success");
+                system.stop();
+            }))
+        );
+        system.addSymbol(
+            system.add.channelOut('x', '*').nullProcess()
+        );
+        system.start();
+    }
 
+    static runTestPiTermRecursion(scene: Phaser.Scene): void{
+        let runs = 0;
+        let maxRuns = 10;
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+
+        let recursion = system.add.term('Recursion', undefined);
+        recursion.symbol = system.add.channelOut('x', '*').next(recursion);
+        system.addSymbol(recursion);
+
+        system.addSymbol(
+            system.add.replication(system.add.channelOut("x", "*").process("Out", ()=>{
+                if(++runs == maxRuns){
+                    console.log("runTestPiTermRecursion: success, runs: "+runs);
+                    system.stop();
+                }
+            }))
+        );
+        for (let i = 0; i < maxRuns; i++) {
+            system.addSymbol(
+                system.add.channelIn('x', '*').process("Out", ()=>{
+                    if(++runs == maxRuns){
+                        console.log("runTestPiReplication2: success, runs: "+runs);
+                        system.stop();
+                    }}
+            ));
+        }
+        system.start();
+    }
 }
