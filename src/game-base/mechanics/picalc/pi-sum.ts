@@ -53,12 +53,22 @@ export class PiSum extends PiResolvable{
         return new PiSum(this.system, actionsCopy);
     }
 
+    rename(argName: string, argValue: string): void {
+        for(let idx in this.actions){
+            this.actions[idx].rename(argName, argValue);
+        }
+    }
+
     addScope(scope: PiScope): void {
-        //TODO
+        for(let idx in this.actions){
+            this.actions[idx].addScope(scope);
+        }
     }
 
     alphaRename(argName: string, argValue: string, scope: PiScope): void {
-        //TODO
+        for(let idx in this.actions){
+            this.actions[idx].alphaRename(argName, argValue, scope);
+        }
     }
 
     scopedRename(argName: string, argValue: string, scope: PiScope): void {

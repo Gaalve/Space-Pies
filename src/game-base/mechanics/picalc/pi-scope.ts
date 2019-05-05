@@ -87,18 +87,18 @@ export class PiScope extends PiSymbol{
         //TODO
     }
     public alphaRename(argName: string, argValue: string, scope: PiScope): void{
-        //TODO
-        // for(let idx in this.symbols){
-        //     this.symbols[idx].alphaRename(argName, argValue, scope);
-        // }
         this.symbolStart.alphaRename(argName, argValue, scope);
     }
     public addScope(scope: PiScope): void{
-        //TODO
         for(let idx in this.symbols){
             this.symbols[idx].addScope(scope);
         }
     }
+
+    public rename(argName: string, argValue: string): void {
+        this.symbolStart.rename(argName, argValue);
+    }
+
 
     public trigger(): void {
         this.extendedScope = true;
