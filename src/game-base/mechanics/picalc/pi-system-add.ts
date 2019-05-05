@@ -47,13 +47,13 @@ export  class PiSystemAdd{
     }
 
     public scope(scopedName: string, symbol: PiSymbol): PiSymbol{
-        let scope = new PiScope(this.system, name, symbol);
+        let scope = new PiScope(this.system, scopedName, symbol, false);
         let last = scope.getLastSymbol();
         return scope;
     }
 
     public scopeAction(scopedName: string, symbol: PiSymbol): PiSystemAddAction{
-        let scope = new PiScope(this.system, name, symbol);
+        let scope = new PiScope(this.system, scopedName, symbol, true);
         let last = scope.getLastSymbol();
         if(last instanceof PiAction) return new PiSystemAddAction(this.system, last);
         else throw new Error("Scope: Last Symbol is not an action!");

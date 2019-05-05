@@ -4,19 +4,20 @@ export class PiCalcTests {
 
     static runTests(scene: Phaser.Scene): void{
         console.log("Running tests");
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequential1(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequential2(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequentialND(scene)}, [], this);
-        // scene.time.delayedCall(0, ()=>{this.runTestPiSequentialNDStatistic(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSum(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSum2(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequentialParallel(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiReplication1(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiReplication2(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiTerm(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiTermRecursion(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiRename(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiSequential1(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiSequential2(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiSequentialND(scene)}, [], this);
+        // // scene.time.delayedCall(0, ()=>{this.runTestPiSequentialNDStatistic(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiSum(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiSum2(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiSequentialParallel(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiReplication1(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiReplication2(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiTerm(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiTermRecursion(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiRename(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiScopeRename(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiShieldTest(scene)}, [], this);
     }
 
     static runTestPiSequential1(scene: Phaser.Scene): void{
@@ -265,7 +266,7 @@ export class PiCalcTests {
     }
 
     static runTestPiScopeRename(scene: Phaser.Scene): void{
-        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, true);
         system.pushSymbol(system.add.scope('x', system.add.channelIn('x', 'a').channelOut('a', '*').nullProcess()));
         system.pushSymbol(system.add.channelOut('x', 'y').nullProcess());
         system.pushSymbol(system.add.channelIn('y', '*').process("Out", ()=>{
@@ -276,13 +277,55 @@ export class PiCalcTests {
     }
 
     static runTestPiShieldTest(scene: Phaser.Scene): void{
-        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.pushSymbol(system.add.scope('x', system.add.channelIn('x', 'a').channelOut('a', '*').nullProcess()));
-        system.pushSymbol(system.add.channelOut('x', 'y').nullProcess());
-        system.pushSymbol(system.add.channelIn('y', '*').process("Out", ()=>{
-            console.log("runTestPiScopeRename: failed");
-            system.stop();
-        }));
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, true);
+
+        //TODO:
+        //Reg:= (s(_).regout<_>.s1<_>.0)  +
+        // (rshield(_).((v w1).(v reg1)).(reghelp<w1>.w1<reg1>.w1<s2>.reg1(_)).s2(_).((v w2).
+        // (v reg2)).(reghelp<w2>.w2<reg2>.w2<s1>.reg2(_)).regout<_>.0)
+        //RegHelp:= !reghelp(w).w(regout).w(s1).Reg
+
+        let reg = system.add.term('Reg',
+            system.add.sum([
+                system.add.channelIn('s', '*').channelOut('regout', '*').channelOut('s1', '*').nullProcess(),
+
+                system.add.channelIn('rshield','*').scopeAction('w1',
+                    system.add.scopeAction('reg1',
+                        system.add.channelOut('reghelp', 'w1').channelOut('w1', 'reg1').
+                            channelOut('w1', 's2').channelIn('reg1', '*').channelIn('s2', '*').nullProcess()
+                        ).nullProcess()
+                    ).scopeAction('w2',
+                        system.add.scopeAction('reg2',
+                                system.add.channelOut('reghelp', 'w2').channelOut('w2', 'reg2').
+                                    channelOut('w2', 's1').channelIn('reg2', '*').nullProcess()
+                            ).nullProcess()
+                    ).channelOut('regout', '*').nullProcess()
+                ]));
+
+        system.pushSymbol(system.add.replication(system.add.channelIn('reghelp', 'w').
+        channelIn('w', 'regout').channelIn('w', 's1').next(reg)));
+
+        system.pushSymbol(
+            system.add.channelIn('rshield','*').scopeAction('w1',
+                system.add.scopeAction('reg1',
+                    system.add.channelOut('reghelp', 'w1').channelOut('w1', 'reg1').
+                    channelOut('w1', 's2').channelIn('reg1', '*').channelIn('s2', '*').nullProcess()
+                ).nullProcess()
+            ).scopeAction('w2',
+                system.add.scopeAction('reg2',
+                    system.add.channelOut('reghelp', 'w2').channelOut('w2', 'reg2').
+                    channelOut('w2', 's1').channelIn('reg2', '*').nullProcess()
+                ).nullProcess()
+            ).channelOut('regout', '*').process('CoreExplosion', ()=>{
+                console.log('Core destroyed!!!')
+            })
+        );
+
+        system.pushSymbol(
+            system.add.channelOut('rshield', '*').channelOut('rshield', '*').channelOut('rshield', '*').
+                channelOut('s', '*').channelOut('s', '*').channelOut('s', '*').nullProcess()
+        );
+
         system.start();
     }
 }

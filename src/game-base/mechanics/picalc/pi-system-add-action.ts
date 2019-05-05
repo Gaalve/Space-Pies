@@ -66,7 +66,7 @@ export  class PiSystemAddAction{
     }
 
     public scope(scopedName: string, symbol: PiSymbol): PiAction{
-        let scope = new PiScope(this.system, name, symbol);
+        let scope = new PiScope(this.system, scopedName, symbol, false);
         let last = scope.getLastSymbol();
         this.action.setNextSymbol(scope);
         return this.startAction;
@@ -74,7 +74,7 @@ export  class PiSystemAddAction{
 
 
     public scopeAction(scopedName: string, symbol: PiSymbol): this{
-        let scope = new PiScope(this.system, name, symbol);
+        let scope = new PiScope(this.system, scopedName, symbol, true);
         let last = scope.getLastSymbol();
         this.action.setNextSymbol(scope);
         if(last instanceof PiAction){

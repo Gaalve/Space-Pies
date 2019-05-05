@@ -8,6 +8,7 @@ export abstract class PiSymbol {
     protected constructor(system: PiSystem, name: string){
         this.system = system;
         this.name = name;
+        this.scopes = [];
     }
 
     /**

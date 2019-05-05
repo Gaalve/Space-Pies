@@ -11,17 +11,31 @@ export class PiScope extends PiSymbol{
     symbols: PiSymbol[];
     symbolEnd: PiSymbol;
 
-    constructor(system: PiSystem, scopedName: string, symbol: PiSymbol){
+    constructor(system: PiSystem, scopedName: string, symbol: PiSymbol, ignoreLast: boolean){
         super(system, "(v "+scopedName+")");
+        console.log('Scoped Name: '+scopedName);
+        console.log("This name: "+this.getName());
         this.system = system;
         let curSymbol = symbol;
-        this.symbols = [curSymbol];
         this.symbolStart = symbol;
-        while (curSymbol instanceof  PiAction){
-            curSymbol = curSymbol._getNext();
-            this.symbols.push(curSymbol);
+        let previous;
+        if(!ignoreLast) {
+            this.symbols = [curSymbol];
+            while (curSymbol instanceof PiAction) {
+                curSymbol = curSymbol._getNext();
+                this.symbols.push(curSymbol);
+            }
+            previous = curSymbol;
         }
-        this.symbolEnd = curSymbol;
+        else {
+            this.symbols = [];
+            while (curSymbol instanceof PiAction) {
+                this.symbols.push(curSymbol);
+                previous = curSymbol;
+                curSymbol = curSymbol._getNext();
+            }
+        }
+        this.symbolEnd = previous;
         this.scopedName = scopedName;
         this.reservedName = this.system.newReservedName(this.scopedName);
         this.extendedScope = false;
@@ -72,5 +86,13 @@ export class PiScope extends PiSymbol{
     }
     public addScope(scope: PiScope): void{
         //TODO
+    }
+
+    public trigger(): void {
+        this.extendedScope = true;
+        for(let idx in this.symbols){
+            this.symbols[idx].alphaRename(this.scopedName, this.reservedName, this);
+        }
+        this.system.pushSymbol(this.symbolStart);
     }
 }
