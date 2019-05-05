@@ -226,7 +226,6 @@ export class PiSystem {
      * Calls the second phase.
      */
     private phaseFindResolvingActions(): void{
-        // if(this.enableDebugLogging) console.log("phase 1");
         this.logPhase1();
         this.phase1changed = false;
         let startT = this.scene.time.now;
