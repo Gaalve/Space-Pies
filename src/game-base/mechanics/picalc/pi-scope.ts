@@ -52,11 +52,15 @@ export class PiScope extends PiSymbol{
     }
 
     copy(): PiSymbol { //TODO
-        return undefined;
+        // return undefined;
+        return new PiScope(this.system, this.scopedName, this.symbolStart.copy(), false);
     }
 
     getSymbolSequence(): string {
         if(this.extendedScope) return this.reservedName;
+        if(this.symbolStart instanceof PiScope){
+            return this.getName()+".("+this.symbols[0].getSymbolSequence()+')';
+        }
         let seq = this.getName()+".("+this.symbols[0].getFullName();
         for (let idx = 1; idx < this.symbols.length; ++idx){
             seq += '.';
@@ -65,6 +69,9 @@ export class PiScope extends PiSymbol{
         if(this.symbolEnd instanceof PiAction){
             seq += this.symbolEnd._getNext().getSymbolSequence();
         }
+        // else if(this.symbolEnd instanceof PiScope){
+        //     seq += this.symbolEnd.getSymbolSequence();
+        // }
         return seq;
     }
 
@@ -81,9 +88,16 @@ export class PiScope extends PiSymbol{
     }
     public alphaRename(argName: string, argValue: string, scope: PiScope): void{
         //TODO
+        // for(let idx in this.symbols){
+        //     this.symbols[idx].alphaRename(argName, argValue, scope);
+        // }
+        this.symbolStart.alphaRename(argName, argValue, scope);
     }
     public addScope(scope: PiScope): void{
         //TODO
+        for(let idx in this.symbols){
+            this.symbols[idx].addScope(scope);
+        }
     }
 
     public trigger(): void {

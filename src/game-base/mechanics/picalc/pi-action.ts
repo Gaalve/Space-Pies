@@ -76,8 +76,9 @@ export abstract class PiAction extends PiResolvable{
 
     public alphaRename(argName: string, argValue: string, scope: PiScope): void {
         console.log('Alpha Rename: '+argName+" => "+argValue);
-        if(argName == this.name && this.scopes.indexOf(scope) > -1 )this.name = argValue;
-        if(argName == this.inOutPut && this.scopes.indexOf(scope) > -1 )this.inOutPut = argValue;
+        if(argName == this.name && (this.scopes.indexOf(scope) > -1 || !this.isNameScoped))this.name = argValue;
+        if(argName == this.inOutPut && (this.scopes.indexOf(scope) > -1 || !this.isNameScoped))this.inOutPut = argValue;
+        this.next.alphaRename(argName, argValue, scope);
     }
 
     public addScope(scope: PiScope): void {

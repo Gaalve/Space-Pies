@@ -73,16 +73,16 @@ export  class PiSystemAddAction{
     }
 
 
-    public scopeAction(scopedName: string, symbol: PiSymbol): this{
-        let scope = new PiScope(this.system, scopedName, symbol, true);
-        let last = scope.getLastSymbol();
-        this.action.setNextSymbol(scope);
-        if(last instanceof PiAction){
-            this.action = last;
-            return this;
-        }
-        else throw new Error("Scope: Last symbol is not an action!");
-    }
+    // public scopeAction(scopedName: string, symbol: PiSymbol): this{
+    //     let scope = new PiScope(this.system, scopedName, symbol, true);
+    //     let last = scope.getLastSymbol();
+    //     this.action.setNextSymbol(scope);
+    //     if(last instanceof PiAction){
+    //         this.action = last;
+    //         return this;
+    //     }
+    //     else throw new Error("Scope: Last symbol is not an action!");
+    // }
 
     public next(symbol: PiSymbol): PiAction{
         this.action.setNextSymbol(symbol);

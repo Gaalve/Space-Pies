@@ -293,12 +293,15 @@ export class PiSystem {
         this.logPhase3();
         this.phase3changed = false;
         let startT = this.scene.time.now;
+        let copy: PiSymbol[] = [];
         for(let idx in this.curActiveSymbols){
-            // if (this.enableDebugLogging) console.log("Triggering Symbol: " + this.curActiveSymbols[idx].getFullName());
             this.curActiveSymbols[idx].trigger();
-            this.removeActiveSymbol(this.curActiveSymbols[idx]);
+            copy.push(this.curActiveSymbols[idx]);
         }
-
+        for(let idx in copy){ // shitty workaround TODO
+            this.removeActiveSymbol(copy[idx]);
+        }
+        // this.curActiveSymbols = [];
         for(let idx in this.activeSymbolsQueue){
             // if (this.enableDebugLogging) console.log("Adding Symbol to active from queue: " + this.activeSymbolsQueue[idx].getFullName());
             this.pushSymbol(this.activeSymbolsQueue[idx]);
