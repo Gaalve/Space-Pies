@@ -16,8 +16,8 @@ export class PiCalcTests {
         // scene.time.delayedCall(0, ()=>{this.runTestPiTerm(scene)}, [], this);
         // scene.time.delayedCall(0, ()=>{this.runTestPiTermRecursion(scene)}, [], this);
         // scene.time.delayedCall(0, ()=>{this.runTestPiRename(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiScopeRename(scene)}, [], this);
-        // scene.time.delayedCall(0, ()=>{this.runTestPiShieldTest(scene)}, [], this);
+        // scene.time.delayedCall(0, ()=>{this.runTestPiScopeRename(scene)}, [], this);
+        scene.time.delayedCall(0, ()=>{this.runTestPiShieldTest(scene)}, [], this);
     }
 
     static runTestPiSequential1(scene: Phaser.Scene): void{
@@ -266,7 +266,7 @@ export class PiCalcTests {
     }
 
     static runTestPiScopeRename(scene: Phaser.Scene): void{
-        let system: PiSystem = new PiSystem(scene, 1, 1, 1, true);
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
         system.pushSymbol(system.add.scope('x', system.add.channelIn('x', 'a').channelOut('a', '*').nullProcess()));
         system.pushSymbol(system.add.channelOut('x', 'y').nullProcess());
         system.pushSymbol(system.add.channelIn('y', '*').process("Out", ()=>{

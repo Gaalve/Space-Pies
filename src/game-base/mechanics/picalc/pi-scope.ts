@@ -13,8 +13,6 @@ export class PiScope extends PiSymbol{
 
     constructor(system: PiSystem, scopedName: string, symbol: PiSymbol, ignoreLast: boolean){
         super(system, "(v "+scopedName+")");
-        console.log('Scoped Name: '+scopedName);
-        console.log("This name: "+this.getName());
         this.system = system;
         let curSymbol = symbol;
         this.symbolStart = symbol;

@@ -15,8 +15,12 @@ export class PiTerm extends PiSymbol{
         return this;
     }
 
-    getSymbolSequence(): string {
+    public getTermContentSymbolSequence(): string {
         return this.getName() + ":= " + this.symbol.getSymbolSequence();
+    }
+
+    getSymbolSequence(): string {
+        return this.getName();
     }
 
     getFullName(): string {

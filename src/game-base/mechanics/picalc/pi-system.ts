@@ -33,6 +33,11 @@ export class PiSystem {
 
     private running;
 
+
+    private phase1changed: boolean;
+    private phase2changed: boolean;
+    private phase3changed: boolean;
+
     public constructor(scene: Phaser.Scene, findResolvingTimeOut: number,
                        resolveTimeOut: number, cleanUpTimeOut: number, enableDebugLogging: boolean){
         this.scene = scene;
@@ -62,6 +67,10 @@ export class PiSystem {
         this.enableDebugLogging = enableDebugLogging;
         this.running = false;
 
+
+        this.phase1changed = true;
+        this.phase2changed = true;
+        this.phase3changed = true;
     }
 
     private indexOfReservedName(name: string): number{
@@ -91,6 +100,8 @@ export class PiSystem {
      * @param symbol
      */
     public pushSymbol(symbol: PiSymbol): void{
+        this.phase1changed = true;
+        this.phase3changed = true;
         if(this.existing.indexOf(symbol)==-1){
             this.existing.push(symbol);
         }
@@ -146,7 +157,7 @@ export class PiSystem {
         else if (resolvable instanceof PiChannelOut) PiSystem.removeFromList(this.curChannelOut, resolvable);
         else if (resolvable instanceof PiSum) PiSystem.removeFromList(this.curSums, resolvable);
         else if (resolvable instanceof PiReplication) PiSystem.removeFromList(this.curReplications, resolvable);
-        else console.log("Error: Tried to move unknown Resolvable");
+        else console.log("Error: Tried to move unknown Resolvable"); //TODO
         this.curActiveSymbols.push(resolvable);
     }
 
@@ -160,7 +171,7 @@ export class PiSystem {
         else if (resolvable instanceof PiChannelOut) return PiSystem.containedInList(this.curChannelOut, resolvable);
         else if (resolvable instanceof PiSum) return PiSystem.containedInList(this.curSums, resolvable);
         else if (resolvable instanceof PiReplication) return PiSystem.containedInList(this.curReplications, resolvable);
-        else console.log("Error: Tried to find unknown Resolvable");
+        else console.log("Error: Tried to find unknown Resolvable"); //TODO
         return false;
     }
 
@@ -201,6 +212,7 @@ export class PiSystem {
                 let rAction = actionsRight[rightIdx];
                 if(lAction.canResolve(rAction)){
                     this.potentiallyResolving.push(new PiResolvingPair(left, lAction, right, rAction));
+                    this.phase2changed = true;
                 }
             }
         }
@@ -216,8 +228,9 @@ export class PiSystem {
      */
     private phaseFindResolvingActions(): void{
         // if(this.enableDebugLogging) console.log("phase 1");
+        this.logPhase1();
+        this.phase1changed = false;
         let startT = this.scene.time.now;
-
         let allResolvables: PiResolvable[] = [];
         allResolvables = allResolvables.concat(this.curChannelIn, this.curChannelOut, this.curSums, this.curReplications);
         for (let i = 0; i < allResolvables.length; i++) {
@@ -248,12 +261,13 @@ export class PiSystem {
      */
     private phaseResolveActions(): void{
         // if(this.enableDebugLogging) console.log("phase 2");
+        this.logPhase2();
+        this.phase2changed = false;
         let startT = this.scene.time.now;
-
         while(this.potentiallyResolving.length > 0){
             let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
-            if (this.enableDebugLogging) console.log("Resolving: "+this.potentiallyResolving[randIdx].left.getSymbolSequence());
-            if (this.enableDebugLogging) console.log("and: "+this.potentiallyResolving[randIdx].right.getSymbolSequence());
+            // if (this.enableDebugLogging) console.log("Resolving: "+this.potentiallyResolving[randIdx].left.getSymbolSequence());
+            // if (this.enableDebugLogging) console.log("and: "+this.potentiallyResolving[randIdx].right.getSymbolSequence());
             let resolvablePair: PiResolvingPair = this.potentiallyResolving[randIdx];
             this.resolve(resolvablePair);
             this.potentiallyResolving.splice(randIdx, 1);
@@ -276,20 +290,52 @@ export class PiSystem {
      */
     private phaseTriggerSymbols(): void{
         // if(this.enableDebugLogging) console.log("phase 3");
+        this.logPhase3();
+        this.phase3changed = false;
         let startT = this.scene.time.now;
         for(let idx in this.curActiveSymbols){
-            if (this.enableDebugLogging) console.log("Triggering Symbol: " + this.curActiveSymbols[idx].getFullName());
+            // if (this.enableDebugLogging) console.log("Triggering Symbol: " + this.curActiveSymbols[idx].getFullName());
             this.curActiveSymbols[idx].trigger();
             this.removeActiveSymbol(this.curActiveSymbols[idx]);
         }
 
         for(let idx in this.activeSymbolsQueue){
-            if (this.enableDebugLogging) console.log("Adding Symbol to active from queue: " + this.activeSymbolsQueue[idx].getFullName());
+            // if (this.enableDebugLogging) console.log("Adding Symbol to active from queue: " + this.activeSymbolsQueue[idx].getFullName());
             this.pushSymbol(this.activeSymbolsQueue[idx]);
         }
         this.activeSymbolsQueue = [];
         let execTime = this.scene.time.now - startT;
         if(this.running)this.scene.time.delayedCall(this.findResolvingTimeOut - execTime, ()=>{this.phaseFindResolvingActions()}, [], this);
+    }
+
+    private logPhase1(){
+        if(!this.phase1changed || !this.enableDebugLogging)return;
+        let allActiveSymbols: PiSymbol[] = [];
+        allActiveSymbols = allActiveSymbols.concat(this.curActiveSymbols,
+            this.curReplications, this.curChannelIn, this.curChannelOut, this.curSums);
+        console.log('#### Current Active Symbols ####');
+        for(let idx in allActiveSymbols){
+            console.log(allActiveSymbols[idx].getSymbolSequence());
+        }
+        console.log('################################');
+    }
+
+    private logPhase2(){
+        if(!this.phase2changed || !this.enableDebugLogging)return;
+        console.log('#### Potentially Resolving ####');
+        for(let idx in this.potentiallyResolving){
+            console.log(this.potentiallyResolving[idx].left.getFullName() + " => " + this.potentiallyResolving[idx].right.getFullName());
+        }
+        console.log('################################');
+    }
+
+    private logPhase3(){
+        if(!this.phase3changed || !this.enableDebugLogging)return;
+        console.log('#### Triggering Symbols ####');
+        for(let idx in this.curActiveSymbols){
+            console.log(this.curActiveSymbols[idx].getFullName());
+        }
+        console.log('################################');
     }
 
     /**
