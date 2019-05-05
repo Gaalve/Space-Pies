@@ -191,7 +191,6 @@ export class PiSystem {
     private resolve(resolvablePair: PiResolvingPair): void{
 
         if(!this.isResolvePairActive(resolvablePair)) {
-            // if(this.enableDebugLogging ) console.log("Can not resolve pair: not active: "+resolvablePair.left.getFullName()+" and "+resolvablePair.right.getFullName());
             return;
         }
         this.moveResolvable(resolvablePair.left);
@@ -260,14 +259,11 @@ export class PiSystem {
      * Calls the third phase.
      */
     private phaseResolveActions(): void{
-        // if(this.enableDebugLogging) console.log("phase 2");
         this.logPhase2();
         this.phase2changed = false;
         let startT = this.scene.time.now;
         while(this.potentiallyResolving.length > 0){
             let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
-            // if (this.enableDebugLogging) console.log("Resolving: "+this.potentiallyResolving[randIdx].left.getSymbolSequence());
-            // if (this.enableDebugLogging) console.log("and: "+this.potentiallyResolving[randIdx].right.getSymbolSequence());
             let resolvablePair: PiResolvingPair = this.potentiallyResolving[randIdx];
             this.resolve(resolvablePair);
             this.potentiallyResolving.splice(randIdx, 1);
@@ -289,7 +285,6 @@ export class PiSystem {
      * Calls the first phase.
      */
     private phaseTriggerSymbols(): void{
-        // if(this.enableDebugLogging) console.log("phase 3");
         this.logPhase3();
         this.phase3changed = false;
         let startT = this.scene.time.now;
@@ -301,9 +296,7 @@ export class PiSystem {
         for(let idx in copy){ // shitty workaround TODO
             this.removeActiveSymbol(copy[idx]);
         }
-        // this.curActiveSymbols = [];
         for(let idx in this.activeSymbolsQueue){
-            // if (this.enableDebugLogging) console.log("Adding Symbol to active from queue: " + this.activeSymbolsQueue[idx].getFullName());
             this.pushSymbol(this.activeSymbolsQueue[idx]);
         }
         this.activeSymbolsQueue = [];
