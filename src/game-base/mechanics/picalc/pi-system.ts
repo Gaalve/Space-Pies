@@ -87,7 +87,11 @@ export class PiSystem {
         PiSystem.removeFromList(this.curActiveSymbols, symbol);
     }
 
-
+    /**
+     * Removes the item from the list or prints a warning to the console, if it is not contained within the list.
+     * @param list
+     * @param item
+     */
     private static removeFromList(list: any[], item: any): void{
         let idx: number = list.indexOf(item, 0);
         if(idx == -1){
@@ -98,10 +102,19 @@ export class PiSystem {
         }
     }
 
+    /**
+     * Returns the index of the item or -1, if it is not contained within the list.
+     * @param list
+     * @param item
+     */
     private static containedInList(list: any[], item: any): boolean{
         return list.indexOf(item, 0) > -1;
     }
 
+    /**
+     * Moves the resolvable to curActiveSymbols (marks it as not active)
+     * @param resolvable
+     */
     private moveResolvable(resolvable: PiResolvable){
         if (resolvable instanceof PiChannelIn) PiSystem.removeFromList(this.curChannelIn, resolvable);
         else if (resolvable instanceof PiChannelOut) PiSystem.removeFromList(this.curChannelOut, resolvable);
@@ -112,6 +125,10 @@ export class PiSystem {
     }
 
 
+    /**
+     * Return true if the resolbable is active.
+     * @param resolvable
+     */
     private isResolvableActive(resolvable: PiResolvable): boolean{
         if (resolvable instanceof PiChannelIn) return PiSystem.containedInList(this.curChannelIn, resolvable);
         else if (resolvable instanceof PiChannelOut) return PiSystem.containedInList(this.curChannelOut, resolvable);
@@ -121,6 +138,10 @@ export class PiSystem {
         return false;
     }
 
+    /**
+     * Returns true if both resolvables are currently active.
+     * @param resolvablePair
+     */
     private isResolvePairActive(resolvablePair: PiResolvingPair): boolean{
         return this.isResolvableActive(resolvablePair.left) && this.isResolvableActive(resolvablePair.right);
     }
