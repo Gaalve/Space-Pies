@@ -1,6 +1,7 @@
 import {PiAction} from "./pi-action";
 import {PiSystem} from "./pi-system";
 import {PiResolvable} from "./pi-resolvable";
+import {PiSymbol} from "./pi-symbol";
 
 
 export class PiSum extends PiResolvable{
@@ -42,5 +43,13 @@ export class PiSum extends PiResolvable{
 
     getAllActions(): PiAction[] {
         return this.actions;
+    }
+
+    public copy(): PiSum{
+        let actionsCopy = [];
+        for (let idx in this.actions){
+            actionsCopy.push(this.actions[idx].copy());
+        }
+        return new PiSum(this.system, actionsCopy);
     }
 }

@@ -49,4 +49,6 @@ export abstract class PiAction extends PiResolvable{
     public getOutputName(): string{
         return this.inOutPut;
     }
+
+    public abstract copy(): PiAction;
 }

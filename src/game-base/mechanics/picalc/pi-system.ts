@@ -69,7 +69,7 @@ export class PiSystem {
             this.existing.push(symbol);
         }
         else {
-            if(this.enableDebugLogging) console.log("Warning: Symbol already exists: "+symbol.getName());
+            console.log("Warning: Symbol already exists: "+symbol.getName());
         }
         if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
         else if (symbol instanceof PiChannelOut) this.curChannelOut.push(symbol);

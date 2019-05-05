@@ -8,8 +8,6 @@ export class PiChannelIn extends PiAction{
         super(system, name, input, true);
     }
 
-
-
     public getFullName(): string {
         return this.name+"("+this.inOutPut+")";
     }
@@ -37,7 +35,11 @@ export class PiChannelIn extends PiAction{
         return [this];
     }
 
-
-
+    public copy(): PiChannelIn{
+        let nextCopy = this.next.copy();
+        let thisCopy = new PiChannelIn(this.system, this.name, this.inOutPut);
+        thisCopy.next = nextCopy;
+        return thisCopy;
+    }
 
 }

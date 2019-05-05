@@ -25,4 +25,6 @@ export abstract class PiSymbol {
     public rename(argName: string, argValue: string){
         // should only be used by pi-action
     }
+
+    public abstract copy(): PiSymbol;
 }

@@ -36,4 +36,11 @@ export class PiChannelOut extends PiAction{
     getAllActions(): PiAction[] {
         return [this];
     }
+
+    public copy(): PiChannelOut{
+        let nextCopy = this.next.copy();
+        let thisCopy = new PiChannelOut(this.system, this.name, this.inOutPut);
+        thisCopy.next = nextCopy;
+        return thisCopy;
+    }
 }

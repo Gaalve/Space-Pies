@@ -29,4 +29,12 @@ export class PiConcurrent extends PiSymbol{
         for(let idx in this.symbols)
             this.system.addSymbol(this.symbols[idx]);
     }
+
+    public copy(): PiConcurrent{
+        let symbolsCopy = [];
+        for (let idx in this.symbols){
+            symbolsCopy.push(this.symbols[idx].copy());
+        }
+        return new PiConcurrent(this.system, symbolsCopy);
+    }
 }

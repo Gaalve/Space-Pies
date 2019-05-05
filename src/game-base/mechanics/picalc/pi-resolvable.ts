@@ -10,4 +10,5 @@ export abstract class PiResolvable extends PiSymbol{
 
     public abstract getAllActions(): PiAction[];
 
+    public abstract copy(): PiResolvable;
 }

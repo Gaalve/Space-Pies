@@ -22,7 +22,11 @@ export class PiReplication extends PiResolvable{
     }
 
     trigger(): void {
-        this.system.addSymbol(this);
+        this.system.addSymbol(this.copy());
+    }
+
+    public copy(): PiReplication{
+        return new PiReplication(this.system, this.action.copy());
     }
 
 }
