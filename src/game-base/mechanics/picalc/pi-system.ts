@@ -156,7 +156,10 @@ export class PiSystem {
         if (resolvable instanceof PiChannelIn) PiSystem.removeFromList(this.curChannelIn, resolvable);
         else if (resolvable instanceof PiChannelOut) PiSystem.removeFromList(this.curChannelOut, resolvable);
         else if (resolvable instanceof PiSum) PiSystem.removeFromList(this.curSums, resolvable);
-        else if (resolvable instanceof PiReplication) PiSystem.removeFromList(this.curReplications, resolvable);
+        else if (resolvable instanceof PiReplication){ // prob a shitty workaround TODO
+            // PiSystem.removeFromList(this.curReplications, resolvable);
+            resolvable.trigger();
+        }
         else console.log("Error: Tried to move unknown Resolvable"); //TODO
         this.curActiveSymbols.push(resolvable);
     }

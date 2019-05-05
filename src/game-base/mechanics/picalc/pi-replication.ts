@@ -4,7 +4,7 @@ import {PiResolvable} from "./pi-resolvable";
 import {PiScope} from "./pi-scope";
 
 export class PiReplication extends PiResolvable{
-    public readonly action: PiAction;
+    public action: PiAction;
     public constructor(system: PiSystem, action: PiAction){
         super(system, "PiReplication");
         this.action = action;
@@ -23,7 +23,8 @@ export class PiReplication extends PiResolvable{
     }
 
     trigger(): void {
-        this.system.pushSymbol(this.copy());
+        // this.system.pushSymbol(this.copy());
+        this.action = this.action.copy();
     }
 
     public copy(): PiReplication{

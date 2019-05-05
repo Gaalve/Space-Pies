@@ -359,16 +359,12 @@ export class PiCalcTests {
 
         system.pushSymbol(
             system.add.channelIn('rshield','*').scope('w1', system.add.scope('reg1',
-                system.add.scope('w2', system.add.scope('reg2',
                     system.add.channelOut('reghelp', 'w1')
                         .channelOut('w1', 'reg1').channelOut('w1', 's2')
-                        .channelIn('reg1', '*').channelIn('s2', '*')
-                        .channelOut('reghelp', 'w2').channelOut('w2', 'reg2')
-                        .channelOut('w2', 's1').channelIn('reg2', '*')
-                        .channelOut('regout', '*').process('CoreExplosion', ()=>{
+                        .channelIn('reg1', '*').channelIn('s2', '*').process('CoreExplosion', ()=>{
                             console.log('Core destroyed!!!')
                         })
-                ))))
+                ))
         );
 
         system.pushSymbol(
