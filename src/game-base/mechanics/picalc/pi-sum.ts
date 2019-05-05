@@ -1,7 +1,7 @@
 import {PiAction} from "./pi-action";
 import {PiSystem} from "./pi-system";
 import {PiResolvable} from "./pi-resolvable";
-import {PiSymbol} from "./pi-symbol";
+import {PiScope} from "./pi-scope";
 
 
 export class PiSum extends PiResolvable{
@@ -51,5 +51,17 @@ export class PiSum extends PiResolvable{
             actionsCopy.push(this.actions[idx].copy());
         }
         return new PiSum(this.system, actionsCopy);
+    }
+
+    addScope(scope: PiScope): void {
+        //TODO
+    }
+
+    alphaRename(argName: string, argValue: string, scope: PiScope): void {
+        //TODO
+    }
+
+    scopedRename(argName: string, argValue: string, scope: PiScope): void {
+        //TODO
     }
 }

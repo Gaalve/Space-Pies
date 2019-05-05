@@ -15,37 +15,39 @@ export class PiCalcTests {
         scene.time.delayedCall(0, ()=>{this.runTestPiReplication2(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiTerm(scene)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiTermRecursion(scene)}, [], this);
+        scene.time.delayedCall(0, ()=>{this.runTestPiRename(scene)}, [], this);
+        scene.time.delayedCall(0, ()=>{this.runTestPiScopeRename(scene)}, [], this);
     }
 
     static runTestPiSequential1(scene: Phaser.Scene): void{
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.addSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
+        system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             console.log("runTestPiSequential#1: success");
             system.stop();
         }));
-        system.addSymbol(system.add.channelOut("x", "*").nullProcess());
+        system.pushSymbol(system.add.channelOut("x", "*").nullProcess());
         system.start();
     }
 
     static runTestPiSequential2(scene: Phaser.Scene): void{
 
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.addSymbol(system.add.channelIn("x", "*").channelOut("x", "*").process("Out", ()=>{
+        system.pushSymbol(system.add.channelIn("x", "*").channelOut("x", "*").process("Out", ()=>{
             console.log("runTestPiSequential#2: success");
             system.stop();
         }));
-        system.addSymbol(system.add.channelOut("x", "*").channelIn("x", "*").nullProcess());
+        system.pushSymbol(system.add.channelOut("x", "*").channelIn("x", "*").nullProcess());
         system.start();
     }
 
     static runTestPiSequentialND(scene: Phaser.Scene): void{
 
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.addSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
+        system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             console.log("runTestPiSequentialND[1]: success");
             system.stop();
         }));
-        system.addSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
+        system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             console.log("runTestPiSequentialND[2]: success");
             system.stop();
         }));
@@ -53,11 +55,11 @@ export class PiCalcTests {
             console.log("runTestPiSequentialND[3]: success");
             system.stop();
         });
-        system.addSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
+        system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             console.log("runTestPiSequentialND[4]: success");
             system.stop();
         }));
-        system.addSymbol(system.add.channelOut("x", "*").nullProcess());
+        system.pushSymbol(system.add.channelOut("x", "*").nullProcess());
         system.start();
     }
 
@@ -67,31 +69,31 @@ export class PiCalcTests {
             return;
         }
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.addSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
+        system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             runs += 1;
             hits[0] += 1;
             system.stop();
             scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
         }));
-        system.addSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
+        system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             runs += 1;
             hits[1] += 1;
             system.stop();
             scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
         }));
-        system.addSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
+        system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             runs += 1;
             hits[2] += 1;
             system.stop();
             scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
         }));
-        system.addSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
+        system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             runs += 1;
             hits[3] += 1;
             system.stop();
             scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
         }));
-        system.addSymbol(system.add.channelOut("x", "*").nullProcess());
+        system.pushSymbol(system.add.channelOut("x", "*").nullProcess());
         system.start();
 
     }
@@ -106,7 +108,7 @@ export class PiCalcTests {
 
     static runTestPiSum(scene: Phaser.Scene): void{
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.addSymbol(system.add.sum([
+        system.pushSymbol(system.add.sum([
             system.add.channelIn('x', '*').process("Out", ()=>{
                 console.log("runTestPiSum[1]: success");
                 system.stop();
@@ -120,15 +122,15 @@ export class PiCalcTests {
                 system.stop();
             })
         ]));
-        system.addSymbol(system.add.channelOut('x', '*').nullProcess());
-        system.addSymbol(system.add.channelOut('y', '*').nullProcess());
-        system.addSymbol(system.add.channelOut('z', '*').nullProcess());
+        system.pushSymbol(system.add.channelOut('x', '*').nullProcess());
+        system.pushSymbol(system.add.channelOut('y', '*').nullProcess());
+        system.pushSymbol(system.add.channelOut('z', '*').nullProcess());
         system.start();
     }
 
     static runTestPiSum2(scene: Phaser.Scene): void{
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.addSymbol(system.add.sum([
+        system.pushSymbol(system.add.sum([
             system.add.channelOut('x', '*').process("Out", ()=>{
                 console.log("runTestPiSum2[1]: success");
                 system.stop();
@@ -142,15 +144,15 @@ export class PiCalcTests {
                 system.stop();
             })
         ]));
-        system.addSymbol(system.add.channelIn('x', '*').nullProcess());
-        system.addSymbol(system.add.channelIn('y', '*').nullProcess());
-        system.addSymbol(system.add.channelIn('z', '*').nullProcess());
+        system.pushSymbol(system.add.channelIn('x', '*').nullProcess());
+        system.pushSymbol(system.add.channelIn('y', '*').nullProcess());
+        system.pushSymbol(system.add.channelIn('z', '*').nullProcess());
         system.start();
     }
 
     static runTestPiSequentialParallel(scene: Phaser.Scene): void{
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.addSymbol(
+        system.pushSymbol(
             system.add.channelIn("x", "*").concurrent([
                     system.add.channelOut('y', '*').nullProcess(),
                     system.add.channelIn('y', '*').process('Out', ()=>{
@@ -160,7 +162,7 @@ export class PiCalcTests {
                 ]
             )
         );
-        system.addSymbol(
+        system.pushSymbol(
             system.add.channelOut('x', '*').nullProcess()
         );
         system.start();
@@ -171,7 +173,7 @@ export class PiCalcTests {
         let runs = 0;
         let maxRuns = 10;
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.addSymbol(
+        system.pushSymbol(
             system.add.replication(system.add.channelIn("x", "*").process("Out", ()=>{
                 if(++runs == maxRuns){
                     console.log("runTestPiReplication1: success, runs: "+runs);
@@ -180,7 +182,7 @@ export class PiCalcTests {
             }))
         );
         for (let i = 0; i < maxRuns; i++) {
-            system.addSymbol(
+            system.pushSymbol(
                 system.add.channelOut('x', '*').nullProcess()
             );
         }
@@ -191,7 +193,7 @@ export class PiCalcTests {
         let runs = 0;
         let maxRuns = 10;
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.addSymbol(
+        system.pushSymbol(
             system.add.replication(system.add.channelOut("x", "*").process("Out", ()=>{
                 if(++runs == maxRuns){
                     console.log("runTestPiReplication2: success, runs: "+runs);
@@ -200,7 +202,7 @@ export class PiCalcTests {
             }))
         );
         for (let i = 0; i < maxRuns; i++) {
-            system.addSymbol(
+            system.pushSymbol(
                 system.add.channelIn('x', '*').nullProcess()
             );
         }
@@ -209,13 +211,13 @@ export class PiCalcTests {
 
     static runTestPiTerm(scene: Phaser.Scene): void{
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.addSymbol(
+        system.pushSymbol(
             system.add.channelIn('x', '*').term('Term21', system.add.process("Out", ()=>{
                 console.log("runTestPiTerm: success");
                 system.stop();
             }))
         );
-        system.addSymbol(
+        system.pushSymbol(
             system.add.channelOut('x', '*').nullProcess()
         );
         system.start();
@@ -228,9 +230,9 @@ export class PiCalcTests {
 
         let recursion = system.add.term('Recursion', undefined);
         recursion.symbol = system.add.channelOut('x', '*').next(recursion);
-        system.addSymbol(recursion);
+        system.pushSymbol(recursion);
 
-        system.addSymbol(
+        system.pushSymbol(
             system.add.replication(system.add.channelOut("x", "*").process("Out", ()=>{
                 if(++runs == maxRuns){
                     console.log("runTestPiTermRecursion: success, runs: "+runs);
@@ -239,7 +241,7 @@ export class PiCalcTests {
             }))
         );
         for (let i = 0; i < maxRuns; i++) {
-            system.addSymbol(
+            system.pushSymbol(
                 system.add.channelIn('x', '*').process("Out", ()=>{
                     if(++runs == maxRuns){
                         console.log("runTestPiReplication2: success, runs: "+runs);
@@ -247,6 +249,40 @@ export class PiCalcTests {
                     }}
             ));
         }
+        system.start();
+    }
+
+    static runTestPiRename(scene: Phaser.Scene): void{
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+
+        system.pushSymbol(system.add.channelIn('x', 'a').channelOut('a', '*').nullProcess());
+        system.pushSymbol(system.add.channelOut('x', 'y').nullProcess());
+        system.pushSymbol(system.add.channelIn('y', '*').process("Out", ()=>{
+            console.log("runTestPiRename: success");
+            system.stop();
+        }));
+        system.start();
+    }
+
+    static runTestPiScopeRename(scene: Phaser.Scene): void{
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.pushSymbol(system.add.scope('x', system.add.channelIn('x', 'a').channelOut('a', '*').nullProcess()));
+        system.pushSymbol(system.add.channelOut('x', 'y').nullProcess());
+        system.pushSymbol(system.add.channelIn('y', '*').process("Out", ()=>{
+            console.log("runTestPiScopeRename: failed");
+            system.stop();
+        }));
+        system.start();
+    }
+
+    static runTestPiShieldTest(scene: Phaser.Scene): void{
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.pushSymbol(system.add.scope('x', system.add.channelIn('x', 'a').channelOut('a', '*').nullProcess()));
+        system.pushSymbol(system.add.channelOut('x', 'y').nullProcess());
+        system.pushSymbol(system.add.channelIn('y', '*').process("Out", ()=>{
+            console.log("runTestPiScopeRename: failed");
+            system.stop();
+        }));
         system.start();
     }
 }

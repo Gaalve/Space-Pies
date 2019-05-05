@@ -15,6 +15,7 @@ export class PiSystem {
     private resolveTimeOut: number;
     private cleanUpTimeOut: number;
 
+    private reservedNames: string[][];
 
     private existing: PiSymbol[];                   // all existing symbols; may get delete later
 
@@ -48,6 +49,8 @@ export class PiSystem {
         this.curActiveSymbols = [];
         this.activeSymbolsQueue = [];
 
+        this.reservedNames = [];
+
         /**
          * Blocking
          * Potentially Resolving
@@ -61,15 +64,37 @@ export class PiSystem {
 
     }
 
+    private indexOfReservedName(name: string): number{
+        for(let idx = 0; idx < this.reservedNames.length; ++idx){
+            if(this.reservedNames[idx][0] == name) return idx;
+        }
+        return -1;
+    }
+
+    public newReservedName(name: string): string{
+        let idx = this.indexOfReservedName(name);
+        let reservedName: string = undefined;
+        if(idx > -1){
+            let amount = this.reservedNames[idx].length;
+            reservedName = name + '\'' + amount;
+            this.reservedNames[idx].push(reservedName);
+        }
+        else{
+            reservedName = name+'\'1';
+            this.reservedNames.push([name, reservedName]);
+        }
+        return reservedName;
+    }
+
     /**
      * Adds a symbol as concurrent term.
      * @param symbol
      */
-    public addSymbol(symbol: PiSymbol): void{
+    public pushSymbol(symbol: PiSymbol): void{
         if(this.existing.indexOf(symbol)==-1){
             this.existing.push(symbol);
         }
-        else if (!(symbol instanceof PiTerm)){
+        else if (!(symbol instanceof PiTerm)){// exception for PiTerm (Recursions)
             console.log("Warning: Symbol already exists: "+symbol.getName());
         }
         if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
@@ -260,7 +285,7 @@ export class PiSystem {
 
         for(let idx in this.activeSymbolsQueue){
             if (this.enableDebugLogging) console.log("Adding Symbol to active from queue: " + this.activeSymbolsQueue[idx].getFullName());
-            this.addSymbol(this.activeSymbolsQueue[idx]);
+            this.pushSymbol(this.activeSymbolsQueue[idx]);
         }
         this.activeSymbolsQueue = [];
         let execTime = this.scene.time.now - startT;

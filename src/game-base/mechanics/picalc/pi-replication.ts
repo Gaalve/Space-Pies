@@ -1,6 +1,7 @@
 import {PiAction} from "./pi-action";
 import {PiSystem} from "./pi-system";
 import {PiResolvable} from "./pi-resolvable";
+import {PiScope} from "./pi-scope";
 
 export class PiReplication extends PiResolvable{
     public readonly action: PiAction;
@@ -22,11 +23,23 @@ export class PiReplication extends PiResolvable{
     }
 
     trigger(): void {
-        this.system.addSymbol(this.copy());
+        this.system.pushSymbol(this.copy());
     }
 
     public copy(): PiReplication{
         return new PiReplication(this.system, this.action.copy());
+    }
+
+    addScope(scope: PiScope): void {
+        //TODO
+    }
+
+    alphaRename(argName: string, argValue: string, scope: PiScope): void {
+        //TODO
+    }
+
+    scopedRename(argName: string, argValue: string, scope: PiScope): void {
+        //TODO
     }
 
 }

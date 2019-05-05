@@ -1,5 +1,6 @@
 import {PiSymbol} from "./pi-symbol";
 import {PiSystem} from "./pi-system";
+import {PiScope} from "./pi-scope";
 
 export class PiTerm extends PiSymbol{
 
@@ -23,7 +24,19 @@ export class PiTerm extends PiSymbol{
     }
 
     trigger(): void {
-        this.system.addSymbol(this.symbol.copy());
+        this.system.pushSymbol(this.symbol.copy());
+    }
+
+    addScope(scope: PiScope): void {
+        //TODO
+    }
+
+    alphaRename(argName: string, argValue: string, scope: PiScope): void {
+        //TODO
+    }
+
+    scopedRename(argName: string, argValue: string, scope: PiScope): void {
+        //TODO
     }
 
 }

@@ -9,6 +9,7 @@ import {PiSymbol} from "./pi-symbol";
 import {PiConcurrent} from "./pi-concurrent";
 import {PiReplication} from "./pi-replication";
 import {PiTerm} from "./pi-term";
+import {PiScope} from "./pi-scope";
 
 export  class PiSystemAdd{
     private readonly system: PiSystem;
@@ -43,5 +44,18 @@ export  class PiSystemAdd{
 
     public term(name: string, symbol: PiSymbol): PiTerm{
         return new PiTerm(this.system, name, symbol);
+    }
+
+    public scope(scopedName: string, symbol: PiSymbol): PiSymbol{
+        let scope = new PiScope(this.system, name, symbol);
+        let last = scope.getLastSymbol();
+        return scope;
+    }
+
+    public scopeAction(scopedName: string, symbol: PiSymbol): PiSystemAddAction{
+        let scope = new PiScope(this.system, name, symbol);
+        let last = scope.getLastSymbol();
+        if(last instanceof PiAction) return new PiSystemAddAction(this.system, last);
+        else throw new Error("Scope: Last Symbol is not an action!");
     }
 }

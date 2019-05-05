@@ -1,8 +1,10 @@
 import {PiSystem} from "./pi-system";
+import {PiScope} from "./pi-scope";
 
 export abstract class PiSymbol {
     protected system: PiSystem;
     protected name: string;
+    protected scopes: PiScope[];
     protected constructor(system: PiSystem, name: string){
         this.system = system;
         this.name = name;
@@ -50,12 +52,16 @@ export abstract class PiSymbol {
      * @param argName
      * @param argValue
      */
-    public rename(argName: string, argValue: string){
+    public rename(argName: string, argValue: string): void{
         // Default: Do nothing! TODO: should probably be overwritten by all symbols
     }
 
+    public abstract scopedRename(argName: string, argValue: string, scope: PiScope): void;
+    public abstract alphaRename(argName: string, argValue: string, scope: PiScope): void;
     /**
      * Creates a deep copy of this symbol (except for Pi-Term).
      */
     public abstract copy(): PiSymbol;
+
+    public abstract addScope(scope: PiScope): void;
 }

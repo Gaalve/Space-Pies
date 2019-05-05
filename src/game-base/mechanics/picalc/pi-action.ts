@@ -2,17 +2,23 @@ import {PiSymbol} from "./pi-symbol";
 import {PiSystem} from "./pi-system";
 import {PiProcess} from "./pi-process";
 import {PiResolvable} from "./pi-resolvable";
+import {PiScope} from "./pi-scope";
 
 export abstract class PiAction extends PiResolvable{
     protected next: PiSymbol;
     protected inOutPut: string;
     protected isInput: boolean;
 
+    protected isNameScoped: boolean;
+    protected isOutputScoped: boolean;
+
     protected constructor(system: PiSystem, name: string, inOutPut: string, isInput: boolean){
         super(system, name.toLowerCase());
         this.inOutPut = inOutPut;
         this.next = new PiProcess(system);
         this.isInput = isInput;
+        this.isNameScoped = false;
+        this.isOutputScoped = false;
     }
 
 
@@ -31,16 +37,7 @@ export abstract class PiAction extends PiResolvable{
      *
      * Recap: only free names can be bound, see ./src/game-base/docs/Pi-Kalkül-Doc.pdf, Section: Freie und Gebundene Namen.
      */
-    public rename(argName: string, argValue: string){
-        //Todo Scope is missing
-        if(this.name == argName){
-            this.name = argValue;
-        }
-        if(!this.isInput && this.inOutPut == argName){
-            this.inOutPut = argValue;
-        }
-        this.next.rename(argName, argValue);
-    }
+
 
     public abstract canResolve(other: PiAction): boolean;
 
@@ -51,4 +48,45 @@ export abstract class PiAction extends PiResolvable{
     }
 
     public abstract copy(): PiAction;
+
+    public _getNext(): PiSymbol{
+        return this.next;
+    }
+
+    private unsafeRename(argName: string, argValue: string): void{
+        if(this.name == argName){
+            this.name = argValue;
+        }
+        if(!this.isInput && this.inOutPut == argName){
+            this.inOutPut = argValue;
+        }
+    }
+
+    public rename(argName: string, argValue: string): void{
+        if(this.name == argName && !this.isNameScoped) this.name = argValue;
+        if(!this.isInput && this.inOutPut == argName && !this.isOutputScoped) this.inOutPut = argValue;
+        this.next.rename(argName, argValue);
+    }
+
+    public scopedRename(argName: string, argValue: string, scope: PiScope): void {
+        if(argName == this.name && this.scopes.indexOf(scope) > -1 )this.name = argValue;
+        if(!this.isInput && argName == this.inOutPut && this.scopes.indexOf(scope) > -1 )this.inOutPut = argValue;
+        this.next.scopedRename(argName, argValue, scope);
+    }
+
+    public alphaRename(argName: string, argValue: string, scope: PiScope): void {
+        if(argName == this.name && this.scopes.indexOf(scope) > -1 )this.name = argValue;
+        if(argName == this.inOutPut && this.scopes.indexOf(scope) > -1 )this.inOutPut = argValue;
+    }
+
+    public addScope(scope: PiScope): void {
+        if(this.name == scope.scopedName){
+            this.isNameScoped = true;
+            this.scopes.push(scope);
+        }
+        else if (this.inOutPut == scope.scopedName){
+            this.isOutputScoped = true;
+            this.scopes.push(scope);
+        }
+    }
 }

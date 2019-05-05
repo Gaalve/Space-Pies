@@ -1,5 +1,6 @@
 import {PiSymbol} from "./pi-symbol";
 import {PiSystem} from "./pi-system";
+import {PiScope} from "./pi-scope";
 
 export class PiConcurrent extends PiSymbol{
 
@@ -27,7 +28,7 @@ export class PiConcurrent extends PiSymbol{
 
     public trigger(): void {
         for(let idx in this.symbols)
-            this.system.addSymbol(this.symbols[idx]);
+            this.system.pushSymbol(this.symbols[idx]);
     }
 
     public copy(): PiConcurrent{
@@ -36,5 +37,23 @@ export class PiConcurrent extends PiSymbol{
             symbolsCopy.push(this.symbols[idx].copy());
         }
         return new PiConcurrent(this.system, symbolsCopy);
+    }
+
+    addScope(scope: PiScope): void {
+        for(let idx in this.symbols){
+            this.symbols[idx].addScope(scope);
+        }
+    }
+
+    alphaRename(argName: string, argValue: string, scope: PiScope): void {
+        // for(let idx in this.symbols){
+        //     this.symbols[idx].alphaRename(argName, argValue, scope);
+        // }
+
+        //TODO!
+    }
+
+    scopedRename(argName: string, argValue: string, scope: PiScope): void {
+        //TODO!
     }
 }

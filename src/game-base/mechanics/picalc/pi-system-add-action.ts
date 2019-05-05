@@ -8,6 +8,7 @@ import {PiConcurrent} from "./pi-concurrent";
 import {PiSum} from "./pi-sum";
 import {PiReplication} from "./pi-replication";
 import {PiTerm} from "./pi-term";
+import {PiScope} from "./pi-scope";
 
 export  class PiSystemAddAction{
     private readonly system: PiSystem;
@@ -62,6 +63,25 @@ export  class PiSystemAddAction{
     public term(name: string, symbol: PiSymbol): PiAction{
         this.action.setNextSymbol(new PiTerm(this.system, name, symbol));
         return this.startAction;
+    }
+
+    public scope(scopedName: string, symbol: PiSymbol): PiAction{
+        let scope = new PiScope(this.system, name, symbol);
+        let last = scope.getLastSymbol();
+        this.action.setNextSymbol(scope);
+        return this.startAction;
+    }
+
+
+    public scopeAction(scopedName: string, symbol: PiSymbol): this{
+        let scope = new PiScope(this.system, name, symbol);
+        let last = scope.getLastSymbol();
+        this.action.setNextSymbol(scope);
+        if(last instanceof PiAction){
+            this.action = last;
+            return this;
+        }
+        else throw new Error("Scope: Last symbol is not an action!");
     }
 
     public next(symbol: PiSymbol): PiAction{
