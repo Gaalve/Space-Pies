@@ -5,6 +5,7 @@ export class Weapon{
 	private level : number;						//level of weapon 1-3
 	private wClass : string;					//projectile or laser
 	private player : number;					//weapon belongs to player 1 or 2
+	private piTerm; //Pi system classes?
 
 	//textures
 	private readonly wMod : Phaser.GameObjects.Sprite;
@@ -12,6 +13,7 @@ export class Weapon{
 
 	protected constructor(scene : Phaser.Scene, x : number , y : number, wClass : string, 
 						  modTex : string, weapTex : string, player : number){
+
 		this.wClass = wClass;
 		this.level = 1; 						//or 0, if weapon shouldn't be activated from the beginning
 		this.player = player;
@@ -39,5 +41,15 @@ export class Weapon{
 	weaponUpgrade(newLevel : number, newTexture : string){
 		this.level = newLevel;					//maybe just: this.level++
 		//new Texture
+	}
+
+	changeWeaponClass(){
+		if(this.wClass == "projectile"){
+			this.wClass = "laser";
+		}else{
+			this.wClass = "projectile";
+		}
+
+		this.level = 1;
 	}
 }
