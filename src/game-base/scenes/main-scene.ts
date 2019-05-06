@@ -8,7 +8,6 @@ export class MainScene extends Phaser.Scene {
     /** How much game time has elapsed since the last rendering of a tick */
     private timeAccumulator = 0.0;
     private timeUpdateTick = 1000/60;
-    private currentPlayer = true;
     private players: [Player, Player];
     private turn: Turn;
     private buttonEndTurn: Button;
@@ -35,14 +34,6 @@ export class MainScene extends Phaser.Scene {
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",
             ()=>{
-                if(this.currentPlayer == true){
-                    this.currentPlayer = false;
-
-                }
-                else{
-                    this.currentPlayer = true;
-
-                }
                 this.turn.nextPlayer()
                 ;});
         this.buttonEndTurn.setPosition(1920/2, 500);
