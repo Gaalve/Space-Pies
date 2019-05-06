@@ -299,12 +299,15 @@ export class PiSystem {
         let startT = this.scene.time.now;
         let copy: PiSymbol[] = [];
         for(let idx in this.curActiveSymbols){
-            this.curActiveSymbols[idx].trigger();
             copy.push(this.curActiveSymbols[idx]);
+        }
+        for(let idx in copy){ // shitty workaround TODO
+            copy[idx].trigger();
         }
         for(let idx in copy){ // shitty workaround TODO
             this.removeActiveSymbol(copy[idx]);
         }
+
         for(let idx in this.activeSymbolsQueue){
             this.pushSymbol(this.activeSymbolsQueue[idx]);
         }

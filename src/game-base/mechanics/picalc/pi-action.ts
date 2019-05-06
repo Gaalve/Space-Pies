@@ -12,6 +12,8 @@ export abstract class PiAction extends PiResolvable{
     protected isNameScoped: boolean;
     protected isOutputScoped: boolean;
 
+    private callback: Function;
+
     protected constructor(system: PiSystem, name: string, inOutPut: string, isInput: boolean){
         super(system, name.toLowerCase());
         this.inOutPut = inOutPut;
@@ -19,6 +21,7 @@ export abstract class PiAction extends PiResolvable{
         this.isInput = isInput;
         this.isNameScoped = false;
         this.isOutputScoped = false;
+        this.callback = ()=>{};
     }
 
 
@@ -80,5 +83,14 @@ export abstract class PiAction extends PiResolvable{
     public getAction(fullName: string): PiAction {
         if(this.getFullName() == fullName) return this;
         throw new Error("Can't find action. this: "+this.getFullName()+ " other: "+fullName );
+    }
+
+    public setCallback(callback: Function){
+        this.callback = callback;
+    }
+
+    trigger(): void {
+        super.trigger();
+        this.callback();
     }
 }
