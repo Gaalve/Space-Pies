@@ -60,7 +60,7 @@ export abstract class PiAction extends PiResolvable{
     }
 
     public alphaRename(argName: string, argValue: string, scope: PiScope): void {
-        console.log('Alpha Rename: '+argName+" => "+argValue);
+        // console.log('Alpha Rename: '+argName+" => "+argValue);
         if(argName == this.name && (this.scopes.indexOf(scope) > -1 || !this.isNameScoped))this.name = argValue;
         if(argName == this.inOutPut && (this.scopes.indexOf(scope) > -1 || !this.isNameScoped))this.inOutPut = argValue;
         this.next.alphaRename(argName, argValue, scope);
@@ -75,5 +75,10 @@ export abstract class PiAction extends PiResolvable{
             this.isOutputScoped = true;
             this.scopes.push(scope);
         }
+    }
+
+    public getAction(fullName: string): PiAction {
+        if(this.getFullName() == fullName) return this;
+        throw new Error("Can't find action. this: "+this.getFullName()+ " other: "+fullName );
     }
 }

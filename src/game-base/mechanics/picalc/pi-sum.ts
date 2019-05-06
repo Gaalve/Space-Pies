@@ -71,4 +71,10 @@ export class PiSum extends PiResolvable{
         }
     }
 
+    public getAction(fullName: string): PiAction {
+        for (let idx in this.actions){
+            if(this.actions[idx].getFullName() == fullName) return this.actions[idx];
+        }
+        throw new Error("Can't find action.");
+    }
 }

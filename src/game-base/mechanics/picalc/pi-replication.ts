@@ -42,4 +42,10 @@ export class PiReplication extends PiResolvable{
         this.action.alphaRename(argName, argValue, scope);
     }
 
+    public getAction(fullName: string): PiAction {
+        if(this.action.getFullName() == fullName) return this.action;
+        throw new Error("Can't find action.");
+        // return this.action.getAction(fullName);
+    }
+
 }
