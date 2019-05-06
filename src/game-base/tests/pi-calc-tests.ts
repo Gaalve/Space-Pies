@@ -224,7 +224,7 @@ export class PiCalcTests {
         system.start();
     }
 
-    static runTestPiTermRecursion(scene: Phaser.Scene): void{ //TODO
+    static runTestPiTermRecursion(scene: Phaser.Scene): void{
         let runs = 0;
         let maxRuns = 10;
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
@@ -234,7 +234,7 @@ export class PiCalcTests {
         system.pushSymbol(recursion);
 
         system.pushSymbol(
-            system.add.replication(system.add.channelOut("x", "*").process("Out", ()=>{
+            system.add.replication(system.add.channelIn("x", "*").process("Out", ()=>{
                 if(++runs == maxRuns){
                     console.log("runTestPiTermRecursion: success, runs: "+runs);
                     system.stop();

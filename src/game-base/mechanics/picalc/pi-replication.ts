@@ -23,7 +23,7 @@ export class PiReplication extends PiResolvable{
     }
 
     trigger(): void {
-        this.action = this.action.copy();
+        // this.action = this.action.copy();
     }
 
     public copy(): PiReplication{
@@ -43,9 +43,8 @@ export class PiReplication extends PiResolvable{
     }
 
     public getAction(fullName: string): PiAction {
-        if(this.action.getFullName() == fullName) return this.action;
+        if(this.action.getFullName() == fullName) return this.action.copy();
         throw new Error("Can't find action.");
-        // return this.action.getAction(fullName);
     }
 
 }
