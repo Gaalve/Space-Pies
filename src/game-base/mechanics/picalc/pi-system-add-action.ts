@@ -28,11 +28,23 @@ export  class PiSystemAddAction{
     }
 
     public channelIn(name: string, input: string): this{
-        return this.nextAction(new PiChannelIn(this.system, name, input))
+        return this.nextAction(new PiChannelIn(this.system, name, input));
     }
 
     public channelOut(name: string, output: string): this{
-        return this.nextAction(new PiChannelOut(this.system, name, output))
+        return this.nextAction(new PiChannelOut(this.system, name, output));
+    }
+
+    public channelInCB(name: string, input: string, callback: Function): this{
+        let pi = new PiChannelIn(this.system, name, input);
+        pi.setCallback(callback);
+        return this.nextAction(pi);
+    }
+
+    public channelOutCB(name: string, output: string, callback: Function): this{
+        let pi = new PiChannelOut(this.system, name, output);
+        pi.setCallback(callback);
+        return this.nextAction(pi);
     }
 
     public concurrent(symbols: PiSymbol[]): PiAction{
