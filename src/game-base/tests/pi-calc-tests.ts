@@ -6,6 +6,8 @@ export class PiCalcTests {
 
     static runTests(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
 
+        scene.time.delayedCall(0, ()=>{this.runTestPiChannelCallback1(scene, testEnvironment)}, [], this);
+        scene.time.delayedCall(0, ()=>{this.runTestPiChannelCallback2(scene, testEnvironment)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiSequential1(scene, testEnvironment)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiSequential2(scene, testEnvironment)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiSequentialND(scene, testEnvironment)}, [], this);
@@ -21,6 +23,30 @@ export class PiCalcTests {
         scene.time.delayedCall(0, ()=>{this.runTestPiScopeRename(scene, testEnvironment)}, [], this);
         scene.time.delayedCall(0, ()=>{this.runTestPiShieldTest(scene, testEnvironment)}, [], this);
         testEnvironment.start();
+    }
+
+    static runTestPiChannelCallback1(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
+        let test = new TestBase(testEnvironment, 'PiChannelCallback#1', 0);
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.setOnDeadlockCallback(()=>{test.success()});
+        system.pushSymbol(system.add.channelIn("x", "*").channelOutCB("y", '*', ()=>{
+            test.fail();
+            system.stop();
+        }).nullProcess());
+        system.pushSymbol(system.add.channelOut("x", "*").nullProcess());
+        system.start();
+    }
+
+    static runTestPiChannelCallback2(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
+        let test = new TestBase(testEnvironment, 'PiChannelCallback#2', 0);
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.setOnDeadlockCallback(()=>{test.fail()});
+        system.pushSymbol(system.add.channelIn("x", "*").channelOutCB("y", '*', ()=>{
+            test.success();
+            system.stop();
+        }).nullProcess());
+        system.pushSymbol(system.add.channelOut("x", "*").channelIn('y', '*').nullProcess());
+        system.start();
     }
 
     static runTestPiSequential1(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
