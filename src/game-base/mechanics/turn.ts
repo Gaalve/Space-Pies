@@ -35,12 +35,14 @@ export class Turn {
     }
 
     private playerInput():void{
+        this.refScene.scene.launch('ShopScene');
         this.awaitInput = true;
         this.refScene.data.set('turnAction', 'PlayerInput');
     }
 
     public nextPlayer():void{
         if (!this.awaitInput) return;
+        this.refScene.scene.sleep('ShopScene');
         this.awaitInput = false;
         this.idx = 1 - this.idx;
         this.currentPlayer = this.players[this.idx];

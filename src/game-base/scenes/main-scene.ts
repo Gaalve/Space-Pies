@@ -12,6 +12,7 @@ export class MainScene extends Phaser.Scene {
     private players: [Player, Player];
     private turn: Turn;
     private buttonEndTurn: Button;
+    private shop: Button;
 
     constructor() {
         super({
@@ -33,8 +34,24 @@ export class MainScene extends Phaser.Scene {
         this.turn = new Turn(this, this.players);
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",
-            ()=>{this.turn.nextPlayer();});
+            ()=>{
+                this.turn.nextPlayer()
+                ;});
         this.buttonEndTurn.setPosition(1920/2, 500);
+        const openShop = this.add.text(910, 600, "shop",{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2}).setVisible(false);
+
+        this.scene.get('ShopScene').events.on("skip", function () {
+            this.scene.sleep("ShopScene");
+            openShop.setVisible(true);
+            openShop.setInteractive()
+        },this);
+
+        openShop.on('pointerup', function (){
+            this.scene.launch('ShopScene');
+            openShop.setVisible(false);
+            openShop.removeInteractive();
+        },this)
     }
 
 
