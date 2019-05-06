@@ -302,11 +302,12 @@ export class PiSystem {
             copy.push(this.curActiveSymbols[idx]);
         }
         for(let idx in copy){ // shitty workaround TODO
-            copy[idx].trigger();
-        }
-        for(let idx in copy){ // shitty workaround TODO
             this.removeActiveSymbol(copy[idx]);
         }
+        for(let idx in copy){ // shitty workaround TODO
+            copy[idx].trigger();
+        }
+
 
         for(let idx in this.activeSymbolsQueue){
             this.pushSymbol(this.activeSymbolsQueue[idx]);
