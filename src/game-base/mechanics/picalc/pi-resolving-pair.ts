@@ -15,11 +15,6 @@ export class PiResolvingPair {
         this.rightAction = rightAction;
     }
 
-    // public canResolve(): boolean{
-    //     // return this.left.canResolve(this.right) && this.right.canResolve(this.left);
-    //     return this.leftAction.canResolve(this.rightAction) && this.rightAction.canResolve(this.leftAction);
-    // }
-
     public getLeftResolvedSymbol(): PiSymbol{
         return this.leftAction.resolve(this.rightAction);
 

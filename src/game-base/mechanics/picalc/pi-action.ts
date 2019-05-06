@@ -53,25 +53,10 @@ export abstract class PiAction extends PiResolvable{
         return this.next;
     }
 
-    private unsafeRename(argName: string, argValue: string): void{
-        if(this.name == argName){
-            this.name = argValue;
-        }
-        if(!this.isInput && this.inOutPut == argName){
-            this.inOutPut = argValue;
-        }
-    }
-
     public rename(argName: string, argValue: string): void{
         if(this.name == argName && !this.isNameScoped) this.name = argValue;
         if(!this.isInput && this.inOutPut == argName && !this.isOutputScoped) this.inOutPut = argValue;
         this.next.rename(argName, argValue);
-    }
-
-    public scopedRename(argName: string, argValue: string, scope: PiScope): void {
-        if(argName == this.name && this.scopes.indexOf(scope) > -1 )this.name = argValue;
-        if(!this.isInput && argName == this.inOutPut && this.scopes.indexOf(scope) > -1 )this.inOutPut = argValue;
-        this.next.scopedRename(argName, argValue, scope);
     }
 
     public alphaRename(argName: string, argValue: string, scope: PiScope): void {

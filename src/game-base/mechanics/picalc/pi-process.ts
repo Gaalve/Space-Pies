@@ -30,7 +30,7 @@ export class PiProcess extends PiSymbol{
         //TODO
     }
 
-    scopedRename(argName: string, argValue: string, scope: PiScope): void {
+    rename(argName: string, argValue: string): void {
         //TODO
     }
 }

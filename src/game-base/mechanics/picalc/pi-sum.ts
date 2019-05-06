@@ -71,7 +71,4 @@ export class PiSum extends PiResolvable{
         }
     }
 
-    scopedRename(argName: string, argValue: string, scope: PiScope): void {
-        //TODO
-    }
 }
