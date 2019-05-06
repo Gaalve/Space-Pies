@@ -37,6 +37,8 @@ export class PiSystem {
     private phase1changed: boolean;
     private phase2changed: boolean;
     private phase3changed: boolean;
+    private deadlock: boolean;
+    private onDeadlockFunction: Function;
 
     public constructor(scene: Phaser.Scene, findResolvingTimeOut: number,
                        resolveTimeOut: number, cleanUpTimeOut: number, enableDebugLogging: boolean){
@@ -71,6 +73,9 @@ export class PiSystem {
         this.phase1changed = true;
         this.phase2changed = true;
         this.phase3changed = true;
+
+        this.deadlock = false;
+        this.onDeadlockFunction = ()=>{};
     }
 
     private indexOfReservedName(name: string): number{
@@ -102,6 +107,7 @@ export class PiSystem {
     public pushSymbol(symbol: PiSymbol): void{
         this.phase1changed = true;
         this.phase3changed = true;
+        this.deadlock = false;
         if(this.existing.indexOf(symbol)==-1){
             this.existing.push(symbol);
         }
@@ -231,6 +237,7 @@ export class PiSystem {
     private phaseFindResolvingActions(): void{
         this.logPhase1();
         this.phase1changed = false;
+        this.deadlock = true;
         let startT = this.scene.time.now;
         let allResolvables: PiResolvable[] = [];
         allResolvables = allResolvables.concat(this.curChannelIn, this.curChannelOut, this.curSums, this.curReplications);
@@ -303,6 +310,7 @@ export class PiSystem {
         }
         this.activeSymbolsQueue = [];
         let execTime = this.scene.time.now - startT;
+        if(this.deadlock) this.onDeadlock();
         if(this.running)this.scene.time.delayedCall(this.findResolvingTimeOut - execTime, ()=>{this.phaseFindResolvingActions()}, [], this);
     }
 
@@ -352,4 +360,12 @@ export class PiSystem {
         this.running = false;
     }
 
+    public setOnDeadlockCallback(callback: Function): void{
+        this.onDeadlockFunction = callback;
+    }
+
+
+    private onDeadlock(): void{
+        this.onDeadlockFunction();
+    }
 }
