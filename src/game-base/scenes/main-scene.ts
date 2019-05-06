@@ -8,7 +8,7 @@ export class MainScene extends Phaser.Scene {
     /** How much game time has elapsed since the last rendering of a tick */
     private timeAccumulator = 0.0;
     private timeUpdateTick = 1000/60;
-
+    private currentPlayer = true;
     private players: [Player, Player];
     private turn: Turn;
     private buttonEndTurn: Button;
@@ -35,22 +35,50 @@ export class MainScene extends Phaser.Scene {
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",
             ()=>{
+                if(this.currentPlayer == true){
+                    this.currentPlayer = false;
+
+                }
+                else{
+                    this.currentPlayer = true;
+
+                }
                 this.turn.nextPlayer()
                 ;});
         this.buttonEndTurn.setPosition(1920/2, 500);
-        const openShop = this.add.text(910, 600, "shop",{
+        const openShop1 = this.add.text(910, 600, "shop",{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2}).setVisible(false);
 
-        this.scene.get('ShopScene').events.on("skip", function () {
-            this.scene.sleep("ShopScene");
-            openShop.setVisible(true);
-            openShop.setInteractive()
+        const openShop2 = this.add.text(910, 600, "shop",{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2}).setVisible(false);
+
+        this.scene.get('ShopSceneP1').events.on("skip", function () {
+            this.scene.sleep("ShopSceneP1");
+            openShop1.setVisible(true);
+            openShop1.setInteractive()
         },this);
 
-        openShop.on('pointerup', function (){
-            this.scene.launch('ShopScene');
-            openShop.setVisible(false);
-            openShop.removeInteractive();
+
+        this.scene.get('ShopSceneP2').events.on("skip", function () {
+            this.scene.sleep("ShopSceneP2");
+            openShop2.setVisible(true);
+            openShop2.setInteractive()
+        },this);
+
+        openShop1.on('pointerup', function (){
+                this.scene.launch('ShopSceneP1');
+
+            openShop1.setVisible(false);
+            openShop1.removeInteractive();
+        },this)
+
+        openShop2.on('pointerup', function (){
+
+            this.scene.launch('ShopSceneP2');
+
+
+            openShop2.setVisible(false);
+            openShop2.removeInteractive();
         },this)
     }
 

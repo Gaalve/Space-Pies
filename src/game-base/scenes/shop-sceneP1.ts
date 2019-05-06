@@ -1,6 +1,6 @@
 import {Button} from "../mechanics/button";
 
-export class ShopScene extends Phaser.Scene{
+export class ShopSceneP1 extends Phaser.Scene{
 
     private timeAccumulator = 0.0;
     private timeUpdateTick = 1000/60;
@@ -14,7 +14,7 @@ export class ShopScene extends Phaser.Scene{
 
     constructor(){
         super({
-            key: 'ShopScene',
+            key: 'ShopSceneP1',
             active: false
         })
     }
@@ -29,7 +29,7 @@ export class ShopScene extends Phaser.Scene{
 
     create(): void{
 
-        this.background = this.add.image(2200, 500,"shop_bg");
+        this.background = this.add.image(2150, 500,"shop_bg");
 
         this.energy = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_energy",

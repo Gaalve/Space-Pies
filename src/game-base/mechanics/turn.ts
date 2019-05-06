@@ -35,14 +35,21 @@ export class Turn {
     }
 
     private playerInput():void{
-        this.refScene.scene.launch('ShopScene');
+        if(this.currentPlayer.getNameIdentifier() == "P1"){
+            this.refScene.scene.launch('ShopSceneP1');
+
+        }
+        else {
+            this.refScene.scene.launch('ShopSceneP2');
+        }
         this.awaitInput = true;
         this.refScene.data.set('turnAction', 'PlayerInput');
     }
 
     public nextPlayer():void{
         if (!this.awaitInput) return;
-        this.refScene.scene.sleep('ShopScene');
+        this.refScene.scene.sleep('ShopSceneP1');
+        this.refScene.scene.sleep('ShopSceneP2');
         this.awaitInput = false;
         this.idx = 1 - this.idx;
         this.currentPlayer = this.players[this.idx];

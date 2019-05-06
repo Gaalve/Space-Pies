@@ -2,7 +2,8 @@ import "phaser"
 
 import {MainScene} from "./scenes/main-scene"
 import {GuiScene} from "./scenes/gui-scene"
-import {ShopScene} from "./scenes/shop-scene";
+import {ShopSceneP1} from "./scenes/shop-sceneP1";
+import {ShopSceneP2} from "./scenes/shop-sceneP2"
 
 const config: GameConfig = {
     width: 1920,
@@ -11,7 +12,7 @@ const config: GameConfig = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [MainScene, GuiScene, ShopScene],
+    scene: [MainScene, GuiScene, ShopSceneP1, ShopSceneP2],
     physics: {
         default: 'arcade'
     },
