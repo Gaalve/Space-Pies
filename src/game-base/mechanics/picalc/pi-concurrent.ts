@@ -46,14 +46,9 @@ export class PiConcurrent extends PiSymbol{
     }
 
     alphaRename(argName: string, argValue: string, scope: PiScope): void {
-        // for(let idx in this.symbols){
-        //     this.symbols[idx].alphaRename(argName, argValue, scope);
-        // }
-
-        //TODO!
+        for(let idx in this.symbols){
+            this.symbols[idx].alphaRename(argName, argValue, scope);
+        }
     }
 
-    scopedRename(argName: string, argValue: string, scope: PiScope): void {
-        //TODO!
-    }
 }

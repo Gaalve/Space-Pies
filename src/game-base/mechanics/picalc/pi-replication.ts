@@ -23,8 +23,7 @@ export class PiReplication extends PiResolvable{
     }
 
     trigger(): void {
-        // this.system.pushSymbol(this.copy());
-        this.action = this.action.copy();
+        // this.action = this.action.copy();
     }
 
     public copy(): PiReplication{
@@ -32,15 +31,20 @@ export class PiReplication extends PiResolvable{
     }
 
     addScope(scope: PiScope): void {
-        //TODO
+        this.action.addScope(scope);
+    }
+
+    rename(argName: string, argValue: string): void {
+        this.action.rename(argName, argValue);
     }
 
     alphaRename(argName: string, argValue: string, scope: PiScope): void {
-        //TODO
+        this.action.alphaRename(argName, argValue, scope);
     }
 
-    scopedRename(argName: string, argValue: string, scope: PiScope): void {
-        //TODO
+    public getAction(fullName: string): PiAction {
+        if(this.action.getFullName() == fullName) return this.action.copy();
+        throw new Error("Can't find action.");
     }
 
 }

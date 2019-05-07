@@ -12,6 +12,8 @@ export abstract class PiAction extends PiResolvable{
     protected isNameScoped: boolean;
     protected isOutputScoped: boolean;
 
+    private callback: Function;
+
     protected constructor(system: PiSystem, name: string, inOutPut: string, isInput: boolean){
         super(system, name.toLowerCase());
         this.inOutPut = inOutPut;
@@ -19,6 +21,7 @@ export abstract class PiAction extends PiResolvable{
         this.isInput = isInput;
         this.isNameScoped = false;
         this.isOutputScoped = false;
+        this.callback = ()=>{};
     }
 
 
@@ -53,29 +56,14 @@ export abstract class PiAction extends PiResolvable{
         return this.next;
     }
 
-    private unsafeRename(argName: string, argValue: string): void{
-        if(this.name == argName){
-            this.name = argValue;
-        }
-        if(!this.isInput && this.inOutPut == argName){
-            this.inOutPut = argValue;
-        }
-    }
-
     public rename(argName: string, argValue: string): void{
         if(this.name == argName && !this.isNameScoped) this.name = argValue;
         if(!this.isInput && this.inOutPut == argName && !this.isOutputScoped) this.inOutPut = argValue;
         this.next.rename(argName, argValue);
     }
 
-    public scopedRename(argName: string, argValue: string, scope: PiScope): void {
-        if(argName == this.name && this.scopes.indexOf(scope) > -1 )this.name = argValue;
-        if(!this.isInput && argName == this.inOutPut && this.scopes.indexOf(scope) > -1 )this.inOutPut = argValue;
-        this.next.scopedRename(argName, argValue, scope);
-    }
-
     public alphaRename(argName: string, argValue: string, scope: PiScope): void {
-        console.log('Alpha Rename: '+argName+" => "+argValue);
+        // console.log('Alpha Rename: '+argName+" => "+argValue);
         if(argName == this.name && (this.scopes.indexOf(scope) > -1 || !this.isNameScoped))this.name = argValue;
         if(argName == this.inOutPut && (this.scopes.indexOf(scope) > -1 || !this.isNameScoped))this.inOutPut = argValue;
         this.next.alphaRename(argName, argValue, scope);
@@ -90,5 +78,19 @@ export abstract class PiAction extends PiResolvable{
             this.isOutputScoped = true;
             this.scopes.push(scope);
         }
+    }
+
+    public getAction(fullName: string): PiAction {
+        if(this.getFullName() == fullName) return this;
+        throw new Error("Can't find action. this: "+this.getFullName()+ " other: "+fullName );
+    }
+
+    public setCallback(callback: Function){
+        this.callback = callback;
+    }
+
+    trigger(): void {
+        super.trigger();
+        this.callback();
     }
 }

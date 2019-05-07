@@ -8,6 +8,8 @@ export abstract class PiResolvable extends PiSymbol{
         super(system, name);
     }
 
+    public abstract getAction(fullName: string): PiAction;
+
     public abstract getAllActions(): PiAction[];
 
     public abstract copy(): PiResolvable;

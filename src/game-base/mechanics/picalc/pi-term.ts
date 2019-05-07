@@ -7,11 +7,13 @@ export class PiTerm extends PiSymbol{
     public symbol: PiSymbol;
 
     private renames: [string, string][];
+    private alphaRenames: [string, string, PiScope][];
 
     public constructor(system: PiSystem, name: string, symbol: PiSymbol){
         super(system, name.toUpperCase());
         this.symbol = symbol;
         this.renames = [];
+        this.alphaRenames = [];
     }
 
     copy(): PiTerm { // no deep copy in case of recursions!
@@ -39,24 +41,18 @@ export class PiTerm extends PiSymbol{
     }
 
     addScope(scope: PiScope): void {
-        //TODO
         this.symbol.addScope(scope);
     }
 
-    rename(argName: string, argValue: string): void {
+    rename(argName: string, argValue: string): void { //TODO: dont rename Term if Symbol is not contained
         super.rename(argName, argValue);
         this.renames.push([argName, argValue]);
         this.name += '['+argValue+'/'+argName+']';
     }
 
     alphaRename(argName: string, argValue: string, scope: PiScope): void {
-        //TODO
-        // this.alphaRenames.push([argName, argValue, scope]);
-        // this.name += '['+argValue+'/'+argName+']';
-    }
-
-    scopedRename(argName: string, argValue: string, scope: PiScope): void {
-        //TODO
+        this.alphaRenames.push([argName, argValue, scope]);
+        this.name += '['+argValue+'/'+argName+']';
     }
 
 }

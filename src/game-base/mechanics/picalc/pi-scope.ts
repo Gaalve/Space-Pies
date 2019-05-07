@@ -83,9 +83,6 @@ export class PiScope extends PiSymbol{
         return this.symbols.indexOf(symbol) > -1;
     }
 
-    public scopedRename(argName: string, argValue: string, scope: PiScope): void{
-        //TODO
-    }
     public alphaRename(argName: string, argValue: string, scope: PiScope): void{
         this.symbolStart.alphaRename(argName, argValue, scope);
     }

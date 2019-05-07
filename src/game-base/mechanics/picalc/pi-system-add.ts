@@ -26,6 +26,18 @@ export  class PiSystemAdd{
         return new PiSystemAddAction(this.system, new PiChannelOut(this.system, name, output))
     }
 
+    public channelInCB(name: string, input: string, callback: Function): PiSystemAddAction{
+        let pi = new PiChannelIn(this.system, name, input);
+        pi.setCallback(callback);
+        return new PiSystemAddAction(this.system, pi)
+    }
+
+    public channelOutCB(name: string, output: string, callback: Function): PiSystemAddAction{
+        let pi = new PiChannelOut(this.system, name, output);
+        pi.setCallback(callback);
+        return new PiSystemAddAction(this.system, pi)
+    }
+
     public process(name: string, callback: Function): PiProcess{
         return new PiProcess(this.system, name, callback);
     }
