@@ -1,5 +1,7 @@
-
 /** Scene for user interface elements. */
+import {PiCalcTests} from "../tests/pi-calc-tests";
+import {TestEnvironment} from "../tests/test-environment";
+
 export class GuiScene extends Phaser.Scene {
 
     constructor() {
@@ -36,6 +38,13 @@ export class GuiScene extends Phaser.Scene {
         roundActionText.setOrigin(0.5, 0.5);
         roundNumberText.setOrigin(0.5, 0.5);
         roundPlayerText.setOrigin(0.5, 0.5);
+
+
+
+
+        let te : TestEnvironment= new TestEnvironment(this, ()=>{});
+        te.setOnFinishCallback(()=>{console.log("Pi-Calc-System working: "+te.didSucceed())});
+        PiCalcTests.runTests(this, te);
     }
 
 }
