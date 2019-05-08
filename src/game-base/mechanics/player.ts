@@ -1,4 +1,3 @@
-
 export class Player {
     private nameIdentifier: string;
     private maxHealth : number;
