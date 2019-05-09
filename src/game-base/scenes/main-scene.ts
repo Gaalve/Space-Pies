@@ -13,6 +13,7 @@ export class MainScene extends Phaser.Scene {
     private players: [Player, Player];
     private turn: Turn;
     private buttonEndTurn: Button;
+    private buttonOption: Button;
 
 
     constructor() {
@@ -38,6 +39,20 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_skip",
             ()=>{this.turn.nextPlayer();});
         this.buttonEndTurn.setPosition(1920/2, 500);
+
+        this.buttonOption = new Button(this, 100, 100, "button_shadow",
+            "button_bg", "button_fg", "button_options",
+            ()=>{
+            this.scene.pause();
+            this.scene.launch('PauseScene');
+            this.scene.setVisible(true,"PauseScene");
+
+            }
+        );
+        this.buttonOption.setPosition(1750, 100);
+
+
+
     }
 
 
@@ -47,6 +62,9 @@ export class MainScene extends Phaser.Scene {
             this.timeAccumulator -= this.timeUpdateTick;
             this.buttonEndTurn.updateStep();
             // console.log("Update")
+
+            this.buttonOption.updateStep()
+
         }
     }
 

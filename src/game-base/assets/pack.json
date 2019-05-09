@@ -125,6 +125,21 @@
         "type": "image",
         "key": "weapon",
         "url": "assets/sprites/weapon.png"
+      },
+      {
+        "type": "image",
+        "key": "shop_bg",
+        "url": "assets/sprites/shop_bg.png"
+      },
+      {
+        "type": "image",
+        "key": "button_options",
+        "url": "assets/sprites/button_options.png"
+      },
+      {
+        "type": "image",
+        "key": "button_resume",
+        "url": "assets/sprites/button_resume.png"
       }
     ]
   }
