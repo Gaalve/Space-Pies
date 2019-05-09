@@ -2,6 +2,7 @@ import "phaser"
 
 import {MainScene} from "./scenes/main-scene"
 import {GuiScene} from "./scenes/gui-scene"
+import {PauseScene} from "./scenes/pause-scene"
 
 const config: GameConfig = {
     width: 1920,
@@ -10,7 +11,7 @@ const config: GameConfig = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [MainScene, GuiScene],
+    scene: [MainScene, GuiScene,PauseScene],
     physics: {
         default: 'arcade'
     },

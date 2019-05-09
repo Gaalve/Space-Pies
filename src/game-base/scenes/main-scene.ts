@@ -14,6 +14,7 @@ export class MainScene extends Phaser.Scene {
     private turn: Turn;
     private buttonEndTurn: Button;
 
+
     constructor() {
         super({
             key: "MainScene"
