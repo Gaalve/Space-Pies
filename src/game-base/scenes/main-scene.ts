@@ -2,6 +2,7 @@ import {Turn} from "../mechanics/turn";
 import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
 import {PiCalcTests} from "../tests/pi-calc-tests";
+import {PiSystem} from "../mechanics/picalc/pi-system";
 import {Healthbar} from "./objects/Healthbar";
 
 
@@ -14,6 +15,8 @@ export class MainScene extends Phaser.Scene {
     private players: [Player, Player];
     private turn: Turn;
     private buttonEndTurn: Button;
+    private buttonOption: Button;
+    private shop: Button;
 
     constructor() {
         super({
@@ -36,8 +39,60 @@ export class MainScene extends Phaser.Scene {
         this.turn = new Turn(this, this.players);
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",
-            ()=>{this.turn.nextPlayer();});
+            ()=>{
+                openShop1.setVisible(false).removeInteractive();
+                openShop2.setVisible(false).removeInteractive();
+                this.turn.nextPlayer()
+                ;});
         this.buttonEndTurn.setPosition(1920/2, 500);
+        const openShop1 = this.add.text(910, 600, "shop",{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2}).setVisible(false);
+
+        const openShop2 = this.add.text(910, 600, "shop",{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2}).setVisible(false);
+
+        this.scene.get('ShopSceneP1').events.on("skip", function () {
+            this.scene.sleep("ShopSceneP1");
+            openShop1.setVisible(true);
+            openShop1.setInteractive()
+        },this);
+
+
+        this.scene.get('ShopSceneP2').events.on("skip", function () {
+            this.scene.sleep("ShopSceneP2");
+            openShop2.setVisible(true);
+            openShop2.setInteractive()
+        },this);
+
+        openShop1.on('pointerup', function (){
+                this.scene.launch('ShopSceneP1');
+
+            openShop1.setVisible(false);
+            openShop1.removeInteractive();
+        },this)
+
+        openShop2.on('pointerup', function (){
+
+            this.scene.launch('ShopSceneP2');
+
+
+            openShop2.setVisible(false);
+            openShop2.removeInteractive();
+        },this)
+
+        this.buttonOption = new Button(this, 100, 100, "button_shadow",
+            "button_bg", "button_fg", "button_options",
+            ()=>{
+            this.scene.pause();
+            this.scene.launch('PauseScene');
+            this.scene.setVisible(true,"PauseScene");
+
+            }
+        );
+        this.buttonOption.setPosition(1750, 100);
+
+
+
 
         // CREATE HEALTHBARS FOR EACH PLAYER, 10 HP, 10 SHIELD
         const healthbarP1 = new Healthbar(this, this.players[0], 10, 10);
@@ -50,8 +105,19 @@ export class MainScene extends Phaser.Scene {
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
             this.buttonEndTurn.updateStep();
-            // console.log("Update")
+            // console.log("Update");
+
+            this.buttonOption.updateStep()
+
         }
+    }
+
+    getPlayer1(): Player{
+        return this.players[0];
+    }
+
+    getPlayer2(): Player{
+        return this.players[1];
     }
 
 }
