@@ -13,7 +13,6 @@ export class MainScene extends Phaser.Scene {
     private players: [Player, Player];
     private turn: Turn;
     private buttonEndTurn: Button;
-    public system: PiSystem;
 
     constructor() {
         super({
@@ -32,7 +31,7 @@ export class MainScene extends Phaser.Scene {
 
     create(): void {
         this.add.image(1920/2, 1080/2, "background_space");
-        this.players = [new Player(this, 200, 500,"P1", 20, true, this.system), new Player(this, 1720, 500,"P2", 20, false, this.system)];
+        this.players = [new Player(this, 200, 500,"P1", 20, true), new Player(this, 1720, 500,"P2", 20, false)];
         this.turn = new Turn(this, this.players);
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",

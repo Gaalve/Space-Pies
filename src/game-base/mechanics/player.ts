@@ -1,5 +1,6 @@
 import {Drone} from "./drone";
 import {PiSystem} from "./picalc/pi-system";
+import {Ship} from "./ship";
 
 export class Player {
     private nameIdentifier: string;
@@ -8,23 +9,27 @@ export class Player {
     private drones : Drone[] = new Array();
     private scene : Phaser.Scene;
     private system : PiSystem;
+    private ship : Ship;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, maxHealth: number, isFirstPlayer: boolean, system : PiSystem){
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, maxHealth: number, isFirstPlayer: boolean){
         this.nameIdentifier = nameIdentifier;
         this.maxHealth = maxHealth;
         this.firstPlayer = isFirstPlayer;
+        this.ship = new Ship(scene, x, y, this);
         this.drones.push(new Drone(scene, x, y, this, 0));
         this.drones[0].addWeapon(scene,"p");
         this.drones[0].setVisible(false);
         this.scene = scene;
-        this.system = system;
-        if(this.nameIdentifier == "P1") {
+
+
+        //this.system = system;
+        /*if(this.nameIdentifier == "P1") {
             system.add.channelInCB("wmod1", "", this.createDrone);
             system.add.channelInCB("wmod1", "", this.createDrone);
         }else{
             system.add.channelInCB("wmod2", "", this.createDrone);
             system.add.channelInCB("wmod2", "", this.createDrone);
-        }
+        }*/
     }
 
     getNameIdentifier(): string{
