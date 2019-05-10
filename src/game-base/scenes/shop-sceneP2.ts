@@ -12,7 +12,7 @@ export class ShopSceneP2 extends Phaser.Scene{
     private shield: Button;
     private armor: Button;
     private background;
-    private activeWmods:integer = 0;
+    private activeWmods:integer = 3;
 
     constructor(){
         super({
