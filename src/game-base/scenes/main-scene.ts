@@ -3,10 +3,6 @@ import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
 import {PiCalcTests} from "../tests/pi-calc-tests";
 
-import {Weapon} from "../mechanics/weapon";
-import {LWeapon} from "../mechanics/laserweapon";
-import {PWeapon} from "../mechanics/projectileweapon";
-
 export class MainScene extends Phaser.Scene {
 
     /** How much game time has elapsed since the last rendering of a tick */
@@ -34,7 +30,7 @@ export class MainScene extends Phaser.Scene {
 
     create(): void {
         this.add.image(1920/2, 1080/2, "background_space")
-        this.players = [new Player("P1", 20, true), new Player("P2", 20, false)];
+        this.players = [new Player(this, 200, 500,"P1", 20, true), new Player(this, 1720, 500,"P2", 20, false)];
         this.turn = new Turn(this, this.players);
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",

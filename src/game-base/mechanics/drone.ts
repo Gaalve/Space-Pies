@@ -1,44 +1,55 @@
 import {Player} from "./player";
+import {Weapon} from "./weapon";
+import {PWeapon} from "./projectileweapon";
+import {LWeapon} from "./laserweapon";
+import {PiSystem} from "./picalc/pi-system";
+
 
 export class Drone extends Phaser.GameObjects.Sprite{
 
-	private position : Phaser.Math.Vector2;
-	private readonly player : Player;
-	private activatedWeapons : number;
+	private posX : number;
+	private posY : number;
+	private player : Player;
+	private weapons : Weapon[];
+	private index : number;
 
 
-	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player){
+	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
 	    if(player.getNameIdentifier() == "P1") {
             super(scene, x, y, "ssr_wmod");
         }else{
 	        super(scene, x, y, "ssb_wmod");
         }
-            this.position.x = x;
-            this.position.y = y;
-            this.player = player;
-            this.activatedWeapons = 0;
+	    this.weapons = new Array();
+	    this.posX = x;
+	    this.posY = y;
+	    this.player = player;
+	    this.index = index;
+	    scene.add.existing(this);
 
-            this.setVisible(false);
-            this.setState(0);
-            scene.add.existing(this);
     }
 
-    activateDrone() : void {
-	    this.setVisible(true);                      //TODO: Als Animation einfügen
-	    this.setState(1);
+    getPositionX() : number{
+	    return this.posX
     }
-
-    getPosition() : Phaser.Math.Vector2{
-	    return this.position;
+    getPositionY() : number{
+	    return this.posY
     }
 
     getPlayer() : Player{
 	    return this.player;
     }
 
-    updateWeapons() : void{
-	    if(this.activatedWeapons < 3) {
-            this.activatedWeapons++;
+    addWeapon(scene : Phaser.Scene, weapon : string) : void{
+	    if(weapon == "l"){
+	        this.weapons.push(new LWeapon(scene, this, this.weapons.length));
+
+        }else if(weapon == "p"){
+	        this.weapons.push(new PWeapon(scene, this, this.weapons.length));
         }
+    }
+
+    getWeapons() : number{
+	    return this.weapons.length;
     }
 }
