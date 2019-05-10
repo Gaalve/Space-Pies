@@ -140,6 +140,12 @@
         "type": "image",
         "key": "weapon",
         "url": "assets/sprites/weapon.png"
+      },
+      {
+        "type": "image",
+        "key": "shop_bg",
+        "url": "assets/sprites/shop_bg.png"
+
       }
     ]
   }
