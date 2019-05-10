@@ -54,15 +54,15 @@ export class Player {
     createDrone(): void {
         if (this.drones.length == 1) {
             if(this.nameIdentifier == "P1"){
-                this.drones.push(new Drone(this.scene, this.drones[0].getPositionX() + 300, this.drones[0].getPositionY() + 300,this,this.drones.length));
+                this.drones.push(new Drone(this.scene, this.drones[0].x + 300, this.drones[0].y + 300,this,this.drones.length));
             }else {
-                this.drones.push(new Drone(this.scene, this.drones[0].getPositionX() - 300, this.drones[0].getPositionY() + 300,this,this.drones.length));
+                this.drones.push(new Drone(this.scene, this.drones[0].x - 300, this.drones[0].y + 300,this,this.drones.length));
             }
         } else if (this.drones.length == 2) {
             if(this.nameIdentifier == "P1"){
-                this.drones.push(new Drone(this.scene, this.drones[0].getPositionX() + 300, this.drones[0].getPositionY() - 300,this,this.drones.length));
+                this.drones.push(new Drone(this.scene, this.drones[0].x + 300, this.drones[0].y - 300,this,this.drones.length));
             }else{
-                this.drones.push(new Drone(this.scene, this.drones[0].getPositionX() - 300, this.drones[0].getPositionY() - 300,this,this.drones.length));
+                this.drones.push(new Drone(this.scene, this.drones[0].x - 300, this.drones[0].y - 300,this,this.drones.length));
             }
         }
     }

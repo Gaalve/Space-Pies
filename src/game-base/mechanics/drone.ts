@@ -7,8 +7,7 @@ import {PiSystem} from "./picalc/pi-system";
 
 export class Drone extends Phaser.GameObjects.Sprite{
 
-	private posX : number;
-	private posY : number;
+
 	private player : Player;
 	private weapons : Weapon[];
 	private index : number;
@@ -21,19 +20,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	        super(scene, x, y, "ssb_wmod");
         }
 	    this.weapons = new Array();
-	    this.posX = x;
-	    this.posY = y;
 	    this.player = player;
 	    this.index = index;
 	    scene.add.existing(this);
-
-    }
-
-    getPositionX() : number{
-	    return this.posX
-    }
-    getPositionY() : number{
-	    return this.posY
     }
 
     getPlayer() : Player{
@@ -44,8 +33,8 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    if(weapon == "l"){
 	        this.weapons.push(new LWeapon(this.scene, this, this.weapons.length));
 
-        }else if(weapon == "p"){
-	        this.weapons.push(new PWeapon(this.scene, this, this.weapons.length));
+        }else if(weapon == "p") {
+            this.weapons.push(new PWeapon(this.scene, this, this.weapons.length));
         }
     }
 
@@ -56,4 +45,5 @@ export class Drone extends Phaser.GameObjects.Sprite{
     getIndex() : number{
 		return this.index;
 	}
+
 }

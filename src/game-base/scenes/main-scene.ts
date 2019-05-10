@@ -89,13 +89,7 @@ export class MainScene extends Phaser.Scene {
         );
         this.buttonOption.setPosition(1750, 100);
 
-        this.players[0].getDrones()[0].addWeapon("p");
-        this.players[0].getDrones()[0].addWeapon("p");
-        this.players[1].getDrones()[0].addWeapon("p");
-        this.players[1].getDrones()[0].addWeapon("p");
         this.players[0].createDrone();
-        this.players[0].getDrones()[1].addWeapon("p");
-
     }
 
 
