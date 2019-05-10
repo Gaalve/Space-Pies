@@ -17,7 +17,7 @@ export class Player {
         this.firstPlayer = isFirstPlayer;
         this.ship = new Ship(scene, x, y, this);
         this.drones.push(new Drone(scene, x, y, this, 0));
-        this.drones[0].addWeapon(scene,"p");
+        this.drones[0].addWeapon("p");
         this.drones[0].setVisible(false);
         this.scene = scene;
 

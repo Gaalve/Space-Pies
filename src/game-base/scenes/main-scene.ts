@@ -32,13 +32,14 @@ export class MainScene extends Phaser.Scene {
 
     create(): void {
         this.add.image(1920/2, 1080/2, "background_space");
-        this.players = [new Player(this, 200, 500,"P1", 20, true), new Player(this, 1720, 500,"P2", 20, false)];
+        this.players = [new Player(this, 250, 540,"P1", 20, true), new Player(this, 1680, 540,"P2", 20, false)];
         this.turn = new Turn(this, this.players);
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",
             ()=>{
                 openShop1.setVisible(false).removeInteractive();
                 openShop2.setVisible(false).removeInteractive();
+
                 this.turn.nextPlayer()
                 ;});
         this.buttonEndTurn.setPosition(1920/2, 500);
@@ -88,7 +89,12 @@ export class MainScene extends Phaser.Scene {
         );
         this.buttonOption.setPosition(1750, 100);
 
-
+        this.players[0].getDrones()[0].addWeapon("p");
+        this.players[0].getDrones()[0].addWeapon("p");
+        this.players[1].getDrones()[0].addWeapon("p");
+        this.players[1].getDrones()[0].addWeapon("p");
+        this.players[0].createDrone();
+        this.players[0].getDrones()[1].addWeapon("p");
 
     }
 

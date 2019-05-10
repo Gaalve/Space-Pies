@@ -40,16 +40,20 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    return this.player;
     }
 
-    addWeapon(scene : Phaser.Scene, weapon : string) : void{
+    addWeapon(weapon : string) : void{
 	    if(weapon == "l"){
-	        this.weapons.push(new LWeapon(scene, this, this.weapons.length));
+	        this.weapons.push(new LWeapon(this.scene, this, this.weapons.length));
 
         }else if(weapon == "p"){
-	        this.weapons.push(new PWeapon(scene, this, this.weapons.length));
+	        this.weapons.push(new PWeapon(this.scene, this, this.weapons.length));
         }
     }
 
     getWeapons() : number{
 	    return this.weapons.length;
     }
+
+    getIndex() : number{
+		return this.index;
+	}
 }
