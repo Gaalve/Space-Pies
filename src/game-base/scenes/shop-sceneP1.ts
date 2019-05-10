@@ -1,6 +1,8 @@
 import {Button} from "../mechanics/button";
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import {chooseSceneP1} from "./choose-sceneP1";
+import {Player} from "../mechanics/player";
+import {MainScene} from "./main-scene";
 
 export class ShopSceneP1 extends Phaser.Scene{
 
@@ -14,6 +16,7 @@ export class ShopSceneP1 extends Phaser.Scene{
     private armor: Button;
     private background;
     private activeWmods: integer = 1;
+    private Player1: Player;
 
 
     constructor(){
@@ -48,7 +51,7 @@ export class ShopSceneP1 extends Phaser.Scene{
         // 'pXmYZ' Z = type(l,p)
         // m0 = ship ; m1 = drone1; m2 = drone2
         // max 3 extensions and modules
-
+        //this.Player1 = this.scene.get('MainScene')
         this.background = this.add.image(2150, 500,"shop_bg");
 
         this.armor = new Button(this, 500, 500, "button_shadow",

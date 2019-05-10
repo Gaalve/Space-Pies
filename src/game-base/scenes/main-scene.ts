@@ -87,4 +87,12 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
+    getPlayer1(): Player{
+        return this.players[0];
+    }
+
+    getPlayer2(): Player{
+        return this.players[1];
+    }
+
 }
