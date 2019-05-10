@@ -13,7 +13,7 @@ export class MainScene extends Phaser.Scene {
     private players: [Player, Player];
     private turn: Turn;
     private buttonEndTurn: Button;
-    public system: PiSystem = new PiSystem(this, 1, 1, 1, false);
+    public system: PiSystem;
 
     constructor() {
         super({

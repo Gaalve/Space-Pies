@@ -1,6 +1,5 @@
 import {Drone} from "./drone";
 import {PiSystem} from "./picalc/pi-system";
-import {MainScene} from "../scenes/main-scene";
 
 export class Player {
     private nameIdentifier: string;
@@ -20,10 +19,11 @@ export class Player {
         this.scene = scene;
         this.system = system;
         if(this.nameIdentifier == "P1") {
-            this.system.add.channelInCB("wmod1", "", this.createDrone);
-            this.system.add.channelInCB("wmod1", "", this.createDrone);
+            system.add.channelInCB("wmod1", "", this.createDrone);
+            system.add.channelInCB("wmod1", "", this.createDrone);
         }else{
-            this.system.add.channelInCB(("wmod2", "", this.createDrone));
+            system.add.channelInCB("wmod2", "", this.createDrone);
+            system.add.channelInCB("wmod2", "", this.createDrone);
         }
     }
 
