@@ -13,6 +13,11 @@
       },
       {
         "type": "image",
+        "key": "background_space",
+        "url": "assets/sprites/background_space.png"
+      },
+      {
+        "type": "image",
         "key": "button_energy",
         "url": "assets/sprites/button_energy.png"
       },
@@ -60,6 +65,16 @@
         "type": "image",
         "key": "core_explosion",
         "url": "assets/sprites/core_explosion.png"
+      },
+      {
+        "type": "image",
+        "key": "healthbar",
+        "url": "assets/sprites/healthbar.png"
+      },
+      {
+        "type": "image",
+        "key": "shieldbar",
+        "url": "assets/sprites/shieldbar.png"
       },
       {
         "type": "image",
