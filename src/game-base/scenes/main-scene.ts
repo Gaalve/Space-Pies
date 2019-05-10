@@ -29,7 +29,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.add.image(1920/2, 1080/2, "background_space")
+        this.add.image(1920/2, 1080/2, "background_space");
         this.players = [new Player(this, 200, 500,"P1", 20, true), new Player(this, 1720, 500,"P2", 20, false)];
         this.turn = new Turn(this, this.players);
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
@@ -44,7 +44,7 @@ export class MainScene extends Phaser.Scene {
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
             this.buttonEndTurn.updateStep();
-            // console.log("Update")
+            // console.log("Update");
         }
     }
 

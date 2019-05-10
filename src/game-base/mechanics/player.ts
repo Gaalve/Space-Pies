@@ -1,4 +1,5 @@
 import {Drone} from "./drone";
+import {PiSystem} from "./picalc/pi-system";
 
 export class Player {
     private nameIdentifier: string;
