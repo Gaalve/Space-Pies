@@ -1,8 +1,8 @@
 
 export class Star {
 
-    private starSprite: Phaser.GameObjects.Sprite;
-    private scale: number;
+    private readonly starSprite: Phaser.GameObjects.Sprite;
+    private readonly scale: number;
     private static readonly vel: number = 0.8;
 
     public constructor(scene: Phaser.Scene, scale: number, x: number){

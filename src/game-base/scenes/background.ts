@@ -1,5 +1,3 @@
-import {PiCalcTests} from "../tests/pi-calc-tests";
-import {TestEnvironment} from "../tests/test-environment";
 import {Space} from "../mechanics/space/space";
 
 export class Background extends Phaser.Scene {

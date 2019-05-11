@@ -4,22 +4,16 @@ import {Star} from "./star";
 export class Space{
 
     private readonly scene: Phaser.Scene;
-//Textures
     private readonly lightLeft: Phaser.GameObjects.Sprite;
     private readonly lightRight: Phaser.GameObjects.Sprite;
 
-    private  starLayerBG0: Star[];
-    private  starLayerBG: Star[];
-    private  starLayerMG: Star[];
-    private  starLayerFG: Star[];
-
-    private lightScaleLeft;
-    private lightScaleRight;
+    private readonly starLayerBG0: Star[];
+    private readonly starLayerBG: Star[];
+    private readonly starLayerMG: Star[];
+    private readonly starLayerFG: Star[];
 
     private counter: number;
-    private counterLimit: number;
-
-
+    private readonly counterLimit: number;
 
 
     public constructor(scene: Phaser.Scene) {
