@@ -8,6 +8,7 @@ export class Space{
     private readonly lightRight: Phaser.GameObjects.Sprite;
 
     private readonly starLayerBG0: Star[];
+    private readonly starLayerBG1: Star[];
     private readonly starLayerBG: Star[];
     private readonly starLayerMG: Star[];
     private readonly starLayerFG: Star[];
@@ -27,8 +28,9 @@ export class Space{
         scene.add.existing(this.lightLeft);
         scene.add.existing(this.lightRight);
         this.counter = 0;
-        this.counterLimit = 60;
+        this.counterLimit = 50;
         this.starLayerBG0 = [];
+        this.starLayerBG1 = [];
         this.starLayerBG = [];
         this.starLayerMG = [];
         this.starLayerFG = [];
@@ -50,9 +52,10 @@ export class Space{
     public updateStep(): void{
         this.counter++;
         this.updateStepStars(this.starLayerBG0, 0.25);
-        this.updateStepStars(this.starLayerBG, 0.5);
-        this.updateStepStars(this.starLayerMG, 0.75);
-        this.updateStepStars(this.starLayerFG, 1);
+        this.updateStepStars(this.starLayerBG1, 0.3);
+        this.updateStepStars(this.starLayerBG, 0.4);
+        this.updateStepStars(this.starLayerMG, 0.6);
+        this.updateStepStars(this.starLayerFG, 0.8);
 
 
 
