@@ -17,7 +17,7 @@ const config: GameConfig = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [Background, MainScene, GuiScene, ShopSceneP1, ShopSceneP2, chooseSceneP1, chooseSceneP2, PauseScene],
+    scene: [Background, MainScene,  GuiScene, ShopSceneP1, ShopSceneP2, chooseSceneP1, chooseSceneP2, PauseScene],
     physics: {
         default: 'arcade'
     },

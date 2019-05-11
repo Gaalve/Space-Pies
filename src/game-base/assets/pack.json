@@ -18,6 +18,11 @@
       },
       {
         "type": "image",
+        "key": "button_armor",
+        "url": "assets/sprites/button_armor.png"
+      },
+      {
+        "type": "image",
         "key": "button_energy",
         "url": "assets/sprites/button_energy.png"
       },
@@ -108,6 +113,11 @@
       },
       {
         "type": "image",
+        "key": "ssb_wmod_off",
+        "url": "assets/sprites/ssb_wmod_off.png"
+      },
+      {
+        "type": "image",
         "key": "ssr_ship",
         "url": "assets/sprites/ssr_ship.png"
       },
@@ -130,6 +140,11 @@
         "type": "image",
         "key": "ssr_wmod",
         "url": "assets/sprites/ssr_wmod.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_wmod_off",
+        "url": "assets/sprites/ssr_wmod_off.png"
       },
       {
         "type": "image",
