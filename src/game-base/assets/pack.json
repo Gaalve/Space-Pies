@@ -23,6 +23,16 @@
       },
       {
         "type": "image",
+        "key": "button_cancel_red",
+        "url": "assets/sprites/button_cancel_red.png"
+      },
+      {
+        "type": "image",
+        "key": "button_cancel_black",
+        "url": "assets/sprites/button_cancel_black.png"
+      },
+      {
+        "type": "image",
         "key": "button_energy",
         "url": "assets/sprites/button_energy.png"
       },
@@ -35,6 +45,11 @@
         "type": "image",
         "key": "button_skip",
         "url": "assets/sprites/button_skip.png"
+      },
+      {
+        "type": "image",
+        "key": "button_space_shuttle",
+        "url": "assets/sprites/button_space_shuttle.png"
       },
       {
         "type": "image",
