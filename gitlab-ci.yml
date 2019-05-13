@@ -1,6 +1,5 @@
 stages:
   - build
-  - test
   - deploy
 
 building_app:
@@ -8,10 +7,6 @@ building_app:
   script:
     - "npm install"
     - "npm run build"
-
-testing_app:
-  stage: test
-  script:
 
 deploy_to_server:
   stage: deploy
