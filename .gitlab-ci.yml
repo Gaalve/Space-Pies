@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
   - deploy
 
 building_app:
@@ -8,8 +9,14 @@ building_app:
     - "npm install"
     - "npm run build"
 
+testing_app:
+  stage: test
+  script:
+
 deploy_to_server:
   stage: deploy
   script:
+    - "npm install"
+    - "npm run build"
     - "~/copy_files.sh"
 
