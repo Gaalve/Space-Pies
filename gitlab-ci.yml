@@ -1,0 +1,20 @@
+stages:
+  - build
+  - test
+  - deploy
+
+building_app:
+  stage: build
+  script:
+    - "npm install"
+    - "npm run build"
+
+testing_app:
+  stage: test
+  script:
+
+deploy_to_server:
+  stage: deploy
+  script:
+    - "~/copy_files.sh"
+
