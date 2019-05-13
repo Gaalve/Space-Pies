@@ -12,6 +12,7 @@ building_app:
 testing_app:
   stage: test
   script:
+    - "ls"
 
 deploy_to_server:
   stage: deploy
