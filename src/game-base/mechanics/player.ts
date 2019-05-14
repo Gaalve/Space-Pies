@@ -1,43 +1,75 @@
 import {Drone} from "./drone";
 import {PiSystem} from "./picalc/pi-system";
 import {Ship} from "./ship";
+import {Health} from "../scenes/objects/Health";
+import has = Reflect.has;
+import {Healthbar} from "../scenes/objects/Healthbar";
 
 export class Player {
     private nameIdentifier: string;
-    private maxHealth : number;
+    public health : Health;
     private firstPlayer: boolean;
     private drones : Drone[] = new Array();
     private scene : Phaser.Scene;
-    private system : PiSystem;
+    public system : PiSystem;
     private ship : Ship;
+    public healthbar : Healthbar;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, maxHealth: number, isFirstPlayer: boolean){
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, health : Health, isFirstPlayer: boolean, piSystem : PiSystem){
         this.nameIdentifier = nameIdentifier;
-        this.maxHealth = maxHealth;
+        this.health = health;
         this.firstPlayer = isFirstPlayer;
         this.ship = new Ship(scene, x, y, this);
         this.drones.push(new Drone(scene, x, y, this, 0));
         this.drones[0].addWeapon(scene,"p");
         this.drones[0].setVisible(false);
         this.scene = scene;
+        this.system = piSystem;
+        this.addHealthbarPiTerms(this);
+
+    }
 
 
-        //this.system = system;
-        /*if(this.nameIdentifier == "P1") {
-            system.add.channelInCB("wmod1", "", this.createDrone);
-            system.add.channelInCB("wmod1", "", this.createDrone);
-        }else{
-            system.add.channelInCB("wmod2", "", this.createDrone);
-            system.add.channelInCB("wmod2", "", this.createDrone);
-        }*/
+    private addHealthbarPiTerms(player: Player) {
+        this.system.pushSymbol(this.system.add.channelIn("armorEmpty" + player.getNameIdentifier(), "*").process("destroyArmor", this.destroyArmor(this.system)))
+        this.system.pushSymbol(this.system.add.channelIn("shieldEmpty" + player.getNameIdentifier(), "*").process("destroyShield", this.destroyShield(this.system)))
+    }
+
+    private destroyShield(system : PiSystem) : Function {
+        let player = this;
+        let dstroyShield = function()
+        {
+            console.log("[ACTION] " + player.getNameIdentifier() + "'s SHIELD COMPLETELY DESTROYED !");
+            system.pushSymbol(system.add.channelOut("shieldDestroyed" + player.getNameIdentifier(), "*").nullProcess());
+        };
+        return dstroyShield;
+
+
+    }
+
+    private destroyArmor(system : PiSystem) : Function {
+        let player = this;
+        let dstroyArmor = function()
+        {
+            console.log("[ACTION] " + player.getNameIdentifier() + "'s ARMOR COMPLETELY DESTROYED !");
+            system.pushSymbol(system.add.channelOut("armorDestroyed" + player.getNameIdentifier(), "*").nullProcess());
+        };
+        return dstroyArmor;
+    }
+
+    public shootProjectile(player : Player)
+    {
+        console.log("[ACTION] Shooting Projectile at " + player.getNameIdentifier() + " !")
+        this.system.pushSymbol(this.system.add.channelOut("armor" + player.getNameIdentifier(), "*").nullProcess());
+    }
+
+    public shootLaser(player : Player) {
+        console.log("[ACTION] Shooting Laser at " + player.getNameIdentifier() + " !")
+        this.system.pushSymbol(this.system.add.channelOut("shield" + player.getNameIdentifier(), "*").nullProcess());
     }
 
     getNameIdentifier(): string{
         return this.nameIdentifier;
-    }
-
-    getMaxHealth(): number{
-        return this.maxHealth;
     }
 
     isFirstPlayer(): boolean{
@@ -66,5 +98,6 @@ export class Player {
             }
         }
     }
+
 
 }
