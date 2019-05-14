@@ -11,7 +11,7 @@ export class Player {
     private system : PiSystem;
     private ship : Ship;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, maxHealth: number, isFirstPlayer: boolean){
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, maxHealth: number, isFirstPlayer: boolean, system : PiSystem){
         this.nameIdentifier = nameIdentifier;
         this.maxHealth = maxHealth;
         this.firstPlayer = isFirstPlayer;
@@ -22,14 +22,14 @@ export class Player {
         this.scene = scene;
 
 
-        //this.system = system;
-        /*if(this.nameIdentifier == "P1") {
-            system.add.channelInCB("wmod1", "", this.createDrone);
-            system.add.channelInCB("wmod1", "", this.createDrone);
+        this.system = system;
+        if(this.nameIdentifier == "P1") {
+            this.system.pushSymbol(this.system.add.channelInCB('wmod1', '*', ()=>{this.createDrone()}).nullProcess());
+            this.system.pushSymbol(this.system.add.channelInCB('wmod1', '*', ()=>{this.createDrone()}).nullProcess());
         }else{
-            system.add.channelInCB("wmod2", "", this.createDrone);
-            system.add.channelInCB("wmod2", "", this.createDrone);
-        }*/
+            this.system.pushSymbol(this.system.add.channelInCB('wmod2', '*', ()=>{this.createDrone()}).nullProcess());
+            this.system.pushSymbol(this.system.add.channelInCB('wmod2', '*', ()=>{this.createDrone()}).nullProcess());
+        }
     }
 
     getNameIdentifier(): string{
@@ -51,7 +51,7 @@ export class Player {
         return this.drones;
     }
 
-    createDrone(): void {
+    createDrone() : void{
         if (this.drones.length == 1) {
             if(this.nameIdentifier == "P1"){
                 this.drones.push(new Drone(this.scene, this.drones[0].x + 300, this.drones[0].y + 300,this,this.drones.length));

@@ -14,6 +14,7 @@ export class MainScene extends Phaser.Scene {
     private buttonEndTurn: Button;
     private buttonOption: Button;
     private shop: Button;
+    private system: PiSystem;
 
     constructor() {
         super({
@@ -31,8 +32,9 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
+        this.system = new PiSystem(this, 1,1,1,false);
         this.add.image(1920/2, 1080/2, "background_space");
-        this.players = [new Player(this, 250, 540,"P1", 20, true), new Player(this, 1680, 540,"P2", 20, false)];
+        this.players = [new Player(this, 250, 540,"P1", 20, true, this.system), new Player(this, 1680, 540,"P2", 20, false, this.system)];
         this.turn = new Turn(this, this.players);
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",
@@ -88,8 +90,9 @@ export class MainScene extends Phaser.Scene {
             }
         );
         this.buttonOption.setPosition(1750, 100);
+        this.system.pushSymbol(this.system.add.channelOut('wmod1', '*').nullProcess());
+        this.system.start();
 
-        this.players[0].createDrone();
     }
 
 
