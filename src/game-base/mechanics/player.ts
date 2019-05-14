@@ -23,6 +23,9 @@ export class Player {
 
 
         this.system = system;
+        /*
+        for each Player add 2 input channels to create new drones (max 2)
+         */
         if(this.nameIdentifier == "P1") {
             this.system.pushSymbol(this.system.add.channelInCB('wmod1', '*', ()=>{this.createDrone()}).nullProcess());
             this.system.pushSymbol(this.system.add.channelInCB('wmod1', '*', ()=>{this.createDrone()}).nullProcess());
@@ -49,6 +52,10 @@ export class Player {
     }
     getDrones(): Drone[]{
         return this.drones;
+    }
+
+    getSystem() : PiSystem{
+        return this.system;
     }
 
     createDrone() : void{

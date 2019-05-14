@@ -6,6 +6,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	private wClass : string;					//projectile or laser
 	private drone : Drone;						//which drone the weapon belongs to
     private wNr : number;
+    private piTerm : string;
 
 	protected constructor(scene : Phaser.Scene, drone : Drone, texture : string, wClass : string, wNr : number) {
         if (drone.getPlayer().getNameIdentifier() == "P1") {
@@ -64,4 +65,15 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	getWeaponNr() : number{
 		return this.wNr;
 	}
+
+    createPiTerm() : void{
+        if(this.drone.getPlayer().getNameIdentifier() == "P1") {
+            this.piTerm = "shield" + this.drone.getPlayer().getNameIdentifier() + "<*>";
+        }else{
+            this.piTerm = "armor" + this.drone.getPlayer().getNameIdentifier() + "<*>";
+        }
+    }
+    getPiTerm() : string{
+	    return this.piTerm;
+    }
 }

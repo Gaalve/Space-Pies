@@ -7,10 +7,10 @@ import {PiSystem} from "./picalc/pi-system";
 
 export class Drone extends Phaser.GameObjects.Sprite{
 
-
 	private player : Player;
 	private weapons : Weapon[];
 	private index : number;
+	private piTerm : string;
 
 
 	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
@@ -44,6 +44,14 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
     getIndex() : number{
 		return this.index;
+	}
+
+	createPiTerm() : void{
+		this.piTerm = "lock(*).";
+
+		for(let w of this.weapons){
+
+		}
 	}
 
 }
