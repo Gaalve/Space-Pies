@@ -1,7 +1,6 @@
 import {Turn} from "../mechanics/turn";
 import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
-import {PiCalcTests} from "../tests/pi-calc-tests";
 import {PiSystem} from "../mechanics/picalc/pi-system";
 
 export class MainScene extends Phaser.Scene {
