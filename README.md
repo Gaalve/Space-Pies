@@ -20,3 +20,6 @@ sodass die Nutzer spielend leicht den Pi-Kalkül erlernen können.
 
 ## Concept Art
 ![Concept Art](concept_artv3.png)
+
+## GitLab CI
+Die GitLab CI testet sowohl den Aufbau der Applikation als auch die Funktionalität von gewünschten Attributen der Applikation. Nach den Tests steht die Anwendung auf dem Server pr.mtv.tu-berlin.de unter <http://pr.mtv.tu-berlin.de/modysy-2019sose/space-pies/master/> zur Verfügung.
