@@ -1,0 +1,23 @@
+stages:
+  - build
+  - test
+  - deploy
+
+building_app:
+  stage: build
+  script:
+    - "npm install"
+    - "npm run build"
+
+testing_app:
+  stage: test
+  script:
+    - "ls"
+
+deploy_to_server:
+  stage: deploy
+  script:
+    - "npm install"
+    - "npm run build"
+    - "~/copy_files.sh"
+
