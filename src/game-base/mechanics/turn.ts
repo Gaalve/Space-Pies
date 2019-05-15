@@ -16,23 +16,24 @@ export class Turn {
         this.awaitInput = false;
         this.currentRound = 0;
         this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
-        this.refScene.data.set('round', ""+(++this.currentRound));
+        //this.refScene.data.set('round', ""+(++this.currentRound));
         this.refScene.data.set('turnAction', 'Create');
         this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
         this.refScene.data.set('round', ""+(this.currentRound));
         this.refScene.data.set('turnAction', 'Create');
-        this.refScene.time.delayedCall(0, () => (this.cycle1()), [], this);
-    }
-
-    private cycle1():void{
-        this.refScene.data.set('turnAction', 'Cycle1');
-        this.refScene.time.delayedCall(0, () => (this.cycle2()), [], this);
-    }
-
-    private cycle2():void{
-        this.refScene.data.set('turnAction', 'Cycle2');
         this.refScene.time.delayedCall(0, () => (this.playerInput()), [], this);
     }
+
+
+ /*   private Attackturn():void{
+        this.refScene.data.set('turnAction', 'Attackturn');
+        this.refScene.time.delayedCall(2000, () => (this.playerInput()), [], this);
+    } /*
+
+ /*   private cycle2():void{
+        this.refScene.data.set('turnAction', 'Cycle2');
+        this.refScene.time.delayedCall(1000, () => (this.playerInput()), [], this);
+    } */
 
     private playerInput():void{
         if(this.currentPlayer.getNameIdentifier() == "P1"){
@@ -43,10 +44,26 @@ export class Turn {
             this.refScene.scene.launch('ShopSceneP2');
         }
         this.awaitInput = true;
-        this.refScene.data.set('turnAction', 'PlayerInput');
+        this.idx = 1 - this.idx;
+        this.currentPlayer = this.players[this.idx];
+        this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
+        this.refScene.data.set('turnAction', 'Shopping Phase');
+        this.refScene.data.set('round', ""+(++this.currentRound));
+
     }
 
-    public nextPlayer():void{
+    public Attackturn():void{
+        if (!this.awaitInput) return;
+        this.refScene.scene.sleep('ShopSceneP1');
+        this.refScene.scene.sleep('ShopSceneP2');
+        this.refScene.scene.sleep('chooseSceneP1');
+        this.refScene.scene.sleep('chooseSceneP2');
+
+        this.refScene.data.set('turnAction', 'Battle Phase');
+        this.refScene.time.delayedCall(3000, () => (this.playerInput()), [], this);
+    }
+
+  /*  public nextPlayer():void{
         if (!this.awaitInput) return;
         this.refScene.scene.sleep('ShopSceneP1');
         this.refScene.scene.sleep('ShopSceneP2');
@@ -57,8 +74,8 @@ export class Turn {
         this.idx = 1 - this.idx;
         this.currentPlayer = this.players[this.idx];
         this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
-        this.refScene.data.set('turnAction', 'NextPlayer');
+        this.refScene.data.set('turnAction', 'Nextplayer');
         this.refScene.data.set('round', ""+(++this.currentRound));
-        this.refScene.time.delayedCall(500, () => (this.cycle1()), [], this);
-    }
+        this.refScene.time.delayedCall(500, () => (this.Attackturn()), [], this);
+    } */
 }
