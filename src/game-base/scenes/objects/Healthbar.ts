@@ -74,12 +74,14 @@ export class Healthbar {
         // ADDING SPRITES TO SCREEN AND MEMORY
         for (let i = 0; i < hp; i++)
         {
-            const armor = this.refScene.add.image( x -= 18, y, "healthbar");
+            const armor =  player.isFirstPlayer() ? this.refScene.add.image(x += 18, y, "healthbar") : this.refScene.add.image( x -= 18, y, "healthbar");
             sprites.armorSprites[i] = armor;
         }
+
+        x = player.isFirstPlayer() ? x + (player.health.getMaxArmor() - hp) * 18 : x - (player.health.getMaxArmor() - hp) * 18;
         for (let i = 0; i < shield; i++)
         {
-            const shield = this.refScene.add.image(x -= 18, y, "shieldbar");
+            const shield =  player.isFirstPlayer() ? this.refScene.add.image(x += 18, y, "shieldbar") : this.refScene.add.image( x -= 18, y, "shieldbar");
             sprites.shieldSprites[i] = shield;
         }
         player.healthbar.spritesP1 = player.isFirstPlayer() ? sprites : player.healthbar.spritesP1;
