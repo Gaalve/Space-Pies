@@ -67,7 +67,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	}
 
     createPiTerm() : void{
-        if(this.drone.getPlayer().getNameIdentifier() == "P1") {
+        if(this.wClass == "laser") {
             this.piTerm = "shield" + this.drone.getPlayer().getNameIdentifier() + "<*>";
         }else{
             this.piTerm = "armor" + this.drone.getPlayer().getNameIdentifier() + "<*>";
