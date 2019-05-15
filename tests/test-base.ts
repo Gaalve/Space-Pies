@@ -13,9 +13,6 @@ export class TestBase {
         if(timeout > 0 ){
             // TODO timeout
         }
-        else {
-            environment.scene.time.delayedCall(10000, this.fail, [], this);
-        }
         this.environment.addTest(this);
     }
 

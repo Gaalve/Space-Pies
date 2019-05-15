@@ -33,6 +33,7 @@ export class PiSystem {
 
     private running;
 
+    private date = new Date();
 
     private phase1changed: boolean;
     private phase2changed: boolean;
@@ -238,7 +239,7 @@ export class PiSystem {
         this.logPhase1();
         this.phase1changed = false;
         this.deadlock = true;
-        let startT = this.scene.time.now;
+        let startT = this.date.getTime();
         let allResolvables: PiResolvable[] = [];
         allResolvables = allResolvables.concat(this.curChannelIn, this.curChannelOut, this.curSums, this.curReplications);
         for (let i = 0; i < allResolvables.length; i++) {
@@ -250,8 +251,8 @@ export class PiSystem {
         }
 
 
-        let execTime = this.scene.time.now - startT;
-        this.scene.time.delayedCall(this.resolveTimeOut - execTime, ()=>{this.phaseResolveActions()}, [], this);
+        let execTime = this.date.getTime() - startT;
+        this.phaseResolveActions();
     }
 
     /**
@@ -270,7 +271,7 @@ export class PiSystem {
     private phaseResolveActions(): void{
         this.logPhase2();
         this.phase2changed = false;
-        let startT = this.scene.time.now;
+        let startT = this.date.getTime();
         while(this.potentiallyResolving.length > 0){
             let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
             let resolvablePair: PiResolvingPair = this.potentiallyResolving[randIdx];
@@ -278,8 +279,8 @@ export class PiSystem {
             this.potentiallyResolving.splice(randIdx, 1);
         }
 
-        let execTime = this.scene.time.now - startT;
-        this.scene.time.delayedCall(this.cleanUpTimeOut - execTime, ()=>{this.phaseTriggerSymbols()}, [], this);
+        let execTime = this.date.getTime() - startT;
+        this.phaseTriggerSymbols();
     }
 
     /**
@@ -296,7 +297,7 @@ export class PiSystem {
     private phaseTriggerSymbols(): void{
         this.logPhase3();
         this.phase3changed = false;
-        let startT = this.scene.time.now;
+        let startT = this.date.getTime();
         let copy: PiSymbol[] = [];
         for(let idx in this.curActiveSymbols){
             copy.push(this.curActiveSymbols[idx]);
@@ -313,9 +314,9 @@ export class PiSystem {
             this.pushSymbol(this.activeSymbolsQueue[idx]);
         }
         this.activeSymbolsQueue = [];
-        let execTime = this.scene.time.now - startT;
+        let execTime = this.date.getTime() - startT;
         if(this.deadlock) this.onDeadlock();
-        if(this.running)this.scene.time.delayedCall(this.findResolvingTimeOut - execTime, ()=>{this.phaseFindResolvingActions()}, [], this);
+        if(this.running) this.phaseFindResolvingActions();
     }
 
     private logPhase1(){
@@ -354,7 +355,7 @@ export class PiSystem {
     public start(): void{
         if (this.enableDebugLogging) console.log("Starting Pi-Calc-Simulation");
         this.running = true;
-        this.scene.time.delayedCall(this.findResolvingTimeOut, ()=>{this.phaseFindResolvingActions()}, [], this);
+        this.phaseFindResolvingActions();
     }
 
     /**

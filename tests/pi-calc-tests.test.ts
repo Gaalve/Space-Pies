@@ -9,11 +9,12 @@ import "mocha";
 
 describe('test', function() {
 
-    let gui : GuiScene = new GuiScene();
-    let te : TestEnvironment = new TestEnvironment(gui, ()=>{});
-    te.setOnFinishCallback(()=>{console.log("Pi-Calc-System working: "+te.didSucceed())});
-
     it('should ', function () {
+
+        this.timeout(10);
+        let gui: Phaser.Scene = new Phaser.Scene({ });
+        let te : TestEnvironment = new TestEnvironment(gui, ()=>{});
+        te.setOnFinishCallback(()=>{console.log("Pi-Calc-System working: "+te.didSucceed())});
         PiCalcTests.runTestPiChannelCallback1(gui, te);
     });
 });
@@ -41,7 +42,7 @@ export class PiCalcTests {
         testEnvironment.start();
     }*/
 
-    static runTestPiChannelCallback1(gui : GuiScene, testEnvironment: TestEnvironment): void{
+    static runTestPiChannelCallback1(gui : Phaser.Scene, testEnvironment: TestEnvironment): void{
 
         let test = new TestBase(testEnvironment, 'PiChannelCallback#1', 0);
         let system : PiSystem = new PiSystem(gui, 1, 1, 1, false);
