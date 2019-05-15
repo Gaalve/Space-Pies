@@ -8,6 +8,7 @@ import {chooseSceneP1} from "./scenes/choose-sceneP1";
 import {chooseSceneP2} from "./scenes/choose-sceneP2";
 import {PauseScene} from "./scenes/pause-scene"
 import {ChooseTypeSceneP1} from"./scenes/chooseType-sceneP1"
+import {ChooseTypeSceneP2} from "./scenes/chooseType-sceneP2";
 
 const config: GameConfig = {
     width: 1920,
@@ -16,8 +17,7 @@ const config: GameConfig = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [MainScene, GuiScene, ShopSceneP1, ShopSceneP2, chooseSceneP1, chooseSceneP2, ChooseTypeSceneP1],
-    scene: [MainScene, GuiScene, ShopSceneP1, ShopSceneP2, chooseSceneP1, chooseSceneP2, PauseScene],
+    scene: [MainScene, GuiScene, ShopSceneP1, ShopSceneP2, chooseSceneP1, chooseSceneP2, ChooseTypeSceneP1, ChooseTypeSceneP2, PauseScene],
     physics: {
         default: 'arcade'
     },

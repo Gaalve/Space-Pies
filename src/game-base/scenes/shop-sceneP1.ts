@@ -23,8 +23,7 @@ export class ShopSceneP1 extends Phaser.Scene{
         super({
             key: 'ShopSceneP1',
             active: false
-        });
-
+        })
     }
 
     preload(): void{
@@ -49,6 +48,9 @@ export class ShopSceneP1 extends Phaser.Scene{
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', this.scene.launch));
         let createWMod = system.add.replication(system.add.channelOut('wmod1','*' ).nullProcess()); //wmod2 for p2
 
+        const text = this.add.text(1920-650, 50, 'choose action', {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
+
         // 'pXmYZ' Z = type(l,p)
         // m0 = ship ; m1 = drone1; m2 = drone2
         // max 3 extensions and modules
@@ -56,9 +58,12 @@ export class ShopSceneP1 extends Phaser.Scene{
         this.Player1 = this.scene.get('MainScene').data.get('P1');
         this.activeWmods = this.Player1.getNrDrones();
         this.background = this.add.image(2150, 500,"shop_bg");
+        const text1 = this.add.text(1920-650, 50, 'choose action', {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
+
 
         this.armor = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "button_energy",
+            "button_bg", "button_fg", "button_armor",
             ()=>{
             system.pushSymbol(createArmor)
             });
@@ -67,6 +72,10 @@ export class ShopSceneP1 extends Phaser.Scene{
         const energyText = this.add.text(1920-500, 180, "Armor", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         const piArmor = this.add.text(1920-300, 180, 'armor(p1).0',{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} );
+        const piShield = this.add.text(1920-300, 330, 'shield(p1).0',{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} );
+        const piWMod = this.add.text(1920-150, 630, 'wmod(p1).0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
         this.shield = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_shield",
@@ -113,7 +122,7 @@ export class ShopSceneP1 extends Phaser.Scene{
 
 
         this.skip = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "button_skip",
+            "button_bg", "button_fg", "button_cancel_black",
             ()=>{
             this.events.emit("skip")
             });

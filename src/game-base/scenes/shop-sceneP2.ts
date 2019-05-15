@@ -49,15 +49,23 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.Player2 = this.scene.get('MainScene').data.get('P2');
         this.activeWmods = this.Player2.getNrDrones();
         this.background = this.add.image(-250, 500,"shop_bg");
+        const text = this.add.text(160, 50, 'choose action', {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
         this.armor = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "button_energy",
+            "button_bg", "button_fg", "button_armor",
             ()=>{
             system.pushSymbol(createArmor)
             });
         this.armor.setPosition(200, 200);
         const energyText = this.add.text(300, 180, "Armor", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+        const piArmor = this.add.text(500, 180, 'armor(p2).O',{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
+        const piShield = this.add.text(500, 330, 'shield(p2).0',{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
+        const piWmod = this.add.text(650, 630, 'wmod(p2).0',{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
         this.shield = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_shield",
@@ -72,7 +80,7 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
-            this.scene.launch('chooseSceneP2');
+            this.scene.launch('chooseTypeSceneP2');
 
             });
         this.wExt.setPosition(200, 500);
@@ -81,9 +89,8 @@ export class ShopSceneP2 extends Phaser.Scene{
 
         if(this.activeWmods >= 3){
             this.wModule = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_skip",
+                "button_bg", "button_fg", "button_cancel_red",
                 ()=>{
-                    system.pushSymbol(createWMod)
 
                 });
             this.wModule.setPosition(200, 650);
@@ -106,7 +113,7 @@ export class ShopSceneP2 extends Phaser.Scene{
 
 
         this.skip = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "button_skip",
+            "button_bg", "button_fg", "button_cancel_black",
             ()=>{
             this.events.emit("skip")
             });
