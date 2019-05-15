@@ -1,5 +1,6 @@
 import {Button} from "../mechanics/button";
 import {PiSystem} from "../mechanics/picalc/pi-system";
+import {Player} from "../mechanics/player";
 
 export class ShopSceneP2 extends Phaser.Scene{
 
@@ -13,12 +14,14 @@ export class ShopSceneP2 extends Phaser.Scene{
     private armor: Button;
     private background;
     private activeWmods:integer = 3;
+    private Player2: Player;
 
     constructor(){
         super({
             key: 'ShopSceneP2',
             active: false
-        })
+        });
+
     }
 
     preload(): void{
@@ -32,17 +35,19 @@ export class ShopSceneP2 extends Phaser.Scene{
     create(): void{
         let system = new PiSystem(this, 1,1, 1, false);
 
-        let createShield = system.add.channelOut('shield','p1' ).nullProcess();
-        let createArmor = system.add.channelOut('armor','p1' ).nullProcess();
-        let createWExtShipL = system.add.channelOut('wext20','l' ).nullProcess();
-        let createWExtShipP = system.add.channelOut('wext20','p' ).nullProcess();
-        let createWExtDrone1L = system.add.channelOut('wext21','l' ).nullProcess();
-        let createWExtDrone1P = system.add.channelOut('wext21','p' ).nullProcess();
-        let createWExtDrone2L = system.add.channelOut('wext22','l' ).nullProcess();
-        let createWExtDrone2P = system.add.channelOut('wext22','p' ).nullProcess();
+        let createShield = system.add.replication(system.add.channelOut('shield','p2' ).nullProcess());
+        let createArmor = system.add.replication(system.add.channelOut('armor','p2' ).nullProcess());
+        let createWExtShipL = system.add.replication(system.add.channelOut('wext20','l' ).nullProcess());
+        let createWExtShipP = system.add.replication(system.add.channelOut('wext20','p' ).nullProcess());
+        let createWExtDrone1L = system.add.replication(system.add.channelOut('wext21','l' ).nullProcess());
+        let createWExtDrone1P = system.add.replication(system.add.channelOut('wext21','p' ).nullProcess());
+        let createWExtDrone2L = system.add.replication(system.add.channelOut('wext22','l' ).nullProcess());
+        let createWExtDrone2P = system.add.replication(system.add.channelOut('wext22','p' ).nullProcess());
+        let startShop = system.add.replication(system.add.channelIn('shopp2','*').process('ShopP2', this.scene.launch));
+        let createWMod = system.add.replication(system.add.channelOut('wmod2','*' ).nullProcess()); //wmod2 for p2
 
-        let createWMod = system.add.channelOut('wmod2','*' ).nullProcess(); //wmod2 for p2
-
+        this.Player2 = this.scene.get('MainScene').data.get('P2');
+        this.activeWmods = this.Player2.getNrDrones();
         this.background = this.add.image(-250, 500,"shop_bg");
 
         this.armor = new Button(this, 500, 500, "button_shadow",

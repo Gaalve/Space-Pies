@@ -23,7 +23,8 @@ export class ShopSceneP1 extends Phaser.Scene{
         super({
             key: 'ShopSceneP1',
             active: false
-        })
+        });
+
     }
 
     preload(): void{
@@ -37,21 +38,23 @@ export class ShopSceneP1 extends Phaser.Scene{
     create(): void{
         let system = new PiSystem(this, 1,1, 1, false);
 
-        let createShield = system.add.channelOut('shield','p1' ).nullProcess();
-        let createArmor = system.add.channelOut('armor','p1' ).nullProcess();
-        let createWExtShipL = system.add.channelOut('wext10','l' ).nullProcess();
-        let createWExtShipP = system.add.channelOut('wext10','p' ).nullProcess();
-        let createWExtDrone1L = system.add.channelOut('wext11','l' ).nullProcess();
-        let createWExtDrone1P = system.add.channelOut('wext11','p' ).nullProcess();
-        let createWExtDrone2L = system.add.channelOut('wext12','l' ).nullProcess();
-        let createWExtDrone2P = system.add.channelOut('wext12','p' ).nullProcess();
-
-        let createWMod = system.add.channelOut('wmod1','*' ).nullProcess(); //wmod2 for p2
+        let createShield = system.add.replication(system.add.channelOut('shield','p1' ).nullProcess());
+        let createArmor = system.add.replication(system.add.channelOut('armor','p1' ).nullProcess());
+        let createWExtShipL = system.add.replication(system.add.channelOut('wext10','l' ).nullProcess());
+        let createWExtShipP = system.add.replication(system.add.channelOut('wext10','p' ).nullProcess());
+        let createWExtDrone1L = system.add.replication(system.add.channelOut('wext11','l' ).nullProcess());
+        let createWExtDrone1P = system.add.replication(system.add.channelOut('wext11','p' ).nullProcess());
+        let createWExtDrone2L = system.add.replication(system.add.channelOut('wext12','l' ).nullProcess());
+        let createWExtDrone2P = system.add.replication(system.add.channelOut('wext12','p' ).nullProcess());
+        let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', this.scene.launch));
+        let createWMod = system.add.replication(system.add.channelOut('wmod1','*' ).nullProcess()); //wmod2 for p2
 
         // 'pXmYZ' Z = type(l,p)
         // m0 = ship ; m1 = drone1; m2 = drone2
         // max 3 extensions and modules
-        //this.Player1 = this.scene.get('MainScene')
+        //this.Player1 = this.scene.get('MainScene').data.get('currentPlayer');
+        this.Player1 = this.scene.get('MainScene').data.get('P1');
+        this.activeWmods = this.Player1.getNrDrones();
         this.background = this.add.image(2150, 500,"shop_bg");
 
         this.armor = new Button(this, 500, 500, "button_shadow",
@@ -77,7 +80,7 @@ export class ShopSceneP1 extends Phaser.Scene{
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
-            this.scene.launch('chooseSceneP1')
+            this.scene.launch('chooseTypeSceneP1')
             //system.pushSymbol(createWMod)
             });
         this.wExt.setPosition(1920-600, 500);
