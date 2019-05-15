@@ -8,27 +8,46 @@ import {PiSystem} from "./picalc/pi-system";
 export class Drone extends Phaser.GameObjects.Sprite{
 
 	private player : Player;
-	private weapons : Weapon[];
+	private weapons : [Weapon, Weapon, Weapon];
 	private index : number;
 	private piTerm : string;
-	private onScreenText : Phaser.GameObjects.Text;
-
+	public onScreenText : Phaser.GameObjects.Text;
+	private activatedWeapons: integer;
 
 	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
-	    if(player.getNameIdentifier() == "P1") {
-            super(scene, x, y, "ssr_wmod");
-        }else{
-	        super(scene, x, y, "ssb_wmod");
-        }
-	    this.weapons = new Array();
+		super(scene, x, y, "ssr_wmod");
+	    if(player.getNameIdentifier() == "P2"){
+	    	this.setTexture("ssb_wmod");
+		}
+	    //reposition external drones
+	    if(index == 1){
+	    	if(player.getNameIdentifier() == "P1"){
+				this.setPosition(x + 300, y + 300);
+			}else{
+				this.setPosition(x - 300, y + 300);
+			}
+		}else if(index == 2){
+			if(player.getNameIdentifier() == "P1"){
+				this.setPosition(x + 300, y - 300);
+			}else{
+				this.setPosition(x - 300, y - 300);
+			}
+		}
+
 	    this.player = player;
 	    this.index = index;
+	    this.setVisible(false);
 	    scene.add.existing(this);
-	    this.buildPiTerm();
+
+	    this.activatedWeapons = 0;
+
+	    this.weapons = [new Weapon(scene, this, "ssr_weap_las", "shield", 0),
+						new Weapon(scene, this, "ssr_weap_las", "shield", 1),
+						new Weapon(scene, this, "ssr_weap_las", "shield", 2)];
+
+		this.buildPiTerm();
 	    this.activateOnScreenText();
-	    if(this.index > 0){
-	    	this.pushPiTermsExt();
-		}
+
     }
 
     getPlayer() : Player{
@@ -39,21 +58,36 @@ export class Drone extends Phaser.GameObjects.Sprite{
     add a weapon to the drone (has to be done via pi calculus)
      */
     addWeapon(weapon : string) : void{
+    	let w = this.weapons[this.getNrWeapons()];
 	    if(weapon == "l"){
-	        this.weapons.push(new LWeapon(this.scene, this, this.weapons.length));
-
+			w.setWeaponClass("shield");
+			if(this.player.getNameIdentifier() == "P1"){
+				w.setTexture("ssr_weap_las");
+			}else{
+				w.setTexture("ssb_weap_las");
+			}
         }else if(weapon == "p") {
-            this.weapons.push(new PWeapon(this.scene, this, this.weapons.length));
+			w.setWeaponClass("armor");
+			if(this.player.getNameIdentifier() == "P1"){
+				w.setTexture("ssr_weap_pro");
+			}else{
+				w.setTexture("ssb_weap_pro");
+			}
         }
+	    w.setVisible(true);
 	    this.buildPiTerm();
 	    this.refreshOnScreenText();
+		this.activatedWeapons = this.activatedWeapons + 1;
+		if(this.activatedWeapons < 3){
+			this.piTermWExtensions();
+		}
     }
 
     /**
     get number of installed weapons
      */
     getNrWeapons() : number{
-	    return this.weapons.length;
+	    return this.activatedWeapons;
     }
 
     /**
@@ -74,13 +108,16 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	build pi Term that represents the drone and will be displayed on Screen
 	 */
 	buildPiTerm() : void {
+		if(this.visible || this.index == 0) {
+			this.piTerm = "lock(*).";
 
-		this.piTerm = "lock(*).";
-
-		for (let w of this.weapons) {
-			this.piTerm = this.piTerm + w.getPiTerm() + "<*>.";
+			for (let w of this.weapons) {
+				if (w.visible) {
+					this.piTerm = this.piTerm + w.getPiTerm() + "<*>.";
+				}
+			}
+			this.piTerm = this.piTerm + "0";
 		}
-		this.piTerm = this.piTerm + "0";
 	}
 
 	/**
@@ -117,7 +154,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	add Pi sum with channels In wextXYl und wextXYp to add either laser or projectile weapon
 	(X: playernumber, Y: dronenumber)
 	 */
-	pushPiTermsExt() : void{
+	piTermWExtensions() : void{
 		let p = this.player.getNameIdentifier().charAt(1);
 		let w = this.index.toString();
 		let channel_l : string = "wext" + p + w + "l";

@@ -8,17 +8,19 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     private wNr : number;
     private piTerm : string;
 
-	protected constructor(scene : Phaser.Scene, drone : Drone, texture : string, wClass : string, wNr : number) {
-        if (drone.getPlayer().getNameIdentifier() == "P1") {
-            super(scene, drone.x + 90, drone.y, texture);
+	public constructor(scene : Phaser.Scene, drone : Drone, texture : string, wClass : string, wNr : number) {
+        super(scene, drone.x, drone.y, texture);
+		if (drone.getPlayer().getNameIdentifier() == "P1") {
+            this.setX(drone.x + 90);
         }else{
-            super(scene, drone.x - 90, drone.y, texture);
+            this.setX(drone.x - 90);
         }
+        this.setVisible(false);
+        scene.add.existing(this);
 		this.wClass = wClass;
 		this.drone = drone;
 		this.wNr = wNr;
 		this.setScale(0.5);
-		this.createPiTerm();
 
 		if(wNr == 1){
 		    this.setY(drone.y + 20);
@@ -32,9 +34,6 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		    this.setDepth(0);
 			this.setScale(0.8);
 			this.repositionWeapons();
-		}
-		if(this.wNr < 2){
-			this.drone.pushPiTermsExt();
 		}
 	}
 
@@ -65,6 +64,10 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		}
 
 	}
+	setWeaponClass(wClass : string) : void{
+	    this.wClass = wClass;
+        this.createPiTerm();
+    }
 
 	getWeaponClass() : string{
 		return this.wClass;
