@@ -33,12 +33,12 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 			this.setScale(0.8);
 			this.repositionWeapons();
 		}
-		if(this.wNr > 0){
-			this.drone.pushPiTerms();
+		if(this.wNr < 2){
+			this.drone.pushPiTermsExt();
 		}
 	}
 
-	/*
+	/**
 	graphical Repositioning of Weapons on ships
 	 */
 	repositionWeapons() : void{
@@ -66,17 +66,22 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 
 	}
 
-	getWeaponNr() : number{
-		return this.wNr;
+	getWeaponClass() : string{
+		return this.wClass;
 	}
 
+	/**
+	Pi Term, that represents the weapon in pi calculus. Will be either shieldPX<*> or armorPX<*> while X is the
+	number of the opposing player
+	 */
     createPiTerm() : void{
-        if(this.wClass == "laser") {
-            this.piTerm = "shield" + this.drone.getPlayer().getNameIdentifier() + "<*>";
-        }else{
-            this.piTerm = "armor" + this.drone.getPlayer().getNameIdentifier() + "<*>";
-        }
+    	if(this.drone.getPlayer().getNameIdentifier() == "P1") {
+			this.piTerm = this.wClass + "P2";
+		}else{
+    		this.piTerm = this.wClass + "P1";
+		}
     }
+
     getPiTerm() : string{
 	    return this.piTerm;
     }
