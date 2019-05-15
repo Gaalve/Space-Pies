@@ -26,6 +26,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    scene.add.existing(this);
 	    this.buildPiTerm();
 	    this.activateOnScreenText();
+	    if(this.index > 0){
+	    	this.pushPiTerms();
+		}
     }
 
     getPlayer() : Player{
@@ -85,4 +88,24 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		this.onScreenText.setText(this.piTerm);
 	}
 
+	/*
+	add Pi sum with channels In wextXYl und wextXYp to add either laser or projectile weapon
+	(X: playernumber, Y: dronenumber)
+	 */
+	pushPiTerms() : void{
+		let p = this.player.getNameIdentifier().charAt(1);
+		let w = this.index.toString();
+		let channel_l : string = "wext" + p + w + "l";
+		let channel_p : string = "wext" + p + w + "p";
+		console.log(channel_l);
+
+		this.player.getSystem().pushSymbol(this.player.getSystem().add.sum([
+			this.player.getSystem().add.channelIn(channel_l, "*").process("aWl", () => {
+				this.addWeapon("l");
+			}),
+			this.player.getSystem().add.channelIn(channel_p, "*").process("aWp", () => {
+				this.addWeapon("p");
+			})
+		]))
+	}
 }

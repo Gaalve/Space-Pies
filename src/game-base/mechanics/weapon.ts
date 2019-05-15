@@ -33,6 +33,9 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 			this.setScale(0.8);
 			this.repositionWeapons();
 		}
+		if(this.wNr > 0){
+			this.drone.pushPiTerms();
+		}
 	}
 
 	/*

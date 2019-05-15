@@ -27,12 +27,15 @@ export class Player {
         for each Player add 2 input channels to create new drones (max 2)
          */
         if(this.nameIdentifier == "P1") {
-            this.system.pushSymbol(this.system.add.channelInCB('wmod1', '*', ()=>{this.createDrone()}).nullProcess());
-            this.system.pushSymbol(this.system.add.channelInCB('wmod1', '*', ()=>{this.createDrone()}).nullProcess());
+            this.system.pushSymbol(this.system.add.channelIn('wmod1', '*').process("cD11", ()=>{this.createDrone()}));
+            this.system.pushSymbol(this.system.add.channelIn('wmod1', '*').process("cD12", ()=>{this.createDrone()}));
         }else{
-            this.system.pushSymbol(this.system.add.channelInCB('wmod2', '*', ()=>{this.createDrone()}).nullProcess());
-            this.system.pushSymbol(this.system.add.channelInCB('wmod2', '*', ()=>{this.createDrone()}).nullProcess());
+            this.system.pushSymbol(this.system.add.channelIn('wmod2', '*').process("cD21", ()=>{this.createDrone()}));
+            this.system.pushSymbol(this.system.add.channelIn('wmod2', '*').process("cD22", ()=>{this.createDrone()}));
         }
+
+        //after drone creation push pi terms to system to wait for newweapon inputs
+        this.drones[0].pushPiTerms();
     }
 
     getNameIdentifier(): string{

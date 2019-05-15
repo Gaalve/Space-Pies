@@ -91,8 +91,12 @@ export class MainScene extends Phaser.Scene {
             }
         );
         this.buttonOption.setPosition(1750, 100);
-        this.system.pushSymbol(this.system.add.channelOut('wmod1', '*').nullProcess());
         this.system.start();
+        this.system.pushSymbol(this.system.add.channelOut("wext10p", "*").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod1", "*").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod1", "*").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wext11l", "*").nullProcess());
+        //this.system.pushSymbol(this.system.add.channelOut("wext11p", "*").nullProcess());
 
     }
 
