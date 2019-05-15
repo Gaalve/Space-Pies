@@ -3,6 +3,8 @@ import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
 import {PiCalcTests} from "../tests/pi-calc-tests";
 import {PiSystem} from "../mechanics/picalc/pi-system";
+import DataManager = Phaser.Data.DataManager;
+import EventEmitter = Phaser.Events.EventEmitter;
 
 export class MainScene extends Phaser.Scene {
 
@@ -15,10 +17,12 @@ export class MainScene extends Phaser.Scene {
     private buttonOption: Button;
     private shop: Button;
 
+
     constructor() {
         super({
             key: "MainScene"
         })
+
     }
 
     preload(): void {
@@ -34,6 +38,8 @@ export class MainScene extends Phaser.Scene {
         this.add.image(1920/2, 1080/2, "background_space");
         this.players = [new Player(this, 200, 500,"P1", 20, true), new Player(this, 1720, 500,"P2", 20, false)];
         this.turn = new Turn(this, this.players);
+        this.data.set('P1', this.players[0]);
+        this.data.set('P2', this.players[1]);
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",
             ()=>{
@@ -105,12 +111,5 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    getPlayer1(): Player{
-        return this.players[0];
-    }
-
-    getPlayer2(): Player{
-        return this.players[1];
-    }
 
 }
