@@ -18,6 +18,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		this.drone = drone;
 		this.wNr = wNr;
 		this.setScale(0.5);
+		this.createPiTerm();
 
 		if(wNr == 1){
 		    this.setY(drone.y + 20);

@@ -11,6 +11,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private weapons : Weapon[];
 	private index : number;
 	private piTerm : string;
+	private onScreenText : Phaser.GameObjects.Text;
 
 
 	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
@@ -23,6 +24,8 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    this.player = player;
 	    this.index = index;
 	    scene.add.existing(this);
+	    this.buildPiTerm();
+	    this.activateOnScreenText();
     }
 
     getPlayer() : Player{
@@ -36,6 +39,8 @@ export class Drone extends Phaser.GameObjects.Sprite{
         }else if(weapon == "p") {
             this.weapons.push(new PWeapon(this.scene, this, this.weapons.length));
         }
+	    this.buildPiTerm();
+	    this.refreshOnScreenText();
     }
 
     getWeapons() : number{
@@ -46,12 +51,38 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		return this.index;
 	}
 
-	createPiTerm() : void{
+	buildPiTerm() : void {
+		this.piTerm = null;
 		this.piTerm = "lock(*).";
 
-		for(let w of this.weapons){
-
+		for (let w of this.weapons) {
+			this.piTerm = this.piTerm + w.getPiTerm() + ".";
 		}
+		this.piTerm = this.piTerm + "0";
+	}
+
+	activateOnScreenText() : void{
+		if(this.index != 0) {
+			this.onScreenText = this.scene.add.text(this.x - 30, this.y + 50, this.piTerm, {
+				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 1
+			});
+		}else {
+			if (this.player.getNameIdentifier() == "P1") {
+				this.onScreenText = this.scene.add.text(this.x - 270, this.y + 100, this.piTerm, {
+					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 1
+				});
+			} else {
+				this.onScreenText = this.scene.add.text(this.x + 235, this.y + 100, this.piTerm, {
+					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 1
+				});
+
+			}
+			this.onScreenText.setAngle(270);
+		}
+	}
+
+	refreshOnScreenText() : void{
+		this.onScreenText.setText(this.piTerm);
 	}
 
 }
