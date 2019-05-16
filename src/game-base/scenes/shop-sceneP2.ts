@@ -12,7 +12,7 @@ export class ShopSceneP2 extends Phaser.Scene{
     private wExt: Button;
     private shield: Button;
     private armor: Button;
-    private background;
+    private background: Phaser.GameObjects.Image;
     private activeWmods:integer = 3;
     private Player2: Player;
     private firstChoose: boolean;
@@ -50,7 +50,10 @@ export class ShopSceneP2 extends Phaser.Scene{
 
         this.Player2 = this.scene.get('MainScene').data.get('P2');
         this.activeWmods = this.Player2.getNrDrones();
-        this.background = this.add.image(-250, 500,"shop_bg");
+        this.background = this.add.image(0, 540,"shop_bg");
+        this.background.setOrigin(0, 0.5);
+        this.background.setFlipX(true);
+        this.background.setTint(0x214478);
         const text = this.add.text(160, 50, 'choose action', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 

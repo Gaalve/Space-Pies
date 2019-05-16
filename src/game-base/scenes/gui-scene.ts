@@ -19,8 +19,8 @@ export class GuiScene extends Phaser.Scene {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 32, fontStyle: 'bold' });
         const roundActionText = this.add.text(1920/2, 124, 'Action ?!', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 22 });
-        let roundPlayerColor = "#FF4444";
-        let roundPlayerStrokeColor = "#AA2222";
+        let roundPlayerColor = "#4444FF";
+        let roundPlayerStrokeColor = "#2222AA";
         this.scene.get('MainScene').data.events.on('changedata-round', (scene, value) => {
             roundNumberText.setText("Round " + value)
         });

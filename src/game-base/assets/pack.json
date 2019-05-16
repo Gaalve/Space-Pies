@@ -49,6 +49,11 @@
       {
         "type": "image",
         "key": "button_space_shuttle",
+        "url": "assets/sprites/button_space_shuttle.png"
+      },
+      {
+        "type": "image",
+        "key": "button_space_shuttle",
         "url": "assets/sprites/button_space_ship.png"
       },
       {
@@ -185,6 +190,12 @@
         "type": "image",
         "key": "shop_bg",
         "url": "assets/sprites/shop_bg.png"
+
+      },
+      {
+        "type": "image",
+        "key": "pause_bg",
+        "url": "assets/sprites/pause_bg.png"
 
       }
     ]

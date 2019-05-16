@@ -31,7 +31,7 @@ export class PauseScene extends Phaser.Scene {
 
     create(): void {
 
-        this.background = this.add.image(1920/2, 500,"shop_bg");
+        this.background = this.add.image(1920/2, 540,"pause_bg");
 
         //this.add.image(1920/2, 1080/2, "background_space")
         const titleText = this.add.text(1920/2-50, 200, 'Pause!', {
