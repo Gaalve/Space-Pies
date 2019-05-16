@@ -40,7 +40,7 @@ export class MainScene extends Phaser.Scene {
         this.system = new PiSystem(this, 1,1,1,false);
         this.system.start();
         this.add.image(1920/2, 1080/2, "background_space");
-        this.players = [new Player(this, 200, 500, "P1", new Health(5, 5), true, this.system), new Player(this, 1720, 500, "P2", new Health(5, 5), false, this.system)];
+        this.players = [new Player(this, 280, 540, "P1", new Health(5, 5), true, this.system), new Player(this, 1650, 540, "P2", new Health(5, 5), false, this.system)];
         const healthbars = new Healthbar(this, this.players, this.system);
         this.turn = new Turn(this, this.players);
         this.data.set('P1', this.players[0]);

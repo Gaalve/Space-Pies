@@ -29,8 +29,19 @@ export class Player {
         this.system = piSystem;
         this.addHealthbarPiTerms(this);
 
-    }
 
+
+        if(this.nameIdentifier == "P1"){
+            this.system.pushSymbol(this.system.add.channelIn("wmod1","*").process("cD11", () => {
+                this.createDrone(1);
+            }));
+        }else {
+            this.system.pushSymbol(this.system.add.channelIn("wmod2", "*").process("cD21", () => {
+                this.createDrone(1);
+            }));
+        }
+
+    }
 
     private addHealthbarPiTerms(player: Player) {
         this.system.pushSymbol(this.system.add.channelIn("armorEmpty" + player.getNameIdentifier(), "*").process("destroyArmor", this.destroyArmor(this.system)))
