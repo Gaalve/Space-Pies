@@ -3,7 +3,7 @@ import {Space} from "../mechanics/space/space";
 export class Background extends Phaser.Scene {
 
     private timeAccumulator = 0.0;
-    private timeUpdateTick = 1000/60;
+    private timeUpdateTick = 1000/30;
 
     private space: Space;
 
