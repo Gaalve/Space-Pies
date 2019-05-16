@@ -11,12 +11,14 @@ export class Turn {
     private currentPlayer: Player;
     private awaitInput: boolean;
     private currentRound: number;
+    public clickable: boolean;
 
     constructor(refScene: Phaser.Scene, players: [Player, Player]){
         this.refScene = refScene;
         this.players = players;
         this.idx = 0;
         this.currentPlayer = this.players[this.idx];
+        this.clickable = false;
         this.awaitInput = false;
         this.currentRound = 0;
         this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
@@ -26,6 +28,7 @@ export class Turn {
         this.refScene.data.set('round', ""+(this.currentRound));
         this.refScene.data.set('turnAction', 'Create');
         this.refScene.time.delayedCall(0, () => (this.playerInput()), [], this);
+        this.refScene.data.set('click', this.clickable);
     }
  /*   create(): void{
         let system = new PiSystem(this, 1,1, 1, false);
@@ -47,6 +50,15 @@ export class Turn {
     private playerInput():void{
        // let system = new PiSystem(this.refScene, 1,1, 1, false);
        // let startShop = system.add.replication(system.add.channelOut('shopp1', '*').nullProcess())
+        this.clickable = true;
+        this.refScene.data.set('round', ""+(++this.currentRound));
+        if(this.currentRound != 1){
+            this.idx = 1 - this.idx;
+            this.currentPlayer = this.players[this.idx];
+            this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
+
+        }
+
         if(this.currentPlayer.getNameIdentifier() == "P1"){
             this.refScene.scene.launch('ShopSceneP1');
           // system.pushSymbol(startShop)
@@ -57,26 +69,26 @@ export class Turn {
             this.refScene.scene.launch('ShopSceneP2');
         }
         this.awaitInput = true; //nächster Spieler
-        this.idx = 1 - this.idx;
-        this.currentPlayer = this.players[this.idx];
-        this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
+
         this.refScene.data.set('turnAction', 'Shopping Phase');
-        this.refScene.data.set('round', ""+(++this.currentRound));
 
     }
 
     public Attackturn():void{
         if (!this.awaitInput) return;
+        this.clickable = false;
         this.refScene.scene.sleep('ShopSceneP1');
         this.refScene.scene.sleep('ShopSceneP2');
         this.refScene.scene.sleep('chooseSceneP1');
         this.refScene.scene.sleep('chooseSceneP2');
-
+        this.refScene.scene.sleep('chooseTypeSceneP1');
+        this.refScene.scene.sleep('chooseTypeSceneP2');
 
         //Waffen schießen lassen:
 
         this.refScene.data.set('turnAction', 'Battle Phase');
-        this.refScene.time.delayedCall(3000, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+        this.refScene.time.delayedCall(1000, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+
     }
 
   /*  public nextPlayer():void{

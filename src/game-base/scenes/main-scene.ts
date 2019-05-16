@@ -48,10 +48,12 @@ export class MainScene extends Phaser.Scene {
         this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_skip",
             ()=>{
-                openShop1.setVisible(false).removeInteractive();
-                openShop2.setVisible(false).removeInteractive();
-                this.turn.Attackturn()
-                ;});
+                if(this.turn.clickable){
+                    openShop1.setVisible(false).removeInteractive();
+                    openShop2.setVisible(false).removeInteractive();
+                    this.turn.Attackturn();
+                }
+                });
         this.buttonEndTurn.setPosition(1920/2, 500);
 
         /*
@@ -136,7 +138,7 @@ export class MainScene extends Phaser.Scene {
 
             openShop1.setVisible(false);
             openShop1.removeInteractive();
-        },this)
+        },this);
 
         openShop2.on('pointerup', function (){
 
@@ -145,7 +147,7 @@ export class MainScene extends Phaser.Scene {
 
             openShop2.setVisible(false);
             openShop2.removeInteractive();
-        },this)
+        },this);
 
         this.buttonOption = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_options",
@@ -156,7 +158,7 @@ export class MainScene extends Phaser.Scene {
 
             }
         );
-        this.buttonOption.setPosition(1750, 100);
+        this.buttonOption.setPosition(1850, 80);
 
     //for testing:
         //this.system.pushSymbol(this.system.add.channelOut("wext10l", "*").nullProcess());
