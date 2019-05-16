@@ -123,12 +123,24 @@ export class ShopSceneP1 extends Phaser.Scene{
                 ()=>{
                     system.pushSymbol(createWMod)
                     this.activeWmods++;
+                    this.events.emit("addedWMmod");
                 });
             this.wModule.setPosition(1920-600, 650);
             const wModText = this.add.text(1920-500, 630, "Weapon Module", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
         }
+        this.events.on("addedWmod", function () {
+            if(this.scene.activeWmods >= 3){
+                this.scene.wModule = new Button(this, 500, 500, "button_shadow",
+                    "button_bg", "button_fg", "button_cancel_red",
+                    ()=>{
+                    });
+                this.scene.wModule.setPosition(1920-600, 650);
+                const wModText = this.add.text(1920-500, 630, "max Mods reached", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+            }
+        })
 
 
         this.skip = new Button(this, 500, 500, "button_shadow",
