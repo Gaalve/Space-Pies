@@ -33,18 +33,19 @@ export class ShopSceneP2 extends Phaser.Scene{
     }
 
     create(): void{
-        let system = new PiSystem(this, 1,1, 1, false);
+        //let system = new PiSystem(this, 1,1, 1, false);
+        let system = this.scene.get('MainScene').data.get("system");
 
-        let createShield = system.add.replication(system.add.channelOut('rshieldP2','*' ).nullProcess());
-        let createArmor = system.add.replication(system.add.channelOut('rarmorP2','*' ).nullProcess());
-        let createWExtShipL = system.add.replication(system.add.channelOut('wext20l','*' ).nullProcess());
-        let createWExtShipP = system.add.replication(system.add.channelOut('wext20p','*' ).nullProcess());
-        let createWExtDrone1L = system.add.replication(system.add.channelOut('wext21l','*' ).nullProcess());
-        let createWExtDrone1P = system.add.replication(system.add.channelOut('wext21p','*' ).nullProcess());
-        let createWExtDrone2L = system.add.replication(system.add.channelOut('wext22l','*' ).nullProcess());
-        let createWExtDrone2P = system.add.replication(system.add.channelOut('wext22p','*' ).nullProcess());
+        let createShield = (system.add.channelOut('rshieldP2','*' ).nullProcess());
+        let createArmor = (system.add.channelOut('rarmorP2','*' ).nullProcess());
+        let createWExtShipL = (system.add.channelOut('wext20l','*' ).nullProcess());
+        let createWExtShipP = (system.add.channelOut('wext20p','*' ).nullProcess());
+        let createWExtDrone1L = (system.add.channelOut('wext21l','*' ).nullProcess());
+        let createWExtDrone1P = (system.add.channelOut('wext21p','*' ).nullProcess());
+        let createWExtDrone2L = (system.add.channelOut('wext22l','*' ).nullProcess());
+        let createWExtDrone2P = (system.add.channelOut('wext22p','*' ).nullProcess());
         let startShop = system.add.replication(system.add.channelIn('shopp2','*').process('ShopP2', this.scene.launch));
-        let createWMod = system.add.replication(system.add.channelOut('wmod2','*' ).nullProcess()); //wmod2 for p2
+        let createWMod = (system.add.channelOut('wmod2','*' ).nullProcess()); //wmod2 for p2
 
         this.Player2 = this.scene.get('MainScene').data.get('P2');
         this.activeWmods = this.Player2.getNrDrones();

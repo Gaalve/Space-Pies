@@ -35,18 +35,19 @@ export class ShopSceneP1 extends Phaser.Scene{
     }
 
     create(): void{
-        let system = new PiSystem(this, 1,1, 1, false);
+        //let system = new PiSystem(this, 1,1, 1, false);
+        let system = this.scene.get('MainScene').data.get("system");
 
-        let createShield = system.add.replication(system.add.channelOut('rshieldP1','*' ).nullProcess());
-        let createArmor = system.add.replication(system.add.channelOut('rarmorP1','*' ).nullProcess());
-        let createWExtShipL = system.add.replication(system.add.channelOut('wext10l','*' ).nullProcess());
-        let createWExtShipP = system.add.replication(system.add.channelOut('wext10p','*' ).nullProcess());
-        let createWExtDrone1L = system.add.replication(system.add.channelOut('wext11l','*' ).nullProcess());
-        let createWExtDrone1P = system.add.replication(system.add.channelOut('wext11p','*' ).nullProcess());
-        let createWExtDrone2L = system.add.replication(system.add.channelOut('wext12l','*' ).nullProcess());
-        let createWExtDrone2P = system.add.replication(system.add.channelOut('wext12p','*' ).nullProcess());
+        let createShield = (system.add.channelOut('rshieldP1','*' ).nullProcess());
+        let createArmor = (system.add.channelOut('rarmorP1','*' ).nullProcess());
+        let createWExtShipL = (system.add.channelOut('wext10l','*' ).nullProcess());
+        let createWExtShipP = (system.add.channelOut('wext10p','*' ).nullProcess());
+        let createWExtDrone1L = (system.add.channelOut('wext11l','*' ).nullProcess());
+        let createWExtDrone1P = (system.add.channelOut('wext11p','*' ).nullProcess());
+        let createWExtDrone2L = (system.add.channelOut('wext12l','*' ).nullProcess());
+        let createWExtDrone2P = (system.add.channelOut('wext12p','*' ).nullProcess());
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', this.scene.launch));
-        let createWMod = system.add.replication(system.add.channelOut('wmod1','*' ).nullProcess()); //wmod2 for p2
+        let createWMod = (system.add.channelOut('wmod1','*' ).nullProcess()); //wmod2 for p2
 
         const text = this.add.text(1920-650, 50, 'choose action', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
