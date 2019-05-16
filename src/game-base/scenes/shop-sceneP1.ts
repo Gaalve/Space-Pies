@@ -40,8 +40,8 @@ export class ShopSceneP1 extends Phaser.Scene{
         //let system = new PiSystem(this, 1,1, 1, false);
         let system = this.scene.get('MainScene').data.get("system");
 
-        let createShield = (system.add.channelOut('rshieldP1','*' ).nullProcess());
-        let createArmor = (system.add.channelOut('rarmorP1','*' ).nullProcess());
+        let createShield = (system.add.channelOut('rShieldP1','*' ).nullProcess());
+        let createArmor = (system.add.channelOut('rArmorP1','*' ).nullProcess());
         let createWExtShipL = (system.add.channelOut('wext10l','*' ).nullProcess());
         let createWExtShipP = (system.add.channelOut('wext10p','*' ).nullProcess());
         let createWExtDrone1L = (system.add.channelOut('wext11l','*' ).nullProcess());
