@@ -51,6 +51,7 @@ export class ShopSceneP1 extends Phaser.Scene{
         const text = this.add.text(1920-650, 50, 'choose action', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
+
         // 'pXmYZ' Z = type(l,p)
         // m0 = ship ; m1 = drone1; m2 = drone2
         // max 3 extensions and modules
