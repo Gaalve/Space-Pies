@@ -16,6 +16,7 @@ export class MainScene extends Phaser.Scene {
     private buttonEndTurn: Button;
     private buttonOption: Button;
     private shop: Button;
+    private system: PiSystem;
 
 
     constructor() {
@@ -35,8 +36,10 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
+        this.system = new PiSystem(this, 1,1,1,false);
+        this.system.start();
         this.add.image(1920/2, 1080/2, "background_space");
-        this.players = [new Player(this, 200, 500,"P1", 20, true), new Player(this, 1720, 500,"P2", 20, false)];
+        this.players = [new Player(this, 280, 540,"P1", 20, true, this.system), new Player(this, 1650, 540,"P2", 20, false, this.system)];
         this.turn = new Turn(this, this.players);
         this.data.set('P1', this.players[0]);
         this.data.set('P2', this.players[1]);
@@ -45,6 +48,7 @@ export class MainScene extends Phaser.Scene {
             ()=>{
                 openShop1.setVisible(false).removeInteractive();
                 openShop2.setVisible(false).removeInteractive();
+
                 this.turn.nextPlayer()
                 ;});
         this.buttonEndTurn.setPosition(1920/2, 500);
@@ -94,8 +98,30 @@ export class MainScene extends Phaser.Scene {
         );
         this.buttonOption.setPosition(1750, 100);
 
+    //for testing:
+        //this.system.pushSymbol(this.system.add.channelOut("wext10l", "*").nullProcess());
+        //this.players[0].getDrones()[0].addWeapon("l");
+        //this.system.pushSymbol(this.system.add.channelOut("wmod1", "*").nullProcess());
+        //this.system.pushSymbol(this.system.add.channelOut("wmod1", "*").nullProcess());
+        //this.system.pushSymbol(this.system.add.channelOut("wext11l", "*").nullProcess());
+        //this.system.pushSymbol(this.system.add.channelOut("wext11p", "*").nullProcess());
 
+        /*this.system.pushSymbol(this.system.add.channelIn("armorP2", "*").
+            process("log", () =>{
+                console.log("P2 lost 1 HP");
+        }));
 
+        this.system.pushSymbol(this.system.add.channelIn("shieldP2", "*").
+        process("log", () =>{
+            console.log("P2 lost 2 HP");
+        }));*/
+
+        //console.log(this.players[0].getNrDrones());
+        //console.log(this.players[0].getDrones()[0].getNrWeapons());
+        //console.log(this.players[0].getDrones()[0].getIndex());
+        //console.log(this.players[0].getDrones()[0].getWeapons()[0].getWeaponClass())
+        //this.players[0].pushWeapons();
+        //this.players[0].unlockWeapons();
     }
 
 
