@@ -17,21 +17,21 @@ export class Healthbar {
     constructor(refScene: Phaser.Scene, players : [Player, Player], piSystem : PiSystem){
         this.refScene = refScene;
         this.players = players;
-        this.players[0].healthbar = this;
-        this.players[1].healthbar = this;
+        this.players[0].setHealthbar( this );
+        this.players[1].setHealthbar( this );
 
         // SET UP FOR SPRITES
-        let maxArmorP1 = this.players[0].health.getCurrentArmor();
-        let maxShieldP1 = this.players[0].health.getCurrentShield();
-        let maxArmorP2 = this.players[1].health.getCurrentArmor();
-        let maxShieldP2 = this.players[1].health.getCurrentShield();
+        let maxArmorP1 = this.players[0].getHealth().getCurrentArmor();
+        let maxShieldP1 = this.players[0].getHealth().getCurrentShield();
+        let maxArmorP2 = this.players[1].getHealth().getCurrentArmor();
+        let maxShieldP2 = this.players[1].getHealth().getCurrentShield();
         this.spritesP1 = new HealthbarSprites(new Array(maxArmorP1), new Array(maxShieldP1));
         this.spritesP2 = new HealthbarSprites(new Array(maxArmorP2), new Array(maxShieldP2));
 
         // SETE UP FOR PISYSTEM (core-explosion string here)
         this.system = piSystem;
-        let piTotalLifeP1 = this.players[0].system.add.channelIn("shieldDestroyed" + players[0].getNameIdentifier(), "*").channelIn("armorDestroyed" + players[0].getNameIdentifier(), "*").process("CoreExplosion" + players[0].getNameIdentifier(), this.coreExplosion);
-        let piTotalLifeP2 = this.players[1].system.add.channelIn("shieldDestroyed" + players[1].getNameIdentifier(), "*").channelIn("armorDestroyed" + players[1].getNameIdentifier(), "*").process("CoreExplosion" + players[1].getNameIdentifier(), this.coreExplosion);
+        let piTotalLifeP1 = this.players[0].getPiSystem().add.channelIn("shieldDestroyed" + players[0].getNameIdentifier(), "*").channelIn("armorDestroyed" + players[0].getNameIdentifier(), "*").process("CoreExplosion" + players[0].getNameIdentifier(), this.coreExplosion);
+        let piTotalLifeP2 = this.players[1].getPiSystem().add.channelIn("shieldDestroyed" + players[1].getNameIdentifier(), "*").channelIn("armorDestroyed" + players[1].getNameIdentifier(), "*").process("CoreExplosion" + players[1].getNameIdentifier(), this.coreExplosion);
         this.system.pushSymbol(piTotalLifeP1);
         this.system.pushSymbol(piTotalLifeP2);
 
@@ -57,15 +57,15 @@ export class Healthbar {
      */
     private constructHealthbar(player : Player)
     {
-        console.log("[constructHealthbar()] " + player.getNameIdentifier() +  " Healthbar refresh, Armor: " + player.health.currentArmor + ", Shield = " + player.health.currentShield);
+        console.log("[constructHealthbar()] " + player.getNameIdentifier() +  " Healthbar refresh, Armor: " + player.getHealth().currentArmor + ", Shield = " + player.getHealth().currentShield);
         // ERASE ALL SPRITES FROM SCREEN AND FROM MEMORY
-        let sprites = player.isFirstPlayer() ? player.healthbar.spritesP1 : player.healthbar.spritesP2;
+        let sprites = player.isFirstPlayer() ? player.getHealthbar().spritesP1 : player.getHealthbar().spritesP2;
         this.clearSprites(sprites);
-        sprites = new HealthbarSprites(new Array(player.health.getCurrentArmor()), new Array(player.health.getCurrentShield()));
+        sprites = new HealthbarSprites(new Array(player.getHealth().getCurrentArmor()), new Array(player.getHealth().getCurrentShield()));
 
         // CONSTRUCT HEALTHBAR WITH CURRENT HEALTH VALUES
-        let hp = player.health.getCurrentArmor();
-        let shield = player.health.getCurrentShield();
+        let hp = player.getHealth().getCurrentArmor();
+        let shield = player.getHealth().getCurrentShield();
 
         // CALCULATE COORDINATES ON SCREEN
         let x = player.isFirstPlayer() ? 182 : this.refScene.cameras.main.width - 182;
@@ -78,14 +78,14 @@ export class Healthbar {
             sprites.armorSprites[i] = armor;
         }
 
-        x = player.isFirstPlayer() ? x + (player.health.getMaxArmor() - hp) * 18 : x - (player.health.getMaxArmor() - hp) * 18;
+        x = player.isFirstPlayer() ? x + (player.getHealth().getMaxArmor() - hp) * 18 : x - (player.getHealth().getMaxArmor() - hp) * 18;
         for (let i = 0; i < shield; i++)
         {
             const shield =  player.isFirstPlayer() ? this.refScene.add.image(x += 18, y, "shieldbar") : this.refScene.add.image( x -= 18, y, "shieldbar");
             sprites.shieldSprites[i] = shield;
         }
-        player.healthbar.spritesP1 = player.isFirstPlayer() ? sprites : player.healthbar.spritesP1;
-        player.healthbar.spritesP2 = player.isFirstPlayer() ? player.healthbar.spritesP2 : sprites;
+        player.getHealthbar().spritesP1 = player.isFirstPlayer() ? sprites : player.getHealthbar().spritesP1;
+        player.getHealthbar().spritesP2 = player.isFirstPlayer() ? player.getHealthbar().spritesP2 : sprites;
     }
 
     /*
@@ -106,16 +106,16 @@ export class Healthbar {
         CONSTRUCT Pi-Terms FOR ARMOR AND SHIELD
      */
     private constructPiTerms(player : Player) {
-        this.addArmor(player.health.getMaxArmor(), player);
-        this.addShield(player.health.getMaxShield(), player);
+        this.addArmor(player.getHealth().getMaxArmor(), player);
+        this.addShield(player.getHealth().getMaxShield(), player);
     }
     private addArmor(amount: number, player : Player) {
         for (var i = 0; i < amount; i++)
-            player.system.pushSymbol(player.system.add.channelIn("armor" + player.getNameIdentifier(), "*").process("damageArmor", this.damageArmor(player)));
+            player.getPiSystem().pushSymbol(player.getPiSystem().add.channelIn("armor" + player.getNameIdentifier(), "*").process("damageArmor", this.damageArmor(player)));
     }
     private addShield(amount: number, player : Player) {
         for (var i = 0; i < amount; i++)
-            player.system.pushSymbol(player.system.add.channelIn("shield" + player.getNameIdentifier(), "*").process("damageShield", this.damageShield(player)));
+            player.getPiSystem().pushSymbol(player.getPiSystem().add.channelIn("shield" + player.getNameIdentifier(), "*").process("damageShield", this.damageShield(player)));
     }
 
 
@@ -130,9 +130,9 @@ export class Healthbar {
         let dmgArmor = function()
         {
             console.log("[ACTION] Armor Damaged!");
-            player.health.damageArmor();
-            player.healthbar.constructHealthbar(player);
-            if (player.health.getCurrentArmor() <= 0)
+            player.getHealth().damageArmor();
+            player.getHealthbar().constructHealthbar(player);
+            if (player.getHealth().getCurrentArmor() <= 0)
             {
                 console.log("[DEBUG] Armor is Empty, pushing: armorEmpty" + player.getNameIdentifier());
                 this.system.pushSymbol(this.system.add.channelOut("armorEmpty" + player.getNameIdentifier(), "*").nullProcess());
@@ -154,10 +154,10 @@ export class Healthbar {
         console.log("[DEBUG] P1 = " + playerP1.getNameIdentifier() + " , P2 = " + playerP2.getNameIdentifier() + " current = " + player.getNameIdentifier());
         let dmgShield = function()
         {
-            player.health.damageShield();
-            console.log("[ACTION] " + player.getNameIdentifier() + "'s Shield Damaged!" + " Armor: " + player.health.currentArmor + ", Shield = " + player.health.currentShield);
-            player.healthbar.constructHealthbar(player);
-            if (player.health.getCurrentShield() == 0)
+            player.getHealth().damageShield();
+            console.log("[ACTION] " + player.getNameIdentifier() + "'s Shield Damaged!" + " Armor: " + player.getHealth().currentArmor + ", Shield = " + player.getHealth().currentShield);
+            player.getHealthbar().constructHealthbar(player);
+            if (player.getHealth().getCurrentShield() == 0)
             {
                 console.log("[DEBUG] " + player.getNameIdentifier() + "'s Shield is Empty. Destroying Shield.");
                 this.system.pushSymbol(this.system.add.channelOut("shieldEmpty" + player.getNameIdentifier(), "*").nullProcess());

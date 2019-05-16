@@ -7,13 +7,13 @@ import {Healthbar} from "../scenes/objects/Healthbar";
 
 export class Player {
     private nameIdentifier: string;
-    public health : Health;
+    private health : Health;
     private firstPlayer: boolean;
     private drones : Drone[] = new Array();
     private scene : Phaser.Scene;
-    public system : PiSystem;
+    private system : PiSystem;
     private ship : Ship;
-    public healthbar : Healthbar;
+    private healthbar : Healthbar;
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, health : Health, isFirstPlayer: boolean, piSystem : PiSystem){
         this.nameIdentifier = nameIdentifier;
@@ -98,6 +98,37 @@ export class Player {
             }
         }
     }
+
+    getHealth() : Health
+    {
+        return this.health;
+    }
+
+    getHealthbar() : Healthbar
+    {
+        return this.healthbar;
+    }
+
+    getPiSystem() : PiSystem
+    {
+        return this.system;
+    }
+
+    setHealth(health: Health) : void
+    {
+        this.health = health;
+    }
+
+    setHealthbar(healthbar: Healthbar) : void
+    {
+        this.healthbar = healthbar;
+    }
+
+    setPiSystem(system: PiSystem) : void
+    {
+        this.system = system;
+    }
+
 
 
 }

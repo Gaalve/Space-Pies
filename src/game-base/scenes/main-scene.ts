@@ -39,8 +39,8 @@ export class MainScene extends Phaser.Scene {
         this.players = [new Player(this, 200, 500, "P1", new Health(5, 5), true, piSystem), new Player(this, 1720, 500, "P2", new Health(5, 5), false, piSystem)];
 
         // CREATING PiSystem
-        this.players[0].system = piSystem;
-        this.players[1].system = piSystem;
+        this.players[0].setPiSystem( piSystem );
+        this.players[1].setPiSystem( piSystem );
 
         let players = this.players;
 
