@@ -11,12 +11,14 @@ export class Turn {
     private currentPlayer: Player;
     private awaitInput: boolean;
     private currentRound: number;
+    private clickable: boolean;
 
     constructor(refScene: Phaser.Scene, players: [Player, Player]){
         this.refScene = refScene;
         this.players = players;
         this.idx = 0;
         this.currentPlayer = this.players[this.idx];
+        this.clickable = false;
         this.awaitInput = false;
         this.currentRound = 0;
         this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());

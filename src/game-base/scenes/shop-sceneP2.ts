@@ -60,11 +60,11 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.armor.setPosition(200, 200);
         const energyText = this.add.text(300, 180, "Armor", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
-        const piArmor = this.add.text(500, 180, 'regArmorP2(*).O',{
+        const piArmor = this.add.text(500, 180, 'regArmorP2<*>.O',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
-        const piShield = this.add.text(500, 330, 'regShieldP2(*).0',{
+        const piShield = this.add.text(500, 330, 'regShieldP2<*>.0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
-        const piWmod = this.add.text(650, 630, 'wmodP2(*).0',{
+        const piWmod = this.add.text(650, 630, 'wmodP2<*>.0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
         this.shield = new Button(this, 500, 500, "button_shadow",
