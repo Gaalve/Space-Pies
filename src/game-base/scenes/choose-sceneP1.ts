@@ -66,7 +66,12 @@ export class chooseSceneP1 extends Phaser.Scene{
             this.shipL = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_space_shuttle",
                 ()=>{
-                    this.events.emit('shipL');
+                    if(type == true){
+                        this.events.emit('shipL');
+                    }
+                    else{
+                        this.events.emit('shipP');
+                    }
                     this.scene.stop()
                     this.scene.launch("ShopSceneP1")
                     //system.pushSymbol(createWMod)
