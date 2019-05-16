@@ -135,7 +135,7 @@ export class MainScene extends Phaser.Scene {
         },this);
 
         openShop1.on('pointerup', function (){
-                this.scene.launch('ShopSceneP1');
+            this.scene.wake('ShopSceneP1');
 
             openShop1.setVisible(false);
             openShop1.removeInteractive();
@@ -143,7 +143,7 @@ export class MainScene extends Phaser.Scene {
 
         openShop2.on('pointerup', function (){
 
-            this.scene.launch('ShopSceneP2');
+            this.scene.wake('ShopSceneP2');
 
 
             openShop2.setVisible(false);

@@ -17,6 +17,7 @@ export class ShopSceneP1 extends Phaser.Scene{
     private background;
     private activeWmods: integer = 1;
     private Player1: Player;
+    private firstChoose: boolean;
 
 
     constructor(){
@@ -24,6 +25,7 @@ export class ShopSceneP1 extends Phaser.Scene{
             key: 'ShopSceneP1',
             active: false
         })
+        this.firstChoose = true;
     }
 
     preload(): void{
@@ -91,7 +93,13 @@ export class ShopSceneP1 extends Phaser.Scene{
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
-            this.scene.launch('chooseTypeSceneP1')
+            if(this.firstChoose == true){
+                this.scene.launch('chooseTypeSceneP1')
+                this.firstChoose = false;
+            }
+            else{
+                this.scene.wake('chooseTypeSceneP1')
+            }
             //system.pushSymbol(createWMod)
             });
         this.wExt.setPosition(1920-600, 500);
@@ -100,9 +108,8 @@ export class ShopSceneP1 extends Phaser.Scene{
 
         if(this.activeWmods >= 3){
             this.wModule = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_skip",
+                "button_bg", "button_fg", "button_cancel_red",
                 ()=>{
-                    system.pushSymbol(createWMod)
                 });
             this.wModule.setPosition(1920-600, 650);
             const wModText = this.add.text(1920-500, 630, "max Mods reached", {
@@ -115,6 +122,7 @@ export class ShopSceneP1 extends Phaser.Scene{
                 "button_bg", "button_fg", "button_wmod",
                 ()=>{
                     system.pushSymbol(createWMod)
+                    this.activeWmods++;
                 });
             this.wModule.setPosition(1920-600, 650);
             const wModText = this.add.text(1920-500, 630, "Weapon Module", {

@@ -12,6 +12,9 @@ export class Turn {
     private awaitInput: boolean;
     private currentRound: number;
     public clickable: boolean;
+    public first1: boolean;
+    public first2: boolean;
+
 
     constructor(refScene: Phaser.Scene, players: [Player, Player]){
         this.refScene = refScene;
@@ -19,6 +22,8 @@ export class Turn {
         this.idx = 0;
         this.currentPlayer = this.players[this.idx];
         this.clickable = false;
+        this.first1 = true;
+        this.first2 = true;
         this.awaitInput = false;
         this.currentRound = 0;
         this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
@@ -60,14 +65,25 @@ export class Turn {
         }
 
         if(this.currentPlayer.getNameIdentifier() == "P1"){
-            this.refScene.scene.launch('ShopSceneP1');
+            if(this.first1 == true){
+                this.refScene.scene.launch('ShopSceneP1');
+                this.first1 = false;
+            }
+            else {
+                this.refScene.scene.wake('ShopSceneP1');
+            }
           // system.pushSymbol(startShop)
           //  system.pushSymbol(system.add.channelOut('shopp1', '*').nullProcess())
 
         }
         else {
-            this.refScene.scene.launch('ShopSceneP2');
-        }
+            if(this.first2 == true){
+                this.refScene.scene.launch('ShopSceneP2');
+                this.first2 = false;
+            }
+            else {
+                this.refScene.scene.wake('ShopSceneP2');
+            }        }
         this.awaitInput = true; //nächster Spieler
 
         this.refScene.data.set('turnAction', 'Shopping Phase');

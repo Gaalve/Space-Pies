@@ -15,13 +15,14 @@ export class ShopSceneP2 extends Phaser.Scene{
     private background;
     private activeWmods:integer = 3;
     private Player2: Player;
+    private firstChoose: boolean;
 
     constructor(){
         super({
             key: 'ShopSceneP2',
             active: false
         });
-
+        this.firstChoose = true;
     }
 
     preload(): void{
@@ -81,8 +82,13 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
-            this.scene.launch('chooseTypeSceneP2');
-
+            if(this.firstChoose == true){
+                this.scene.launch('chooseTypeSceneP2');
+                this.firstChoose = false;
+            }
+            else{
+                this.scene.wake('chooseTypeSceneP2');
+            }
             });
         this.wExt.setPosition(200, 500);
         const wExtText = this.add.text(300, 480, "Weapon Extension", {
