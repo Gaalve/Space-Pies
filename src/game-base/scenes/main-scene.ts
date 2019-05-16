@@ -138,7 +138,7 @@ export class MainScene extends Phaser.Scene {
 
             openShop1.setVisible(false);
             openShop1.removeInteractive();
-        },this)
+        },this);
 
         openShop2.on('pointerup', function (){
 
@@ -147,7 +147,7 @@ export class MainScene extends Phaser.Scene {
 
             openShop2.setVisible(false);
             openShop2.removeInteractive();
-        },this)
+        },this);
 
         this.buttonOption = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_options",
