@@ -1,7 +1,6 @@
 import {Player} from "./player";
 import {ShopSceneP1} from "../scenes/shop-sceneP1";
-import {PiCalcTests} from "../tests/pi-calc-tests";
-import {PiSystem} from "../mechanics/picalc/pi-system";
+import {PiSystem} from "./picalc/pi-system";
 import {chooseSceneP1} from "../scenes/choose-sceneP1";
 
 export class Turn {
