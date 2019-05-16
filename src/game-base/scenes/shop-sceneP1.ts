@@ -48,6 +48,7 @@ export class ShopSceneP1 extends Phaser.Scene{
 
         let createWMod = system.add.channelOut('wmod1','*' ).nullProcess(); //wmod2 for p2
 
+
         // 'pXmYZ' Z = type(l,p)
         // m0 = ship ; m1 = drone1; m2 = drone2
         // max 3 extensions and modules

@@ -15,7 +15,9 @@ export class MainScene extends Phaser.Scene {
     private players: [Player, Player];
     private turn: Turn;
     private buttonEndTurn: Button;
+    private buttonOption: Button;
     private shop: Button;
+    private system: PiSystem;
 
     constructor() {
         super({
@@ -148,6 +150,8 @@ export class MainScene extends Phaser.Scene {
             openShop2.removeInteractive();
         },this)
 
+
+
     }
 
 
@@ -155,7 +159,11 @@ export class MainScene extends Phaser.Scene {
         this.timeAccumulator += delta;
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
+            this.buttonEndTurn.updateStep();
             // console.log("Update");
+
+            this.buttonOption.updateStep()
+
         }
     }
 
