@@ -45,13 +45,14 @@ export class chooseSceneP2 extends Phaser.Scene{
         let type = this.scene.get('chooseTypeSceneP2').data.get('type');
         this.Player2 = this.scene.get('MainScene').data.get('P2');
         let drones = this.Player2.getDrones();
+        let droneNr = this.Player2.getNrDrones();
         let ship = drones[0];
         this.m0activeExt = ship.getNrWeapons();
-        if(drones.length >= 2){
+        if(droneNr >= 2){
             let drone1 = drones[1];
             this.m1activeExt = drone1.getNrWeapons()
         }
-        if(drones.length >= 3){
+        if(droneNr >= 3){
             let drone2 = drones[2];
             this.m2activeExt = drone2.getNrWeapons();
         }
@@ -98,14 +99,14 @@ export class chooseSceneP2 extends Phaser.Scene{
 
         }
 
-        if(this.m1activeExt >= 3 || drones.length < 2){
+        if(this.m1activeExt >= 3 || droneNr < 2){
             this.drone1L = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_cancel_red",
                 ()=>{
                     //system.pushSymbol(createWMod)
                 });
             this.drone1L.setPosition(200, 450);
-            if(drones.length < 2){
+            if(droneNr < 2){
                 const droneTL = this.add.text(300, 420, 'mod not built', {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
 
@@ -117,7 +118,7 @@ export class chooseSceneP2 extends Phaser.Scene{
             }
 
         }
-        if(this.m1activeExt < 3 && drones.length >= 2){
+        if(this.m1activeExt < 3 && droneNr >= 2){
             this.drone1L = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_wext",
                 ()=>{
@@ -147,13 +148,13 @@ export class chooseSceneP2 extends Phaser.Scene{
             }
 
         }
-        if(this.m2activeExt >= 3 || drones.length < 3){
+        if(this.m2activeExt >= 3 || droneNr < 3){
             this.drone2L = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_cancel_red",
                 ()=>{
                     //system.pushSymbol(createWMod)
                 });
-            if(drones.length < 3){
+            if(droneNr < 3){
                 const droneT2L = this.add.text(300, 620, 'mod not built', {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
             }
@@ -164,7 +165,7 @@ export class chooseSceneP2 extends Phaser.Scene{
             this.drone2L.setPosition(200, 650)
 
         }
-        if(this.m2activeExt < 3 && drones.length >= 3){
+        if(this.m2activeExt < 3 && droneNr >= 3){
             this.drone2L = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_wext",
                 ()=>{
