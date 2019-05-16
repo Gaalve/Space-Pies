@@ -5,16 +5,12 @@ import {Player} from "../../mechanics/player";
 */
 export class Health {
     public player: Player;
-    public maxArmor: integer;
-    public maxShield: integer;
-    public currentArmor: integer;
-    public currentShield: integer;
+    public armor: integer;
+    public shield: integer;
 
-    constructor(maxArmor : integer, maxShield : integer) {
-        this.maxArmor = maxArmor;
-        this.maxShield = maxShield;
-        this.currentArmor = maxArmor;
-        this.currentShield = maxShield;
+    constructor(armor : integer, shield : integer) {
+        this.armor = armor;
+        this.shield = shield;
     }
 
 
@@ -30,42 +26,33 @@ export class Health {
 
     public getCurrentArmor() : integer
     {
-        return this.currentArmor;
+        return this.armor;
     }
 
 
     public getCurrentShield() : integer
     {
-        return this.currentShield;
+        return this.shield;
     }
 
-    public getMaxArmor() : integer
-    {
-        return this.maxArmor;
-    }
-
-    public getMaxShield() : integer
-    {
-        return this.maxShield;
-    }
 
     public damageArmor() : void
     {
-        this.currentArmor = this.currentArmor - 1;
+        this.armor = this.armor - 1;
     }
 
     public damageShield() : void
     {
-        this.currentShield = this.currentShield - 1;
+        this.shield = this.shield - 1;
     }
 
     public regenerateArmor() : void
     {
-        this.currentArmor = this.currentArmor + 1;
+        this.armor = this.armor + 1;
     }
 
-    public regenerateLife() : void
+    public regenerateShield() : void
     {
-        this.currentShield = this.currentShield + 1;
+        this.shield = this.shield + 1;
     }
 }
