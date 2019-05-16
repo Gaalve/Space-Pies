@@ -6,30 +6,31 @@ export class Player {
     private nameIdentifier: string;
     private maxHealth : number;
     private firstPlayer: boolean;
-    private drones : Drone[] = new Array();
+    private drones : [Drone, Drone, Drone];
     private scene : Phaser.Scene;
     private system : PiSystem;
     private ship : Ship;
+    private activatedDrones : number;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, maxHealth: number, isFirstPlayer: boolean){
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, maxHealth: number, isFirstPlayer: boolean, system : PiSystem){
         this.nameIdentifier = nameIdentifier;
         this.maxHealth = maxHealth;
         this.firstPlayer = isFirstPlayer;
+        this.system = system;
         this.ship = new Ship(scene, x, y, this);
-        this.drones.push(new Drone(scene, x, y, this, 0));
-        this.drones[0].addWeapon(scene,"p");
-        this.drones[0].setVisible(false);
+        this.drones = [new Drone(scene, x, y, this, 0), new Drone(scene, x, y, this, 1), new Drone(scene, x, y, this,2 )];
         this.scene = scene;
+        this.activatedDrones = 1;
+        this.drones[0].addWeapon("p");
 
-
-        //this.system = system;
-        /*if(this.nameIdentifier == "P1") {
-            system.add.channelInCB("wmod1", "", this.createDrone);
-            system.add.channelInCB("wmod1", "", this.createDrone);
+        /*
+        for each Player add 1 input channel to create new drone
+         */
+        if(this.nameIdentifier == "P1") {
+            this.system.pushSymbol(this.system.add.channelIn('wmod1', '*').process("cD11", ()=>{this.createDrone(1)}));
         }else{
-            system.add.channelInCB("wmod2", "", this.createDrone);
-            system.add.channelInCB("wmod2", "", this.createDrone);
-        }*/
+            this.system.pushSymbol(this.system.add.channelIn('wmod2', '*').process("cD21", ()=>{this.createDrone(1)}));
+        }
     }
 
     getNameIdentifier(): string{
@@ -45,25 +46,66 @@ export class Player {
     }
 
     getNrDrones(): number{
-        return this.drones.length;
+        return this.activatedDrones;
     }
     getDrones(): Drone[]{
         return this.drones;
     }
 
-    createDrone(): void {
-        if (this.drones.length == 1) {
+    getSystem() : PiSystem{
+        return this.system;
+    }
+
+    /**
+    activate weapon drone that will be able to mount up to three weapons
+     */
+    createDrone(index : number) : void{
+        this.activatedDrones = this.activatedDrones + 1;
+        this.drones[index].piTermWExtensions();
+        this.drones[index].setVisible(true);
+
+        if(index == 1){
             if(this.nameIdentifier == "P1"){
-                this.drones.push(new Drone(this.scene, this.drones[0].getPositionX() + 300, this.drones[0].getPositionY() + 300,this,this.drones.length));
-            }else {
-                this.drones.push(new Drone(this.scene, this.drones[0].getPositionX() - 300, this.drones[0].getPositionY() + 300,this,this.drones.length));
-            }
-        } else if (this.drones.length == 2) {
-            if(this.nameIdentifier == "P1"){
-                this.drones.push(new Drone(this.scene, this.drones[0].getPositionX() + 300, this.drones[0].getPositionY() - 300,this,this.drones.length));
+                this.system.pushSymbol(this.system.add.channelIn('wmod1', '*').process("cD12", ()=>{this.createDrone(2)}));
             }else{
-                this.drones.push(new Drone(this.scene, this.drones[0].getPositionX() - 300, this.drones[0].getPositionY() - 300,this,this.drones.length));
+                this.system.pushSymbol(this.system.add.channelIn('wmod2', '*').process("cD22", ()=>{this.createDrone(2)}));
             }
+        }
+    }
+
+    /**
+	push pi terms for weapons to the pi system. Has to be done each round again
+	 */
+    pushWeapons() : void{
+        for(let d of this.drones) {
+            if(d.getNrWeapons() == 1) {
+                this.system.pushSymbol(
+                    this.system.add.channelIn("lock", "*").
+                    channelOut(d.getWeapons()[0].getPiTerm(), "*").nullProcess()
+                );
+            } else if (d.getNrWeapons() == 2) {
+                this.system.pushSymbol(
+                    this.system.add.channelIn("lock", "*").
+                    channelOut(d.getWeapons()[0].getPiTerm(), "*").
+                    channelOut(d.getWeapons()[1].getPiTerm(), "*").nullProcess()
+                );
+            } else if (d.getNrWeapons() == 3) {
+                this.system.pushSymbol(
+                    this.system.add.channelIn("lock", "*").
+                    channelOut(d.getWeapons()[0].getPiTerm(), "*").
+                    channelOut(d.getWeapons()[1].getPiTerm(), "*").
+                    channelOut(d.getWeapons()[2].getPiTerm(), "*").nullProcess()
+                );
+            }
+        }
+    }
+
+    /**
+    unlock the existing weapons in attack phase to deal damage to the opponents hit-points
+     */
+    unlockWeapons() : void{
+        for(let i = 0; i < this.activatedDrones; i++){
+            this.system.pushSymbol(this.system.add.channelOut("lock", "*").nullProcess());
         }
     }
 
