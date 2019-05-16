@@ -35,22 +35,12 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
-        let piSystem = new PiSystem(this, 1,1, 1, false);
 
         // this.add.image(1920/2, 1080/2, "background_space")
-        this.players = [new Player(this, 200, 500, "P1", new Health(5, 5), true, piSystem), new Player(this, 1720, 500, "P2", new Health(5, 5), false, piSystem)];
-
-        // CREATING PiSystem
-        this.players[0].setPiSystem( piSystem );
-        this.players[1].setPiSystem( piSystem );
-
-        let players = this.players;
-
+        this.players = [new Player(this, 200, 500, "P1", new Health(5, 5), true, this.system), new Player(this, 1720, 500, "P2", new Health(5, 5), false, this.system)];
 
         // CREATE HEALTHBARS FOR EACH PLAYER, 10 HP, 10 SHIELD
-        const healthbars = new Healthbar(this, players, piSystem );
-
-        piSystem.start();
+        const healthbars = new Healthbar(this, this.players, this.system);
 
         this.turn = new Turn(this, this.players);
 
@@ -58,7 +48,7 @@ export class MainScene extends Phaser.Scene {
            ----------------------------------------------------------
                            SHOOT BUTTONS - can delete
            ----------------------------------------------------------
-        */
+
         const shootLaserP1 = this.add.text(200, 800, "laser ->",{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2}).setVisible(true);
         shootLaserP1.setInteractive();
@@ -106,14 +96,11 @@ export class MainScene extends Phaser.Scene {
             shootProjectileP2.setColor("#ffffff");
             this.players[1].shootProjectile(this.players[0]);
         },this)
-        /*
+
             ----------------------------------------------------------
                             SHOOT BUTTONS - can delete
             ----------------------------------------------------------
          */
-
-
-
 
         const openShop1 = this.add.text(910, 600, "shop",{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2}).setVisible(false);
@@ -149,9 +136,6 @@ export class MainScene extends Phaser.Scene {
             openShop2.setVisible(false);
             openShop2.removeInteractive();
         },this)
-
-
-
     }
 
 

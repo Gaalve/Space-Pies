@@ -2,7 +2,7 @@ import {Drone} from "./drone";
 import {PiSystem} from "./picalc/pi-system";
 import {Ship} from "./ship";
 import {Health} from "../scenes/objects/Health";
-import has = Reflect.has;
+//import has = Reflect.has;
 import {Healthbar} from "../scenes/objects/Healthbar";
 
 export class Player {
@@ -163,10 +163,6 @@ export class Player {
     setHealthbar(healthbar: Healthbar) : void
     {
         this.healthbar = healthbar;
-    }
-    setPiSystem(piSystem : PiSystem) : void
-    {
-        this.system = piSystem;
     }
 
 }
