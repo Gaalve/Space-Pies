@@ -17,8 +17,8 @@ export class Healthbar {
     constructor(refScene: Phaser.Scene, players : [Player, Player], piSystem : PiSystem){
         this.refScene = refScene;
         this.players = players;
-        this.players[0].setHealthbar( this );
-        this.players[1].setHealthbar( this );
+        this.players[0].setHealthbar(this);
+        this.players[1].setHealthbar(this);
 
         // SET UP FOR SPRITES
         let maxArmorP1 = this.players[0].getHealth().getCurrentArmor();

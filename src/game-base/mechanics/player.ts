@@ -103,12 +103,10 @@ export class Player {
     {
         return this.health;
     }
-
     getHealthbar() : Healthbar
     {
         return this.healthbar;
     }
-
     getPiSystem() : PiSystem
     {
         return this.system;
@@ -118,17 +116,13 @@ export class Player {
     {
         this.health = health;
     }
-
     setHealthbar(healthbar: Healthbar) : void
     {
         this.healthbar = healthbar;
     }
-
-    setPiSystem(system: PiSystem) : void
+    setPiSystem(piSystem : PiSystem) : void
     {
-        this.system = system;
+        this.system = piSystem;
     }
-
-
 
 }
