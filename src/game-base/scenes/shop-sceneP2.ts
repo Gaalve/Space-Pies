@@ -35,8 +35,8 @@ export class ShopSceneP2 extends Phaser.Scene{
     create(): void{
         let system = new PiSystem(this, 1,1, 1, false);
 
-        let createShield = system.add.replication(system.add.channelOut('shield','p2' ).nullProcess());
-        let createArmor = system.add.replication(system.add.channelOut('armor','p2' ).nullProcess());
+        let createShield = system.add.replication(system.add.channelOut('rshieldP2','*' ).nullProcess());
+        let createArmor = system.add.replication(system.add.channelOut('rarmorP2','*' ).nullProcess());
         let createWExtShipL = system.add.replication(system.add.channelOut('wext20l','*' ).nullProcess());
         let createWExtShipP = system.add.replication(system.add.channelOut('wext20p','*' ).nullProcess());
         let createWExtDrone1L = system.add.replication(system.add.channelOut('wext21l','*' ).nullProcess());
@@ -60,11 +60,11 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.armor.setPosition(200, 200);
         const energyText = this.add.text(300, 180, "Armor", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
-        const piArmor = this.add.text(500, 180, 'armor(p2).O',{
+        const piArmor = this.add.text(500, 180, 'regArmorP2(*).O',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
-        const piShield = this.add.text(500, 330, 'shield(p2).0',{
+        const piShield = this.add.text(500, 330, 'regShieldP2(*).0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
-        const piWmod = this.add.text(650, 630, 'wmod(p2).0',{
+        const piWmod = this.add.text(650, 630, 'wmodP2(*).0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
         this.shield = new Button(this, 500, 500, "button_shadow",

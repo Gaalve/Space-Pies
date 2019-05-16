@@ -73,12 +73,12 @@ export class chooseSceneP1 extends Phaser.Scene{
             const shipTL = this.add.text(1920-500, 220, 'ship', {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
             if(type == true){
-                const piWext1 = this.add.text(1920-350, 220, 'wextp1m0(l).0',{
+                const piWext1 = this.add.text(1920-350, 220, 'wextp1m0l(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
             }
             else{
-                const piWext1 = this.add.text(1920-350, 220, 'wextp1m0(p).0',{
+                const piWext1 = this.add.text(1920-350, 220, 'wextp1m0p(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
             }
@@ -123,12 +123,12 @@ export class chooseSceneP1 extends Phaser.Scene{
             const droneTL = this.add.text(1920-500, 420, 'drone 1', {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
             if(type == true){
-                const piWext2 = this.add.text(1920-350, 420, 'wextp1m2(l).0',{
+                const piWext2 = this.add.text(1920-350, 420, 'wextp1m2l(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
             }
             else{
-                const piWext2 = this.add.text(1920-350, 420, 'wextp1m1(p).0',{
+                const piWext2 = this.add.text(1920-350, 420, 'wextp1m1p(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
             }
@@ -172,12 +172,12 @@ export class chooseSceneP1 extends Phaser.Scene{
 
             this.drone2L.setPosition(1920-600, 650)
             if(type == true){
-                const piWext3 = this.add.text(1920-350, 620, 'wextp1m2(l).0',{
+                const piWext3 = this.add.text(1920-350, 620, 'wextp1m2l(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
             }
             else{
-                const piWext3 = this.add.text(1920-350, 620, 'wextp1m2(p).0',{
+                const piWext3 = this.add.text(1920-350, 620, 'wextp1m2p(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
             }
