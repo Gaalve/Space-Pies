@@ -35,7 +35,8 @@ export class ShopSceneP1 extends Phaser.Scene{
     }
 
     create(): void{
-        let system = new PiSystem(this, 1,1, 1, false);
+        //let system = new PiSystem(this, 1,1, 1, false);
+        let system = this.scene.get('MainScene').data.get("system");
 
         let createShield = system.add.replication(system.add.channelOut('rshieldP1','*' ).nullProcess());
         let createArmor = system.add.replication(system.add.channelOut('rarmorP1','*' ).nullProcess());
