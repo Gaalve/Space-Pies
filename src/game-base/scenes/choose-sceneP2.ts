@@ -38,7 +38,10 @@ export class chooseSceneP2 extends Phaser.Scene{
 
     create(): void{
 
-        this.background = this.add.image(-250, 500,"shop_bg");
+        this.background = this.add.image(0, 540,"shop_bg");
+        this.background.setOrigin(0, 0.5);
+        this.background.setFlipX(true);
+        this.background.setTint(0x214478);
         const text = this.add.text(160, 50, 'choose Weapon Mod', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
@@ -81,6 +84,7 @@ export class chooseSceneP2 extends Phaser.Scene{
 
                     }
                     this.scene.stop()
+                    this.scene.launch("ShopSceneP2");
                     //system.pushSymbol(createWMod)
                 });
             this.shipL.setPosition(200, 250);
@@ -131,6 +135,7 @@ export class chooseSceneP2 extends Phaser.Scene{
 
                     }
                     this.scene.stop()
+                    this.scene.launch("ShopSceneP2");
                     //system.pushSymbol(createWMod)
                 });
             this.drone1L.setPosition(200, 450);
@@ -178,6 +183,7 @@ export class chooseSceneP2 extends Phaser.Scene{
 
                     }
                     this.scene.stop()
+                    this.scene.launch("ShopSceneP2");
                     //system.pushSymbol(createWMod)
                 });
             const droneT2L = this.add.text(300, 620, 'drone2', {
@@ -200,6 +206,7 @@ export class chooseSceneP2 extends Phaser.Scene{
             "button_bg", "button_fg", "button_cancel_black",
             ()=> {
                 this.scene.stop()
+                this.scene.launch("ShopSceneP2");
             });
         this.close.setPosition(200, 850)
         const closeT = this.add.text(300, 820, 'close', {

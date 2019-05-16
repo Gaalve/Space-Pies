@@ -95,14 +95,10 @@ export class ShopSceneP1 extends Phaser.Scene{
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
-            if(this.firstChoose == true){
+                this.scene.stop()
                 this.scene.launch('chooseTypeSceneP1')
-                this.firstChoose = false;
-            }
-            else{
-                this.scene.wake('chooseTypeSceneP1')
-            }
-            //system.pushSymbol(createWMod)
+
+                //system.pushSymbol(createWMod)
             });
         this.wExt.setPosition(1920-600, 500);
         const wExtText = this.add.text(1920-500, 480, "Weapon Extension", {

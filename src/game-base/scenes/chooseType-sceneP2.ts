@@ -29,6 +29,10 @@ export class ChooseTypeSceneP2 extends Phaser.Scene {
     create(): void {
 
         this.background = this.add.image(-250, 500,"shop_bg");
+        this.background = this.add.image(0, 540,"shop_bg");
+        this.background.setOrigin(0, 0.5);
+        this.background.setFlipX(true);
+        this.background.setTint(0x214478);
         this.laser = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "ssb_weap_las",
             () => {
