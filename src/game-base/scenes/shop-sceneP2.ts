@@ -37,12 +37,12 @@ export class ShopSceneP2 extends Phaser.Scene{
 
         let createShield = system.add.replication(system.add.channelOut('shield','p2' ).nullProcess());
         let createArmor = system.add.replication(system.add.channelOut('armor','p2' ).nullProcess());
-        let createWExtShipL = system.add.replication(system.add.channelOut('wext20','l' ).nullProcess());
-        let createWExtShipP = system.add.replication(system.add.channelOut('wext20','p' ).nullProcess());
-        let createWExtDrone1L = system.add.replication(system.add.channelOut('wext21','l' ).nullProcess());
-        let createWExtDrone1P = system.add.replication(system.add.channelOut('wext21','p' ).nullProcess());
-        let createWExtDrone2L = system.add.replication(system.add.channelOut('wext22','l' ).nullProcess());
-        let createWExtDrone2P = system.add.replication(system.add.channelOut('wext22','p' ).nullProcess());
+        let createWExtShipL = system.add.replication(system.add.channelOut('wext20l','*' ).nullProcess());
+        let createWExtShipP = system.add.replication(system.add.channelOut('wext20p','*' ).nullProcess());
+        let createWExtDrone1L = system.add.replication(system.add.channelOut('wext21l','*' ).nullProcess());
+        let createWExtDrone1P = system.add.replication(system.add.channelOut('wext21p','*' ).nullProcess());
+        let createWExtDrone2L = system.add.replication(system.add.channelOut('wext22l','*' ).nullProcess());
+        let createWExtDrone2P = system.add.replication(system.add.channelOut('wext22p','*' ).nullProcess());
         let startShop = system.add.replication(system.add.channelIn('shopp2','*').process('ShopP2', this.scene.launch));
         let createWMod = system.add.replication(system.add.channelOut('wmod2','*' ).nullProcess()); //wmod2 for p2
 
