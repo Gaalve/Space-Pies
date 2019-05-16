@@ -35,14 +35,14 @@ export class chooseSceneP1 extends Phaser.Scene{
         let type = this.scene.get('chooseTypeSceneP1').data.get('type');
         let drones = this.Player1.getDrones();
         let ship = drones[0];
-        this.m0activeExt = ship.getWeapons();
+        this.m0activeExt = ship.getNrWeapons();
         if(drones.length >= 2){
             let drone1 = drones[1];
-            this.m1activeExt = drone1.getWeapons();
+            this.m1activeExt = drone1.getNrWeapons();
         }
         if(drones.length >= 3){
             let drone2 = drones[2];
-            this.m1activeExt = drone2.getWeapons();
+            this.m1activeExt = drone2.getNrWeapons();
         }
 
         this.background = this.add.image(2150, 500,"shop_bg");
