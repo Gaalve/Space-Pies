@@ -37,26 +37,34 @@ export class ShopSceneP1 extends Phaser.Scene{
     create(): void{
         let system = new PiSystem(this, 1,1, 1, false);
 
-        let createShield = system.add.channelOut('shield','p1' ).nullProcess();
-        let createArmor = system.add.channelOut('armor','p1' ).nullProcess();
-        let createWExtShipL = system.add.channelOut('wext10','l' ).nullProcess();
-        let createWExtShipP = system.add.channelOut('wext10','p' ).nullProcess();
-        let createWExtDrone1L = system.add.channelOut('wext11','l' ).nullProcess();
-        let createWExtDrone1P = system.add.channelOut('wext11','p' ).nullProcess();
-        let createWExtDrone2L = system.add.channelOut('wext12','l' ).nullProcess();
-        let createWExtDrone2P = system.add.channelOut('wext12','p' ).nullProcess();
+        let createShield = system.add.replication(system.add.channelOut('rshieldP1','*' ).nullProcess());
+        let createArmor = system.add.replication(system.add.channelOut('rarmorP1','*' ).nullProcess());
+        let createWExtShipL = system.add.replication(system.add.channelOut('wext10l','*' ).nullProcess());
+        let createWExtShipP = system.add.replication(system.add.channelOut('wext10p','*' ).nullProcess());
+        let createWExtDrone1L = system.add.replication(system.add.channelOut('wext11l','*' ).nullProcess());
+        let createWExtDrone1P = system.add.replication(system.add.channelOut('wext11p','*' ).nullProcess());
+        let createWExtDrone2L = system.add.replication(system.add.channelOut('wext12l','*' ).nullProcess());
+        let createWExtDrone2P = system.add.replication(system.add.channelOut('wext12p','*' ).nullProcess());
+        let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', this.scene.launch));
+        let createWMod = system.add.replication(system.add.channelOut('wmod1','*' ).nullProcess()); //wmod2 for p2
 
-        let createWMod = system.add.channelOut('wmod1','*' ).nullProcess(); //wmod2 for p2
+        const text = this.add.text(1920-650, 50, 'choose action', {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
 
         // 'pXmYZ' Z = type(l,p)
         // m0 = ship ; m1 = drone1; m2 = drone2
         // max 3 extensions and modules
-        //this.Player1 = this.scene.get('MainScene')
+        //this.Player1 = this.scene.get('MainScene').data.get('currentPlayer');
+        this.Player1 = this.scene.get('MainScene').data.get('P1');
+        this.activeWmods = this.Player1.getNrDrones();
         this.background = this.add.image(2150, 500,"shop_bg");
+        const text1 = this.add.text(1920-650, 50, 'choose action', {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
+
 
         this.armor = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "button_energy",
+            "button_bg", "button_fg", "button_armor",
             ()=>{
             system.pushSymbol(createArmor)
             });
@@ -64,7 +72,11 @@ export class ShopSceneP1 extends Phaser.Scene{
 
         const energyText = this.add.text(1920-500, 180, "Armor", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
-        const piArmor = this.add.text(1920-300, 180, 'armor(p1).0',{
+        const piArmor = this.add.text(1920-300, 180, 'regArmorP1(*).0',{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} );
+        const piShield = this.add.text(1920-300, 330, 'regShieldP1(*).0',{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} );
+        const piWMod = this.add.text(1920-150, 630, 'wmodP1(*).0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
         this.shield = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_shield",
@@ -78,7 +90,7 @@ export class ShopSceneP1 extends Phaser.Scene{
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
-            this.scene.launch('chooseSceneP1')
+            this.scene.launch('chooseTypeSceneP1')
             //system.pushSymbol(createWMod)
             });
         this.wExt.setPosition(1920-600, 500);
@@ -111,7 +123,7 @@ export class ShopSceneP1 extends Phaser.Scene{
 
 
         this.skip = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "button_skip",
+            "button_bg", "button_fg", "button_cancel_black",
             ()=>{
             this.events.emit("skip")
             });
