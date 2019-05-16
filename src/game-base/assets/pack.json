@@ -191,6 +191,12 @@
         "key": "shop_bg",
         "url": "assets/sprites/shop_bg.png"
 
+      },
+      {
+        "type": "image",
+        "key": "pause_bg",
+        "url": "assets/sprites/pause_bg.png"
+
       }
     ]
   }
