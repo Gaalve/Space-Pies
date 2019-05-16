@@ -85,6 +85,7 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
+                this.scene.stop()
                 this.scene.launch('chooseTypeSceneP2');
 
             });

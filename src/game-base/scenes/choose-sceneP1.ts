@@ -45,8 +45,9 @@ export class chooseSceneP1 extends Phaser.Scene{
             let drone2 = drones[2];
             this.m1activeExt = drone2.getNrWeapons();
         }
-
-        this.background = this.add.image(2150, 500,"shop_bg");
+        this.background = this.add.image(1120, 540,"shop_bg");
+        this.background.setOrigin(0,0.5);
+        this.background.setTint(0x782121);
         const text = this.add.text(1920-650, 50, 'choose Weapon Mod', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
@@ -67,6 +68,7 @@ export class chooseSceneP1 extends Phaser.Scene{
                 ()=>{
                     this.events.emit('shipL');
                     this.scene.stop()
+                    this.scene.launch("ShopSceneP1")
                     //system.pushSymbol(createWMod)
                 });
             this.shipL.setPosition(1920-600, 250);
@@ -117,6 +119,7 @@ export class chooseSceneP1 extends Phaser.Scene{
 
                     }
                     this.scene.stop()
+                    this.scene.launch("ShopSceneP1")
                     //system.pushSymbol(createWMod)
                 });
             this.drone1L.setPosition(1920-600, 450);
@@ -165,6 +168,7 @@ export class chooseSceneP1 extends Phaser.Scene{
 
                 }
                     this.scene.stop()
+                    this.scene.launch("ShopSceneP1")
                     //system.pushSymbol(createWMod)
                 });
             const droneT2L = this.add.text(1920-500, 620, 'drone2', {
@@ -187,6 +191,7 @@ export class chooseSceneP1 extends Phaser.Scene{
             "button_bg", "button_fg", "button_cancel_black",
             ()=> {
                 this.scene.stop()
+                this.scene.launch("ShopSceneP1")
             });
         this.close.setPosition(1920-600, 850);
         const closeT = this.add.text(1920-500, 820, 'close', {
