@@ -1,4 +1,5 @@
 import {Button} from "../mechanics/button";
+import {Player} from "../mechanics/player";
 export class chooseSceneP1 extends Phaser.Scene{
 
     private timeAccumulator = 0.0;
@@ -8,13 +9,11 @@ export class chooseSceneP1 extends Phaser.Scene{
     private shipL: Button;
     private drone1L: Button;
     private drone2L: Button;
-    private shipP: Button;
-    private drone1P: Button;
-    private drone2P: Button;
-    //private activeMod: integer;
+    private close: Button;
     private m0activeExt : integer = 0;
     private m1activeExt: integer = 0;
     private m2activeExt: integer = 0;
+    private Player1: Player;
 
     constructor(){
         super({
@@ -32,183 +31,166 @@ export class chooseSceneP1 extends Phaser.Scene{
     }
 
     create(): void{
-        /*let system = new PiSystem(this, 1,1, 1, false);
-
-        let createShield = system.add.channelOut('shield','p1' ).nullProcess();
-        let createArmor = system.add.channelOut('armor','p1' ).nullProcess();
-        let createWExtShipL = system.add.channelOut('wExt','p1m0l' ).nullProcess();
-        let createWExtShipP = system.add.channelOut('wExt','p1m0p' ).nullProcess();
-        let createWExtDrone1L = system.add.channelOut('wExt','p1m1l' ).nullProcess();
-        let createWExtDrone1P = system.add.channelOut('wExt','p1m1p' ).nullProcess();
-        let createWExtDrone2L = system.add.channelOut('wExt','p1m2l' ).nullProcess();
-        let createWExtDrone2P = system.add.channelOut('wExt','p1m2p' ).nullProcess();
-
-        let createWMod = system.add.channelOut('wMod','p1' ).nullProcess();*/
+        this.Player1 = this.scene.get('MainScene').data.get('P1');
+        let type = this.scene.get('chooseTypeSceneP1').data.get('type');
+        let drones = this.Player1.getDrones();
+        let droneNr = this.Player1.getNrDrones();
+        let ship = drones[0];
+        this.m0activeExt = ship.getNrWeapons();
+        if(droneNr >= 2){
+            let drone1 = drones[1];
+            this.m1activeExt = drone1.getNrWeapons();
+        }
+        if(droneNr >= 3){
+            let drone2 = drones[2];
+            this.m1activeExt = drone2.getNrWeapons();
+        }
 
         this.background = this.add.image(2150, 500,"shop_bg");
-        const laser = this.add.text(1920-800, 100, 'Laser', {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+        const text = this.add.text(1920-650, 50, 'choose Weapon Mod', {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
-        const projectile = this.add.text(1920-800, 500, 'Projectile', {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2})
         if(this.m0activeExt >= 3) {
             this.shipL = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_skip",
+                "button_bg", "button_fg", "button_cancel_red",
                 () => {
-                    this.scene.sleep()
                     //system.pushSymbol(createWMod)
                 });
-            this.shipL.setPosition(1920-700, 350);
-            const shipTL = this.add.text(1920-730, 260, 'max reached', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
+            this.shipL.setPosition(1920-600, 250);
+            const shipTL = this.add.text(1920-500, 220, 'max reached', {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
 
         }
         if(this.m0activeExt < 3){
             this.shipL = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_wext",
+                "button_bg", "button_fg", "button_space_shuttle",
                 ()=>{
                     this.events.emit('shipL');
                     this.scene.sleep()
                     //system.pushSymbol(createWMod)
                 });
-            this.shipL.setPosition(1920-700, 350);
-            const shipTL = this.add.text(1920-730, 260, 'ship', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
+            this.shipL.setPosition(1920-600, 250);
+            const shipTL = this.add.text(1920-500, 220, 'ship', {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
+            if(type == true){
+                const piWext1 = this.add.text(1920-350, 220, 'wextp1m0l(*).0',{
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
+
+            }
+            else{
+                const piWext1 = this.add.text(1920-350, 220, 'wextp1m0p(*).0',{
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
+
+            }
+
 
         }
 
-        if(this.m1activeExt >= 3){
+        if(this.m1activeExt >= 3 || droneNr < 2){
             this.drone1L = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_skip",
+                "button_bg", "button_fg", "button_cancel_red",
                 ()=>{
-                    this.scene.sleep()
                     //system.pushSymbol(createWMod)
                 });
-            this.drone1L.setPosition(1920-400, 350);
-            const droneTL = this.add.text(1920-430, 260, 'max reached', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
+            this.drone1L.setPosition(1920-600, 450);
+            if(droneNr < 2){
+                const droneTL = this.add.text(1920-500, 420, 'mod not built', {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
 
+            }
+            else{
+                const droneTL = this.add.text(1920-500, 420, 'max reached', {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
+
+            }
         }
-        if(this.m1activeExt < 3){
+        if(this.m1activeExt < 3 && droneNr >= 2){
             this.drone1L = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_wext",
                 ()=>{
-                    this.events.emit('drone1L');
+                    if(type == true){
+                        this.events.emit('drone1L');
+
+                    }
+                    else{
+                        this.events.emit('drone1P');
+
+                    }
                     this.scene.sleep()
                     //system.pushSymbol(createWMod)
                 });
-            this.drone1L.setPosition(1920-400, 350);
-            const droneTL = this.add.text(1920-430, 260, 'drone1', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
+            this.drone1L.setPosition(1920-600, 450);
+            const droneTL = this.add.text(1920-500, 420, 'drone 1', {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
+            if(type == true){
+                const piWext2 = this.add.text(1920-350, 420, 'wextp1m2l(*).0',{
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
+
+            }
+            else{
+                const piWext2 = this.add.text(1920-350, 420, 'wextp1m1p(*).0',{
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
+
+            }
 
         }
-        if(this.m2activeExt >= 3){
+        if(this.m2activeExt >= 3 || droneNr< 3){
             this.drone2L = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_skip",
+                "button_bg", "button_fg", "button_cancel_red",
                 ()=>{
-                    this.scene.sleep()
-                    //system.pushSymbol(createWMod)
-                });
-            const droneT2L = this.add.text(1920-130, 260, 'max reached', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
+             });
+            if(droneNr < 3){
+                const droneTL = this.add.text(1920-500, 620, 'mod not built', {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
 
-            this.drone2L.setPosition(1920-100, 350)
+            }
+            else {
+                const droneT2L = this.add.text(1920 - 500, 620, 'max reached', {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2
+                });
+            }
+            this.drone2L.setPosition(1920-600, 650)
 
         }
-        if(this.m2activeExt < 3){
+        if(this.m2activeExt < 3 && droneNr >= 3){
             this.drone2L = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_wext",
                 ()=>{
+                if(type == true){
                     this.events.emit('drone2L');
-                    this.scene.sleep()
-                    //system.pushSymbol(createWMod)
-                });
-            const droneT2L = this.add.text(1920-130, 260, 'drone2', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
 
-            this.drone2L.setPosition(1920-100, 350)
-
-        }
-
-        if(this.m0activeExt >= 3){
-            this.shipP = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_skip",
-                ()=>{
-                    this.scene.sleep()
-                    //system.pushSymbol(createWMod)
-                });
-            this.shipP.setPosition(1920-700, 750)
-            const shipT = this.add.text(1920-730, 660, 'max reached', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
-
-        }
-
-        if(this.m0activeExt < 3){
-            this.shipP = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_wext",
-                ()=>{
-                    this.events.emit('shipP');
-                    this.scene.sleep()
-                    //system.pushSymbol(createWMod)
-                });
-            this.shipP.setPosition(1920-700, 750)
-            const shipT = this.add.text(1920-730, 660, 'ship', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
-
-        }
-
-        if(this.m1activeExt >= 3){
-            this.drone1P = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_skip",
-                ()=>{
-                    this.scene.sleep()
-                    //system.pushSymbol(createWMod)
-                });
-            this.drone1P.setPosition(1920-400, 750);
-            const droneTP = this.add.text(1920-430, 660, 'max reached', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
-
-        }
-        if(this.m1activeExt < 3){
-            this.drone1P = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_wext",
-                ()=>{
-                    this.events.emit('drone1P');
-                    this.scene.sleep()
-                    //system.pushSymbol(createWMod)
-                });
-            this.drone1P.setPosition(1920-400, 750);
-            const droneTP = this.add.text(1920-430, 660, 'drone1', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
-
-        }
-
-        if(this.m2activeExt >= 3){
-            this.drone2P = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_skip",
-                ()=>{
-                    this.scene.sleep()
-                    //system.pushSymbol(createWMod)
-                });
-            this.drone2P.setPosition(1920-100, 750);
-            const droneT2P = this.add.text(1920-130, 660, 'max reached', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
-
-        }
-
-        if(this.m2activeExt < 3){
-            this.drone2P = new Button(this, 500, 500, "button_shadow",
-                "button_bg", "button_fg", "button_wext",
-                ()=>{
+                }
+                else{
                     this.events.emit('drone2P');
+
+                }
                     this.scene.sleep()
                     //system.pushSymbol(createWMod)
                 });
-            this.drone2P.setPosition(1920-100, 750);
-            const droneT2P = this.add.text(1920-130, 660, 'drone2', {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2});
+            const droneT2L = this.add.text(1920-500, 620, 'drone2', {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
+
+            this.drone2L.setPosition(1920-600, 650)
+            if(type == true){
+                const piWext3 = this.add.text(1920-350, 620, 'wextp1m2l(*).0',{
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
+
+            }
+            else{
+                const piWext3 = this.add.text(1920-350, 620, 'wextp1m2p(*).0',{
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
+
+            }
 
         }
+        this.close = new Button(this, 500, 500, "button_shadow",
+            "button_bg", "button_fg", "button_cancel_black",
+            ()=> {
+                this.scene.sleep()
+            });
+        this.close.setPosition(1920-600, 850);
+        const closeT = this.add.text(1920-500, 820, 'close', {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
 
     }
     update(time: number, delta: number): void {
@@ -216,11 +198,9 @@ export class chooseSceneP1 extends Phaser.Scene{
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
             this.shipL.updateStep();
-            this.shipP.updateStep();
-            this.drone1P.updateStep();
-            this.drone2P.updateStep();
             this.drone1L.updateStep();
             this.drone2L.updateStep();
+            this.close.updateStep();
             // console.log("Update")
         }
     }
