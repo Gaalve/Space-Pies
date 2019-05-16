@@ -122,20 +122,20 @@ export class MainScene extends Phaser.Scene {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2}).setVisible(false);
 
         this.scene.get('ShopSceneP1').events.on("skip", function () {
-            this.scene.sleep("ShopSceneP1");
+            this.scene.stop("ShopSceneP1");
             openShop1.setVisible(true);
             openShop1.setInteractive()
         },this);
 
 
         this.scene.get('ShopSceneP2').events.on("skip", function () {
-            this.scene.sleep("ShopSceneP2");
+            this.scene.stop("ShopSceneP2");
             openShop2.setVisible(true);
             openShop2.setInteractive()
         },this);
 
         openShop1.on('pointerup', function (){
-            this.scene.wake('ShopSceneP1');
+            this.scene.launch('ShopSceneP1');
 
             openShop1.setVisible(false);
             openShop1.removeInteractive();
@@ -143,7 +143,7 @@ export class MainScene extends Phaser.Scene {
 
         openShop2.on('pointerup', function (){
 
-            this.scene.wake('ShopSceneP2');
+            this.scene.launch('ShopSceneP2');
 
 
             openShop2.setVisible(false);

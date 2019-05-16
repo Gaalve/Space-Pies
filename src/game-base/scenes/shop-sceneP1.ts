@@ -140,7 +140,7 @@ export class ShopSceneP1 extends Phaser.Scene{
                 const wModText = this.add.text(1920-500, 630, "max Mods reached", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
             }
-        })
+        }, this);
 
 
         this.skip = new Button(this, 500, 500, "button_shadow",

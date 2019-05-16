@@ -66,7 +66,7 @@ export class chooseSceneP1 extends Phaser.Scene{
                 "button_bg", "button_fg", "button_space_shuttle",
                 ()=>{
                     this.events.emit('shipL');
-                    this.scene.sleep()
+                    this.scene.stop()
                     //system.pushSymbol(createWMod)
                 });
             this.shipL.setPosition(1920-600, 250);
@@ -116,7 +116,7 @@ export class chooseSceneP1 extends Phaser.Scene{
                         this.events.emit('drone1P');
 
                     }
-                    this.scene.sleep()
+                    this.scene.stop()
                     //system.pushSymbol(createWMod)
                 });
             this.drone1L.setPosition(1920-600, 450);
@@ -164,7 +164,7 @@ export class chooseSceneP1 extends Phaser.Scene{
                     this.events.emit('drone2P');
 
                 }
-                    this.scene.sleep()
+                    this.scene.stop()
                     //system.pushSymbol(createWMod)
                 });
             const droneT2L = this.add.text(1920-500, 620, 'drone2', {
@@ -186,7 +186,7 @@ export class chooseSceneP1 extends Phaser.Scene{
         this.close = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_cancel_black",
             ()=> {
-                this.scene.sleep()
+                this.scene.stop()
             });
         this.close.setPosition(1920-600, 850);
         const closeT = this.add.text(1920-500, 820, 'close', {

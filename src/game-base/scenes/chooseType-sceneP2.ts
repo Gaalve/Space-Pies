@@ -33,14 +33,9 @@ export class ChooseTypeSceneP2 extends Phaser.Scene {
             "button_bg", "button_fg", "ssb_weap_las",
             () => {
                 this.data.set('type', true);
-                this.scene.sleep();
-                if(this.first == true){
-                    this.scene.launch('chooseSceneP2')
-                    this.first = false;
-                }
-                else{
-                    this.scene.wake('chooseSceneP2')
-                }
+                this.scene.stop();
+                this.scene.launch('chooseSceneP2')
+
                 //system.pushSymbol(createWMod)
             });
         this.laser.setPosition(200, 400)
@@ -49,14 +44,9 @@ export class ChooseTypeSceneP2 extends Phaser.Scene {
             "button_bg", "button_fg", "ssb_weap_pro",
             () => {
                 this.data.set("type", false);
-                this.scene.sleep();
-                if(this.first == true){
-                    this.scene.launch('chooseSceneP2')
-                    this.first = false;
-                }
-                else{
-                    this.scene.wake('chooseSceneP2')
-                }                //system.pushSymbol(createWMod)
+                this.scene.stop();
+                this.scene.launch('chooseSceneP2')
+                //system.pushSymbol(createWMod)
             });
         this.projectile.setPosition(200, 700)
         const laserT = this.add.text(300, 370, 'Laser', {
