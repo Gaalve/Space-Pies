@@ -1,4 +1,8 @@
 import {Player} from "./player";
+import {ShopSceneP1} from "../scenes/shop-sceneP1";
+import {PiCalcTests} from "../tests/pi-calc-tests";
+import {PiSystem} from "../mechanics/picalc/pi-system";
+import {chooseSceneP1} from "../scenes/choose-sceneP1";
 
 export class Turn {
     private refScene: Phaser.Scene;
@@ -23,7 +27,12 @@ export class Turn {
         this.refScene.data.set('turnAction', 'Create');
         this.refScene.time.delayedCall(0, () => (this.playerInput()), [], this);
     }
+ /*   create(): void{
+        let system = new PiSystem(this, 1,1, 1, false);
+        system.start()
+        let startShop = system.add.replication(system.add.channelOut('shopp1', '*').nullProcess())
 
+    } */
 
  /*   private Attackturn():void{
         this.refScene.data.set('turnAction', 'Attackturn');
@@ -36,14 +45,18 @@ export class Turn {
     } */
 
     private playerInput():void{
+       // let system = new PiSystem(this.refScene, 1,1, 1, false);
+       // let startShop = system.add.replication(system.add.channelOut('shopp1', '*').nullProcess())
         if(this.currentPlayer.getNameIdentifier() == "P1"){
             this.refScene.scene.launch('ShopSceneP1');
+          // system.pushSymbol(startShop)
+          //  system.pushSymbol(system.add.channelOut('shopp1', '*').nullProcess())
 
         }
         else {
             this.refScene.scene.launch('ShopSceneP2');
         }
-        this.awaitInput = true;
+        this.awaitInput = true; //nächster Spieler
         this.idx = 1 - this.idx;
         this.currentPlayer = this.players[this.idx];
         this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
@@ -59,8 +72,11 @@ export class Turn {
         this.refScene.scene.sleep('chooseSceneP1');
         this.refScene.scene.sleep('chooseSceneP2');
 
+
+        //Waffen schießen lassen:
+
         this.refScene.data.set('turnAction', 'Battle Phase');
-        this.refScene.time.delayedCall(3000, () => (this.playerInput()), [], this);
+        this.refScene.time.delayedCall(3000, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
     }
 
   /*  public nextPlayer():void{
