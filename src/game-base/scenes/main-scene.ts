@@ -42,8 +42,7 @@ export class MainScene extends Phaser.Scene {
             ()=>{
                 openShop1.setVisible(false).removeInteractive();
                 openShop2.setVisible(false).removeInteractive();
-
-                this.turn.nextPlayer()
+                this.turn.Attackturn()
                 ;});
         this.buttonEndTurn.setPosition(1920/2, 500);
         const openShop1 = this.add.text(910, 600, "shop",{
