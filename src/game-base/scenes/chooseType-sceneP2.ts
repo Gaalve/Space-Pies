@@ -1,19 +1,21 @@
 import {Button} from "../mechanics/button";
 import {chooseSceneP1} from "./choose-sceneP1";
+import first = Phaser.Display.Canvas.CanvasPool.first;
 
 export class ChooseTypeSceneP2 extends Phaser.Scene {
     private timeAccumulator = 0.0;
     private timeUpdateTick = 1000 / 60;
     private laser: Button;
     private projectile: Button;
-
+    private first: boolean;
     private background;
 
     constructor() {
         super({
             key: 'chooseTypeSceneP2',
             active: false
-        })
+        });
+        this.first = true;
     }
 
     preload(): void {
@@ -28,20 +30,21 @@ export class ChooseTypeSceneP2 extends Phaser.Scene {
 
         this.background = this.add.image(-250, 500,"shop_bg");
         this.laser = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "ssr_weap_las",
+            "button_bg", "button_fg", "ssb_weap_las",
             () => {
                 this.data.set('type', true);
-                this.scene.sleep();
+                this.scene.stop();
                 this.scene.launch('chooseSceneP2')
+
                 //system.pushSymbol(createWMod)
             });
         this.laser.setPosition(200, 400)
 
         this.projectile = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "ssr_weap_pro",
+            "button_bg", "button_fg", "ssb_weap_pro",
             () => {
                 this.data.set("type", false);
-                this.scene.sleep();
+                this.scene.stop();
                 this.scene.launch('chooseSceneP2')
                 //system.pushSymbol(createWMod)
             });

@@ -143,6 +143,7 @@ export class Player {
                 );
             }
         }
+        this.unlockWeapons();
     }
 
     /**

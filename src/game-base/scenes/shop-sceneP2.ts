@@ -15,13 +15,14 @@ export class ShopSceneP2 extends Phaser.Scene{
     private background: Phaser.GameObjects.Image;
     private activeWmods:integer = 3;
     private Player2: Player;
+    private firstChoose: boolean;
 
     constructor(){
         super({
             key: 'ShopSceneP2',
             active: false
         });
-
+        this.firstChoose = true;
     }
 
     preload(): void{
@@ -84,7 +85,7 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
-            this.scene.launch('chooseTypeSceneP2');
+                this.scene.launch('chooseTypeSceneP2');
 
             });
         this.wExt.setPosition(200, 500);

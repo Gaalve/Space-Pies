@@ -12,6 +12,9 @@ export class Turn {
     private awaitInput: boolean;
     private currentRound: number;
     public clickable: boolean;
+    public first1: boolean;
+    public first2: boolean;
+
 
     constructor(refScene: Phaser.Scene, players: [Player, Player]){
         this.refScene = refScene;
@@ -19,6 +22,8 @@ export class Turn {
         this.idx = 0;
         this.currentPlayer = this.players[this.idx];
         this.clickable = false;
+        this.first1 = true;
+        this.first2 = true;
         this.awaitInput = false;
         this.currentRound = 0;
         this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
@@ -61,7 +66,8 @@ export class Turn {
 
         if(this.currentPlayer.getNameIdentifier() == "P1"){
             this.refScene.scene.launch('ShopSceneP1');
-          // system.pushSymbol(startShop)
+
+            // system.pushSymbol(startShop)
           //  system.pushSymbol(system.add.channelOut('shopp1', '*').nullProcess())
 
         }
@@ -77,15 +83,15 @@ export class Turn {
     public Attackturn():void{
         if (!this.awaitInput) return;
         this.clickable = false;
-        this.refScene.scene.sleep('ShopSceneP1');
-        this.refScene.scene.sleep('ShopSceneP2');
-        this.refScene.scene.sleep('chooseSceneP1');
-        this.refScene.scene.sleep('chooseSceneP2');
-        this.refScene.scene.sleep('chooseTypeSceneP1');
-        this.refScene.scene.sleep('chooseTypeSceneP2');
+        this.refScene.scene.stop('ShopSceneP1');
+        this.refScene.scene.stop('ShopSceneP2');
+        this.refScene.scene.stop('chooseSceneP1');
+        this.refScene.scene.stop('chooseSceneP2');
+        this.refScene.scene.stop('chooseTypeSceneP1');
+        this.refScene.scene.stop('chooseTypeSceneP2');
 
         //Waffen schießen lassen:
-
+        this.currentPlayer.pushWeapons();
         this.refScene.data.set('turnAction', 'Battle Phase');
         this.refScene.time.delayedCall(1000, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
 
