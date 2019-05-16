@@ -22,15 +22,15 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    //reposition external drones
 	    if(index == 1){
 	    	if(player.getNameIdentifier() == "P1"){
-				this.setPosition(x + 300, y + 300);
-			}else{
-				this.setPosition(x - 300, y + 300);
-			}
-		}else if(index == 2){
-			if(player.getNameIdentifier() == "P1"){
 				this.setPosition(x + 300, y - 300);
 			}else{
 				this.setPosition(x - 300, y - 300);
+			}
+		}else if(index == 2){
+			if(player.getNameIdentifier() == "P1"){
+				this.setPosition(x + 300, y + 300);
+			}else{
+				this.setPosition(x - 300, y + 300);
 			}
 		}
 
@@ -141,6 +141,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			}
 			this.onScreenText.setAngle(270);
 		}
+		this.onScreenText.setOrigin(0.5);
 	}
 
 	/**
@@ -148,6 +149,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	 */
 	refreshOnScreenText() : void{
 		this.onScreenText.setText(this.piTerm);
+		this.onScreenText.setOrigin(0.5);
 	}
 
 	/**

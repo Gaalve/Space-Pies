@@ -163,6 +163,7 @@ export class Player {
     {
         return this.healthbar;
     }
+
     getPiSystem() : PiSystem
     {
         return this.system;
@@ -172,6 +173,7 @@ export class Player {
     {
         this.health = health;
     }
+    
     setHealthbar(healthbar: Healthbar) : void
     {
         this.healthbar = healthbar;
