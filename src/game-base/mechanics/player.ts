@@ -1,44 +1,89 @@
 import {Drone} from "./drone";
 import {PiSystem} from "./picalc/pi-system";
 import {Ship} from "./ship";
+import {Health} from "../scenes/objects/Health";
+//import has = Reflect.has;
+import {Healthbar} from "../scenes/objects/Healthbar";
 
 export class Player {
     private nameIdentifier: string;
-    private maxHealth : number;
+    private health : Health;
     private firstPlayer: boolean;
     private drones : [Drone, Drone, Drone];
     private scene : Phaser.Scene;
     private system : PiSystem;
     private ship : Ship;
     private activatedDrones : number;
+    private healthbar : Healthbar;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, maxHealth: number, isFirstPlayer: boolean, system : PiSystem){
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, health : Health, isFirstPlayer: boolean, piSystem : PiSystem){
         this.nameIdentifier = nameIdentifier;
-        this.maxHealth = maxHealth;
+        this.health = health;
         this.firstPlayer = isFirstPlayer;
-        this.system = system;
+        this.system = piSystem;
         this.ship = new Ship(scene, x, y, this);
         this.drones = [new Drone(scene, x, y, this, 0), new Drone(scene, x, y, this, 1), new Drone(scene, x, y, this,2 )];
         this.scene = scene;
         this.activatedDrones = 1;
         this.drones[0].addWeapon("p");
+        this.system = piSystem;
+        this.addHealthbarPiTerms(this);
 
-        /*
-        for each Player add 1 input channel to create new drone
-         */
-        if(this.nameIdentifier == "P1") {
-            this.system.pushSymbol(this.system.add.channelIn('wmod1', '*').process("cD11", ()=>{this.createDrone(1)}));
-        }else{
-            this.system.pushSymbol(this.system.add.channelIn('wmod2', '*').process("cD21", ()=>{this.createDrone(1)}));
+
+
+        if(this.nameIdentifier == "P1"){
+            this.system.pushSymbol(this.system.add.channelIn("wmod1","*").process("cD11", () => {
+                this.createDrone(1);
+            }));
+        }else {
+            this.system.pushSymbol(this.system.add.channelIn("wmod2", "*").process("cD21", () => {
+                this.createDrone(1);
+            }));
         }
+
+    }
+
+    private addHealthbarPiTerms(player: Player) {
+        this.system.pushSymbol(this.system.add.channelIn("armorEmpty" + player.getNameIdentifier(), "*").process("destroyArmor", this.destroyArmor(this.system)))
+        this.system.pushSymbol(this.system.add.channelIn("shieldEmpty" + player.getNameIdentifier(), "*").process("destroyShield", this.destroyShield(this.system)))
+    }
+
+
+    private destroyShield(system : PiSystem) : Function {
+        let player = this;
+        let dstroyShield = function()
+        {
+            console.log("[ACTION] " + player.getNameIdentifier() + "'s SHIELD COMPLETELY DESTROYED !");
+            system.pushSymbol(system.add.channelOut("shieldDestroyed" + player.getNameIdentifier(), "*").nullProcess());
+        };
+        return dstroyShield;
+
+
+    }
+
+    private destroyArmor(system : PiSystem) : Function {
+        let player = this;
+        let dstroyArmor = function()
+        {
+            console.log("[ACTION] " + player.getNameIdentifier() + "'s ARMOR COMPLETELY DESTROYED !");
+            system.pushSymbol(system.add.channelOut("armorDestroyed" + player.getNameIdentifier(), "*").nullProcess());
+        };
+        return dstroyArmor;
+    }
+
+    public shootProjectile(player : Player)
+    {
+        console.log("[ACTION] Shooting Projectile at " + player.getNameIdentifier() + " !")
+        this.system.pushSymbol(this.system.add.channelOut("armor" + player.getNameIdentifier(), "*").nullProcess());
+    }
+
+    public shootLaser(player : Player) {
+        console.log("[ACTION] Shooting Laser at " + player.getNameIdentifier() + " !")
+        this.system.pushSymbol(this.system.add.channelOut("shield" + player.getNameIdentifier(), "*").nullProcess());
     }
 
     getNameIdentifier(): string{
         return this.nameIdentifier;
-    }
-
-    getMaxHealth(): number{
-        return this.maxHealth;
     }
 
     isFirstPlayer(): boolean{
@@ -107,6 +152,28 @@ export class Player {
         for(let i = 0; i < this.activatedDrones; i++){
             this.system.pushSymbol(this.system.add.channelOut("lock", "*").nullProcess());
         }
+    }
+
+    getHealth() : Health
+    {
+        return this.health;
+    }
+    getHealthbar() : Healthbar
+    {
+        return this.healthbar;
+    }
+    getPiSystem() : PiSystem
+    {
+        return this.system;
+    }
+
+    setHealth(health: Health) : void
+    {
+        this.health = health;
+    }
+    setHealthbar(healthbar: Healthbar) : void
+    {
+        this.healthbar = healthbar;
     }
 
 }
