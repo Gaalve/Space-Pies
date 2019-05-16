@@ -8,6 +8,8 @@ import {chooseSceneP1} from "./scenes/choose-sceneP1";
 import {chooseSceneP2} from "./scenes/choose-sceneP2";
 import {PauseScene} from "./scenes/pause-scene"
 import {Background} from "./scenes/background";
+import {ChooseTypeSceneP1} from"./scenes/chooseType-sceneP1"
+import {ChooseTypeSceneP2} from "./scenes/chooseType-sceneP2";
 
 const config: GameConfig = {
     width: 1920,

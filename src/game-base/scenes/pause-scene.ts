@@ -54,7 +54,7 @@ export class PauseScene extends Phaser.Scene {
         this.buttonReset = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_skip",
             ()=>{
-            this.scene.launch('MainScene');
+            this.scene.get('MainScene').scene.restart();
             this.scene.stop();});
 
         this.buttonReset.setPosition(1920/2, 1080/2+75);

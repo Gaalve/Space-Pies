@@ -53,6 +53,11 @@
       },
       {
         "type": "image",
+        "key": "button_space_shuttle",
+        "url": "assets/sprites/button_space_ship.png"
+      },
+      {
+        "type": "image",
         "key": "button_shadow",
         "url": "assets/sprites/button_shadow.png"
       },
