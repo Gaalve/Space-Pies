@@ -15,6 +15,8 @@
 		
 <h4>Code: </h4>	
         -Wir benutzen einen K&R Style 
+        -Wir programmieren mit IntelliJ IDEA
+        -Typescript
     	-Einrückungstiefe beträgt 4 Leerzeichen 
     	-getter werden beispielsweise "getHealth" benannt 
     	-im Allgemeinen werden Methoden klein geschrieben, wenn der Name aus 2 	Wörtern zusammengesetzt ist, 
