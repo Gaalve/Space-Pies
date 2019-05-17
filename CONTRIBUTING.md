@@ -1,6 +1,6 @@
 <h3>Contribution Guide: </h3>
 
-<h4>Mergerequets: </h4>
+<h4>Mergerequests: </h4>
 
                 1. Bei Gitlab den Mergerequest erstellen und Branch anlegen. 
                 2. Bei IntelliJ den Branch unten rechts im Git master "checkout"
