@@ -20,11 +20,13 @@ export class Background extends Phaser.Scene {
             "assets/pack.json",
             "preload"
         )
-
     }
 
     create(): void {
         this.space = new Space(this);
+        // let s : Phaser.Scene = this.scene.get('MainScene');
+        // this.scene.setActive(true, 'MainScene')
+        this.scene.launch('MainScene')
     }
 
 
