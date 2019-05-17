@@ -21,6 +21,7 @@
     	-getter werden beispielsweise "getHealth" benannt 
     	-im Allgemeinen werden Methoden klein geschrieben, wenn der Name aus 2 	Wörtern zusammengesetzt ist, 
     	wird das 2. Wort mit einem Großbuchstaben 	angenfangen um es zu verdeutlichen, bspw: "playerInput"
+    	-versucht relativ viel zu kommentieren, lieber zuviel als zu wenig
     	
 <h4>Commit-Messages: </h4>   
         -Kurz was geändert
