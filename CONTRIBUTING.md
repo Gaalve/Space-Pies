@@ -8,7 +8,7 @@
         	    4. Nun in diesen Branch arbeiten.
 	        	5. Wenn fertig dann den derzeitigen Master pullen/fetchen
 	        	6. Bei IntelliJ den Pfeil hinten beim Master "merge into current" drücken.
-	        	7. Evtl. vorhanden Conflicts beheben
+	        	7. Evtl. vorhandene Conflicts beheben
         		8. Nun in IntelliJ seinen Branch commiten, kommentar nicht vergessen
 	        	9. git push im Terminal von IntelliJ, oder anders pushen
 	        	
