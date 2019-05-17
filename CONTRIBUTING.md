@@ -14,9 +14,9 @@
 	        	
 		
 <h4>Code: </h4>	
-        -Wir benutzen einen K&R Style <br>
-    	-Einrückungstiefe beträgt 4 Leerzeichen <br>
-    	-getter werden beispielsweise "getHealth" benannt <br>
+        -Wir benutzen einen K&R Style 
+    	-Einrückungstiefe beträgt 4 Leerzeichen 
+    	-getter werden beispielsweise "getHealth" benannt 
     	-im Allgemeinen werden Methoden klein geschrieben, wenn der Name aus 2 	Wörtern zusammengesetzt ist, 
     	wird das 2. Wort mit einem Großbuchstaben 	angenfangen um es zu verdeutlichen, bspw: "playerInput"
     	
