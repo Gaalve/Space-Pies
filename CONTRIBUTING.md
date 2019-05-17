@@ -21,7 +21,8 @@
     	wird das 2. Wort mit einem Großbuchstaben 	angenfangen um es zu verdeutlichen, bspw: "playerInput"
     	
 <h4>Commit-Messages: </h4>   
-        -Kurz erklären was und wieso geändert (wenn nötig)
+        -Kurz was geändert
+        -Kurz wieso geändert (wenn nötig)
                    
 <h4>Bug-reports: </h4>
         -reproduzierbar Fehler beschreiben /evtl. screenshots 
