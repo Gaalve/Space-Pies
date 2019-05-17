@@ -7,10 +7,10 @@ import {HealthType} from "./health-type";
 export class Health {
     private player: Player;
     private shipBar: Healthbar;
-    private zone1Bar: Healthbar;
-    private zone2Bar: Healthbar;
-    private zone3Bar: Healthbar;
-    private zone4Bar: Healthbar;
+    private readonly zone1Bar: Healthbar;
+    private readonly zone2Bar: Healthbar;
+    private readonly zone3Bar: Healthbar;
+    private readonly zone4Bar: Healthbar;
     public constructor(scene: Phaser.Scene, player: Player, pi: PiSystem){
         this.player = player;
         this.shipBar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, false, 120);
@@ -35,50 +35,29 @@ export class Health {
         /**
          * Adding HitZone Pi-Terms
          */
-        {
-            let hbid: string = "z1";
-            let zoneBar: Healthbar = this.zone1Bar;
-            let regLS = Health.getPiRegLaserShield(pi, pid, hbid, ()=>{zoneBar.addBar(HealthType.ShieldBar)});
-            let regAS = Health.getPiRegArmorShield(pi, pid, hbid, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
-            let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{console.log("destorying Bar");zoneBar.destroyBar()}, regLS, regAS);
-            let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()}, regLS, regAS);
-            Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
-            Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
-            Health.addPiHitzoneShield(pi, pid, hbid,()=>{zoneBar.addBar(HealthType.ShieldBar)});
-        }
-        {
-            let hbid: string = "z2";
-            let zoneBar: Healthbar = this.zone2Bar;
-            let regLS = Health.getPiRegLaserShield(pi, pid, hbid, ()=>{zoneBar.addBar(HealthType.ShieldBar)});
-            let regAS = Health.getPiRegArmorShield(pi, pid, hbid, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
-            let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()}, regLS, regAS);
-            let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()}, regLS, regAS);
-            Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
-            Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
-            Health.addPiHitzoneShield(pi, pid, hbid,()=>{zoneBar.addBar(HealthType.ShieldBar)});
-        }
-        {
-            let hbid: string = "z3";
-            let zoneBar: Healthbar = this.zone3Bar;
-            let regLS = Health.getPiRegLaserShield(pi, pid, hbid, ()=>{zoneBar.addBar(HealthType.ShieldBar)});
-            let regAS = Health.getPiRegArmorShield(pi, pid, hbid, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
-            let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()}, regLS, regAS);
-            let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()}, regLS, regAS);
-            Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
-            Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
-            Health.addPiHitzoneArmor(pi, pid, hbid,()=>{zoneBar.addBar(HealthType.ArmorBar)});
-        }
-        {
-            let hbid: string = "z4";
-            let zoneBar: Healthbar = this.zone4Bar;
-            let regLS = Health.getPiRegLaserShield(pi, pid, hbid, ()=>{zoneBar.addBar(HealthType.ShieldBar)});
-            let regAS = Health.getPiRegArmorShield(pi, pid, hbid, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
-            let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()}, regLS, regAS);
-            let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()}, regLS, regAS);
-            Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
-            Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
-            Health.addPiHitzoneArmor(pi, pid, hbid,()=>{zoneBar.addBar(HealthType.ArmorBar)});
-        }
+        this.createHitZoneInPiShield(pi, pid, "z1", this.zone1Bar);
+        this.createHitZoneInPiShield(pi, pid, "z2", this.zone2Bar);
+        this.createHitZoneInPiArmor(pi, pid, "z3", this.zone3Bar);
+        this.createHitZoneInPiArmor(pi, pid, "z4", this.zone4Bar);
+    }
+
+    private createHitZoneInPiShield(pi: PiSystem, pid:string, hbid: string, zoneBar: Healthbar){
+        let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+            ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
+        let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+            ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
+        Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
+        Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
+        Health.addPiHitzoneShield(pi, pid, hbid,()=>{zoneBar.addBar(HealthType.ArmorBar)});
+    }
+    private createHitZoneInPiArmor(pi: PiSystem, pid:string, hbid: string, zoneBar: Healthbar){
+        let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+            ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
+        let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+            ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
+        Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
+        Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
+        Health.addPiHitzoneArmor(pi, pid, hbid,()=>{zoneBar.addBar(HealthType.ArmorBar)});
     }
 
     public addToHz(pi: PiSystem, name: string, hzid: string){
@@ -86,83 +65,66 @@ export class Health {
     }
 
     /**
-     * Returns the regenerative Function for Laser Shields
+     * Retruns the normal Function for Laser Shields
      * @param pi - pi system
      * @param pid - player id
      * @param hbid - health bar id
-     * @param regLSCB - callback to regenerate a laser shield bar
+     * @param desLSCB - callback to destroy a laser shield bar
+     * @param regLSCB - callback to regenerate laser shield bar
+     * @param regASCB - callback to regenerate armor shield bar
      */
-    private static getPiRegLaserShield(pi: PiSystem, pid: string, hbid: string, regLSCB: Function): PiTerm{
-        return pi.add.term('RegLS'+pid+hbid,
-            pi.add.scope('reg1',
+    private static getPiLaserShield(pi: PiSystem, pid: string, hbid: string, desLSCB: Function,
+                             regLSCB: Function, regASCB: Function): PiTerm{
+        return pi.add.term('LasShld'+pid+hbid, pi.add.sum([
+            pi.add.channelInCB('shield'+pid,'', desLSCB) // laser shield of player X
+                .channelOut('regout', '') // sync
+                .nullProcess(),
+            pi.add.channelIn('rshield'+pid+hbid, '') // regenerate laser shield
+            .scope('reg1',
             pi.add.scope('reg2',
             pi.add.channelOutCB('reghelpls'+pid+hbid, 'reg1', regLSCB)
             .channelIn('reg1', '*')
             .channelOut('reghelpls'+pid+hbid, 'reg2').channelIn('reg2', '*')
-            .channelOut('regout', '*').nullProcess()
-        )));
-    }
-
-    /**
-     * Returns the regenerative Function for Armor Shields
-     * @param pi - pi system
-     * @param pid - player id
-     * @param hbid - health bar id
-     * @param regASCB - callback to regenerate a armor shield bar
-     */
-    private static getPiRegArmorShield(pi: PiSystem, pid: string, hbid: string, regASCB: Function): PiTerm{
-        return pi.add.term('RegAS'+pid+hbid,
-            pi.add.scope('reg1',
-            pi.add.scope('reg2',
-            pi.add.channelOutCB('reghelpas'+pid+hbid, 'reg1', regASCB)
-            .channelIn('reg1', '*')
-            .channelOut('reghelpas'+pid+hbid, 'reg2').channelIn('reg2', '*')
-            .channelOut('regout', '*').nullProcess()
-        ))
-        );
-    }
-
-    /**
-     * Retruns the normal Function for Laser Shields
-     * @param pi - pi system
-     * @param pid - player id
-     * @param hbig - health bar id
-     * @param desLSCB - callback to destroy a laser shield bar
-     * @param regLS - pi term to regenerate laser shield
-     * @param regAS - pi term to regenerate armor shield
-     */
-    private static getPiLaserShield(pi: PiSystem, pid: string, hbig: string, desLSCB: Function,
-                             regLS: PiTerm, regAS: PiTerm): PiTerm{
-        return pi.add.term('LasShld'+pid+hbig, pi.add.sum([
-            pi.add.channelInCB('shield'+pid,'', desLSCB) // laser shield of player X
-                .channelOut('regout', '') // sync
-                .nullProcess(),
-            pi.add.channelIn('rshield'+pid+hbig, '') // regenerate laser shield
-                .next(regLS),
-            pi.add.channelIn('rarmor'+pid+hbig, '') // regenerate armor shield
-                .next(regAS)
+            .channelOut('regout', '*').nullProcess())),
+            pi.add.channelIn('rarmor'+pid+hbid, '') // regenerate armor shield
+                .scope('reg1',
+                pi.add.scope('reg2',
+                pi.add.channelOutCB('reghelpas'+pid+hbid, 'reg1', regASCB)
+                .channelIn('reg1', '*')
+                .channelOut('reghelpls'+pid+hbid, 'reg2').channelIn('reg2', '*')
+                .channelOut('regout', '*').nullProcess()))
         ]));
     }
 
     /**
-     * Returns the normal Function for Laser Shields
+     * Retruns the normal Function for Armor Shields
      * @param pi - pi system
      * @param pid - player id
-     * @param hbig - health bar id
-     * @param desLSCB - callback to destroy a laser shield bar
-     * @param regLS - pi term to regenerate laser shield
-     * @param regAS - pi term to regenerate armor shield
+     * @param hbid - health bar id
+     * @param desASCB - callback to destroy a armor shield bar
+     * @param regLSCB - callback to regenerate laser shield bar
+     * @param regASCB - callback to regenerate armor shield bar
      */
-    private static getPiArmorShield(pi: PiSystem, pid: string, hbig: string, desLSCB: Function,
-                             regLS: PiTerm, regAS: PiTerm): PiTerm{
-        return pi.add.term('ArmShld'+pid+hbig, pi.add.sum([
-            pi.add.channelInCB('armor'+pid,'', desLSCB) // armor shield of player X
+    private static getPiArmorShield(pi: PiSystem, pid: string, hbid: string, desASCB: Function,
+                                    regLSCB: Function, regASCB: Function): PiTerm{
+        return pi.add.term('ArmShld'+pid+hbid, pi.add.sum([
+            pi.add.channelInCB('armor'+pid,'', desASCB) // laser shield of player X
                 .channelOut('regout', '') // sync
                 .nullProcess(),
-            pi.add.channelIn('rshield'+pid+hbig, '') // regenerate laser shield
-                .next(regLS),
-            pi.add.channelIn('rarmor'+pid+hbig, '') // regenerate armor shield
-                .next(regAS)
+            pi.add.channelIn('rshield'+pid+hbid, '') // regenerate laser shield
+                .scope('reg1',
+                pi.add.scope('reg2',
+                pi.add.channelOutCB('reghelpls'+pid+hbid, 'reg1', regLSCB)
+                .channelIn('reg1', '*')
+                .channelOut('reghelpas'+pid+hbid, 'reg2').channelIn('reg2', '*')
+                .channelOut('regout', '*').nullProcess())),
+            pi.add.channelIn('rarmor'+pid+hbid, '') // regenerate armor shield
+                .scope('reg1',
+                pi.add.scope('reg2',
+                pi.add.channelOutCB('reghelpas'+pid+hbid, 'reg1', regASCB)
+                .channelIn('reg1', '*')
+                .channelOut('reghelpas'+pid+hbid, 'reg2').channelIn('reg2', '*')
+                .channelOut('regout', '*').nullProcess()))
         ]));
     }
 
@@ -210,6 +172,7 @@ export class Health {
      * @param pi - pi system
      * @param pid - player id
      * @param hbid - health bar id
+     * @param regASCB
      */
     private static addPiHitzoneArmor(pi: PiSystem, pid: string, hbid: string, regASCB){
         pi.pushSymbol(
