@@ -3,13 +3,14 @@
 <h4>Mergerequets: </h4>
 
                 1. Bei Gitlab den Mergerequest erstellen und Branch anlegen. 
-        		2. Jetzt ist der Master schon im Branch (wenn aus irgendeinem Grund nicht 
-        	    3. Nun in diesen Branch arbeiten.
-	        	4. Wenn fertig dann den derzeitigen Master pullen/fetchen
-	        	5. Bei IntelliJ den Pfeil hinten beim Master "merge into current" drücken.
-	        	6. Evtl. vorhanden Conflicts beheben
-        		7. Nun in IntelliJ seinen Branch commiten, kommentar nicht vergessen
-	        	8. git push im Terminal von IntelliJ, oder anders pushen
+                2. Bei IntelliJ den Branch unten rechts im Git master "checkout"
+        		3. Jetzt ist der Master schon im Branch
+        	    4. Nun in diesen Branch arbeiten.
+	        	5. Wenn fertig dann den derzeitigen Master pullen/fetchen
+	        	6. Bei IntelliJ den Pfeil hinten beim Master "merge into current" drücken.
+	        	7. Evtl. vorhanden Conflicts beheben
+        		8. Nun in IntelliJ seinen Branch commiten, kommentar nicht vergessen
+	        	9. git push im Terminal von IntelliJ, oder anders pushen
 	        	
 		
 <h4>Code: </h4>	
