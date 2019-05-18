@@ -53,11 +53,6 @@
       },
       {
         "type": "image",
-        "key": "background_space",
-        "url": "assets/sprites/background_space.png"
-      },
-      {
-        "type": "image",
         "key": "button_armor",
         "url": "assets/sprites/button_armor.png"
       },
@@ -210,11 +205,6 @@
         "type": "image",
         "key": "star",
         "url": "assets/sprites/star.png"
-      },
-      {
-        "type": "image",
-        "key": "weapon",
-        "url": "assets/sprites/weapon.png"
       },
       {
         "type": "image",
