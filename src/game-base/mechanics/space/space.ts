@@ -28,14 +28,14 @@ export class Space{
         scene.add.existing(this.lightLeft);
         scene.add.existing(this.lightRight);
         this.counter = 0;
-        this.counterLimit = 50;
+        this.counterLimit = 1;
         this.starLayerBG0 = [];
         this.starLayerBG1 = [];
         this.starLayerBG = [];
         this.starLayerMG = [];
         this.starLayerFG = [];
-        for (let i = 0; i < 9000; i++) { // simulate 900 seconds
-            this.updateStep();
+        for (let i = 0; i < 1000; i++) { // simulate 900 seconds
+            this.update(0.1);
         }
     }
 
@@ -49,28 +49,29 @@ export class Space{
         }
     }
 
-    public updateStep(): void{
-        this.counter++;
-        this.updateStepStars(this.starLayerBG0, 0.25);
-        this.updateStepStars(this.starLayerBG1, 0.3);
-        this.updateStepStars(this.starLayerBG, 0.4);
-        this.updateStepStars(this.starLayerMG, 0.6);
-        this.updateStepStars(this.starLayerFG, 0.8);
+    public update(delta: number): void{
+        this.counter+=delta;
+        // this.updateStepStars(this.starLayerBG0, 0.25);
+        this.updateStepStars(this.starLayerBG1, 0.4, delta);
+        this.updateStepStars(this.starLayerBG, 0.5, delta);
+        this.updateStepStars(this.starLayerMG, 0.7, delta);
+        this.updateStepStars(this.starLayerFG, 0.9, delta);
 
 
 
         this.lightLeft.setScale(0.99 + Math.sin(Phaser.Math.DEG_TO_RAD*360*this.counter/this.counterLimit)*0.01);
         this.lightRight.setScale(0.99 + Math.cos( Phaser.Math.DEG_TO_RAD*360*this.counter/this.counterLimit)*0.01);
-        if(this.counter > this.counterLimit){
-            this.counter = 0;
+        if(this.counter >= this.counterLimit){
+            this.counter -= this.counterLimit;
         }
    }
 
-   private updateStepStars(stars: Star[], scale: number){
+   private updateStepStars(stars: Star[], scale: number, delta: number){
        let remove: Star[] = [];
        for(let idx in stars){
            let star = stars[idx];
-           star.updateStep();
+           // star.updateStep();
+           star.update(delta);
            if (star.shouldRemove()) remove.push(star);
        }
 

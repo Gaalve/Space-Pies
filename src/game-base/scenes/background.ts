@@ -24,17 +24,16 @@ export class Background extends Phaser.Scene {
 
     create(): void {
         this.space = new Space(this);
-        // let s : Phaser.Scene = this.scene.get('MainScene');
-        // this.scene.setActive(true, 'MainScene')
         this.scene.launch('MainScene')
     }
 
 
     update(time: number, delta: number): void {
-        this.timeAccumulator += delta;
-        while (this.timeAccumulator >= this.timeUpdateTick) {
-            this.timeAccumulator -= this.timeUpdateTick;
-            this.space.updateStep();
-        }
+        // this.timeAccumulator += delta;
+        // while (this.timeAccumulator >= this.timeUpdateTick) {
+        //     this.timeAccumulator -= this.timeUpdateTick;
+        //     this.space.updateStep();
+        // }
+        this.space.update(delta/1000);
     }
 }
