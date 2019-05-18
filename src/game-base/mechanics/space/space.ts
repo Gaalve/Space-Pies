@@ -7,7 +7,7 @@ export class Space{
     private readonly lightLeft: Phaser.GameObjects.Sprite;
     private readonly lightRight: Phaser.GameObjects.Sprite;
 
-    private readonly starLayerBG0: Star[];
+    // private readonly starLayerBG0: Star[];
     private readonly starLayerBG1: Star[];
     private readonly starLayerBG: Star[];
     private readonly starLayerMG: Star[];
@@ -29,7 +29,7 @@ export class Space{
         scene.add.existing(this.lightRight);
         this.counter = 0;
         this.counterLimit = 1;
-        this.starLayerBG0 = [];
+        // this.starLayerBG0 = [];
         this.starLayerBG1 = [];
         this.starLayerBG = [];
         this.starLayerMG = [];

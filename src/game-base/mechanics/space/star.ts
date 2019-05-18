@@ -15,10 +15,6 @@ export class Star {
         scene.add.existing(this.starSprite);
     }
 
-    // public updateStep(): void{
-    //     this.starSprite.x = this.lastX + Star.vel * this.scale * 10;
-    //     this.lastX = this.starSprite.x;
-    // }
 
     public update(delta: number): void{
         this.starSprite.x += Star.vel * this.scale * delta;
