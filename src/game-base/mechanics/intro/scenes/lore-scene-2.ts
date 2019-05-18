@@ -3,7 +3,7 @@ import {SubScene} from "../sub-scene";
 import Sprite = Phaser.GameObjects.Sprite;
 import Text = Phaser.GameObjects.Text;
 
-export class LoreScene extends SubScene{
+export class LoreScene2 extends SubScene{
 
     planet: Sprite;
     blue: Sprite;
@@ -15,8 +15,8 @@ export class LoreScene extends SubScene{
 
     constructor(scene: Phaser.Scene) {
         super(scene, 2, 2, 3);
-        this.skipInTransition = false;
-        this.skipOutTransition = true;
+        this.skipInTransition = true;
+        this.skipOutTransition = false;
         this.planet = new Sprite(scene, -1000, 540, "intro_planet");
         this.blue = new Sprite(scene, -1000, 540, "ssb_ship_on");
         this.red = new Sprite(scene, -1000, 540, "ssr_ship_on");
@@ -32,16 +32,35 @@ export class LoreScene extends SubScene{
     }
 
     subIntro(delta: number): void {
-        this.moveSin(-800, 960, delta, this.planet);
+
+        this.moveSin(1400, 960, delta, this.blue);
+        this.scaleSin(0, 1, delta, this.blue);
     }
 
     subOutro(delta: number): void {
+
+        this.moveCos(1400, 2200, delta, this.planet);
+        this.moveCos(960, -800, delta, this.blue);
+        this.tbs.setAlpha(0);
+        this.text.setAlpha(0);
     }
 
     subScene(delta: number): void {
-        this.moveSin(960, 1400, delta, this.planet);
-        this.scaleSin(0, 1, delta, this.red);
-        this.moveCos(960, -500, delta, this.red);
+        this.tbs.x = 960;
+        this.tbs.setAlpha(1);
+        this.text.setAlpha(1);
+        this.tbs.y = 400;
+        this.text.x = 960;
+        this.text.y = 380;
+        if(delta <= 0.25){
+            this.tbs.setAlpha(delta*4);
+            this.text.setAlpha(delta*4);
+        }
+        if(delta >= 0.75){
+            delta -= 0.75;
+            this.tbs.setAlpha(1-delta*4);
+            this.text.setAlpha(1-delta*4);
+        }
     }
 
 
@@ -62,18 +81,19 @@ export class LoreScene extends SubScene{
         this.planet.setDepth(1);
         this.tbs.setDepth(1);
         this.tbn.setDepth(1);
+        this.blue.setScale(0);
+        this.planet.x = 1400;
 
-        this.scene.add.existing(this.text);
         this.scene.add.existing(this.planet);
         this.scene.add.existing(this.blue);
         this.scene.add.existing(this.red);
         this.scene.add.existing(this.tbs);
         this.scene.add.existing(this.tbn);
+        this.scene.add.existing(this.text);
     }
 
     private moveCos(from: number, to: number, delta:number, sprite: Sprite){
         sprite.x = to - Math.cos(delta*Math.PI/2 )*(to - from);
-        if(this.planet == sprite)console.log(sprite.x+ ' delta: '+delta);
     }
 
     private moveSin(from: number, to: number, delta:number, sprite: Sprite){
@@ -85,7 +105,9 @@ export class LoreScene extends SubScene{
     }
 
     private scaleSin(from: number, to: number, delta:number, sprite: Sprite){
+
         sprite.setScale( from + Math.sin(delta*Math.PI/2 )*(to - from));
+        console.log("Scale: "+sprite.scaleX+" delta: "+delta);
     }
 
     private scaleCos(from: number, to: number, delta:number, sprite: Sprite){

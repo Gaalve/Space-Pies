@@ -3,6 +3,12 @@ import {PresentScene} from "./scenes/present-scene";
 import {IntroSpace} from "../space/intro-space";
 import {TransitionScene} from "./scenes/transition-scene";
 import {GenericTextScene} from "./scenes/generic-text-scene";
+import {LoreScene} from "./scenes/lore-scene";
+import {LoreScene2} from "./scenes/lore-scene-2";
+import {LoreScene3} from "./scenes/lore-scene-3";
+import {LoreScene4} from "./scenes/lore-scene-4";
+import {LoreScene5} from "./scenes/lore-scene-5";
+import {LoreScene6} from "./scenes/lore-scene-6";
 
 export class SubSceneManager {
     private space: IntroSpace;
@@ -13,12 +19,16 @@ export class SubSceneManager {
 
     public constructor(scene: Phaser.Scene){
         this.space = new IntroSpace(scene);
-        this.subScenes = [new TransitionScene(scene, this.space), new TransitionScene(scene, this.space), new PresentScene(scene),
+        this.subScenes = [
+            new TransitionScene(scene, this.space), new TransitionScene(scene, this.space), new PresentScene(scene),
             new TransitionScene(scene, this.space), new GenericTextScene(scene, "Space Pies\nThe Ultimate Game\nGold Edition", 160),
             new TransitionScene(scene, this.space), new GenericTextScene(scene, "A not so long time ago...", 100, 1),
             new TransitionScene(scene, this.space,1), new GenericTextScene(scene, "...in a galaxy not far away...", 100, 1),
             new TransitionScene(scene, this.space,1), new GenericTextScene(scene, "...two men were destined to fight...", 100, 1),
-            new TransitionScene(scene, this.space,1), new GenericTextScene(scene, "...in the Ultimate Battle of the Universe.", 100),];
+            new TransitionScene(scene, this.space,1), new GenericTextScene(scene, "...in the Ultimate Battle of the Universe.", 100),
+            new TransitionScene(scene, this.space,1), new LoreScene(scene), new LoreScene2(scene),
+            new TransitionScene(scene, this.space, 2), new LoreScene3(scene),
+            new LoreScene4(scene), new LoreScene5(scene), new LoreScene6(scene), new TransitionScene(scene,this.space)];
 
         this.idx = 0;
         this.time = 0;
@@ -41,9 +51,10 @@ export class SubSceneManager {
 
         }
         else{
-            console.log("Intro");
-            this.space.setCounterLimit(Math.sin(time/cur.inDuration * Math.PI/2)*0.7+0.1);
-            this.space.setSpeedModifier((Math.cos(time/cur.inDuration * Math.PI/2))*18 + 2);
+            if(!cur.skipInTransition) {
+                this.space.setCounterLimit(Math.sin(time / cur.inDuration * Math.PI / 2) * 0.7 + 0.1);
+                this.space.setSpeedModifier((Math.cos(time / cur.inDuration * Math.PI / 2)) * 18 + 2);
+            }
             cur.subIntro(time/cur.inDuration);
         }
     }
@@ -54,7 +65,6 @@ export class SubSceneManager {
             this.updateOutro(cur, time - cur.subSceneDuration);
         }
         else{
-            console.log("Scene");
             this.space.setCounterLimit(0.8);
             this.space.setSpeedModifier(2);
             cur.subScene(time/cur.subSceneDuration);
@@ -67,16 +77,16 @@ export class SubSceneManager {
             this.nextScene();
         }
         else{
-            console.log("Outro");
-            this.space.setCounterLimit(Math.cos(time/cur.outDuration * Math.PI/2)*0.7+0.1);
-            this.space.setSpeedModifier((Math.sin(time/cur.inDuration * Math.PI/2))*18 + 2);
+            if(!cur.skipOutTransition) {
+                this.space.setCounterLimit(Math.cos(time / cur.outDuration * Math.PI / 2) * 0.7 + 0.1);
+                this.space.setSpeedModifier((Math.sin(time / cur.outDuration * Math.PI / 2)) * 18 + 2);
+            }
             cur.subOutro(time/cur.outDuration);
         }
 
     }
 
     private nextScene(){
-        console.log("Next");
         this.subScenes[this.idx++].destroy();
         if(this.idx < this.subScenes.length) this.subScenes[this.idx].launch();
         this.time = 0;

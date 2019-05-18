@@ -239,6 +239,11 @@
       },
       {
         "type": "image",
+        "key": "intro_textbox_scream_big",
+        "url": "assets/sprites/intro_textbox_scream_big.png"
+      },
+      {
+        "type": "image",
         "key": "intro_planet",
         "url": "assets/sprites/intro_planet.png"
       },

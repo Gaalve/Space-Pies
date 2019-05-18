@@ -3,6 +3,9 @@ export abstract class SubScene {
     inDuration: number;
     outDuration: number;
     subSceneDuration: number;
+
+    public skipInTransition: boolean = false;
+    public skipOutTransition: boolean = false;
     protected scene: Phaser.Scene;
 
 
