@@ -3,7 +3,7 @@ export class Star {
 
     private readonly starSprite: Phaser.GameObjects.Sprite;
     private readonly scale: number;
-    private static readonly vel: number = 80;
+    private static readonly vel: number = 60;
     private lastX: number;
 
     public constructor(scene: Phaser.Scene, scale: number, x: number){

@@ -7,7 +7,7 @@ export class Space{
     private readonly lightLeft: Phaser.GameObjects.Sprite;
     private readonly lightRight: Phaser.GameObjects.Sprite;
 
-    // private readonly starLayerBG0: Star[];
+    private readonly starLayerBG0: Star[];
     private readonly starLayerBG1: Star[];
     private readonly starLayerBG: Star[];
     private readonly starLayerMG: Star[];
@@ -28,8 +28,8 @@ export class Space{
         scene.add.existing(this.lightLeft);
         scene.add.existing(this.lightRight);
         this.counter = 0;
-        this.counterLimit = 1;
-        // this.starLayerBG0 = [];
+        this.counterLimit = 3;
+        this.starLayerBG0 = [];
         this.starLayerBG1 = [];
         this.starLayerBG = [];
         this.starLayerMG = [];
@@ -51,16 +51,16 @@ export class Space{
 
     public update(delta: number): void{
         this.counter+=delta;
-        // this.updateStepStars(this.starLayerBG0, 0.25);
-        this.updateStepStars(this.starLayerBG1, 0.4, delta);
-        this.updateStepStars(this.starLayerBG, 0.5, delta);
-        this.updateStepStars(this.starLayerMG, 0.7, delta);
-        this.updateStepStars(this.starLayerFG, 0.9, delta);
+        this.updateStepStars(this.starLayerBG0, 0.25, delta);
+        this.updateStepStars(this.starLayerBG1, 0.3, delta);
+        this.updateStepStars(this.starLayerBG, 0.4, delta);
+        this.updateStepStars(this.starLayerMG, 0.6, delta);
+        this.updateStepStars(this.starLayerFG, 0.8, delta);
 
 
 
-        this.lightLeft.setScale(0.99 + Math.sin(Phaser.Math.DEG_TO_RAD*360*this.counter/this.counterLimit)*0.01);
-        this.lightRight.setScale(0.99 + Math.cos( Phaser.Math.DEG_TO_RAD*360*this.counter/this.counterLimit)*0.01);
+        this.lightLeft.setScale(0.98 + Math.sin(Phaser.Math.DEG_TO_RAD*360*this.counter/this.counterLimit)*0.02);
+        this.lightRight.setScale(0.98 + Math.cos( Phaser.Math.DEG_TO_RAD*360*this.counter/this.counterLimit)*0.02);
         if(this.counter >= this.counterLimit){
             this.counter -= this.counterLimit;
         }
@@ -83,6 +83,7 @@ export class Space{
 
        if(this.counter > this.counterLimit){
            stars.push(new Star(this.scene, scale, -40));
+           stars.push(new Star(this.scene, scale - Math.random()*0.05, -50));
        }
    }
 }
