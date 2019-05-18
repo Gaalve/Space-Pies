@@ -238,20 +238,9 @@ export class PiSystem {
     private phaseFindResolvingActions(): void{
         this.logPhase1();
         let startT = this.scene.time.now;
-        this.phase1changed = true;
         if(this.phase1changed) {
             this.phase1changed = false;
             this.deadlock = true;
-            // let allResolvables: PiResolvable[] = [];
-            // allResolvables = allResolvables.concat(this.curChannelIn, this.curChannelOut, this.curSums, this.curReplications);
-            // for (let i = 0; i < allResolvables.length; i++) {
-            //     for (let j = 0; j < allResolvables.length; j++) {
-            //         if (i != j) {
-            //             this.addAllResolvablePair(allResolvables[i], allResolvables[j]);
-            //         }
-            //     }
-            // }
-            //
 
             this.curChannelIn.forEach(
                 (val1) => {
