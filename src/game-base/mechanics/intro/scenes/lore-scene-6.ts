@@ -14,7 +14,7 @@ export class LoreScene6 extends SubScene{
     text: Text;
 
     constructor(scene: Phaser.Scene) {
-        super(scene, 4, 2, 5);
+        super(scene, 2, 2, 4);
         this.skipInTransition = false;
         this.skipOutTransition = false;
         this.planet = new Sprite(scene, -1000, 540, "intro_planet");
@@ -37,7 +37,7 @@ export class LoreScene6 extends SubScene{
     subOutro(delta: number): void {
         this.tbn.setAlpha(0);
         this.text.setAlpha(0);
-        this.moveSin(960, -900, delta, this.blue);
+        this.moveCos(960, -900, delta, this.blue);
     }
 
     subScene(delta: number): void {

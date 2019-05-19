@@ -32,14 +32,14 @@ export class LoreScene2 extends SubScene{
     }
 
     subIntro(delta: number): void {
-
-        this.moveSin(1400, 960, delta, this.blue);
+        this.moveLin(1670, 2110, delta, this.planet);
+        this.moveSin(1670, 960, delta, this.blue);
         this.scaleSin(0, 1, delta, this.blue);
     }
 
     subOutro(delta: number): void {
 
-        this.moveCos(1400, 2200, delta, this.planet);
+        // this.moveCos(1400, 2200, delta, this.planet);
         this.moveCos(960, -800, delta, this.blue);
         this.tbs.setAlpha(0);
         this.text.setAlpha(0);
@@ -82,7 +82,7 @@ export class LoreScene2 extends SubScene{
         this.tbs.setDepth(1);
         this.tbn.setDepth(1);
         this.blue.setScale(0);
-        this.planet.x = 1400;
+        this.planet.x = 1670;
 
         this.scene.add.existing(this.planet);
         this.scene.add.existing(this.blue);

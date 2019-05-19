@@ -14,7 +14,7 @@ export class LoreScene4 extends SubScene{
     text: Text;
 
     constructor(scene: Phaser.Scene) {
-        super(scene, 2, 2, 3);
+        super(scene, 2, 0, 3);
         this.skipInTransition = false;
         this.skipOutTransition = true;
         this.planet = new Sprite(scene, -1000, 540, "intro_planet");
