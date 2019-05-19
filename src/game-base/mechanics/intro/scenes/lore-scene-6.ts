@@ -46,7 +46,7 @@ export class LoreScene6 extends SubScene{
         this.text.setAlpha(1);
         this.tbn.y = 400;
         this.text.x = 960;
-        this.text.y = 380;
+        this.text.y = 370;
         if(delta <= 0.2){
             this.tbn.setAlpha(delta*5);
             this.text.setAlpha(delta*5);
