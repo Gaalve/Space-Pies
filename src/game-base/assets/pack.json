@@ -234,6 +234,11 @@
       },
       {
         "type": "image",
+        "key": "logo_space_pies",
+        "url": "assets/sprites/logo_space_pies.png"
+      },
+      {
+        "type": "image",
         "key": "intro_textbox_scream",
         "url": "assets/sprites/intro_textbox_scream.png"
       },

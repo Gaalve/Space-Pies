@@ -12,6 +12,7 @@ import {LoreScene6} from "./scenes/lore-scene-6";
 import {TransitionSceneFast} from "./scenes/transition-scene-fast";
 import {Background} from "../../scenes/background";
 import {BlackFadeInScene} from "./scenes/black-fade-in-scene";
+import {SpacePiesScene} from "./scenes/space-pies-scene";
 
 export class SubSceneManager {
     private scene: Phaser.Scene;
@@ -27,7 +28,9 @@ export class SubSceneManager {
         this.space = new IntroSpace(scene);
         this.subScenes = [new BlackFadeInScene(scene),
             new TransitionScene(scene, this.space), new TransitionScene(scene, this.space), new PresentScene(scene),
-            new TransitionScene(scene, this.space), new GenericTextScene(scene, "Space Pies\nThe Ultimate Game\nGold Edition", 160),
+            new TransitionScene(scene, this.space),
+            new SpacePiesScene(scene),
+            // new GenericTextScene(scene, "Space Pies\nThe Ultimate Game\nGold Edition", 160),
             new TransitionScene(scene, this.space), new GenericTextScene(scene, "A not so long time ago...", 100, 1),
             new TransitionScene(scene, this.space,1), new GenericTextScene(scene, "...in a galaxy not far away...", 100, 1),
             new TransitionScene(scene, this.space,1), new GenericTextScene(scene, "...two men were destined to fight...", 100, 1),
