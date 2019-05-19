@@ -18,6 +18,7 @@ export class SubSceneManager {
     private subScenes: SubScene[];
     private idx: number;
     private time: number;
+    private skipped: boolean;
 
 
     public constructor(scene: Phaser.Scene){
@@ -38,6 +39,7 @@ export class SubSceneManager {
         this.idx = 0;
         this.time = 0;
         this.subScenes[this.idx].launch();
+        this.skipped = false;
     }
 
     public update(delta: number){
@@ -95,9 +97,15 @@ export class SubSceneManager {
     }
 
     private nextScene(){
+        if(this.skipped)return;
         this.subScenes[this.idx++].destroy();
         if(this.idx < this.subScenes.length) this.subScenes[this.idx].launch();
         else this.scene.scene.launch('FadeScene', {shut: 'Intro', start: 'Background'});
         this.time = 0;
+    }
+
+    public skipToLastScene(){
+        this.skipped = true;
+        this.scene.scene.launch('FadeScene', {shut: 'Intro', start: 'Background'});
     }
 }
