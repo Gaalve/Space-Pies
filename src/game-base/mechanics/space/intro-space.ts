@@ -31,17 +31,13 @@ export class IntroSpace{
         scene.add.existing(this.lightLeft);
         scene.add.existing(this.lightRight);
         this.counter = 0;
-        this.counterLimit = 3;
         this.starLayerBG0 = [];
         this.starLayerBG1 = [];
         this.starLayerBG = [];
         this.starLayerMG = [];
         this.starLayerFG = [];
-        this.speedModifier = 1;
-        for (let i = 0; i < 1000; i++) { // simulate 900 seconds
-            // this.update(0.016);
-        }
     }
+
 
     private static removeFromList(list: any[], item: any): void{
         let idx: number = list.indexOf(item, 0);
