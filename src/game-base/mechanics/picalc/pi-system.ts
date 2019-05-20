@@ -167,7 +167,7 @@ export class PiSystem {
             // resolvable.trigger();
         }
         else console.log("Error: Tried to move unknown Resolvable"); //TODO
-        // this.curActiveSymbols.push(resolvable);
+        this.curActiveSymbols.push(resolvable);
     }
 
 
@@ -204,9 +204,6 @@ export class PiSystem {
         }
         this.moveResolvable(resolvablePair.left);
         this.moveResolvable(resolvablePair.right);
-
-        this.curActiveSymbols.push(resolvablePair.leftAction);
-        this.curActiveSymbols.push(resolvablePair.rightAction);
 
         this.activeSymbolsQueue.push(resolvablePair.getLeftResolvedSymbol());
         this.activeSymbolsQueue.push(resolvablePair.getRightResolvedSymbol());

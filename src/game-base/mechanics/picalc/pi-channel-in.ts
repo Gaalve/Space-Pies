@@ -39,7 +39,6 @@ export class PiChannelIn extends PiAction{
         let nextCopy = this.next.copy();
         let thisCopy = new PiChannelIn(this.system, this.name, this.inOutPut);
         thisCopy.next = nextCopy;
-        thisCopy.setCallback(this.callback);
         return thisCopy;
     }
 
