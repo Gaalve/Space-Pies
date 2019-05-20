@@ -19,13 +19,24 @@ export class chooseSceneP2 extends Phaser.Scene{
     private m0activeExt: integer = 0;
     private m1activeExt: integer = 0;
     private m2activeExt: integer = 0;
+    private maxReached0: boolean;
+    private maxReached1: boolean;
+    private maxReached2: boolean;
+    private type: boolean;
+    private shipTL: Phaser.GameObjects.Text;
+    private droneTL: Phaser.GameObjects.Text;
+    private droneT2L: Phaser.GameObjects.Text;
+
 
 
     constructor(){
         super({
             key: 'chooseSceneP2',
             active: false
-        })
+        });
+        this.maxReached0 = false;
+        this.maxReached1 = false;
+        this.maxReached2 = false;
     }
 
     preload(): void{
@@ -45,7 +56,8 @@ export class chooseSceneP2 extends Phaser.Scene{
         const text = this.add.text(160, 50, 'choose Weapon Mod', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
-        let type = this.scene.get('chooseTypeSceneP2').data.get('type');
+        this.type = this.scene.get('chooseTypeSceneP2').data.get('type');
+        let type = this.type
         this.Player2 = this.scene.get('MainScene').data.get('P2');
         let drones = this.Player2.getDrones();
         let droneNr = this.Player2.getNrDrones();
@@ -67,7 +79,7 @@ export class chooseSceneP2 extends Phaser.Scene{
                     //system.pushSymbol(createWMod)
                 });
             this.shipL.setPosition(200, 250);
-            const shipTL = this.add.text(300, 220, 'max reached', {
+            this.shipTL = this.add.text(300, 220, 'max reached', {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
 
         }
@@ -83,20 +95,21 @@ export class chooseSceneP2 extends Phaser.Scene{
                         this.events.emit('shipP');
 
                     }
-                    this.scene.stop()
-                    this.scene.launch("ShopSceneP2");
+                    this.m0activeExt++;
+                    this.scene.sleep()
+                    this.scene.run("ShopSceneP2");
                     //system.pushSymbol(createWMod)
                 });
             this.shipL.setPosition(200, 250);
-            const shipTL = this.add.text(300, 220, 'ship', {
+            this.shipTL = this.add.text(300, 220, 'ship', {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
             if(type == true){
-                const piWext1 = this.add.text(450, 220, 'wextp2m0l(*).0',{
+                const piWext1 = this.add.text(450, 200, 'wextp2m0l(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
             }
             else{
-                const piWext1 = this.add.text(450, 220, 'wextp2m0p(*).0',{
+                const piWext1 = this.add.text(450, 200, 'wextp2m0p(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
             }
@@ -111,12 +124,14 @@ export class chooseSceneP2 extends Phaser.Scene{
                 });
             this.drone1L.setPosition(200, 450);
             if(droneNr < 2){
-                const droneTL = this.add.text(300, 420, 'mod not built', {
+                this.maxReached1 = true;
+                this.m1activeExt = 3;
+                this.droneTL = this.add.text(300, 420, 'mod not built', {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
 
             }
             else{
-                const droneTL = this.add.text(300, 420, 'max reached', {
+                this.droneTL = this.add.text(300, 420, 'max reached', {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
 
             }
@@ -134,20 +149,21 @@ export class chooseSceneP2 extends Phaser.Scene{
                         this.events.emit('drone1P');
 
                     }
-                    this.scene.stop()
-                    this.scene.launch("ShopSceneP2");
+                    this.m1activeExt++;
+                    this.scene.sleep()
+                    this.scene.run("ShopSceneP2");
                     //system.pushSymbol(createWMod)
                 });
             this.drone1L.setPosition(200, 450);
-            const droneTL = this.add.text(300, 420, 'drone 1', {
+            this.droneTL = this.add.text(300, 420, 'drone 1', {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
             if(type == true){
-                const piWext2 = this.add.text(450, 420, 'wextp2m1l(*).0',{
+                const piWext2 = this.add.text(450, 400, 'wextp2m1l(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
             }
             else{
-                const piWext2 = this.add.text(450, 420, 'wextp2m1p(*).0',{
+                const piWext2 = this.add.text(450, 400, 'wextp2m1p(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
             }
@@ -160,11 +176,13 @@ export class chooseSceneP2 extends Phaser.Scene{
                     //system.pushSymbol(createWMod)
                 });
             if(droneNr < 3){
-                const droneT2L = this.add.text(300, 620, 'mod not built', {
+                this.maxReached2 = true;
+                this.m2activeExt = 3;
+                this.droneT2L = this.add.text(300, 620, 'mod not built', {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
             }
             else{
-                const droneT2L = this.add.text(300, 620, 'max reached', {
+                this.droneT2L = this.add.text(300, 620, 'max reached', {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
             }
             this.drone2L.setPosition(200, 650)
@@ -182,11 +200,12 @@ export class chooseSceneP2 extends Phaser.Scene{
                         this.events.emit('drone2P');
 
                     }
-                    this.scene.stop()
-                    this.scene.launch("ShopSceneP2");
+                    this.m2activeExt++;
+                    this.scene.sleep()
+                    this.scene.run("ShopSceneP2");
                     //system.pushSymbol(createWMod)
                 });
-            const droneT2L = this.add.text(300, 620, 'drone2', {
+            this.droneT2L = this.add.text(300, 620, 'drone2', {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
 
             this.drone2L.setPosition(200, 650)
@@ -205,8 +224,8 @@ export class chooseSceneP2 extends Phaser.Scene{
         this.close = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_cancel_black",
             ()=> {
-                this.scene.stop()
-                this.scene.launch("ShopSceneP2");
+                this.scene.sleep()
+                this.scene.run("ShopSceneP2");
             });
         this.close.setPosition(200, 850)
         const closeT = this.add.text(300, 820, 'close', {
@@ -222,6 +241,120 @@ export class chooseSceneP2 extends Phaser.Scene{
             this.drone1L.updateStep();
             this.drone2L.updateStep();
             this.close.updateStep();
+
+            let drones = this.Player2.getDrones();
+            let droneNr = this.Player2.getNrDrones();
+            let ship = drones[0];
+            this.m0activeExt = ship.getNrWeapons();
+            if(droneNr >= 2){
+                let drone1 = drones[1];
+                this.m1activeExt = drone1.getNrWeapons()
+            }
+            if(droneNr >= 3){
+                let drone2 = drones[2];
+                this.m2activeExt = drone2.getNrWeapons();
+            }
+
+            if(this.m0activeExt >= 3 && !this.maxReached0){
+                this.maxReached0 = true;
+                this.shipL.changeButton(this,200, 250, "button_cancel_red", ()=>{
+
+                } );
+                this.children.remove(this.shipTL);
+                this.shipTL = this.add.text(300, 220, 'max reached', {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2
+                });
+
+
+            }
+            if(this.m0activeExt < 3 && this.maxReached0){
+                this.maxReached0 = false;
+                this.shipL.changeButton(this,200, 250, "button_space_shuttle", ()=>{
+                    if(this.type == true){
+                        this.events.emit('shipL');
+                    }
+                    else{
+                        this.events.emit('shipP');
+                    }
+                    this.m0activeExt++;
+                    this.scene.sleep()
+                    this.scene.run("ShopSceneP2")
+                    //system.pushSymbol(createWMod)
+                });
+                this.children.remove(this.shipTL);
+                this.shipTL = this.add.text(300, 220, 'ship', {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2
+                });
+
+
+            }
+            if(this.m1activeExt >= 3 && !this.maxReached1){
+                this.maxReached1 = true;
+                this.drone1L.changeButton(this,200, 450, "button_cancel_red", ()=>{
+
+                } );
+                this.children.remove(this.droneTL);
+                this.droneTL = this.add.text(300, 420, 'max reached', {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2
+                });
+
+
+            }
+            if(this.m1activeExt < 3 && this.maxReached1){
+                this.maxReached1 = false;
+                this.drone1L.changeButton(this,200, 450, "button_wext", ()=>{
+                    if(this.type == true){
+                        this.events.emit('drone1L');
+                    }
+                    else{
+                        this.events.emit('drone1P');
+                    }
+                    this.m1activeExt++;
+                    this.scene.sleep()
+                    this.scene.run("ShopSceneP2")
+                    //system.pushSymbol(createWMod)
+                });
+                this.children.remove(this.droneTL);
+                this.droneTL = this.add.text(300, 420, 'drone1', {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2
+                });
+
+
+            }
+
+            if(this.m2activeExt >= 3 && !this.maxReached2){
+                this.maxReached2 = true;
+                this.drone2L.changeButton(this,200, 650, "button_cancel_red", ()=>{
+
+                } );
+                this.children.remove(this.droneT2L);
+                this.droneT2L = this.add.text(300, 620, 'max reached', {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2
+                });
+
+
+            }
+            if(this.m2activeExt < 3 && this.maxReached2){
+                this.maxReached2 = false;
+                this.drone2L.changeButton(this,200, 650, "button_wext", ()=>{
+                    if(this.type == true){
+                        this.events.emit('drone2L');
+                    }
+                    else{
+                        this.events.emit('drone2P');
+                    }
+                    this.m2activeExt++;
+                    this.scene.sleep()
+                    this.scene.run("ShopSceneP2")
+                    //system.pushSymbol(createWMod)
+                });
+                this.children.remove(this.droneT2L);
+                this.droneT2L = this.add.text(300, 620, 'drone2', {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2
+                });
+
+
+            }
             // console.log("Update")
         }
     }

@@ -18,13 +18,15 @@ export class ShopSceneP1 extends Phaser.Scene{
     private activeWmods: integer = 1;
     private Player1: Player;
     private firstChoose: boolean;
+    private wModText: Phaser.GameObjects.Text;
+    private system: PiSystem;
 
 
     constructor(){
         super({
             key: 'ShopSceneP1',
             active: false
-        })
+        });
         this.firstChoose = true;
     }
 
@@ -38,8 +40,8 @@ export class ShopSceneP1 extends Phaser.Scene{
 
     create(): void{
         //let system = new PiSystem(this, 1,1, 1, false);
-        let system = this.scene.get('MainScene').data.get("system");
-
+        this.system = this.scene.get('MainScene').data.get("system");
+        let system = this.system;
         let createShield = (system.add.channelOut('rShieldP1','*' ).nullProcess());
         let createArmor = (system.add.channelOut('rArmorP1','*' ).nullProcess());
         let createWExtShipL = (system.add.channelOut('wext10l','*' ).nullProcess());
@@ -95,9 +97,8 @@ export class ShopSceneP1 extends Phaser.Scene{
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
-                this.scene.stop()
-                this.scene.launch('chooseTypeSceneP1')
-
+                this.scene.sleep()
+                this.scene.run('chooseTypeSceneP1')
                 //system.pushSymbol(createWMod)
             });
         this.wExt.setPosition(1920-600, 500);
@@ -110,7 +111,7 @@ export class ShopSceneP1 extends Phaser.Scene{
                 ()=>{
                 });
             this.wModule.setPosition(1920-600, 650);
-            const wModText = this.add.text(1920-500, 630, "max Mods reached", {
+            this.wModText = this.add.text(1920-500, 630, "max Mods reached", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
         }
@@ -121,24 +122,12 @@ export class ShopSceneP1 extends Phaser.Scene{
                 ()=>{
                     system.pushSymbol(createWMod)
                     this.activeWmods++;
-                    this.events.emit("addedWMmod");
                 });
             this.wModule.setPosition(1920-600, 650);
-            const wModText = this.add.text(1920-500, 630, "Weapon Module", {
+            this.wModText = this.add.text(1920-500, 630, "Weapon Module", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
         }
-        this.events.on("addedWmod", function () {
-            if(this.scene.activeWmods >= 3){
-                this.scene.wModule = new Button(this, 500, 500, "button_shadow",
-                    "button_bg", "button_fg", "button_cancel_red",
-                    ()=>{
-                    });
-                this.scene.wModule.setPosition(1920-600, 650);
-                const wModText = this.add.text(1920-500, 630, "max Mods reached", {
-                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
-            }
-        }, this);
 
 
         this.skip = new Button(this, 500, 500, "button_shadow",
@@ -182,6 +171,30 @@ export class ShopSceneP1 extends Phaser.Scene{
             this.armor.updateStep();
             this.wModule.updateStep();
             this.wExt.updateStep();
+            if(this.activeWmods >= 3 && this.firstChoose){
+                this.firstChoose = false;
+                this.wModule.changeButton(this,1920-600, 650, "button_cancel_red", ()=>{
+                });
+                this.children.remove(this.wModText)
+                this.wModText = this.add.text(1920-500, 630, "max Mods reached", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+            }
+
+            if(this.activeWmods < 3 && !this.firstChoose){
+                this.firstChoose = true;
+                this.wModule.changeButton(this,1920-600, 650, "button_wmod", ()=> {
+                        this.system.pushSymbol(this.system.add.channelOut('wmod1','*' ).nullProcess())
+                        this.activeWmods++;
+                    }
+                );
+                this.children.remove(this.wModText)
+                this.wModText = this.add.text(1920-500, 630, "Weapon Module", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+            }
+
+
             // console.log("Update")
         }
     }
