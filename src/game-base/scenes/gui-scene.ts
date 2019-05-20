@@ -44,7 +44,7 @@ export class GuiScene extends Phaser.Scene {
 
         let te : TestEnvironment= new TestEnvironment(this, ()=>{});
         te.setOnFinishCallback(()=>{console.log("Pi-Calc-System working: "+te.didSucceed())});
-        // PiCalcTests.runTests(this, te);
+        PiCalcTests.runTests(this, te);
     }
 
 }

@@ -42,7 +42,7 @@ export class PauseScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_resume",
             ()=>{
             this.scene.resume("MainScene");
-            this.scene.stop();}
+            this.scene.sleep();}
             //this.scene.setVisible(false,"PauseScene")}
         );
         this.buttonResume.setPosition(1920/2, 1080/2-75);
@@ -55,7 +55,7 @@ export class PauseScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_skip",
             ()=>{
             this.scene.get('MainScene').scene.restart();
-            this.scene.stop();});
+            this.scene.sleep();});
 
         this.buttonReset.setPosition(1920/2, 1080/2+75);
 
