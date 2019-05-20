@@ -16,6 +16,7 @@ export class ShopSceneP2 extends Phaser.Scene{
     private activeWmods:integer = 3;
     private Player2: Player;
     private firstChoose: boolean;
+    private wModText: Phaser.GameObjects.Text;
 
     constructor(){
         super({
@@ -85,8 +86,8 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
-                this.scene.stop()
-                this.scene.launch('chooseTypeSceneP2');
+                this.scene.sleep()
+                this.scene.run('chooseTypeSceneP2');
 
             });
         this.wExt.setPosition(200, 500);
@@ -100,7 +101,7 @@ export class ShopSceneP2 extends Phaser.Scene{
 
                 });
             this.wModule.setPosition(200, 650);
-            const wModText = this.add.text(300, 630, "max Mods reached", {
+            this.wModText = this.add.text(300, 630, "max Mods reached", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
         }
@@ -109,10 +110,10 @@ export class ShopSceneP2 extends Phaser.Scene{
                 "button_bg", "button_fg", "button_wmod",
                 ()=>{
                     system.pushSymbol(createWMod)
-
+                    this.activeWmods++;
                 });
             this.wModule.setPosition(200, 650);
-            const wModText = this.add.text(300, 630, "Weapon Module", {
+            this.wModText = this.add.text(300, 630, "Weapon Module", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
         }
@@ -159,6 +160,17 @@ export class ShopSceneP2 extends Phaser.Scene{
             this.armor.updateStep();
             this.wModule.updateStep();
             this.wExt.updateStep();
+            if(this.firstChoose && this.activeWmods >= 3){
+                this.firstChoose = false;
+                this.wModule.changeButton(this,200, 650, "button_cancel_red", ()=>{
+                });
+                this.children.remove(this.wModText);
+                this.wModText = this.add.text(300, 630, "max Mods reached", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+
+            }
+
             // console.log("Update")
         }
     }
