@@ -256,6 +256,51 @@
         "type": "image",
         "key": "intro_textbox_normal",
         "url": "assets/sprites/intro_textbox_normal.png"
+      },
+      {
+        "type": "image",
+        "key": "energy_icon",
+        "url": "assets/sprites/energy_icon.png"
+      },
+      {
+        "type": "image",
+        "key": "fire_dark",
+        "url": "assets/sprites/fire_dark.png"
+      },
+      {
+        "type": "image",
+        "key": "fire_light",
+        "url": "assets/sprites/fire_light.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_solar_drone",
+        "url": "assets/sprites/ssb_solar_drone.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_solar_drone",
+        "url": "assets/sprites/ssr_solar_drone.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_weap_rock",
+        "url": "assets/sprites/ssb_weap_rock.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_weap_rock",
+        "url": "assets/sprites/ssr_weap_rock.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_nuke_drone",
+        "url": "assets/sprites/ssr_nuke_drone.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_nuke_drone",
+        "url": "assets/sprites/ssb_nuke_drone.png"
       }
     ]
   }

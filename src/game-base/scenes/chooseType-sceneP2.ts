@@ -37,8 +37,8 @@ export class ChooseTypeSceneP2 extends Phaser.Scene {
             "button_bg", "button_fg", "ssb_weap_las",
             () => {
                 this.data.set('type', true);
-                this.scene.stop();
-                this.scene.launch('chooseSceneP2')
+                this.scene.sleep();
+                this.scene.run('chooseSceneP2')
 
                 //system.pushSymbol(createWMod)
             });
@@ -48,8 +48,15 @@ export class ChooseTypeSceneP2 extends Phaser.Scene {
             "button_bg", "button_fg", "ssb_weap_pro",
             () => {
                 this.data.set("type", false);
-                this.scene.stop();
-                this.scene.launch('chooseSceneP2')
+                this.scene.sleep();
+                if(this.first == true){
+                    this.scene.run('chooseSceneP2')
+                    this.first = false;
+                }
+                else{
+                    this.scene.get('chooseSceneP2').scene.restart()
+
+                }
                 //system.pushSymbol(createWMod)
             });
         this.projectile.setPosition(200, 700)
