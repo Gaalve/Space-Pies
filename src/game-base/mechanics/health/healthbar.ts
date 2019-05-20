@@ -30,7 +30,6 @@ export class Healthbar {
     }
 
     public destroyBar(): void{
-        console.log("switching sprites with bleeding sprite");
         let sprite = this.bars.pop().getSprite();
         let bleedingSprite = this.scene.add.sprite(sprite.x, sprite.y, "bleedingbar");
         bleedingSprite.setFrame(0);
