@@ -35,26 +35,8 @@ export class Turn {
         this.refScene.time.delayedCall(0, () => (this.playerInput()), [], this);
         this.refScene.data.set('click', this.clickable);
     }
- /*   create(): void{
-        let system = new PiSystem(this, 1,1, 1, false);
-        system.start()
-        let startShop = system.add.replication(system.add.channelOut('shopp1', '*').nullProcess())
-
-    } */
-
- /*   private Attackturn():void{
-        this.refScene.data.set('turnAction', 'Attackturn');
-        this.refScene.time.delayedCall(2000, () => (this.playerInput()), [], this);
-    } /*
-
- /*   private cycle2():void{
-        this.refScene.data.set('turnAction', 'Cycle2');
-        this.refScene.time.delayedCall(1000, () => (this.playerInput()), [], this);
-    } */
 
     private playerInput():void{
-       // let system = new PiSystem(this.refScene, 1,1, 1, false);
-       // let startShop = system.add.replication(system.add.channelOut('shopp1', '*').nullProcess())
         this.clickable = true;
         this.refScene.data.set('round', ""+(++this.currentRound));
         if(this.currentRound != 1){
@@ -94,23 +76,7 @@ export class Turn {
         //Waffen schießen lassen:
         this.currentPlayer.pushWeapons();
         this.refScene.data.set('turnAction', 'Battle Phase');
-        this.refScene.time.delayedCall(1000, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+        this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
 
     }
-
-  /*  public nextPlayer():void{
-        if (!this.awaitInput) return;
-        this.refScene.scene.sleep('ShopSceneP1');
-        this.refScene.scene.sleep('ShopSceneP2');
-        this.refScene.scene.sleep('chooseSceneP1');
-        this.refScene.scene.sleep('chooseSceneP2');
-
-        this.awaitInput = false;
-        this.idx = 1 - this.idx;
-        this.currentPlayer = this.players[this.idx];
-        this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
-        this.refScene.data.set('turnAction', 'Nextplayer');
-        this.refScene.data.set('round', ""+(++this.currentRound));
-        this.refScene.time.delayedCall(500, () => (this.Attackturn()), [], this);
-    } */
 }

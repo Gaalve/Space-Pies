@@ -8,6 +8,46 @@
       },
       {
         "type": "image",
+        "key": "adap_shield",
+        "url": "assets/sprites/adap_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "armor_shield",
+        "url": "assets/sprites/armor_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "hitzone_shield",
+        "url": "assets/sprites/hitzone_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "laser_shield",
+        "url": "assets/sprites/laser_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "nano_shield",
+        "url": "assets/sprites/nano_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "rocket_shield",
+        "url": "assets/sprites/rocket_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "sym_core",
+        "url": "assets/sprites/sym_core.png"
+      },
+      {
+        "type": "image",
+        "key": "sym_zone",
+        "url": "assets/sprites/sym_zone.png"
+      },
+      {
+        "type": "image",
         "key": "big_oval_light",
         "url": "assets/sprites/big_oval_light.png"
       },
