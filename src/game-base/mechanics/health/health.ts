@@ -20,13 +20,13 @@ export class Health {
         this.shipBar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, false, 120,
             "CoreExplosion"+pid, pid);
         this.zone1Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 170,
-            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid+'< >', pid);
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
         this.zone2Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 220,
-            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid+'< >', pid);
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
         this.zone3Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 270,
-            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid+'< >', pid);
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
         this.zone4Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 320,
-            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid+'< >', pid);
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
 
 
         pi.pushSymbol(
