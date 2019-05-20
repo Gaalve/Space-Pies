@@ -37,10 +37,19 @@ export class Healthbar {
         bleedingSprite.anims.animationManager.create({
             key: 'bleeding',
             frames: bleedingSprite.anims.animationManager.generateFrameNumbers('bleedingbar', { start: 0, end: 40 }),
-            frameRate: 100,
+            frameRate: 100
         });
-        bleedingSprite.once(ANIMATION_COMPLETE, (bleedingSprite) => {bleedingSprite.destroy()});
+        bleedingSprite.on('animationcomplete', this.destroy(bleedingSprite));
         bleedingSprite.anims.play("bleeding");
         sprite.destroy();
+    }
+
+    private destroy(bleedingSprite: Phaser.GameObjects.Sprite) {
+        let destroy = function()
+        {
+            console.log("DESTROYING BLEEDING BAR");
+            bleedingSprite.destroy();
+        }
+        return destroy;
     }
 }
