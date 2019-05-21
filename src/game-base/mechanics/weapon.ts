@@ -20,19 +20,19 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		this.wClass = wClass;
 		this.drone = drone;
 		this.wNr = wNr;
-		this.setScale(0.5);
+		//this.setScale(0.5);
 
 		if(wNr == 1){
-		    this.setY(drone.y + 20);
+		    this.setY(drone.y - 40);
         }else if(wNr == 2){
-		    this.setY(drone.y - 20);
+		    this.setY(drone.y + 40);
         }
-		this.setDepth(-1);
+		this.setDepth(0);
 
 		//reposition weapons on ship
 		if(this.drone.getIndex() == 0) {
 		    this.setDepth(0);
-			this.setScale(0.8);
+			//this.setScale(0.8);
 			this.repositionWeapons();
 		}
 	}
@@ -43,23 +43,23 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	repositionWeapons() : void{
 		if(this.drone.getPlayer().getNameIdentifier() == "P1"){
 			if(this.wNr == 1){
-				this.setX(this.x - 45);
+				this.setX(this.x - 35);
 				this.setY(this.y + 180);
 			}else if(this.wNr == 2){
-				this.setX(this.x - 45);
+				this.setX(this.x - 35);
 				this.setY(this.y - 180);
 			}else{
-				this.setX(this.x + 35)
+				this.setX(this.x + 45)
 			}
 		}else{
 			if(this.wNr == 1){
-				this.setX(this.x + 70);
+				this.setX(this.x + 50);
 				this.setY(this.y + 130);
 			}else if(this.wNr == 2){
-				this.setX(this.x + 70);
+				this.setX(this.x + 50);
 				this.setY(this.y - 130);
 			}else{
-				this.setX(this.x - 30)
+				this.setX(this.x - 45)
 			}
 		}
 
