@@ -2,6 +2,8 @@ import {Drone} from "./drone";
 import {PiSystem} from "./picalc/pi-system";
 import {Ship} from "./ship";
 import {Health} from "./health/health";
+import {AnimationManager} from "./animation/AnimationManager";
+
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
@@ -98,25 +100,34 @@ export class Player {
 	push pi terms for weapons to the pi system. Has to be done each round again
 	 */
     pushWeapons() : void{
-        for(let d of this.drones) {
-            if(d.getNrWeapons() == 1) {
+        for(let drone of this.drones) {
+            if(drone.getNrWeapons() == 1) {
                 this.system.pushSymbol(
                     this.system.add.channelIn("lock", "*").
-                    channelOut(d.getWeapons()[0].getPiTerm(), "*").nullProcess()
+                    channelOut(drone.getWeapons()[0].getPiTerm(), "*").nullProcess()
                 );
-            } else if (d.getNrWeapons() == 2) {
+            } else if (drone.getNrWeapons() == 2) {
                 this.system.pushSymbol(
                     this.system.add.channelIn("lock", "*").
-                    channelOut(d.getWeapons()[0].getPiTerm(), "*").
-                    channelOut(d.getWeapons()[1].getPiTerm(), "*").nullProcess()
+                    channelOut(drone.getWeapons()[0].getPiTerm(), "*").
+                    channelOut(drone.getWeapons()[1].getPiTerm(), "*").nullProcess()
                 );
-            } else if (d.getNrWeapons() == 3) {
+                let animationScene = this.scene.scene.get("AnimationScene");
+                animationScene.add.text(drone.getWeapons()[0].getX(), drone.getWeapons()[0].getY(), drone.getWeapons()[0].getPiTerm());
+            } else if (drone.getNrWeapons() == 3) {
                 this.system.pushSymbol(
                     this.system.add.channelIn("lock", "*").
-                    channelOut(d.getWeapons()[0].getPiTerm(), "*").
-                    channelOut(d.getWeapons()[1].getPiTerm(), "*").
-                    channelOut(d.getWeapons()[2].getPiTerm(), "*").nullProcess()
+                    channelOut(drone.getWeapons()[0].getPiTerm(), "*").
+                    channelOut(drone.getWeapons()[1].getPiTerm(), "*").
+                    channelOut(drone.getWeapons()[2].getPiTerm(), "*").nullProcess()
                 );
+                let animationScene = this.scene.scene.get("AnimationScene");
+                let manager = new AnimationManager(this.scene);
+                let text = animationScene.add.text(drone.getWeapons()[0].getX(), drone.getWeapons()[0].getY(), drone.getWeapons()[0].getPiTerm());
+                manager.addAnimation(1920/2, 800, text);
+
+                // text.x = -1000 + Math.sin(Math.PI/2 )*(1920/2 + 1000);
+
             }
         }
         this.unlockWeapons();

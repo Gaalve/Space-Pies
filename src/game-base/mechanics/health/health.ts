@@ -20,6 +20,7 @@ export class Health {
         this.zone4Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 320);
 
         const pid = player.getNameIdentifier();
+        // todo: kara animate
         pi.pushSymbol(
             pi.add.channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
                 .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})

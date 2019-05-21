@@ -78,14 +78,20 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	number of the opposing player
 	 */
     createPiTerm() : void{
-    	if(this.drone.getPlayer().getNameIdentifier() == "P1") {
-			this.piTerm = this.wClass + "P2";
-		}else{
-    		this.piTerm = this.wClass + "P1";
-		}
+			this.piTerm = this.drone.getPlayer().getNameIdentifier() == "P1" ? this.wClass + "P2" : this.wClass + "P1";
     }
 
     getPiTerm() : string{
 	    return this.piTerm;
     }
+
+    getX()
+	{
+		return this.x;
+	}
+
+	getY()
+	{
+		return this.y;
+	}
 }
