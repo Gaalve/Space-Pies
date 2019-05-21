@@ -2,6 +2,7 @@
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import {MainScene} from "./main-scene";
 import {Animation} from "../mechanics/animation/Animation";
+import Sprite = Phaser.GameObjects.Sprite;
 
 export class ScenePiAnimation extends Phaser.Scene{
 
@@ -42,8 +43,10 @@ export class ScenePiAnimation extends Phaser.Scene{
                 let deltaX = animation.toX - animation.text.x;
                 let deltaY = animation.toY - animation.text.y;
                 let deltaRatio = deltaY/deltaX;
-                animation.text.x = animation.text.x >= animation.toX ? animation.text.x : animation.text.x + 10 ;
-                animation.text.y = animation.text.y >= animation.toY ? animation.text.y : animation.text.y + (10 * deltaRatio) ;
+                this.moveSin(animation.text.x, animation.toX - (deltaX/2), 0.1/5, animation.text);
+                this.moveCos(animation.text.x, animation.toX, 0.1/5 , animation.text);
+                // animation.text.x = animation.text.x >= animation.toX ? animation.text.x : animation.text.x + 10 ;
+                // animation.text.y = animation.text.y >= animation.toY ? animation.text.y : animation.text.y + (10 * deltaRatio) ;
                 if (animation.text.x >= animation.toX && animation.text.y >= animation.toY)
                 {
                     this.removeAnimation(animation);
@@ -70,4 +73,13 @@ export class ScenePiAnimation extends Phaser.Scene{
                 this.animations.splice(i, 1);
 
     }
+
+    private moveCos(from: number, to: number, delta:number, text: Phaser.GameObjects.Text){
+        text.x = to - Math.cos(delta*Math.PI/2 )*(to - from);
+    }
+
+    private moveSin(from: number, to: number, delta:number, text: Phaser.GameObjects.Text){
+        text.x = from + Math.sin(delta*Math.PI/2 )*(to - from);
+    }
+
 }
