@@ -29,6 +29,10 @@ export class Player {
         this.health.addToHz(piSystem, 'rshield', 'z1');
         this.health.addToHz(piSystem, 'rshield', 'z1');
         this.health.addToHz(piSystem, 'rarmor', 'z1');
+        this.health.addToHz(piSystem, 'rshield', 'z1');
+        this.health.addToHz(piSystem, 'rarmor', 'z1');
+        this.health.addToHz(piSystem, 'rshield', 'z1');
+        this.health.addToHz(piSystem, 'rarmor', 'z1');
 
         // z2 starts with 1 shield
         this.health.addToHz(piSystem, 'rshield', 'z2');
@@ -36,6 +40,15 @@ export class Player {
         this.health.addToHz(piSystem, 'rarmor', 'z2');
 
         // z3 starts with 1 armor
+        this.health.addToHz(piSystem, 'rshield', 'z3');
+        this.health.addToHz(piSystem, 'rarmor', 'z3');
+        this.health.addToHz(piSystem, 'rshield', 'z3');
+        this.health.addToHz(piSystem, 'rshield', 'z3');
+        this.health.addToHz(piSystem, 'rarmor', 'z3');
+        this.health.addToHz(piSystem, 'rshield', 'z3');
+        this.health.addToHz(piSystem, 'rshield', 'z3');
+        this.health.addToHz(piSystem, 'rarmor', 'z3');
+        this.health.addToHz(piSystem, 'rshield', 'z3');
         this.health.addToHz(piSystem, 'rshield', 'z3');
         this.health.addToHz(piSystem, 'rarmor', 'z3');
         this.health.addToHz(piSystem, 'rshield', 'z3');
