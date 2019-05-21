@@ -97,6 +97,7 @@ export class MainScene extends Phaser.Scene {
         );
         this.buttonOption.setPosition(1880, 40);
 
+        this.system.pushSymbol(this.system.add.channelOut("wext10r", "").nullProcess());
     }
 
 
