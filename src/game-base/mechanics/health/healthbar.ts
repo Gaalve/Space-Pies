@@ -21,7 +21,7 @@ export class Healthbar {
         this.y = y;
         this.bars = [];
         this.direction = direction;
-        this.position = direction == 1 ? 10 + 60 : 1920 - 10 - 50;
+        this.position = direction == 1 ? 10 + 50 : 1920 - 10 - 50;
         this.symbol = new Sprite(scene, this.position - 30 * direction, this.y, isHitZone ? "sym_zone" : "sym_core");
         this.symbol.setOrigin(0.5,0.5);
         this.scene.add.existing(this.symbol);
@@ -55,8 +55,13 @@ export class Healthbar {
     public toString(): string{
         let str: string = "";
         for (let i = this.bars.length - 1; i >= 0; i--) {
-            str += this.bars[i].toString();
-            str += '( ).';
+            if (i >= 2 && i < this.bars.length - 3) {
+                if(i == 3)
+                    str += '[...].'
+            } else{
+                str += this.bars[i].toString();
+                str += '( ).';
+            }
         }
         str += this.lastPiSymbolString;
         return str;
