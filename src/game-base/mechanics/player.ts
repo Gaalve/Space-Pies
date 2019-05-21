@@ -2,7 +2,8 @@ import {Drone} from "./drone";
 import {PiSystem} from "./picalc/pi-system";
 import {Ship} from "./ship";
 import {Health} from "./health/health";
-import {AnimationManager} from "./animation/AnimationManager";
+import {Animation} from "./animation/Animation";
+import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
 
 export class Player {
     private nameIdentifier: string;
@@ -115,17 +116,16 @@ export class Player {
                 let animationScene = this.scene.scene.get("AnimationScene");
                 animationScene.add.text(drone.getWeapons()[0].getX(), drone.getWeapons()[0].getY(), drone.getWeapons()[0].getPiTerm());
             } else if (drone.getNrWeapons() == 3) {
-                this.system.pushSymbol(
-                    this.system.add.channelIn("lock", "*").
-                    channelOut(drone.getWeapons()[0].getPiTerm(), "*").
-                    channelOut(drone.getWeapons()[1].getPiTerm(), "*").
-                    channelOut(drone.getWeapons()[2].getPiTerm(), "*").nullProcess()
-                );
-                let animationScene = this.scene.scene.get("AnimationScene");
-                let manager = new AnimationManager(this.scene);
-                let text = animationScene.add.text(drone.getWeapons()[0].getX(), drone.getWeapons()[0].getY(), drone.getWeapons()[0].getPiTerm());
-                manager.addAnimation(1920/2, 800, text);
+                let action = this.system.add.channelIn("lock", "*").
+                channelOut(drone.getWeapons()[0].getPiTerm(), "*").
+                channelOut(drone.getWeapons()[1].getPiTerm(), "*").
+                channelOut(drone.getWeapons()[2].getPiTerm(), "*").nullProcess();
 
+                this.system.pushSymbol(action);
+                let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
+                let text = animationScene.add.text(drone.getWeapons()[0].getX(), drone.getWeapons()[0].getY(), action.getSymbolSequence().replace("lock(*).", ""));
+                let animation = new Animation(null, animationScene, 1920/2, 300, text);
+                animationScene.addAnimation(animation);
                 // text.x = -1000 + Math.sin(Math.PI/2 )*(1920/2 + 1000);
 
             }

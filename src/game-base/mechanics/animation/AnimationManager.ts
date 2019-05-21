@@ -18,15 +18,15 @@ export class AnimationManager {
         {
             let animation = this.animation;
             console.log("animate entered")
-            let deltaX = x - text.x;
-            let deltaY = y - text.y;
+
+
+            // DIAGONAL PATH TO CENTER OF SCREEEN
             let deltaRatio = y/x;
 
+            text.x = text.x >= x ? text.x : text.x += 5;
+            text.y = text.y >= y ? text.y : text.y + (5 * deltaRatio);
 
-            text.x = text.x += 5;
-            text.y = text.y + (5 * deltaRatio);
-
-
+            // IF CENTER REACHED - STOP ANIMATION
             if (text.x >= x && text.y >= y)
             {
                 console.log("animation stopped")

@@ -1,14 +1,14 @@
-import {Button} from "../mechanics/button";
+
 import {PiSystem} from "../mechanics/picalc/pi-system";
-import {chooseSceneP1} from "./choose-sceneP1";
-import {Player} from "../mechanics/player";
 import {MainScene} from "./main-scene";
+import {Animation} from "../mechanics/animation/Animation";
 
 export class ScenePiAnimation extends Phaser.Scene{
 
     private firstChoose: boolean;
     private system: PiSystem;
-
+    private animationRunning: boolean;
+    private animations: Array<Animation>;
 
     constructor(){
         super({
@@ -16,6 +16,7 @@ export class ScenePiAnimation extends Phaser.Scene{
             active: false
         });
         this.firstChoose = true;
+        this.animations = new Array<Animation>();
     }
 
     preload(): void{
@@ -28,13 +29,45 @@ export class ScenePiAnimation extends Phaser.Scene{
 
     create(): void{
         this.system = this.scene.get('MainScene').data.get("system");
-        const something = this.add.sprite(1920/3, 1080/3, "ssb_weap_rock");
         console.log("ScenePiAnimation ACTIVE!");
+        this.animationRunning = false;
     }
 
     update(time: number, delta: number): void {
+        if (this.animations.length > 0)
+        {
+            for (let i = 0; i < this.animations.length; i++)
+            {
+               let animation = <Animation> this.animations[i];
+                let deltaX = animation.toX - animation.text.x;
+                let deltaY = animation.toY - animation.text.y;
+                let deltaRatio = deltaY/deltaX;
+                animation.text.x = animation.text.x >= animation.toX ? animation.text.x : animation.text.x + 10 ;
+                animation.text.y = animation.text.y >= animation.toY ? animation.text.y : animation.text.y + (10 * deltaRatio) ;
+                if (animation.text.x >= animation.toX && animation.text.y >= animation.toY)
+                {
+                    this.removeAnimation(animation);
+                }
+            }
+        }
 
     }
 
+    setAnimationRunning(boolean : boolean)
+    {
+        this.animationRunning = boolean;
+    }
 
+    public addAnimation(animation: Animation)
+    {
+        this.animations.push(animation);
+    }
+
+    public removeAnimation(animation: Animation)
+    {
+        for (let i = 0; i < this.animations.length; i++)
+            if (this.animations[i] == animation)
+                this.animations.splice(i, 1);
+
+    }
 }
