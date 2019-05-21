@@ -42,11 +42,10 @@ export class ScenePiAnimation extends Phaser.Scene{
                let animation = <Animation> this.animations[i];
                 let deltaX = animation.toX - animation.text.x;
                 let deltaY = animation.toY - animation.text.y;
-                let deltaRatio = deltaY/deltaX;
-                this.moveSin(animation.text.x, animation.toX - (deltaX/2), 0.1/5, animation.text);
-                this.moveCos(animation.text.x, animation.toX, 0.1/5 , animation.text);
-                // animation.text.x = animation.text.x >= animation.toX ? animation.text.x : animation.text.x + 10 ;
-                // animation.text.y = animation.text.y >= animation.toY ? animation.text.y : animation.text.y + (10 * deltaRatio) ;
+
+                this.moveCos(animation.fromX, animation.toX, animation.duration/animation.currentTime, animation.text);
+                animation.currentTime += delta;
+
                 if (animation.text.x >= animation.toX && animation.text.y >= animation.toY)
                 {
                     this.removeAnimation(animation);
