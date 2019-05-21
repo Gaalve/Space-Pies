@@ -3,7 +3,7 @@ import Sprite = Phaser.GameObjects.Sprite;
 export class FadeScene extends Phaser.Scene {
 
 
-    private static transitionDuration: number = 5;
+    private static transitionDuration: number = 4;
     private timer: number;
     private shutdown: string;
     private start: string;
