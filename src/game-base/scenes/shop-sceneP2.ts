@@ -21,6 +21,11 @@ export class ShopSceneP2 extends Phaser.Scene{
     private armorText: Phaser.GameObjects.Text;
     private shieldText: Phaser.GameObjects.Text;
     private system: PiSystem;
+    private energyCostText1: Phaser.GameObjects.Text;
+    private energyCostText2: Phaser.GameObjects.Text;
+    private energyCostText3: Phaser.GameObjects.Text;
+    private energyCostText4: Phaser.GameObjects.Text;
+
 
 
     constructor(){
@@ -63,12 +68,23 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.background.setTint(0x214478);
 
         let energy = this.Player2.getEnergy();
-        let energyCost = 3;
+        let energyCost = this.Player2.getEnergyCost();
         this.add.image(50,40,"button_energy");
         this.energyText = this.add.text(70, 10, " : " +energy, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
 
-
+        this.add.image(70,200,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,350,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,500,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,650,"button_energy").setDisplaySize(40,40);
+        this.energyCostText1 = this.add.text(90, 185, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+        this.energyCostText2 = this.add.text(90, 335, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+        this.energyCostText3 = this.add.text(90, 485, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+        this.energyCostText4 = this.add.text(90, 635, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
 
 
         const text = this.add.text(160, 50, 'choose action', {
@@ -162,6 +178,7 @@ export class ShopSceneP2 extends Phaser.Scene{
                 ()=>{
                     system.pushSymbol(createWMod);
                     this.Player2.payEnergy(energyCost);
+                    this.Player2.raiseEnergyCost(1);
                 });
             this.wModule.setPosition(200, 650);
             this.wModText = this.add.text(300, 630, "Weapon Module", {
@@ -205,6 +222,7 @@ export class ShopSceneP2 extends Phaser.Scene{
     update(time: number, delta: number): void {
         this.timeAccumulator += delta;
         let old = 0;
+        let oldCost = 2;
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
             this.skip.updateStep();
@@ -215,12 +233,27 @@ export class ShopSceneP2 extends Phaser.Scene{
             this.activeWmods = this.Player2.getNrDrones();
 
             let energy = this.Player2.getEnergy();
-            let energyCost = 3;
+            let energyCost = this.Player2.getEnergyCost();
             if(energy != old){
                 this.children.remove(this.energyText);
                 this.energyText = this.add.text(70, 20, " = " +energy, {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
 
+            }
+
+            if(energyCost != oldCost){
+                this.children.remove(this.energyCostText1);
+                this.children.remove(this.energyCostText2);
+                this.children.remove(this.energyCostText3);
+                this.children.remove(this.energyCostText4);
+                this.energyCostText1 = this.add.text(90, 185, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+                this.energyCostText2 = this.add.text(90, 335, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+                this.energyCostText3 = this.add.text(90, 485, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+                this.energyCostText4 = this.add.text(90, 635, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
             }
 
             if(energy < energyCost){
@@ -258,8 +291,10 @@ export class ShopSceneP2 extends Phaser.Scene{
             if(!this.firstChoose && this.activeWmods < 3 && energy >= energyCost){
                 this.firstChoose = true;
                 this.wModule.changeButton(this,200, 650, "button_wmod", ()=>{
-                    this.system.pushSymbol(this.system.add.channelOut('wmod2','*' ).nullProcess())
-                    this.Player2.payEnergy(3);                    this.Player2.payEnergy(energyCost);
+                    this.system.pushSymbol(this.system.add.channelOut('wmod2','*' ).nullProcess());
+                    this.Player2.payEnergy(energyCost);
+                    this.Player2.raiseEnergyCost(1);
+
                 });
                 this.children.remove(this.wModText);
                 this.wModText = this.add.text(300, 630, "Weapon Mod", {
@@ -267,6 +302,7 @@ export class ShopSceneP2 extends Phaser.Scene{
 
             }
             old = energy;
+            oldCost = energyCost;
 
             // console.log("Update")
         }

@@ -26,7 +26,9 @@ export class chooseSceneP2 extends Phaser.Scene{
     private shipTL: Phaser.GameObjects.Text;
     private droneTL: Phaser.GameObjects.Text;
     private droneT2L: Phaser.GameObjects.Text;
-
+    private energyCostText1: Phaser.GameObjects.Text;
+    private energyCostText2: Phaser.GameObjects.Text;
+    private energyCostText3: Phaser.GameObjects.Text;
 
 
     constructor(){
@@ -59,7 +61,19 @@ export class chooseSceneP2 extends Phaser.Scene{
         let choose = this.scene.get("chooseTypeSceneP2")
         this.Player2 = this.scene.get('MainScene').data.get('P2');
         let energy = this.Player2.getEnergy();
-        let energyCost = 3;
+        let energyCost = this.Player2.getEnergyCost();
+        this.add.image(50,40,"button_energy");
+
+        this.add.image(70,250,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,450,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,650,"button_energy").setDisplaySize(40,40);
+        this.energyCostText1 = this.add.text(90, 235, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+        this.energyCostText2 = this.add.text(90, 435, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+        this.energyCostText3 = this.add.text(90, 635, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+
         let drones = this.Player2.getDrones();
         let droneNr = this.Player2.getNrDrones();
         let ship = drones[0];
@@ -256,6 +270,7 @@ export class chooseSceneP2 extends Phaser.Scene{
     update(time: number, delta: number): void {
         this.timeAccumulator += delta;
         let old = 0;
+        let oldCost = 2;
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
             this.shipL.updateStep();
@@ -265,8 +280,8 @@ export class chooseSceneP2 extends Phaser.Scene{
             let choose = this.scene.get("chooseTypeSceneP2");
 
             let energy = this.Player2.getEnergy();
-            let energyCost = 3;
-            this.add.image(50,40,"button_energy");
+            let energyCost = this.Player2.getEnergyCost();
+
 
             let drones = this.Player2.getDrones();
             let droneNr = this.Player2.getNrDrones();
@@ -285,6 +300,18 @@ export class chooseSceneP2 extends Phaser.Scene{
                 this.children.remove(this.energyText);
                 this.energyText = this.add.text(70, 20, " = " +energy, {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
+
+            }
+            if(energyCost != oldCost){
+                this.children.remove(this.energyCostText1);
+                this.children.remove(this.energyCostText2);
+                this.children.remove(this.energyCostText3);
+                this.energyCostText1 = this.add.text(90, 235, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+                this.energyCostText2 = this.add.text(90, 435, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+                this.energyCostText3 = this.add.text(90, 635, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
 
             }
 
@@ -423,6 +450,7 @@ export class chooseSceneP2 extends Phaser.Scene{
 
             }
             old = energy;
+            oldCost = energyCost;
             // console.log("Update")
         }
     }
