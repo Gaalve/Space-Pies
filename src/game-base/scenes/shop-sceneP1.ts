@@ -85,7 +85,7 @@ export class ShopSceneP1 extends Phaser.Scene{
         const piShield = this.add.text(1920-200, 310, 'regShieldP1<*>.0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} );
         const piWMod = this.add.text(1920-200, 610, 'wmodP1<*>.0',{
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} );
 
         if(energy >= energyCost){
 
