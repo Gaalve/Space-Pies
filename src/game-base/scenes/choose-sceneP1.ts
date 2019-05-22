@@ -110,11 +110,15 @@ export class chooseSceneP1 extends Phaser.Scene{
             this.shipL = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_space_shuttle",
                 ()=>{
-                    if(choose.data.get("type")  == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('shipL');
                     }
-                    else{
+                    else if(choose.data.get("type")  == "pro"){
                         this.events.emit('shipP');
+                    }
+                    else{
+                        this.events.emit('shipR');
+
                     }
                     this.scene.sleep();
                     this.Player1.payEnergy(energyCost);
@@ -124,7 +128,7 @@ export class chooseSceneP1 extends Phaser.Scene{
             this.shipL.setPosition(1920-600, 250);
             this.shipTL = this.add.text(1920-500, 220, 'ship', {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
-            if(choose.data.get("type") == true){
+            if(choose.data.get("type") == "las"){
                 const piWext1 = this.add.text(1920-150, 220, 'wextp1m0l(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
@@ -166,12 +170,15 @@ export class chooseSceneP1 extends Phaser.Scene{
             this.drone1L = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_wext",
                 ()=>{
-                    if(choose.data.get("type")  == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('drone1L');
 
                     }
-                    else{
+                    else if(choose.data.get("type")  == "pro"){
                         this.events.emit('drone1P');
+                    }
+                    else{
+                        this.events.emit('drone1R');
 
                     }
                     this.scene.sleep();
@@ -182,7 +189,7 @@ export class chooseSceneP1 extends Phaser.Scene{
             this.drone1L.setPosition(1920-600, 450);
             this.droneTL = this.add.text(1920-500, 420, 'drone 1', {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
-            if(choose.data.get("type") == true){
+            if(choose.data.get("type") == "las"){
                 const piWext2 = this.add.text(1920-150, 420, 'wextp1m2l(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
@@ -223,12 +230,15 @@ export class chooseSceneP1 extends Phaser.Scene{
             this.drone2L = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_wext",
                 ()=>{
-                if(choose.data.get("type")  == true){
+                if(choose.data.get("type")  == "las"){
                     this.events.emit('drone2L');
 
                 }
-                else{
+                else if(choose.data.get("type")  == "pro"){
                     this.events.emit('drone2P');
+                }
+                else{
+                    this.events.emit('drone2R');
 
                 }
                     this.scene.sleep();
@@ -240,7 +250,7 @@ export class chooseSceneP1 extends Phaser.Scene{
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2});
 
             this.drone2L.setPosition(1920-600, 650)
-            if(choose.data.get("type") == true){
+            if(choose.data.get("type") == "las"){
                 const piWext3 = this.add.text(1920-150, 620, 'wextp1m2l(*).0',{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
@@ -255,7 +265,7 @@ export class chooseSceneP1 extends Phaser.Scene{
         this.close = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_cancel_black",
             ()=> {
-                this.scene.sleep()
+                this.scene.sleep();
                 this.scene.run("ShopSceneP1")
             });
         this.close.setPosition(1920-600, 850);
@@ -333,11 +343,15 @@ export class chooseSceneP1 extends Phaser.Scene{
             if(this.m0activeExt < 3 && this.maxReached0 && energy >= energyCost){
                 this.maxReached0 = false;
                 this.shipL.changeButton(this,1920-600, 250, "button_space_shuttle", ()=>{
-                    if(choose.data.get("type")  == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('shipL');
                     }
-                    else{
+                    else if(choose.data.get("type")  == "pro"){
                         this.events.emit('shipP');
+                    }
+                    else{
+                        this.events.emit('shipR');
+
                     }
                     this.Player1.payEnergy(energyCost);
                     this.scene.sleep();
@@ -356,7 +370,7 @@ export class chooseSceneP1 extends Phaser.Scene{
 
                 } );
                 this.children.remove(this.droneTL);
-                if(this.maxReached1 == true){
+                if(droneNr < 2){
                     this.droneTL = this.add.text(1920 - 500, 420, 'mod not built', {
                         fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2
                     });
@@ -379,11 +393,15 @@ export class chooseSceneP1 extends Phaser.Scene{
             if(this.m1activeExt < 3 && this.maxReached1 && energy >= energyCost){
                 this.maxReached1 = false;
                 this.drone1L.changeButton(this,1920-600, 450, "button_wext", ()=>{
-                    if(choose.data.get("type")  == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('drone1L');
                     }
-                    else{
+                    else if(choose.data.get("type")  == "pro"){
                         this.events.emit('drone1P');
+                    }
+                    else{
+                        this.events.emit('drone1R');
+
                     }
                     this.Player1.payEnergy(energyCost);
                     this.scene.sleep();
@@ -403,7 +421,7 @@ export class chooseSceneP1 extends Phaser.Scene{
 
                 } );
                 this.children.remove(this.droneT2L);
-                if(this.maxReached2 == true){
+                if(droneNr < 3){
                     this.droneT2L = this.add.text(1920 - 500, 620, 'mod not built', {
                         fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 2
                     });
@@ -425,11 +443,15 @@ export class chooseSceneP1 extends Phaser.Scene{
             if(this.m2activeExt < 3 && this.maxReached2 && energy >= energyCost){
                 this.maxReached2 = false;
                 this.drone2L.changeButton(this,1920-600, 650, "button_wext", ()=>{
-                    if(choose.data.get("type")  == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('drone2L');
                     }
-                    else{
+                    else if(choose.data.get("type")  == "pro"){
                         this.events.emit('drone2P');
+                    }
+                    else{
+                        this.events.emit('drone2R');
+
                     }
                     this.Player1.payEnergy(energyCost);
                     this.scene.sleep();

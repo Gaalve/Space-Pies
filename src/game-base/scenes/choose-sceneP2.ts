@@ -111,12 +111,14 @@ export class chooseSceneP2 extends Phaser.Scene{
             this.shipL = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_space_shuttle",
                 ()=>{
-                    if(choose.data.get("type") == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('shipL');
-
                     }
-                    else {
+                    else if(choose.data.get("type")  == "pro"){
                         this.events.emit('shipP');
+                    }
+                    else{
+                        this.events.emit('shipR');
 
                     }
                     this.Player2.payEnergy(energyCost);
@@ -170,12 +172,15 @@ export class chooseSceneP2 extends Phaser.Scene{
             this.drone1L = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_wext",
                 ()=>{
-                    if(choose.data.get("type") == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('drone1L');
 
                     }
-                    else{
+                    else if(choose.data.get("type")  == "pro"){
                         this.events.emit('drone1P');
+                    }
+                    else{
+                        this.events.emit('drone1R');
 
                     }
                     this.Player2.payEnergy(energyCost);
@@ -226,12 +231,15 @@ export class chooseSceneP2 extends Phaser.Scene{
             this.drone2L = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_wext",
                 ()=>{
-                    if(choose.data.get("type") == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('drone2L');
 
                     }
-                    else {
+                    else if(choose.data.get("type")  == "pro"){
                         this.events.emit('drone2P');
+                    }
+                    else{
+                        this.events.emit('drone2R');
 
                     }
                     this.Player2.payEnergy(energyCost);
@@ -340,11 +348,15 @@ export class chooseSceneP2 extends Phaser.Scene{
             if(this.m0activeExt < 3 && this.maxReached0 && energy >= energyCost){
                 this.maxReached0 = false;
                 this.shipL.changeButton(this,200, 250, "button_space_shuttle", ()=>{
-                    if(choose.data.get("type") == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('shipL');
                     }
-                    else{
+                    else if(choose.data.get("type")  == "pro"){
                         this.events.emit('shipP');
+                    }
+                    else{
+                        this.events.emit('shipR');
+
                     }
                     this.Player2.payEnergy(energyCost);
                     this.scene.sleep();
@@ -385,11 +397,16 @@ export class chooseSceneP2 extends Phaser.Scene{
             if(this.m1activeExt < 3 && this.maxReached1 && energy >= energyCost){
                 this.maxReached1 = false;
                 this.drone1L.changeButton(this,200, 450, "button_wext", ()=>{
-                    if(choose.data.get("type") == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('drone1L');
+
+                    }
+                    else if(choose.data.get("type")  == "pro"){
+                        this.events.emit('drone1P');
                     }
                     else{
-                        this.events.emit('drone1P');
+                        this.events.emit('drone1R');
+
                     }
                     this.Player2.payEnergy(energyCost);
                     this.scene.sleep();
@@ -431,11 +448,16 @@ export class chooseSceneP2 extends Phaser.Scene{
             if(this.m2activeExt < 3 && this.maxReached2 && energy >= energyCost){
                 this.maxReached2 = false;
                 this.drone2L.changeButton(this,200, 650, "button_wext", ()=>{
-                    if(choose.data.get("type") == true){
+                    if(choose.data.get("type")  == "las"){
                         this.events.emit('drone2L');
+
+                    }
+                    else if(choose.data.get("type")  == "pro"){
+                        this.events.emit('drone2P');
                     }
                     else{
-                        this.events.emit('drone2P');
+                        this.events.emit('drone2R');
+
                     }
                     this.Player2.payEnergy(energyCost);
                     this.scene.sleep();
