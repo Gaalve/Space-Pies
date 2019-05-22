@@ -183,4 +183,8 @@ export class Player {
     {
         this.energy = amount;
     }
+    resetEnergy() : void
+    {
+        this.energy = 10;
+    }
 }
