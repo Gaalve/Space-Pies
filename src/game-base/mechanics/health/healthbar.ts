@@ -1,6 +1,7 @@
 import {HealthbarSprites} from "./healthbar-sprites";
 import Sprite = Phaser.GameObjects.Sprite;
 import {HealthType} from "./health-type";
+import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
@@ -29,6 +30,25 @@ export class Healthbar {
     }
 
     public destroyBar(): void{
-        this.bars.pop().destroy();
+        let sprite = this.bars.pop().getSprite();
+        let bleedingSprite = this.scene.add.sprite(sprite.x, sprite.y, "bleedingbar");
+        bleedingSprite.setFrame(0);
+        bleedingSprite.anims.animationManager.create({
+            key: 'bleeding',
+            frames: bleedingSprite.anims.animationManager.generateFrameNumbers('bleedingbar', { start: 0, end: 40 }),
+            frameRate: 100
+        });
+        bleedingSprite.on('animationcomplete', this.destroy(bleedingSprite));
+        bleedingSprite.anims.play("bleeding");
+        sprite.destroy();
+    }
+
+    private destroy(bleedingSprite: Phaser.GameObjects.Sprite) {
+        let destroy = function()
+        {
+            console.log("DESTROYING BLEEDING BAR");
+            bleedingSprite.destroy();
+        }
+        return destroy;
     }
 }

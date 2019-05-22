@@ -29,4 +29,8 @@ export class HealthbarSprites {
     public destroy(): void{
         this.sprite.destroy();
     }
+
+    public getSprite() {
+        return this.sprite;
+    }
 }
