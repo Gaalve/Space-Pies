@@ -74,11 +74,11 @@ export class ShopSceneP2 extends Phaser.Scene{
         const text = this.add.text(160, 50, 'choose action', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
-        const piArmor = this.add.text(500, 180, 'regArmorP2<*>.O',{
+        const piArmor = this.add.text(600, 160, 'regArmorP2<*>.O',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
-        const piShield = this.add.text(500, 330, 'regShieldP2<*>.0',{
+        const piShield = this.add.text(600, 310, 'regShieldP2<*>.0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
-        const piWmod = this.add.text(650, 630, 'wmodP2<*>.0',{
+        const piWmod = this.add.text(600, 610, 'wmodP2<*>.0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
         if(energy < energyCost){
