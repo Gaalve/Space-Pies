@@ -11,6 +11,7 @@ export class Player {
     private ship : Ship;
     private activatedDrones : number;
     private health : Health;
+    private energy : number;
 
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem){
@@ -44,6 +45,8 @@ export class Player {
         this.health.addToHz(piSystem, 'rarmor', 'z4');
         this.health.addToHz(piSystem, 'rarmor', 'z4');
         this.health.addToHz(piSystem, 'rshield', 'z4');
+
+        this.energy = 10;
 
         if(this.nameIdentifier == "P1"){
             this.system.pushSymbol(this.system.add.channelIn("wmod1","*").process("cD11", () => {
@@ -136,4 +139,18 @@ export class Player {
         return this.system;
     }
 
+    getEnergy() : number
+    {
+        return this.energy;
+    }
+
+    payEnergy(cost: number) : void
+    {
+        this.energy -= cost;
+    }
+
+    gainEnergy(ammount: number) : void
+    {
+        this.energy += ammount;
+    }
 }
