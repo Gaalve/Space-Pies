@@ -65,12 +65,21 @@ export class Turn {
         if (!this.awaitInput) return;
         this.clickable = false;
         this.refScene.scene.sleep('ShopSceneP1');
-        this.refScene.scene.sleep('chooseSceneP1');
-        this.refScene.scene.sleep('chooseTypeSceneP1');
+        if(this.refScene.scene.get("chooseSceneP1").scene.isActive()){
+            this.refScene.scene.sleep('chooseSceneP1');
+        }
+        if(this.refScene.scene.get("chooseTypeSceneP1").scene.isActive()) {
+            this.refScene.scene.sleep('chooseTypeSceneP1');
+        }
+
         if(this.currentRound != 1){
             this.refScene.scene.sleep('ShopSceneP2');
-            this.refScene.scene.sleep('chooseSceneP2');
-            this.refScene.scene.sleep('chooseTypeSceneP2');
+            if(this.refScene.scene.get("chooseSceneP2").scene.isActive()) {
+                this.refScene.scene.sleep('chooseSceneP2');
+            }
+            if(this.refScene.scene.get("chooseTypeSceneP2").scene.isActive()) {
+                this.refScene.scene.sleep('chooseTypeSceneP2');
+            }
         }
 
         //Waffen schießen lassen:
