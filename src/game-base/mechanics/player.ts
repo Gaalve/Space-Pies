@@ -144,9 +144,9 @@ export class Player {
         }
     }
 
-    getPiSystem() : PiSystem
+    /*getPiSystem() : PiSystem
     {
         return this.system;
-    }
+    }*/
 
 }

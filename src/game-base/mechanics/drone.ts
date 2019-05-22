@@ -11,6 +11,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private weapons : [Weapon, Weapon, Weapon];
 	private index : number;
 	private piTerm : string;
+	private simplePi : string;
 	public onScreenText : Phaser.GameObjects.Text;
 	private activatedWeapons: integer;
 
@@ -117,19 +118,22 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	 */
 	buildPiTerm() : void {
 		if(this.visible || this.index == 0) {
-			this.piTerm = "lock(*).";
+			this.piTerm = "lock().";
+			this.simplePi = "lock().";
 
 			for (let w of this.weapons) {
 				if (w.visible) {
-					this.piTerm = this.piTerm + w.getPiTerm() + "<*>.";
+					this.piTerm = this.piTerm + w.getPiTerm() + "<>.";
+					this.simplePi = this.simplePi + w.getSimplePi() + "<>.";
 				}
 			}
 			this.piTerm = this.piTerm + "0";
+			this.simplePi = this.simplePi + "0";
 		}
 	}
 
 	toString() : string{
-		return this.piTerm;
+		return this.simplePi;
 	}
 
 	/**
@@ -137,16 +141,16 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	 */
 	activateOnScreenText() : void{
 		if(this.index != 0) {
-			this.onScreenText = this.scene.add.text(this.x - 30, this.y + 60, this.piTerm, {
+			this.onScreenText = this.scene.add.text(this.x - 30, this.y + 60, this.simplePi, {
 				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
 			});
 		}else {
 			if (this.player.getNameIdentifier() == "P1") {
-				this.onScreenText = this.scene.add.text(this.x - 270, this.y + 100, this.piTerm, {
+				this.onScreenText = this.scene.add.text(this.x - 270, this.y + 100, this.simplePi, {
 					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
 				});
 			} else {
-				this.onScreenText = this.scene.add.text(this.x + 235, this.y + 100, this.piTerm, {
+				this.onScreenText = this.scene.add.text(this.x + 235, this.y + 100, this.simplePi, {
 					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
 				});
 
@@ -160,7 +164,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	refreshes the displayed Pi Term, if any changes (add Weapons) where made
 	 */
 	refreshOnScreenText() : void{
-		this.onScreenText.setText(this.piTerm);
+		this.onScreenText.setText(this.simplePi);
 		//this.onScreenText.setDisplayOrigin(0.5);
 	}
 

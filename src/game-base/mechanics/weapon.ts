@@ -7,6 +7,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	private drone : Drone;						//which drone the weapon belongs to
     private wNr : number;
     private piTerm : string;
+    private simplePi : string;
 
 	public constructor(scene : Phaser.Scene, drone : Drone, texture : string, wClass : string, wNr : number) {
         super(scene, drone.x, drone.y, texture);
@@ -18,6 +19,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
         this.setVisible(false);
         scene.add.existing(this);
 		this.wClass = wClass;
+		this.simplePi = wClass.charAt(0);
 		this.drone = drone;
 		this.wNr = wNr;
 		//this.setScale(0.5);
@@ -66,6 +68,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	}
 	setWeaponClass(wClass : string) : void{
 	    this.wClass = wClass;
+	    this.simplePi = wClass.charAt(0);
         this.createPiTerm();
     }
 
@@ -79,13 +82,19 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	 */
     createPiTerm() : void{
     	if(this.drone.getPlayer().getNameIdentifier() == "P1") {
-			this.piTerm = this.wClass + "P2";
+			this.piTerm = this.wClass + "p2";
+			this.simplePi = this.simplePi + "p2";
 		}else{
-    		this.piTerm = this.wClass + "P1";
+    		this.piTerm = this.wClass + "p1";
+    		this.simplePi = this.simplePi + "p1";
 		}
     }
 
     getPiTerm() : string{
 	    return this.piTerm;
     }
+
+    getSimplePi() : string{
+    	return this.simplePi;
+	}
 }
