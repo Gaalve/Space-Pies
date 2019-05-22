@@ -153,6 +153,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			}
 			this.onScreenText.setAngle(270);
 		}
+		this.onScreenText.setDisplayOrigin(0.5);
 	}
 
 	/**
@@ -160,7 +161,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	 */
 	refreshOnScreenText() : void{
 		this.onScreenText.setText(this.piTerm);
-		this.onScreenText.setOrigin(0.5);
+		//this.onScreenText.setDisplayOrigin(0.5);
 	}
 
 	/**
