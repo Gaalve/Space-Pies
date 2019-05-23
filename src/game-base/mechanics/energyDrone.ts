@@ -80,7 +80,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
     }
 
     toString() : string{
-        return this.piTerm + "<*>.0";
+        return "lock(*)." + this.piTerm + "<*>.0";
     }
 
 
