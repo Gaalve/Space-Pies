@@ -171,4 +171,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			})
 		]))
 	}
+
+	get _onScreenText() : Phaser.GameObjects.Text
+	{
+		return this.onScreenText;
+	}
 }

@@ -22,10 +22,10 @@ export class Health {
         const pid = player.getNameIdentifier();
         // todo: kara animate
         pi.pushSymbol(
-            pi.add.channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
-                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
-                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
-                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
+            pi.add.channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar("hz"+pid)})
+                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar("hz"+pid)})
+                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar("hz"+pid)})
+                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar("hz"+pid)})
                 .process("CoreExplosion"+pid, ()=>{console.log(pid+" lost.")})
         );
         this.shipBar.addBar(HealthType.HitZoneBar);
@@ -43,18 +43,18 @@ export class Health {
     }
 
     private createHitZoneInPiShield(pi: PiSystem, pid:string, hbid: string, zoneBar: Healthbar){
-        let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar("someterm")},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
-        let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar("someterm")},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
         Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
         Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
         Health.addPiHitzoneShield(pi, pid, hbid,()=>{zoneBar.addBar(HealthType.ArmorBar)});
     }
     private createHitZoneInPiArmor(pi: PiSystem, pid:string, hbid: string, zoneBar: Healthbar){
-        let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar("someterm")},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
-        let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar("someterm")},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
         Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
         Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);

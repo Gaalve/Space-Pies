@@ -123,8 +123,8 @@ export class Player {
 
                 this.system.pushSymbol(action);
                 let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
-                let text = animationScene.add.text(drone.getWeapons()[0].getX(), drone.getWeapons()[0].getY(), action.getSymbolSequence().replace("lock(*).", ""));
-                let animation = new Animation(null, animationScene, text.x, text.y, 1920/2, 300, text, 1000);
+                let text = drone.onScreenText;
+                let animation = new Animation(null, animationScene, text.x, text.y, 1920/2, 1080/2, text, 1000);
                 animationScene.addAnimation(animation);
                 // text.x = -1000 + Math.sin(Math.PI/2 )*(1920/2 + 1000);
 
