@@ -178,4 +178,13 @@ export class Player {
     {
         this.energyCost += amount;
     }
+
+    setEnergy(amount: number) : void
+    {
+        this.energy = amount;
+    }
+    resetEnergy() : void
+    {
+        this.energy = 10;
+    }
 }

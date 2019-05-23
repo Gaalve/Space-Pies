@@ -49,10 +49,19 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.system = this.scene.get('MainScene').data.get("system");
         let system = this.system;
 
-        let createShield = (system.add.channelOut('rShieldP2','*' ).nullProcess());
-        let createArmor = (system.add.channelOut('rArmorP2','*' ).nullProcess());
+        let createShield1 = (system.add.channelOut('rshieldp2z1','*' ).nullProcess());
+        let createArmor1 = (system.add.channelOut('rarmorp2z1','*' ).nullProcess());
+        let createShield2 = (system.add.channelOut('rshieldp2z2','*' ).nullProcess());
+        let createArmor2 = (system.add.channelOut('rarmorp2z2','*' ).nullProcess());
+        let createShield3 = (system.add.channelOut('rshieldp2z3','*' ).nullProcess());
+        let createArmor3 = (system.add.channelOut('rarmorp2z3','*' ).nullProcess());
+        let createShield4 = (system.add.channelOut('rshieldp2z4','*' ).nullProcess());
+        let createArmor4 = (system.add.channelOut('rarmorp2z4','*' ).nullProcess());
         let createWExtShipL = (system.add.channelOut('wext20l','*' ).nullProcess());
         let createWExtShipP = (system.add.channelOut('wext20p','*' ).nullProcess());
+        let createWExtShipR = (system.add.channelOut('wext20r','*' ).nullProcess());
+        let createWExtDrone1R = (system.add.channelOut('wext21r','*' ).nullProcess());
+        let createWExtDrone2R = (system.add.channelOut('wext22r','*' ).nullProcess());
         let createWExtDrone1L = (system.add.channelOut('wext21l','*' ).nullProcess());
         let createWExtDrone1P = (system.add.channelOut('wext21p','*' ).nullProcess());
         let createWExtDrone2L = (system.add.channelOut('wext22l','*' ).nullProcess());
@@ -122,17 +131,17 @@ export class ShopSceneP2 extends Phaser.Scene{
             this.armor = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_armor",
                 ()=>{
-                    system.pushSymbol(createArmor);
-                    this.Player2.payEnergy(energyCost)
-                });
+                    this.data.set("type", "armor");
+                    this.scene.run("chooseZoneSceneP2");
+                    this.scene.sleep();                });
             this.armor.setPosition(200, 200);
 
             this.shield = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_shield",
                 ()=>{
-                    system.pushSymbol(createShield);
-                    this.Player2.payEnergy(energyCost)
-                });
+                    this.data.set("type", "shield");
+                    this.scene.run("chooseZoneSceneP2");
+                    this.scene.sleep();                });
             this.shield.setPosition(200, 350);
             this.shieldText = this.add.text(300, 330, "Shield", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
@@ -198,12 +207,17 @@ export class ShopSceneP2 extends Phaser.Scene{
 
 
         let choose = this.scene.get('chooseSceneP2');
+        let zones = this.scene.get('chooseZoneSceneP2');
+
         choose.events.on('shipL', function () {
             system.pushSymbol(createWExtShipL)
         }, this);
 
         choose.events.on('shipP', function () {
             system.pushSymbol(createWExtShipP)
+        }, this);
+        choose.events.on('shipR', function () {
+            system.pushSymbol(createWExtShipR)
         }, this);
         choose.events.on('drone1L', function () {
             system.pushSymbol(createWExtDrone1L)
@@ -216,7 +230,37 @@ export class ShopSceneP2 extends Phaser.Scene{
         }, this);
         choose.events.on('drone2P', function () {
             system.pushSymbol(createWExtDrone2P)
-        }, this)
+        }, this);
+        choose.events.on('drone1R', function () {
+            system.pushSymbol(createWExtDrone1R)
+        }, this);
+        choose.events.on('drone2R', function () {
+            system.pushSymbol(createWExtDrone2R)
+        }, this);
+        zones.events.on("armorZ1", function () {
+            system.pushSymbol(createArmor1);
+        })
+        zones.events.on("shieldZ1", function () {
+            system.pushSymbol(createShield1);
+        })
+        zones.events.on("armorZ2", function () {
+            system.pushSymbol(createArmor2);
+        })
+        zones.events.on("shieldZ2", function () {
+            system.pushSymbol(createShield2);
+        })
+        zones.events.on("armorZ3", function () {
+            system.pushSymbol(createArmor3);
+        })
+        zones.events.on("shieldZ3", function () {
+            system.pushSymbol(createShield3);
+        })
+        zones.events.on("armorZ4", function () {
+            system.pushSymbol(createArmor4);
+        })
+        zones.events.on("shieldZ4", function () {
+            system.pushSymbol(createShield4);
+        })
     }
 
     update(time: number, delta: number): void {
