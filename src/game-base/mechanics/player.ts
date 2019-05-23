@@ -102,6 +102,8 @@ export class Player {
         this.activatedDrones = this.activatedDrones + 1;
         this.drones[index].piTermWExtensions();
         this.drones[index].setVisible(true);
+        this.drones[index].buildPiTerm();
+        this.drones[index].refreshOnScreenText();
 
         if(index == 1){
             if(this.nameIdentifier == "P1"){
