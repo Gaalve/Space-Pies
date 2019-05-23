@@ -16,6 +16,7 @@ export class Turn {
     public first2: boolean;
 
 
+
     constructor(refScene: Phaser.Scene, players: [Player, Player]){
         this.refScene = refScene;
         this.players = players;
@@ -34,6 +35,7 @@ export class Turn {
         this.refScene.data.set('turnAction', 'Create');
         this.refScene.time.delayedCall(0, () => (this.playerInput()), [], this);
         this.refScene.data.set('click', this.clickable);
+
     }
 
     private playerInput():void{
@@ -49,11 +51,16 @@ export class Turn {
         if(this.currentPlayer.getNameIdentifier() == "P1"){
             this.refScene.scene.run( 'ShopSceneP1');
             // system.pushSymbol(startShop)
-          //  system.pushSymbol(system.add.channelOut('shopp1', '*').nullProcess())
+            //  system.pushSymbol(system.add.channelOut('shopp1', '*').nullProcess())
 
+            //  this.player.getSystem().pushSymbol(this.system().add.channelOut('shopp1', '*').nullProcess())
+            // sys.pushSymbol( sys.add.replication
+            // let player1turn = system.add.replication(system.add.channelIn('player1', '*').channelOut('shopp1', '').nullProcess());
+            // sys.pushSymbol( sys.add.replication( [ sys.add.chanIn('player1', '').chanOut('uin1', '')....]));
         }
         else {
             this.refScene.scene.run('ShopSceneP2');
+            //  this.player.getSystem().pushSymbol(this.system().add.channelOut('shopp2', '*').nullProcess())
         }
         this.awaitInput = true; //nächster Spieler
 
