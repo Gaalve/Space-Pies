@@ -24,7 +24,7 @@ export class Background extends Phaser.Scene {
 
     create(): void {
         this.space = new Space(this);
-        this.scene.launch('MainScene')
+        this.scene.launch('StartScene')
     }
 
 
