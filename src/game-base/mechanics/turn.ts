@@ -42,6 +42,7 @@ export class Turn {
         if(this.currentRound != 1){
             this.idx = 1 - this.idx;
             this.currentPlayer = this.players[this.idx];
+            this.currentPlayer.gainEnergy(3);
             this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
 
         }
