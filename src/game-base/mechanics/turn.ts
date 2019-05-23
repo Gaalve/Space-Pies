@@ -42,7 +42,7 @@ export class Turn {
         if(this.currentRound != 1){
             this.idx = 1 - this.idx;
             this.currentPlayer = this.players[this.idx];
-            this.currentPlayer.gainEnergy(3);
+            //this.currentPlayer.gainEnergy(3);
             this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
 
         }
@@ -85,6 +85,7 @@ export class Turn {
 
         //Waffen schießen lassen:
         this.currentPlayer.pushWeapons();
+        this.currentPlayer.pushEnergy();
         this.refScene.data.set('turnAction', 'Battle Phase');
         this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
 

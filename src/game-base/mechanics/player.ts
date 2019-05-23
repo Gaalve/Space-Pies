@@ -7,7 +7,7 @@ export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
     private drones : [Drone, Drone, Drone];
-    private solarDrones: [EnergyDrone, EnergyDrone];
+    private solarDrones: [EnergyDrone, EnergyDrone, EnergyDrone];
     private scene : Phaser.Scene;
     private system : PiSystem;
     private ship : Ship;
@@ -26,9 +26,9 @@ export class Player {
         this.ship = new Ship(scene, x, y, this);
         this.drones = [new Drone(scene, x, y, this, 0), new Drone(scene, x, y, this, 1), new Drone(scene, x, y, this,2 )];
         this.scene = scene;
-        this.solarDrones = [new EnergyDrone(scene, x, y, this, 0), new EnergyDrone(scene, x, y, this, 1)];
+        this.solarDrones = [new EnergyDrone(scene, x, y, this, 0), new EnergyDrone(scene, x, y, this, 1),new EnergyDrone(scene, x, y, this, 2)];
         this.activatedDrones = 1;
-        this.activatedSolarDrones = 0;
+        this.activatedSolarDrones = 1;
         this.drones[0].addWeapon("p");
         this.system = piSystem;
         this.health = new Health(scene, this, piSystem);
@@ -72,13 +72,24 @@ export class Player {
         if(this.nameIdentifier == "P1"){
             this.system.pushSymbol(this.system.add.channelIn("wmod1","*").process("cD11", () => {
                 this.createDrone(1);
-                this.createSolarDrone(0);
             }));
+            this.system.pushSymbol(this.system.add.channelIn("solar1","*").process("cD14", () => {
+                this.createSolarDrone(1);
+            }));
+            this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("renergy1","*").process("cD15", () => {
+                this.gainEnergy(3);
+            })));
+
         }else {
             this.system.pushSymbol(this.system.add.channelIn("wmod2", "*").process("cD21", () => {
                 this.createDrone(1);
-                this.createSolarDrone(0);
             }));
+            this.system.pushSymbol(this.system.add.channelIn("solar2","*").process("cD24", () => {
+                this.createSolarDrone(1);
+            }));
+            this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("renergy2","*").process("cD25", () => {
+                this.gainEnergy(3);
+            })));
         }
 
     }
@@ -131,11 +142,11 @@ export class Player {
         this.activatedSolarDrones += 1;
         this.solarDrones[index].setVisible(true);
 
-        if(index == 0){
+        if(index == 1){
             if(this.nameIdentifier == "P1"){
-                this.system.pushSymbol(this.system.add.channelIn('solar1', '*').process("cD13", ()=>{this.createSolarDrone(1)}));
+                this.system.pushSymbol(this.system.add.channelIn('solar1', '*').process("cD13", ()=>{this.createSolarDrone(2)}));
             }else{
-                this.system.pushSymbol(this.system.add.channelIn('solar2', '*').process("cD23", ()=>{this.createSolarDrone(1)}));
+                this.system.pushSymbol(this.system.add.channelIn('solar2', '*').process("cD23", ()=>{this.createSolarDrone(2)}));
             }
         }
     }
@@ -168,12 +179,35 @@ export class Player {
         this.unlockWeapons();
     }
 
+    pushEnergy(): void{
+        for(let d of this.solarDrones){
+            if(d.getPlayer().getNameIdentifier() == "P1" && (d.visible || d.getIndex() == 0)){
+                this.system.pushSymbol(
+                    this.system.add.channelIn("locks", "*").
+                    channelOut("renergy1", "*").nullProcess())
+            }
+            else if(d.visible|| d.getIndex() == 0){
+                this.system.pushSymbol(
+                    this.system.add.channelIn("locks", "*").
+                    channelOut("renergy2", "*").nullProcess())
+            }
+
+        }
+        this.unlockSolar();
+    }
+
     /**
     unlock the existing weapons in attack phase to deal damage to the opponents hit-points
      */
     unlockWeapons() : void{
         for(let i = 0; i < this.activatedDrones; i++){
             this.system.pushSymbol(this.system.add.channelOut("lock", "*").nullProcess());
+        }
+    }
+
+    unlockSolar() : void{
+        for(let i = 0; i < this.activatedSolarDrones; i++){
+            this.system.pushSymbol(this.system.add.channelOut("locks", "*").nullProcess());
         }
     }
 

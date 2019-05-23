@@ -14,13 +14,13 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
             this.setTexture("ssb_solar_drone");
         }
         //reposition external drones
-        if(index == 0){
+        if(index == 1){
             if(player.getNameIdentifier() == "P1"){
                 this.setPosition(x + 100, y - 400);
             }else{
                 this.setPosition(x - 150, y - 400);
             }
-        }else if(index == 1){
+        }else if(index == 2){
             if(player.getNameIdentifier() == "P1"){
                 this.setPosition(x + 100, y + 400);
             }else{
@@ -57,13 +57,18 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
      */
     buildPiTerm() : void {
         if(this.visible || this.index == 0) {
-            this.piTerm = "lock(*).rEnergy" + this.player.getNameIdentifier() + "<*>.0";
+            this.piTerm = "renergy" + this.player.getNameIdentifier().charAt(1);
         }
     }
 
-    toString() : string{
-        return this.piTerm;
+    getPiTerm() : string{
+        return this.piTerm
     }
+
+    toString() : string{
+        return this.piTerm + "<*>.0";
+    }
+
 
 
 }

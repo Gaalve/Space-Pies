@@ -10,6 +10,7 @@ export class ShopSceneP2 extends Phaser.Scene{
     private skip: Button;
     private wModule: Button;
     private wExt: Button;
+    private solar: Button;
     private shield: Button;
     private armor: Button;
     private background: Phaser.GameObjects.Image;
@@ -25,6 +26,7 @@ export class ShopSceneP2 extends Phaser.Scene{
     private energyCostText2: Phaser.GameObjects.Text;
     private energyCostText3: Phaser.GameObjects.Text;
     private energyCostText4: Phaser.GameObjects.Text;
+    private solarText: Phaser.GameObjects.Text;
 
 
 
@@ -148,7 +150,13 @@ export class ShopSceneP2 extends Phaser.Scene{
 
             this.armorText = this.add.text(300, 180, "Armor", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+            this.solar = new Button(this,1920-600, 900, "button_shadow", "button_bg", "button_fg","button_armor", ()=>{
+                system.pushSymbol(system.add.channelOut("solar2", "*").nullProcess())
 
+
+            });
+            this.solarText = this.add.text(1920-500, 880, "Armor", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         }
 
         this.wExt = new Button(this, 500, 500, "button_shadow",
