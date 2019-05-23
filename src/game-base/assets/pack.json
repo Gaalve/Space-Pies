@@ -153,6 +153,11 @@
       },
       {
         "type": "image",
+        "key": "ssb_ship_on_rot",
+        "url": "assets/sprites/ssb_ship_on_rot.png"
+      },
+      {
+        "type": "image",
         "key": "ssb_weap_las",
         "url": "assets/sprites/ssb_weap_las.png"
       },
