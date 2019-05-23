@@ -27,6 +27,20 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
                 this.setPosition(x - 150, y + 400);
             }
         }
+        else if(index == 3){
+            if(player.getNameIdentifier() == "P1"){
+                this.setPosition(x - 50, y - 450);
+            }else{
+                this.setPosition(x , y - 450);
+            }
+        }
+        else if(index == 4){
+            if(player.getNameIdentifier() == "P1"){
+                this.setPosition(x - 50, y + 450);
+            }else{
+                this.setPosition(x , y + 450);
+            }
+        }
 
         this.player = player;
         this.index = index;

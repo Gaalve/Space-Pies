@@ -36,7 +36,7 @@ export class ChooseZoneSceneP2 extends Phaser.Scene {
         const text1 = this.add.text(160, 50, 'choose hitzone', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
         this.zone1 = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "ssr_weap_las",
+            "button_bg", "button_fg", "sym_zone",
             () => {
                 if(choose.data.get("type") == "armor"){
                     this.events.emit("armorZ1");
@@ -52,7 +52,7 @@ export class ChooseZoneSceneP2 extends Phaser.Scene {
         this.zone1.setPosition(200, 250);
 
         this.zone2 = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "ssr_weap_pro",
+            "button_bg", "button_fg", "sym_zone",
             () => {
                 if(choose.data.get("type") == "armor"){
                     this.events.emit("armorZ2");
@@ -67,7 +67,7 @@ export class ChooseZoneSceneP2 extends Phaser.Scene {
         this.zone2.setPosition(200, 450);
 
         this.zone3 = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "ssr_weap_rock",
+            "button_bg", "button_fg", "sym_zone",
             () => {
                 if(choose.data.get("type") == "armor"){
                     this.events.emit("armorZ3");
@@ -81,7 +81,7 @@ export class ChooseZoneSceneP2 extends Phaser.Scene {
             });
         this.zone3.setPosition(200, 650);
         this.zone4 = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "ssr_weap_rock",
+            "button_bg", "button_fg", "sym_zone",
             () => {
                 if(choose.data.get("type") == "armor"){
                     this.events.emit("armorZ4");

@@ -17,8 +17,11 @@ export class ShopSceneP1 extends Phaser.Scene{
     private armor: Button;
     private background: Phaser.GameObjects.Image;
     private activeWmods: integer = 1;
+    private activeSmods: integer = 1;
     private Player1: Player;
     private firstChoose: boolean;
+    private change: boolean;
+    private change2: boolean;
     private wModText: Phaser.GameObjects.Text;
     private system: PiSystem;
     private energyText: Phaser.GameObjects.Text;
@@ -29,7 +32,7 @@ export class ShopSceneP1 extends Phaser.Scene{
     private energyCostText2: Phaser.GameObjects.Text;
     private energyCostText3: Phaser.GameObjects.Text;
     private energyCostText4: Phaser.GameObjects.Text;
-
+    private energyCostText5: Phaser.GameObjects.Text;
 
 
 
@@ -39,6 +42,9 @@ export class ShopSceneP1 extends Phaser.Scene{
             active: false
         });
         this.firstChoose = true;
+        this.change = true;
+        this.change2 = true;
+
     }
 
     preload(): void{
@@ -80,6 +86,7 @@ export class ShopSceneP1 extends Phaser.Scene{
 
         this.Player1 = this.scene.get('MainScene').data.get('P1');
         this.activeWmods = this.Player1.getNrDrones();
+        this.activeSmods = this.Player1.getNrSolarDrones();
         let energy = this.Player1.getEnergy();
         let energyCost = this.Player1.getEnergyCost();
 
@@ -97,6 +104,7 @@ export class ShopSceneP1 extends Phaser.Scene{
         this.add.image(1920-730,350,"button_energy").setDisplaySize(40,40);
         this.add.image(1920-730,500,"button_energy").setDisplaySize(40,40);
         this.add.image(1920-730,650,"button_energy").setDisplaySize(40,40);
+        this.add.image(1920-730,800,"button_energy").setDisplaySize(40,40);
         this.energyCostText1 = this.add.text(1920-710, 185, " x " +energyCost, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
         this.energyCostText2 = this.add.text(1920-710, 335, " x " +energyCost, {
@@ -104,6 +112,8 @@ export class ShopSceneP1 extends Phaser.Scene{
         this.energyCostText3 = this.add.text(1920-710, 485, " x " +energyCost, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
         this.energyCostText4 = this.add.text(1920-710, 635, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+        this.energyCostText5 = this.add.text(1920-710, 785, " x " +energyCost, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
 
 
@@ -113,6 +123,8 @@ export class ShopSceneP1 extends Phaser.Scene{
         const piShield = this.add.text(1920-200, 310, 'rShieldP1<*>.0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} );
         const piWMod = this.add.text(1920-200, 610, 'wmodP1<*>.0',{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} );
+        const piSMod = this.add.text(1920-200, 765, 'solar1<*>.0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} );
 
         if(energy >= energyCost){
@@ -133,13 +145,6 @@ export class ShopSceneP1 extends Phaser.Scene{
                 this.scene.sleep();
             });
             this.shieldText = this.add.text(1920-500, 330, "Shield", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
-            this.solar = this.setButton(1920-600, 900, "button_armor", ()=>{
-                system.pushSymbol(system.add.channelOut("solar1", "*").nullProcess())
-
-
-            });
-            this.solarText = this.add.text(1920-500, 880, "Armor", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
         }
@@ -196,14 +201,42 @@ export class ShopSceneP1 extends Phaser.Scene{
 
         }
 
+        if(this.activeSmods >= 5 && energy < energyCost){
+            this.solar = this.setButton(1920-600, 800, "button_cancel_red", ()=>{
+
+            });
+
+            if(this.activeSmods >= 5){
+                this.solarText = this.add.text(1920-500, 780, "max reached", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+            }
+            else{
+                this.solarText = this.add.text(1920-500, 780, "not enough energy", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+            }
+
+
+        }
+
+        if(this.activeSmods < 5 && energy >= energyCost){
+            this.solar = this.setButton(1920-600, 800, "ssr_solar_drone", ()=>{
+                system.pushSymbol(system.add.channelOut("solar1", "*").nullProcess());
+                this.Player1.payEnergy(energyCost);
+
+            });
+            this.solarText = this.add.text(1920-500, 780, "Solar drone", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+        }
+
 
         this.skip = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_cancel_black",
             ()=>{
             this.events.emit("skip")
             });
-        this.skip.setPosition(1920-600, 800);
-        const skipText = this.add.text(1920-500, 780, "close", {
+        this.skip.setPosition(1920-600, 950);
+        const skipText = this.add.text(1920-500, 930, "close", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
 
@@ -275,7 +308,10 @@ export class ShopSceneP1 extends Phaser.Scene{
             this.armor.updateStep();
             this.wModule.updateStep();
             this.wExt.updateStep();
+            this.solar.updateStep();
             this.activeWmods = this.Player1.getNrDrones();
+            this.activeSmods = this.Player1.getNrSolarDrones();
+
             let energy = this.Player1.getEnergy();
             let energyCost = this.Player1.getEnergyCost();
             if(energy != old){
@@ -289,6 +325,8 @@ export class ShopSceneP1 extends Phaser.Scene{
                 this.children.remove(this.energyCostText2);
                 this.children.remove(this.energyCostText3);
                 this.children.remove(this.energyCostText4);
+                this.children.remove(this.energyCostText5);
+
                 this.energyCostText1 = this.add.text(1920-710, 185, " x " +energyCost, {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
                 this.energyCostText2 = this.add.text(1920-710, 335, " x " +energyCost, {
@@ -297,10 +335,11 @@ export class ShopSceneP1 extends Phaser.Scene{
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
                 this.energyCostText4 = this.add.text(1920-710, 635, " x " +energyCost, {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
-
+                this.energyCostText5 = this.add.text(1920-710, 785, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
             }
 
-            if(energy < energyCost){
+            if(energy < energyCost && this.change2){
                 this.armor.changeButton(this,1920-600, 200, "button_cancel_red", ()=>{
                 });
                 this.shield.changeButton(this,1920-600, 350, "button_cancel_red", ()=>{
@@ -309,6 +348,27 @@ export class ShopSceneP1 extends Phaser.Scene{
                 this.children.remove(this.armorText);
                 this.shieldText = this.changeText(1920-500, 330, "not enough energy");
                 this.armorText = this.changeText(1920-500, 180, "not enough energy")
+
+                this.change2 = false;
+                //this.changeText()
+            }
+
+            if(energy >= energyCost && !this.change2){
+                this.armor.changeButton(this,1920-600, 200, "button_armor", ()=>{
+                    this.data.set("type", "armor");
+                    this.scene.run("chooseZoneSceneP1");
+                    this.scene.sleep();
+                });
+                this.shield.changeButton(this,1920-600, 350, "button_shield", ()=>{
+                    this.data.set("type", "shield");
+                    this.scene.run("chooseZoneSceneP1");
+                    this.scene.sleep();
+                });
+                this.children.remove(this.shieldText);
+                this.children.remove(this.armorText);
+                this.shieldText = this.changeText(1920-500, 330, "Shield");
+                this.armorText = this.changeText(1920-500, 180, "Armor");
+                this.change2 = true;
 
                 //this.changeText()
             }
@@ -338,8 +398,36 @@ export class ShopSceneP1 extends Phaser.Scene{
                         this.Player1.raiseEnergyCost(1);
                     }
                 );
-                this.children.remove(this.wModText)
+                this.children.remove(this.wModText);
                 this.wModText = this.changeText(1920-500, 630, "Weapon Mod")
+            }
+
+            if(this.activeSmods >= 5 && this.change || energy < energyCost){
+                this.change = false;
+                this.solar.changeButton(this,1920-600, 800, "button_cancel_red", ()=>{
+                });
+                this.children.remove(this.solarText);
+                if(this.activeSmods >= 5){
+                    this.solarText = this.add.text(1920-500, 780, "max Mods reached", {
+                        fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+                }
+                else if(energy < energyCost){
+
+                    this.solarText = this.add.text(1920-500, 780, "not enough energy", {
+                        fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+                }
+            }
+            if(this.activeSmods < 5 && !this.change && energy >= energyCost){
+                this.change = true;
+                this.solar.changeButton(this,1920-600, 800, "ssr_solar_drone", ()=> {
+                        this.system.pushSymbol(this.system.add.channelOut("solar1", "*").nullProcess());
+                        this.Player1.payEnergy(energyCost);
+
+                    }
+                );
+                this.children.remove(this.solarText);
+                this.solarText = this.changeText(1920-500, 780, "Solar drone")
             }
 
             old = energy;
