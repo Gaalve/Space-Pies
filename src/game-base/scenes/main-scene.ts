@@ -36,7 +36,6 @@ export class MainScene extends Phaser.Scene {
 
     create(): void {
         this.system = new PiSystem(this, 1,1,1,true);
-        this.system.start();
         this.data.set("system", this.system);
         this.players = [new Player(this, 280, 540, "P1", true, this.system), new Player(this, 1650, 540, "P2", false, this.system)];
         this.turn = new Turn(this, this.players);
@@ -99,14 +98,30 @@ export class MainScene extends Phaser.Scene {
         );
         this.buttonOption.setPosition(1880, 40);
 
-        /*
-        Weapons in Pi Calculus
-         */
+        //Weapons in Pi Calculus
         for(let i = 1; i<3; i++){
             for(let j = 0; j < 3; j++){
                 this.buildWeaponsPi(i,j);
             }
         }
+        //extra functions to resolve existing channels w1, w2, w3 after attack phase
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w1", "").nullProcess()));
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w2", "").nullProcess()));
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w3", "").nullProcess()));
+
+        //locks for attack phase
+        this.buildLocksPi(1);
+        this.buildLocksPi(2);
+
+        //extra functions to resolve existing channels nolock1, nolock2, nolock3 after attack phase
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock1", "").nullProcess()));
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock2", "").nullProcess()));
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock3", "").nullProcess()));
+
+        //create
+
+
+        this.system.start();
     }
 
 
@@ -120,6 +135,11 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
+    /**
+     * builds all weaponmods and weapons in pi calculus
+     * @param player
+     * @param drone
+     */
     buildWeaponsPi(player : number, drone : number) : void{
         let p = player.toString();
         let d = drone.toString();
@@ -149,6 +169,26 @@ export class MainScene extends Phaser.Scene {
                                                     }).
                                                 channelOut("newlock" + p, "lock" + p).
                                                 next(weapon));
+    }
+
+    buildLocksPi(player : number) : void{
+        let p = player.toString();
+
+        let rlock = this.system.add.term("RLock" + p, undefined);
+        let sum = this.system.add.sum([this.system.add.channelIn("unlock" + p, "").
+                                                channelOut("nolock1", "").
+                                                channelOut("nolock2", "").
+                                                channelOut("nolock3", "").
+                                                channelOut("attackp" + p + "end", "").
+                                                next(rlock),
+                                              this.system.add.channelIn("newlock" + p, "nolock1").
+                                                next(rlock),
+                                              this.system.add.channelIn("newlock" + p, "nolock2").
+                                                next(rlock),
+                                              this.system.add.channelIn("newlock" + p, "nolock3").
+                                                next(rlock)]);
+        rlock.symbol = sum;
+        this.system.pushSymbol(rlock);
     }
 
 }
