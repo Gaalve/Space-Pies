@@ -33,6 +33,8 @@ module.exports = {
     plugins: [
         new CopyPlugin([
             { from: path.resolve(__dirname, 'src/game-base/assets'), to: 'assets' },
+            { from: path.resolve(__dirname, 'media'), to: 'media' },
+            { from: path.resolve(__dirname, 'style.css'), to: 'style.css' },
             { from: path.resolve(__dirname, 'index.html'), to: 'index.html' },
         ]),
     ],
