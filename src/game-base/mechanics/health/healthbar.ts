@@ -45,7 +45,7 @@ export class Healthbar {
     }
 
     public destroyBar(): void{
-        let sprite = this.bars.pop().getSprite();
+        let sprite = this.bars.pop().sprite;
         let bleedingSprite = this.scene.add.sprite(sprite.x, sprite.y, "bleedingbar");
         bleedingSprite.setFrame(0);
         bleedingSprite.anims.animationManager.create({
