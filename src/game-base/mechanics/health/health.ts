@@ -34,7 +34,7 @@ export class Health {
                 .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
                 .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
                 .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
-                .process("CoreExplosion"+pid, ()=>{console.log(pid+" lost.")})
+                .process("CoreExplosion"+pid, ()=>{console.log(pid+" lost."); this.player.ship.explosion()})
         );
         this.shipBar.addBar(HealthType.HitZoneBar);
         this.shipBar.addBar(HealthType.HitZoneBar);
@@ -57,7 +57,7 @@ export class Health {
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)});
         Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
         Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
-        Health.addPiHitzoneShield(pi, pid, hbid,()=>{zoneBar.addBar(HealthType.ArmorBar)});
+        Health.addPiHitzoneShield(pi, pid, hbid,()=>{zoneBar.addBar(HealthType.ShieldBar)});
     }
     private createHitZoneInPiArmor(pi: PiSystem, pid:string, hbid: string, zoneBar: Healthbar){
         let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
