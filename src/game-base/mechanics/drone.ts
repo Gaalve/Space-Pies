@@ -128,28 +128,32 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		}
 	}
 
+	toString() : string{
+		return this.piTerm;
+	}
+
 	/**
 	first activation of displayed text for pi representation of drones
 	 */
 	activateOnScreenText() : void{
 		if(this.index != 0) {
-			this.onScreenText = this.scene.add.text(this.x - 30, this.y + 50, this.piTerm, {
-				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 1
+			this.onScreenText = this.scene.add.text(this.x - 30, this.y + 60, this.piTerm, {
+				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
 			});
 		}else {
 			if (this.player.getNameIdentifier() == "P1") {
 				this.onScreenText = this.scene.add.text(this.x - 270, this.y + 100, this.piTerm, {
-					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 1
+					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
 				});
 			} else {
 				this.onScreenText = this.scene.add.text(this.x + 235, this.y + 100, this.piTerm, {
-					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 1
+					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
 				});
 
 			}
 			this.onScreenText.setAngle(270);
 		}
-		this.onScreenText.setOrigin(0.5);
+		this.onScreenText.setDisplayOrigin(0.5);
 	}
 
 	/**
@@ -157,7 +161,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	 */
 	refreshOnScreenText() : void{
 		this.onScreenText.setText(this.piTerm);
-		this.onScreenText.setOrigin(0.5);
+		//this.onScreenText.setDisplayOrigin(0.5);
 	}
 
 	/**
