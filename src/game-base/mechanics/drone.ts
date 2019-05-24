@@ -60,21 +60,21 @@ export class Drone extends Phaser.GameObjects.Sprite{
      */
     addWeapon(weapon : string) : void{
     	let w = this.weapons[this.getNrWeapons()];
-	    if(weapon == "l"){
+	    if(weapon == "armor"){
 			w.setWeaponClass("armor");
 			if(this.player.getNameIdentifier() == "P1"){
 				w.setTexture("ssr_weap_las");
 			}else{
 				w.setTexture("ssb_weap_las");
 			}
-        }else if(weapon == "p") {
+        }else if(weapon == "shield") {
 			w.setWeaponClass("shield");
 			if(this.player.getNameIdentifier() == "P1"){
 				w.setTexture("ssr_weap_pro");
 			}else{
 				w.setTexture("ssb_weap_pro");
 			}
-        }else if(weapon == "r"){
+        }else if(weapon == "rocket"){
 	    	w.setWeaponClass("rocket");
 			if(this.player.getNameIdentifier() == "P1"){
 				w.setTexture("ssr_weap_rock");

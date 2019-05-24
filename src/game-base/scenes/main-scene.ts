@@ -113,8 +113,9 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w3", "").nullProcess()));
 
         //locks for attack phase
-        this.buildLocksPi(1);
-        this.buildLocksPi(2);
+        for(let i = 1; i < 3; i++){
+            this.buildLocksPi(i);
+        }
 
         //extra functions to resolve existing channels nolock1, nolock2, nolock3 after attack phase
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock1", "").nullProcess()));
@@ -122,8 +123,13 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock3", "").nullProcess()));
 
         //create 1 weapon for each player on ship
-        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext101", "p").nullProcess());
-        this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext201", "p").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext101", "shield").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext201", "shield").nullProcess());
+
+    //#####################Testing
+        this.system.pushSymbol(this.system.add.channelOut("wmod11", "").channelOut("wext111", "armor").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod12", "").channelOut("wext121", "rocket").nullProcess());
+    //#####################Testing
 
 
         this.system.start();
@@ -151,7 +157,7 @@ export class MainScene extends Phaser.Scene {
         let weapon = this.system.add.term("Weapon" + p + d, undefined);
 
         let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
-                                                channelOutCB("w1","", () => {}).
+                                                channelOutCB("w1","", () => {}).        //function for weapon animation
                                                 channelOutCB("w2", "", () => {}).
                                                 channelOutCB("w3", "", () => {}).
                                                 next(weapon),
@@ -172,7 +178,7 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.channelInCB("wmod" + p + d, "", () => {
                                                     this.players[player - 1].createDrone(drone);
                                                     }).
-                                                channelOut("newlock" + p, "lock" + p).
+                                                channelOut("newlock" + p + d, "lock" + p).
                                                 next(weapon));
     }
 
@@ -186,11 +192,11 @@ export class MainScene extends Phaser.Scene {
                                                 channelOut("nolock3", "").
                                                 channelOut("attackp" + p + "end", "").
                                                 next(rlock),
-                                              this.system.add.channelIn("newlock" + p, "nolock1").
+                                              this.system.add.channelIn("newlock" + p + "0", "nolock1").
                                                 next(rlock),
-                                              this.system.add.channelIn("newlock" + p, "nolock2").
+                                              this.system.add.channelIn("newlock" + p + "1", "nolock2").
                                                 next(rlock),
-                                              this.system.add.channelIn("newlock" + p, "nolock3").
+                                              this.system.add.channelIn("newlock" + p + "2", "nolock3").
                                                 next(rlock)]);
         rlock.symbol = sum;
         this.system.pushSymbol(rlock);
