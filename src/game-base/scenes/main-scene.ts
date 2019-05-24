@@ -3,6 +3,8 @@ import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
 
 import {PiSystem} from "../mechanics/picalc/pi-system";
+import {PiTerm} from "../mechanics/picalc/pi-term";
+import {PiSymbol} from "../mechanics/picalc/pi-symbol";
 
 export class MainScene extends Phaser.Scene {
 
@@ -96,6 +98,15 @@ export class MainScene extends Phaser.Scene {
             }
         );
         this.buttonOption.setPosition(1880, 40);
+
+        /*
+        Weapons in Pi Calculus
+         */
+        for(let i = 1; i<3; i++){
+            for(let j = 0; j < 3; j++){
+                this.buildWeaponsPi(i,j);
+            }
+        }
     }
 
 
@@ -109,5 +120,35 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
+    buildWeaponsPi(player : number, drone : number) : void{
+        let p = player.toString();
+        let d = drone.toString();
+        let weapon = this.system.add.term("Weapon" + p + d, undefined);
+
+        let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
+                                                channelOutCB("w1","", () => {}).
+                                                channelOutCB("w2", "", () => {}).
+                                                channelOutCB("w3", "", () => {}).
+                                                next(weapon),
+                                              this.system.add.channelInCB("wext" + p + d + "1", "w1", (wClass) => {
+                                                    this.players[player - 1].getDrones()[drone].addWeapon(wClass);
+                                                    }).
+                                                next(weapon),
+                                              this.system.add.channelInCB("wext" + p + d + "2", "w2", (wClass) => {
+                                                    this.players[player - 1].getDrones()[drone].addWeapon(wClass);
+                                                    }).
+                                                next(weapon),
+                                              this.system.add.channelInCB("wext" + p + d + "3", "w3", (wClass) => {
+                                                    this.players[player - 1].getDrones()[drone].addWeapon(wClass);
+                                                    }).
+                                                next(weapon)]);
+        weapon.symbol = sum;
+
+        this.system.pushSymbol(this.system.add.channelInCB("wmod" + p + d, "", () => {
+                                                    this.players[player - 1].createDrone(drone);
+                                                    }).
+                                                channelOut("newlock" + p, "lock" + p).
+                                                next(weapon));
+    }
 
 }
