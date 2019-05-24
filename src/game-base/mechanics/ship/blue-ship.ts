@@ -13,20 +13,21 @@ export class BlueShip extends BaseShip{
         super(scene, x, y);
 
         this.back = new ShipPart(scene, x, y, "ssbr/ssb_back", "ssbr/ssb_des_back",
-            -200, 200, -200, 200);
+            79, 0, 36, 6);
 
         this.pilot = new ShipPart(scene, x, y, "ssbr/ssb_pilot", "ssbr/ssb_des_pilot",
-            200, 0, 200, 0);
+            -149, 0, -121, 8);
 
         this.wingUp = new ShipPart(scene, x, y, "ssbr/ssb_wing_up", "ssbr/ssb_des_wing_up",
-            200, 0, 200, 0);
+            -19, -112, -20, -92);
 
         this.wingDown = new ShipPart(scene, x, y, "ssbr/ssb_wing_down", "ssbr/ssb_des_wing_down",
-            200, 0, 200, 0);
+            -19, 112, -40, 104);
 
         this.hull = new ShipPart(scene, x, y, "ssbr/ssb_hull", "ssbr/ssb_des_hull",
-            0, 0, 200, 0);
+            -46, 0, -37, 13);
         this.setAllPartPosition();
+        this.toDestroyedShip();
     }
 
 

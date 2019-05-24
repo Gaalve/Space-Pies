@@ -19,7 +19,7 @@ export class Turn {
     constructor(refScene: Phaser.Scene, players: [Player, Player]){
         this.refScene = refScene;
         this.players = players;
-        this.idx = 0;
+        this.idx = 1;
         this.currentPlayer = this.players[this.idx];
         this.clickable = false;
         this.first1 = true;
@@ -36,7 +36,7 @@ export class Turn {
         this.refScene.data.set('click', this.clickable);
     }
 
-    private playerInput():void{
+    public playerInput():void{
         this.clickable = true;
         this.refScene.data.set('round', ""+(++this.currentRound));
         if(this.currentRound != 1){

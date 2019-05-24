@@ -29,9 +29,10 @@ export class Ship extends Phaser.GameObjects.Sprite{
 
         this.posX = x;
         this.posY = y;
-        scene.add.existing(this);
-        this.alpha = 0.5;
-        this.setTintFill(0x00FFFF);
+        // scene.add.existing(this);
+        // this.alpha = 0.5;
+        // this.setTintFill(0xFFFFFF);
+        // this.setTint(0x00FFFF);
         this.pem = scene.add.particles("particle");
         this.pem.setDepth(5);
         this.explosionSmoke = this.pem.createEmitter( {
