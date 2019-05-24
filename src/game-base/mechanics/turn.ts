@@ -48,6 +48,17 @@ export class Turn {
 
         }
 
+        let sys = this.currentPlayer.getPiSystem();
+
+        sys.pushSymbol(
+            sys.add.replication(
+                sys.add.channelIn('player2', '').channelOut('shopp2', '').
+                channelIn('shopp2end', '').channelOut('unlock2', '').
+                channelIn('attack2end', '').channelOut('player1', '').nullProcess()
+            )
+        );
+
+
         if(this.currentPlayer.getNameIdentifier() == "P1"){
             this.refScene.scene.run( 'ShopSceneP1');
             // system.pushSymbol(startShop)
@@ -90,9 +101,10 @@ export class Turn {
         }
 
         //Waffen schießen lassen:
-        this.currentPlayer.pushWeapons();
-        this.refScene.data.set('turnAction', 'Battle Phase');
-        this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
-
+        //this.currentPlayer.pushWeapons();
+        //this.refScene.data.set('turnAction', 'Battle Phase');
+        //this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+        let sys = this.currentPlayer.getPiSystem();
+        sys.pushSymbol(sys.add.channelOut('shop'+this.currentPlayer.getNameIdentifier()+'end', '').nullProcess());
     }
 }

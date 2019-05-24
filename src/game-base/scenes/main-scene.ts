@@ -34,7 +34,7 @@ export class MainScene extends Phaser.Scene {
 
     create(): void {
         this.system = new PiSystem(this, 1,1,1,true);
-        this.system.start();
+
         this.data.set("system", this.system);
         this.players = [new Player(this, 280, 540, "P1", true, this.system), new Player(this, 1650, 540, "P2", false, this.system)];
         this.turn = new Turn(this, this.players);
@@ -96,6 +96,7 @@ export class MainScene extends Phaser.Scene {
             }
         );
         this.buttonOption.setPosition(1880, 40);
+        this.system.start();
     }
 
 
