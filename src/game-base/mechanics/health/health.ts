@@ -3,23 +3,32 @@ import {PiSystem} from "../picalc/pi-system";
 import {Healthbar} from "./healthbar";
 import {PiTerm} from "../picalc/pi-term";
 import {HealthType} from "./health-type";
+import {HealthbarSprites} from "./healthbar-sprites";
 
 export class Health {
     private player: Player;
-    private shipBar: Healthbar;
-    private readonly zone1Bar: Healthbar;
-    private readonly zone2Bar: Healthbar;
-    private readonly zone3Bar: Healthbar;
-    private readonly zone4Bar: Healthbar;
+    public shipBar: Healthbar;
+    public readonly zone1Bar: Healthbar;
+    public readonly zone2Bar: Healthbar;
+    public readonly zone3Bar: Healthbar;
+    public readonly zone4Bar: Healthbar;
+
     public constructor(scene: Phaser.Scene, player: Player, pi: PiSystem){
         this.player = player;
-        this.shipBar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, false, 120);
-        this.zone1Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 170);
-        this.zone2Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 220);
-        this.zone3Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 270);
-        this.zone4Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 320);
-
         const pid = player.getNameIdentifier();
+
+        this.shipBar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, false, 120,
+            "CoreExplosion"+pid, pid);
+        this.zone1Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 170,
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
+        this.zone2Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 220,
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
+        this.zone3Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 270,
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
+        this.zone4Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 320,
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
+
+
         pi.pushSymbol(
             pi.add.channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
                 .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
