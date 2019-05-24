@@ -30,7 +30,6 @@ export class Player {
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0), new EnergyDrone(scene, x, y, this, 1),new EnergyDrone(scene, x, y, this, 2),new EnergyDrone(scene, x, y, this, 3),new EnergyDrone(scene, x, y, this, 4)];
         this.activatedDrones = 0;
         this.activatedSolarDrones = 1;
-        this.drones[0].addWeapon("p");
         this.system = piSystem;
         this.health = new Health(scene, this, piSystem);
 

@@ -122,8 +122,8 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock3", "").nullProcess()));
 
         //create 1 weapon for each player on ship
-        this.system.pushSymbol(this.system.add.channelOut("wmod10","").nullProcess());
-        this.system.pushSymbol(this.system.add.channelOut("wmod20", "").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext101", "p").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext201", "p").nullProcess());
 
 
         this.system.start();
