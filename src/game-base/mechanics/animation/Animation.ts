@@ -1,3 +1,4 @@
+import {Player} from "../player";
 
 export class Animation {
     private _id: String;
@@ -9,7 +10,9 @@ export class Animation {
     private _text: Phaser.GameObjects.Text;
     private _duration: number;
     private _currentTime: number;
-
+    private _player: Player;
+    private _locked : boolean;
+    private _interpolate: boolean;
 
 
 
@@ -53,18 +56,6 @@ export class Animation {
         this._text = value;
     }
 
-    constructor(id: String, animationScene: Phaser.Scene, fromX: number, fromY: number, toX: number, toY: number, text: Phaser.GameObjects.Text, duration: number) {
-        this._id = id;
-        this._animationScene = animationScene;
-        this._fromX = fromX;
-        this._fromY = fromY;
-        this._toX = toX;
-        this._toY = toY;
-        this._text = text;
-        this._duration = duration;
-        this._currentTime = 0;
-    }
-
     get fromX(): number {
         return this._fromX;
     }
@@ -95,5 +86,44 @@ export class Animation {
 
     set currentTime(value: number) {
         this._currentTime = value;
+    }
+
+
+
+    get locked(): boolean {
+        return this._locked;
+    }
+
+    set locked(value: boolean) {
+        this._locked = value;
+    }
+
+    get player(): Player {
+        return this._player;
+    }
+
+    set player(value: Player) {
+        this._player = value;
+    }
+
+    constructor(id: string, animationScene: Phaser.Scene, fromX: number, fromY: number, toX: number, toY: number, text: Phaser.GameObjects.Text, duration: number) {
+        this._animationScene = animationScene;
+        this._fromX = fromX;
+        this._fromY = fromY;
+        this._toX = toX;
+        this._toY = toY;
+        this._text = text;
+        this._duration = duration;
+        this._currentTime = 0;
+        this._id = id;
+        this._locked = false;
+    }
+
+    get interpolate(): boolean {
+        return this._interpolate;
+    }
+
+    set interpolate(value: boolean) {
+        this._interpolate = value;
     }
 }

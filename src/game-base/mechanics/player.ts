@@ -4,6 +4,7 @@ import {Ship} from "./ship";
 import {Health} from "./health/health";
 import {Animation} from "./animation/Animation";
 import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
+import {Weapon} from "./weapon";
 
 export class Player {
     private nameIdentifier: string;
@@ -113,8 +114,6 @@ export class Player {
                     channelOut(drone.getWeapons()[0].getPiTerm(), "*").
                     channelOut(drone.getWeapons()[1].getPiTerm(), "*").nullProcess()
                 );
-                let animationScene = this.scene.scene.get("AnimationScene");
-                animationScene.add.text(drone.getWeapons()[0].getX(), drone.getWeapons()[0].getY(), drone.getWeapons()[0].getPiTerm());
             } else if (drone.getNrWeapons() == 3) {
                 let action = this.system.add.channelIn("lock", "*").
                 channelOut(drone.getWeapons()[0].getPiTerm(), "*").
@@ -122,12 +121,18 @@ export class Player {
                 channelOut(drone.getWeapons()[2].getPiTerm(), "*").nullProcess();
 
                 this.system.pushSymbol(action);
+            }
+            for (let i = 0; i < drone.getWeapons().length; i++)
+            {
+                let weapon = drone.getWeapons()[i];
+                let piTerm =  typeof weapon.getPiTerm() !== 'undefined' ? weapon.getPiTerm() + "<*>" : null;
+                if (piTerm == null) break;
                 let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
-                let text = drone.onScreenText;
-                let animation = new Animation(null, animationScene, text.x, text.y, 1920/2, 1080/2, text, 1000);
+                let text = this.scene.add.text(weapon.x, weapon.y, piTerm);
+                let id = this.isFirstPlayer() ? "1" : "-1";
+                let animation = new Animation(id, animationScene, text.x, text.y, 1920/2-50, 1080/2, text, 1000);
                 animationScene.addAnimation(animation);
                 // text.x = -1000 + Math.sin(Math.PI/2 )*(1920/2 + 1000);
-
             }
         }
         this.unlockWeapons();

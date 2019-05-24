@@ -35,7 +35,7 @@ export class Healthbar {
         let sprite = this.bars.pop().getSprite();
         let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
         let text = this.scene.add.text(sprite.x, sprite.y, piterm.toString());
-        let animation = new Animation(null, animationScene, text.x, text.y, 1920/2, 200, text, 1000);
+        let animation = new Animation(this.direction.toString(10), animationScene, text.x, text.y, 1920/2, 200, text, 1000);
         animationScene.addAnimation(animation);
         let bleedingSprite = this.scene.add.sprite(sprite.x, sprite.y, "bleedingbar");
         bleedingSprite.setFrame(0);

@@ -40,26 +40,61 @@ export class ScenePiAnimation extends Phaser.Scene{
         {
             for (let i = 0; i < this.animations.length; i++)
             {
-               let animation = <Animation> this.animations[i];
+
+                let animation = <Animation> this.animations[i];
                 let deltaX = Math.abs(animation.toX - animation.fromX);
                 let deltaY = Math.abs(animation.toY - animation.fromY);
 
-                    animation.currentTime += delta;
-                    let halfDuration = animation.duration/2;
-                    this.moveSin(animation.fromX, animation.toX, animation.fromY, animation.toY, animation.currentTime/animation.duration, animation.text);
-                    this.scaleSin(20, 50,animation.currentTime/halfDuration, animation.text);
-                    this.colorSin(animation.text.style.color, "#990000", animation.currentTime/animation.duration, animation.text);
+                animation.currentTime += delta;
+                let halfDuration = animation.duration;
+                this.moveSin(animation.fromX, animation.toX, animation.fromY, animation.toY, animation.currentTime/animation.duration, animation.text);
+
+                let fontScale = !animation.locked ? 50 : 30;
+                this.scaleSin(20, 50,animation.currentTime/halfDuration, animation.text);
+
+                let color = !animation.locked ? "#990000" : "#006c9b";
+                this.colorSin(animation.text.style.color, color , animation.currentTime/animation.duration, animation.text);
 
 
-                // this.moveSin(animation.fromX, animation.toX, animation.currentTime/animation.duration, animation.text);
-                // this.scaleSin(50, 30,animation.currentTime/animation.duration, animation.text);
+                let text = animation.text;
+                let player = animation.player;
                 if (animation.currentTime >= animation.duration)
                 {
+                    if(!animation.locked)
+                    {
+                        let fromX = text.x;
+                        let fromY = text.y;
+                        let toXY = this.lockCounterpartXY(animation);
+                        let toX = toXY != null ? toXY.x : 1920/7;
+                        let toY = toXY != null ? toXY.y : 1080/7;
+                        let newAnim = new Animation(animation.id.toString(), this, fromX, fromY, toX, toY, text, 500);
+                        newAnim.locked = true;
+                        this.addAnimation(newAnim);
+                    }
                     this.removeAnimation(animation);
                 }
+
+
             }
         }
 
+    }
+
+    private lockCounterpartXY(animation: Animation) {
+        for (let i = 0; i < this.animations.length; i++)
+        {
+            let anim = this.animations[i];
+            let x, y;
+            if (anim == animation) continue;
+            if (anim.id != animation.id && !anim.locked)
+            {
+                anim.locked = true;
+                x =  anim.text.x - animation.text.width;
+                y =  anim.text.y - animation.text.height;
+                return {x, y};
+            }
+        }
+        return null;
     }
 
     setAnimationRunning(boolean : boolean)
