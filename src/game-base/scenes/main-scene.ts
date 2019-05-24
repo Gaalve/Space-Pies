@@ -127,8 +127,8 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext201", "shield").nullProcess());
 
     //#####################Testing
-        this.system.pushSymbol(this.system.add.channelOut("wmod11", "").channelOut("wext111", "armor").nullProcess());
-        this.system.pushSymbol(this.system.add.channelOut("wmod12", "").channelOut("wext121", "rocket").nullProcess());
+        //this.system.pushSymbol(this.system.add.channelOut("wmod11", "").channelOut("wext111", "armor").nullProcess());
+        //this.system.pushSymbol(this.system.add.channelOut("wmod12", "").channelOut("wext121", "rocket").nullProcess());
     //#####################Testing
 
 
