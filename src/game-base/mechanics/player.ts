@@ -157,6 +157,29 @@ export class Player {
 
     }
 
+    pushEnergy(): void{
+        for(let d of this.solarDrones){
+            if(d.getPlayer().getNameIdentifier() == "P1" && (d.visible || d.getIndex() == 0)){
+                this.system.pushSymbol(
+                    this.system.add.channelIn("locks", "*").
+                    channelOut("renergy1", "*").nullProcess())
+            }
+            else if(d.visible|| d.getIndex() == 0){
+                this.system.pushSymbol(
+                    this.system.add.channelIn("locks", "*").
+                    channelOut("renergy2", "*").nullProcess())
+            }
+
+        }
+        this.unlockSolar();
+    }
+
+    unlockSolar() : void{
+        for(let i = 0; i < this.activatedSolarDrones; i++){
+            this.system.pushSymbol(this.system.add.channelOut("locks", "*").nullProcess());
+        }
+    }
+
     getEnergy() : number
     {
         return this.energy;
