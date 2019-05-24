@@ -66,6 +66,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		}
 
 	}
+
 	setWeaponClass(wClass : string) : void{
 	    this.wClass = wClass;
 	    this.simplePi = wClass.charAt(0);
