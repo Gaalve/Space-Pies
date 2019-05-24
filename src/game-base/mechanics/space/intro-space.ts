@@ -1,7 +1,7 @@
 import Sprite = Phaser.GameObjects.Sprite;
 import {Star} from "./star";
 
-export class Space{
+export class IntroSpace{
 
     private readonly scene: Phaser.Scene;
     private readonly lightLeft: Phaser.GameObjects.Sprite;
@@ -15,6 +15,7 @@ export class Space{
 
     private counter: number;
     private counterLimit: number;
+    private speedModifier: number;
 
 
     public constructor(scene: Phaser.Scene) {
@@ -25,19 +26,18 @@ export class Space{
         this.lightRight.setOrigin(0.5, 0.5);
         this.lightLeft.setTint(0xFF0000);
         this.lightRight.setTint(0x00ccFF);
+        // this.lightLeft.setDepth(2);
+        // this.lightRight.setDepth(2);
         scene.add.existing(this.lightLeft);
         scene.add.existing(this.lightRight);
         this.counter = 0;
-        this.counterLimit = 3;
         this.starLayerBG0 = [];
         this.starLayerBG1 = [];
         this.starLayerBG = [];
         this.starLayerMG = [];
         this.starLayerFG = [];
-        for (let i = 0; i < 1000; i++) { // simulate 900 seconds
-            this.update(0.1);
-        }
     }
+
 
     private static removeFromList(list: any[], item: any): void{
         let idx: number = list.indexOf(item, 0);
@@ -51,18 +51,19 @@ export class Space{
 
     public update(delta: number): void{
         this.counter+=delta;
-        this.updateStepStars(this.starLayerBG0, 0.25, delta);
-        this.updateStepStars(this.starLayerBG1, 0.3, delta);
-        this.updateStepStars(this.starLayerBG, 0.4, delta);
-        this.updateStepStars(this.starLayerMG, 0.6, delta);
-        this.updateStepStars(this.starLayerFG, 0.8, delta);
+        this.updateStepStars(this.starLayerBG0, 0.6, delta);
+        this.updateStepStars(this.starLayerBG1, 0.7, delta);
+        this.updateStepStars(this.starLayerBG, 0.8, delta);
+        this.updateStepStars(this.starLayerMG, 0.9, delta);
+        this.updateStepStars(this.starLayerFG, 1, delta);
 
 
 
-        this.lightLeft.setScale(0.98 + Math.sin(Phaser.Math.DEG_TO_RAD*360*this.counter/this.counterLimit)*0.02);
-        this.lightRight.setScale(0.98 + Math.cos( Phaser.Math.DEG_TO_RAD*360*this.counter/this.counterLimit)*0.02);
+        // this.lightLeft.setScale(0.98 + Math.sin(Phaser.Math.DEG_TO_RAD*360*this.counter/this.counterLimit)*0.02);
+        // this.lightRight.setScale(0.98 + Math.cos( Phaser.Math.DEG_TO_RAD*360*this.counter/this.counterLimit)*0.02);
         if(this.counter >= this.counterLimit){
             this.counter -= this.counterLimit;
+            if(this.counter >= this.counterLimit) this.update(delta);
         }
    }
 
@@ -70,19 +71,22 @@ export class Space{
         this.counterLimit = limit;
    }
 
+   public setSpeedModifier(speed: number){
+        this.speedModifier = speed;
+   }
+
    private updateStepStars(stars: Star[], scale: number, delta: number){
        let remove: Star[] = [];
        for(let idx in stars){
            let star = stars[idx];
-           // star.updateStep();
-           star.update(delta);
+           star.update(delta * this.speedModifier);
            if (star.shouldRemove()) remove.push(star);
        }
 
        for(let idx in remove){
            let star = remove[idx];
            star.destroy();
-           Space.removeFromList(stars, star);
+           IntroSpace.removeFromList(stars, star);
        }
 
        if(this.counter > this.counterLimit){
