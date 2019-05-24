@@ -91,6 +91,6 @@ export abstract class PiAction extends PiResolvable{
 
     trigger(): void {
         super.trigger();
-        this.callback(this.name);
+        this.callback();
     }
 }
