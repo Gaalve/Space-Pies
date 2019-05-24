@@ -53,11 +53,6 @@
       },
       {
         "type": "image",
-        "key": "background_space",
-        "url": "assets/sprites/background_space.png"
-      },
-      {
-        "type": "image",
         "key": "button_armor",
         "url": "assets/sprites/button_armor.png"
       },
@@ -213,11 +208,6 @@
       },
       {
         "type": "image",
-        "key": "weapon",
-        "url": "assets/sprites/weapon.png"
-      },
-      {
-        "type": "image",
         "key": "button_options",
         "url": "assets/sprites/button_options.png"
       },
@@ -236,7 +226,51 @@
         "type": "image",
         "key": "pause_bg",
         "url": "assets/sprites/pause_bg.png"
-
+      },
+      {
+        "type": "image",
+        "key": "energy_icon",
+        "url": "assets/sprites/energy_icon.png"
+      },
+      {
+        "type": "image",
+        "key": "fire_dark",
+        "url": "assets/sprites/fire_dark.png"
+      },
+      {
+        "type": "image",
+        "key": "fire_light",
+        "url": "assets/sprites/fire_light.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_solar_drone",
+        "url": "assets/sprites/ssb_solar_drone.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_solar_drone",
+        "url": "assets/sprites/ssr_solar_drone.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_weap_rock",
+        "url": "assets/sprites/ssb_weap_rock.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_weap_rock",
+        "url": "assets/sprites/ssr_weap_rock.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_nuke_drone",
+        "url": "assets/sprites/ssr_nuke_drone.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_nuke_drone",
+        "url": "assets/sprites/ssb_nuke_drone.png"
       }
     ]
   }

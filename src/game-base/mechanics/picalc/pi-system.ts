@@ -216,14 +216,12 @@ export class PiSystem {
     private addAllResolvablePair(left: PiResolvable, right: PiResolvable): void{
         let actionsLeft = left.getAllActions();
         let actionsRight = right.getAllActions();
-
         for(let leftIdx in actionsLeft){
             let lAction = actionsLeft[leftIdx];
             for (let rightIdx in actionsRight){
                 let rAction = actionsRight[rightIdx];
                 if(lAction.canResolve(rAction)){
                     this.potentiallyResolving.push(new PiResolvingPair(left, lAction, right, rAction));
-                    this.phase2changed = true;
                 }
             }
         }
@@ -239,20 +237,34 @@ export class PiSystem {
      */
     private phaseFindResolvingActions(): void{
         this.logPhase1();
-        this.phase1changed = false;
-        this.deadlock = true;
         let startT = this.scene.time.now;
-        let allResolvables: PiResolvable[] = [];
-        allResolvables = allResolvables.concat(this.curChannelIn, this.curChannelOut, this.curSums, this.curReplications);
-        for (let i = 0; i < allResolvables.length; i++) {
-            for (let j = 0; j < allResolvables.length; j++) {
-                if(i != j){
-                    this.addAllResolvablePair(allResolvables[i], allResolvables[j]);
+        if(this.phase1changed) {
+            this.phase1changed = false;
+            this.deadlock = true;
+
+            this.curChannelIn.forEach(
+                (val1) => {
+                    this.curChannelOut.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+                    this.curSums.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+                    this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
                 }
-            }
+            );
+            this.curChannelOut.forEach(
+                (val1) => {
+                    this.curSums.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+                    this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+                }
+            );
+
+            this.curSums.forEach(
+                (val1, idx1) => {
+                    this.curSums.forEach((val2, idx2) => {if(idx1 != idx2)this.addAllResolvablePair(val1, val2);});
+                    this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+                }
+            );
+
+            this.phase2changed = this.potentiallyResolving.length > 0;
         }
-
-
         let execTime = this.scene.time.now - startT;
         this.scene.time.delayedCall(this.resolveTimeOut - execTime, ()=>{this.phaseResolveActions()}, [], this);
     }

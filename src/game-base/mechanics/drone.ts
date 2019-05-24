@@ -73,7 +73,15 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			}else{
 				w.setTexture("ssb_weap_pro");
 			}
-        }
+        }else if(weapon == "r"){
+	    	w.setWeaponClass("rocket");			//TODO check name
+			if(this.player.getNameIdentifier() == "P1"){
+				w.setTexture("ssr_weap_rock");
+			}else{
+				w.setTexture("ssb_weap_rock");
+			}
+		}
+
 	    w.setVisible(true);
 	    this.buildPiTerm();
 	    this.refreshOnScreenText();
@@ -98,14 +106,14 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	}
 
     /**
-    get number of drone (0: ship, 1 + 2: external drones
+    get number of weapondrone (0: ship, 1: upper weapondrone, 2: lower weapondrone)
      */
     getIndex() : number{
 		return this.index;
 	}
 
 	/**
-	build pi Term that represents the drone and will be displayed on Screen
+	build pi Term that represents the weapondrone and will be displayed on Screen
 	 */
 	buildPiTerm() : void {
 		if(this.visible || this.index == 0) {
@@ -120,28 +128,32 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		}
 	}
 
+	toString() : string{
+		return this.piTerm;
+	}
+
 	/**
 	first activation of displayed text for pi representation of drones
 	 */
 	activateOnScreenText() : void{
 		if(this.index != 0) {
-			this.onScreenText = this.scene.add.text(this.x - 30, this.y + 50, this.piTerm, {
-				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 1
+			this.onScreenText = this.scene.add.text(this.x - 30, this.y + 60, this.piTerm, {
+				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
 			});
 		}else {
 			if (this.player.getNameIdentifier() == "P1") {
 				this.onScreenText = this.scene.add.text(this.x - 270, this.y + 100, this.piTerm, {
-					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 1
+					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
 				});
 			} else {
 				this.onScreenText = this.scene.add.text(this.x + 235, this.y + 100, this.piTerm, {
-					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 1
+					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
 				});
 
 			}
 			this.onScreenText.setAngle(270);
 		}
-		this.onScreenText.setOrigin(0.5);
+		this.onScreenText.setDisplayOrigin(0.5);
 	}
 
 	/**
@@ -149,7 +161,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	 */
 	refreshOnScreenText() : void{
 		this.onScreenText.setText(this.piTerm);
-		this.onScreenText.setOrigin(0.5);
+		//this.onScreenText.setDisplayOrigin(0.5);
 	}
 
 	/**
@@ -161,6 +173,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		let w = this.index.toString();
 		let channel_l : string = "wext" + p + w + "l";
 		let channel_p : string = "wext" + p + w + "p";
+		let channel_r : string = "wext" + p + w + "r";
 
 		this.player.getSystem().pushSymbol(this.player.getSystem().add.sum([
 			this.player.getSystem().add.channelIn(channel_l, "*").process("aWl", () => {
@@ -168,6 +181,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			}),
 			this.player.getSystem().add.channelIn(channel_p, "*").process("aWp", () => {
 				this.addWeapon("p");
+			}),
+			this.player.getSystem().add.channelIn(channel_r, "*").process("aWr", () => {
+				this.addWeapon("r");
 			})
 		]))
 	}

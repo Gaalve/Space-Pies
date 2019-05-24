@@ -1,5 +1,6 @@
 import {Button} from "../mechanics/button";
 import {MainScene} from "./main-scene";
+import {Player} from "../mechanics/player";
 
 export class PauseScene extends Phaser.Scene {
 
@@ -10,6 +11,8 @@ export class PauseScene extends Phaser.Scene {
     private background;
     private buttonResume: Button;
     private buttonReset: Button;
+    private P1: Player;
+    private P2: Player;
 
 
     preload(): void {
@@ -32,6 +35,8 @@ export class PauseScene extends Phaser.Scene {
     create(): void {
 
         this.background = this.add.image(1920/2, 540,"pause_bg");
+        this.P1 = this.scene.get('MainScene').data.get("P1");
+        this.P2 = this.scene.get('MainScene').data.get("P2");
 
         //this.add.image(1920/2, 1080/2, "background_space")
         const titleText = this.add.text(1920/2-50, 200, 'Pause!', {
@@ -42,7 +47,7 @@ export class PauseScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_resume",
             ()=>{
             this.scene.resume("MainScene");
-            this.scene.stop();}
+            this.scene.sleep();}
             //this.scene.setVisible(false,"PauseScene")}
         );
         this.buttonResume.setPosition(1920/2, 1080/2-75);
@@ -55,7 +60,9 @@ export class PauseScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_skip",
             ()=>{
             this.scene.get('MainScene').scene.restart();
-            this.scene.stop();});
+            this.P2.resetEnergy();
+            this.P1.resetEnergy();
+            this.scene.sleep();});
 
         this.buttonReset.setPosition(1920/2, 1080/2+75);
 

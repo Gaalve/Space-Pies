@@ -10,7 +10,7 @@ export class Button{
     private readonly shadow: Phaser.GameObjects.Sprite;
     private readonly bg: Phaser.GameObjects.Sprite;
     private readonly img: Phaser.GameObjects.Sprite;
-    private readonly fg: Phaser.GameObjects.Sprite;
+    private fg: Phaser.GameObjects.Sprite;
 
     //Color Interpolation
     private readonly startColor: Phaser.Display.Color;
@@ -89,5 +89,12 @@ export class Button{
         this.bg.setPosition(x, y);
         this.fg.setPosition(x, y);
         this.img.setPosition(x, y);
+    }
+
+    public changeButton(scene: Phaser.Scene,x: number, y: number, fgTex: string, onClick: Function = ()=>{}): void{
+        scene.children.remove(this.fg)
+        this.fg = new Sprite(scene, x, y, fgTex)
+        scene.add.existing(this.fg);
+        this.onClick = onClick;
     }
 }
