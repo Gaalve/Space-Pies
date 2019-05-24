@@ -276,6 +276,114 @@
         "type": "image",
         "key": "particle",
         "url": "assets/sprites/particle.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_back",
+        "url": "assets/sprites/ssbr/ssb_back.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_des_back",
+        "url": "assets/sprites/ssbr/ssb_des_back.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_des_pilot",
+        "url": "assets/sprites/ssbr/ssb_des_pilot.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_des_wing_down",
+        "url": "assets/sprites/ssbr/ssb_des_wing_down.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_des_wing_up",
+        "url": "assets/sprites/ssbr/ssb_des_wing_up.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_des_hull",
+        "url": "assets/sprites/ssbr/ssb_hull.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_pilot",
+        "url": "assets/sprites/ssbr/ssb_pilot.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_wing_down",
+        "url": "assets/sprites/ssbr/ssb_wing_down.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_wing_up",
+        "url": "assets/sprites/ssbr/ssb_wing_up.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_back_down",
+        "url": "assets/sprites/ssbr/ssr_back_down.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_back_up",
+        "url": "assets/sprites/ssbr/ssr_back_up.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_des_back_down",
+        "url": "assets/sprites/ssbr/ssr_des_back_down.png"
+      },{
+        "type": "image",
+        "key": "ssbr/ssr_des_back_up",
+        "url": "assets/sprites/ssbr/ssr_des_back_up.png"
+      },{
+        "type": "image",
+        "key": "ssbr/ssr_des_hull",
+        "url": "assets/sprites/ssbr/ssr_des_hull.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_des_pilot",
+        "url": "assets/sprites/ssbr/ssr_des_pilot.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_des_wing_down",
+        "url": "assets/sprites/ssbr/ssr_des_wing_down.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_des_wing_up_1",
+        "url": "assets/sprites/ssbr/ssr_des_wing_up_1.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_des_wing_up_2",
+        "url": "assets/sprites/ssbr/ssr_des_wing_up_2.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_hull",
+        "url": "assets/sprites/ssbr/ssr_hull.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_pilot",
+        "url": "assets/sprites/ssbr/ssr_pilot.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_wing_down",
+        "url": "assets/sprites/ssbr/ssr_wing_down.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_wing_up",
+        "url": "assets/sprites/ssbr/ssr_wing_up.png"
       }
     ]
   }
