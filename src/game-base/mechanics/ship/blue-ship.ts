@@ -27,7 +27,7 @@ export class BlueShip extends BaseShip{
         this.hull = new ShipPart(scene, x, y, "ssbr/ssb_hull", "ssbr/ssb_des_hull",
             -46, 0, -37, 13);
         this.setAllPartPosition();
-        this.toDestroyedShip();
+        // this.toDestroyedShip();
     }
 
 
@@ -45,6 +45,26 @@ export class BlueShip extends BaseShip{
         this.wingUp.setPosition(this.posX, this.posY);
         this.wingDown.setPosition(this.posX, this.posY);
         this.hull.setPosition(this.posX, this.posY);
+    }
+
+    toDestroyedBack(): void {
+        this.back.toDestroyedPart();
+    }
+
+    toDestroyedHull(): void {
+        this.hull.toDestroyedPart();
+    }
+
+    toDestroyedPilot(): void {
+        this.pilot.toDestroyedPart();
+    }
+
+    toDestroyedWingDown(): void {
+        this.wingDown.toDestroyedPart();
+    }
+
+    toDestroyedWingUp(): void {
+        this.wingUp.toDestroyedPart();
     }
 
 }

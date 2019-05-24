@@ -20,5 +20,13 @@ export abstract class BaseShip {
         this.setAllPartPosition();
     }
 
+    public abstract toDestroyedBack(): void;
+    public abstract toDestroyedWingUp(): void;
+    public abstract toDestroyedWingDown(): void;
+    public abstract toDestroyedPilot(): void;
+    public abstract toDestroyedHull(): void;
+
     public abstract toDestroyedShip(): void;
+
+    public abstract update(delta: number): void;
 }

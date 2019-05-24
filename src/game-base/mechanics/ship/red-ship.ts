@@ -51,4 +51,24 @@ export class RedShip extends BaseShip{
         this.hull.setPosition(this.posX, this.posY);
     }
 
+    toDestroyedBack(): void {
+        this.backDown.toDestroyedPart();
+        this.backUp.toDestroyedPart();
+    }
+
+    toDestroyedHull(): void {
+        this.hull.toDestroyedPart();
+    }
+
+    toDestroyedPilot(): void {
+        this.pilot.toDestroyedPart();
+    }
+
+    toDestroyedWingDown(): void {
+        this.wingDown.toDestroyedPart();
+    }
+
+    toDestroyedWingUp(): void {
+        this.wingUp.toDestroyedPart();
+    }
 }
