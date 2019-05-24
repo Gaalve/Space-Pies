@@ -94,6 +94,9 @@ export class Player {
 
     }
 
+    public update(delta: number): void{
+        this.ship.update(delta);
+    }
 
     getNameIdentifier(): string{
         return this.nameIdentifier;

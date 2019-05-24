@@ -68,6 +68,10 @@ export class Ship{
         if(this.isRed) this.exploedP1();
     }
 
+    public update(delta: number): void{
+        this.modularShip.update(delta);
+    }
+
     private exploedP1(): void{
         this.scene.time.delayedCall(2000, this.explosion2At, [40, -130, 0.85, 2.4], this);
         this.scene.time.delayedCall(2500, ()=>{this.modularShip.toDestroyedWingUp()}, [], this);

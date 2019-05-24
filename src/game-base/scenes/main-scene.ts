@@ -104,9 +104,10 @@ export class MainScene extends Phaser.Scene {
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
             this.buttonEndTurn.updateStep();
-            this.buttonOption.updateStep()
-
+            this.buttonOption.updateStep();
         }
+        this.players[0].update(delta);
+        this.players[1].update(delta);
     }
 
 

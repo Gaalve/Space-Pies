@@ -11,8 +11,10 @@ export class ShipPart {
     private desOffX: number;
     private desOffY: number;
 
+    private isDestroyed: boolean;
+
     public constructor(scene: Scene, x: number, y: number, normTex: string, desTex: string, offX: number, offY: number,
-                       desOffX: number, desOffY: number){
+                       desOffX: number, desOffY: number, depth: number){
         this.scene = scene;
         this.normal = new Sprite(scene, x, y, normTex);
         this.destroyed = new Sprite(scene, x, y, desTex);
@@ -21,16 +23,29 @@ export class ShipPart {
 
         this.desOffX = desOffX;
         this.desOffY = desOffY;
+
+        this.isDestroyed = false;
+
+        this.normal.setDepth(depth);
+        this.destroyed.setDepth(depth);
+
         this.scene.add.existing(this.normal);
     }
 
     public toDestroyedPart(): void{
         this.normal.destroy();
         this.scene.add.existing(this.destroyed);
+        this.isDestroyed = true;
     }
 
     public setPosition(x: number, y: number): void{
         this.normal.setPosition(x + this.offX, y + this.offY);
         this.destroyed.setPosition(x + this.desOffX, y + this.desOffY);
+    }
+
+    public update(delta: number): void{
+        if(!this.isDestroyed) return;
+        this.destroyed.x += (this.offX *0+ this.desOffX) / 5500 * delta;
+        this.destroyed.y += (this.offY *0+ this.desOffY)/ 5500 * delta;
     }
 }
