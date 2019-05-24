@@ -309,6 +309,11 @@
       },
       {
         "type": "image",
+        "key": "ssbr/ssb_hull",
+        "url": "assets/sprites/ssbr/ssb_hull.png"
+      },
+      {
+        "type": "image",
         "key": "ssbr/ssb_pilot",
         "url": "assets/sprites/ssbr/ssb_pilot.png"
       },

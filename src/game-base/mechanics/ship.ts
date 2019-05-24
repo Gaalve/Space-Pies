@@ -1,6 +1,9 @@
 import {Player} from "./player";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import ParticleEmitter = Phaser.GameObjects.Particles.ParticleEmitter;
+import {BaseShip} from "./ship/base-ship";
+import {RedShip} from "./ship/red-ship";
+import {BlueShip} from "./ship/blue-ship";
 
 
 export class Ship extends Phaser.GameObjects.Sprite{
@@ -13,16 +16,22 @@ export class Ship extends Phaser.GameObjects.Sprite{
     private explosionOrange: Phaser.GameObjects.Particles.ParticleEmitter;
     private explosionYellow: Phaser.GameObjects.Particles.ParticleEmitter;
 
+    private modularShip: BaseShip;
+
     public constructor (scene : Phaser.Scene, x: number, y: number, player : Player){
         if(player.getNameIdentifier() == "P1"){
             super(scene, x, y, "ssr_ship_on");
+            this.modularShip = new RedShip(scene, x, y);
         }else{
             super(scene, x, y, "ssb_ship_on");
+            this.modularShip = new BlueShip(scene, x, y);
         }
 
         this.posX = x;
         this.posY = y;
         scene.add.existing(this);
+        this.alpha = 0.5;
+        this.setTintFill(0x00FFFF);
         this.pem = scene.add.particles("particle");
         this.pem.setDepth(5);
         this.explosionSmoke = this.pem.createEmitter( {
