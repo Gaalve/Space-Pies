@@ -10,7 +10,8 @@ export class ScenePiAnimation extends Phaser.Scene{
     private firstChoose: boolean;
     private system: PiSystem;
     private animationRunning: boolean;
-    private animations: Array<Animation>;
+    private queuedAnimations: Array<Animation>;
+    private finishedAnimations: Array<Animation>;
 
     constructor(){
         super({
@@ -18,7 +19,8 @@ export class ScenePiAnimation extends Phaser.Scene{
             active: false
         });
         this.firstChoose = true;
-        this.animations = new Array<Animation>();
+        this.queuedAnimations = new Array<Animation>();
+        this.finishedAnimations = new Array<Animation>();
     }
 
     preload(): void{
@@ -36,54 +38,63 @@ export class ScenePiAnimation extends Phaser.Scene{
     }
 
     update(time: number, delta: number): void {
-        if (this.animations.length > 0)
+        if (this.queuedAnimations.length > 0)
         {
-            for (let i = 0; i < this.animations.length; i++)
+            for (let i = 0; i < 1; i++)
             {
 
-                let animation = <Animation> this.animations[i];
+                let animation = <Animation> this.queuedAnimations[i];
                 let deltaX = Math.abs(animation.toX - animation.fromX);
                 let deltaY = Math.abs(animation.toY - animation.fromY);
 
                 animation.currentTime += delta;
                 let halfDuration = animation.duration;
-                this.moveSin(animation.fromX, animation.toX, animation.fromY, animation.toY, animation.currentTime/animation.duration, animation.text);
 
-                let fontScale = !animation.locked ? 50 : 30;
-                this.scaleSin(20, 50,animation.currentTime/halfDuration, animation.text);
-
-                let color = !animation.locked ? "#990000" : "#006c9b";
-                this.colorSin(animation.text.style.color, color , animation.currentTime/animation.duration, animation.text);
-
-
-                let text = animation.text;
-                let player = animation.player;
-                if (animation.currentTime >= animation.duration)
+                if (animation.move)
                 {
-                    if(!animation.locked)
-                    {
-                        let fromX = text.x;
-                        let fromY = text.y;
-                        let toXY = this.lockCounterpartXY(animation);
-                        let toX = toXY != null ? toXY.x : 1920/7;
-                        let toY = toXY != null ? toXY.y : 1080/7;
-                        let newAnim = new Animation(animation.id.toString(), this, fromX, fromY, toX, toY, text, 500);
-                        newAnim.locked = true;
-                        this.addAnimation(newAnim);
-                    }
-                    this.removeAnimation(animation);
+                    this.moveSin(animation.fromX, animation.toX, animation.fromY, animation.toY, animation.currentTime / animation.duration, animation.text);
+                }
+
+                if (animation.scaleFont)
+                {
+                    let fontScale = !animation.locked ? 50 : 30;
+                    this.scaleSin(20, 50, animation.currentTime / halfDuration, animation.text);
+                }
+                if (animation.interpolate)
+                {
+                    let color = !animation.locked ? "#990000" : "#006c9b";
+                    this.colorSin(animation.text.style.color, color , animation.currentTime/animation.duration, animation.text);
                 }
 
 
+                let text = animation.text;
+                if (animation.currentTime >= animation.duration)
+                {
+                    animation.finished = true;
+                    let finishedAnimation = this.queuedAnimations.shift();
+                    this.finishedAnimations.push(finishedAnimation);
+                    // // if(!animation.locked)
+                    // // {
+                    // //     let fromX = text.x;
+                    // //     let fromY = text.y;
+                    // //     let toXY = this.lockCounterpartXY(animation);
+                    // //     let toX = toXY != null ? toXY.x : 1920/7;
+                    // //     let toY = toXY != null ? toXY.y : 1080/7;
+                    // //     let newAnim = new Animation(animation.id.toString(), this, fromX, fromY, toX, toY, text, 500);
+                    // //     newAnim.locked = true;
+                    // //     this.addAnimation(newAnim);
+                    // // }
+                    // this.removeAnimation(animation);
+                }
             }
         }
 
     }
 
     private lockCounterpartXY(animation: Animation) {
-        for (let i = 0; i < this.animations.length; i++)
+        for (let i = 0; i < this.finishedAnimations.length; i++)
         {
-            let anim = this.animations[i];
+            let anim = this.finishedAnimations[i];
             let x, y;
             if (anim == animation) continue;
             if (anim.id != animation.id && !anim.locked)
@@ -104,23 +115,24 @@ export class ScenePiAnimation extends Phaser.Scene{
 
     public addAnimation(animation: Animation)
     {
-        for (let i = 0 ; i < this.animations.length; i++)
+        for (let i = 0 ; i < this.queuedAnimations.length; i++)
         {
-            if (animation.toY >= this.animations[i].toY - this.animations[i].text.height && animation.toY <= this.animations[i].toY + this.animations[i].text.height)
+            // ADJUST XY SO IT DOESN'T OVERLAP WITH OTHER TEXTS
+            if (animation.toY >= this.queuedAnimations[i].toY - this.queuedAnimations[i].text.height && animation.toY <= this.queuedAnimations[i].toY + this.queuedAnimations[i].text.height)
             {
                 animation.toY += animation.text.height;
             }
         }
-        this.animations.push(animation);
+        this.queuedAnimations.push(animation);
     }
 
-    public removeAnimation(animation: Animation)
-    {
-        for (let i = 0; i < this.animations.length; i++)
-            if (this.animations[i] == animation)
-                this.animations.splice(i, 1);
-
-    }
+    // public removeAnimation(animation: Animation)
+    // {
+    //     for (let i = 0; i < this.animations.length; i++)
+    //         if (this.animations[i] == animation)
+    //             this.animations.splice(i, 1);
+    //
+    // }
 
     private moveCos(fromX: number, toX: number, fromY: number, toY: number, delta:number, text: Phaser.GameObjects.Text){
         text.x = toX - Math.cos(delta*Math.PI/2 )*(toX - fromX);

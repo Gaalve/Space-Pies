@@ -10,9 +10,11 @@ export class Animation {
     private _text: Phaser.GameObjects.Text;
     private _duration: number;
     private _currentTime: number;
-    private _player: Player;
+    private _finished: boolean;
     private _locked : boolean;
     private _interpolate: boolean;
+    private _move: boolean;
+    private _scaleFont: boolean;
 
 
 
@@ -98,14 +100,6 @@ export class Animation {
         this._locked = value;
     }
 
-    get player(): Player {
-        return this._player;
-    }
-
-    set player(value: Player) {
-        this._player = value;
-    }
-
     constructor(id: string, animationScene: Phaser.Scene, fromX: number, fromY: number, toX: number, toY: number, text: Phaser.GameObjects.Text, duration: number) {
         this._animationScene = animationScene;
         this._fromX = fromX;
@@ -125,5 +119,29 @@ export class Animation {
 
     set interpolate(value: boolean) {
         this._interpolate = value;
+    }
+
+    get move(): boolean {
+        return this._move;
+    }
+
+    set move(value: boolean) {
+        this._move = value;
+    }
+
+    get scaleFont(): boolean {
+        return this._scaleFont;
+    }
+
+    set scaleFont(value: boolean) {
+        this._scaleFont = value;
+    }
+
+    get finished(): boolean {
+        return this._finished;
+    }
+
+    set finished(value: boolean) {
+        this._finished = value;
     }
 }

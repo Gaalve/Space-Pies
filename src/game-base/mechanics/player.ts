@@ -130,7 +130,10 @@ export class Player {
                 let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
                 let text = this.scene.add.text(weapon.x, weapon.y, piTerm);
                 let id = this.isFirstPlayer() ? "1" : "-1";
-                let animation = new Animation(id, animationScene, text.x, text.y, 1920/2-50, 1080/2, text, 1000);
+                let animation = new Animation(id, animationScene, text.x, text.y, 1920/2-50, 1080/2, text, 500  );
+                animation.move = true;
+                animation.interpolate = true;
+                animation.scaleFont = true;
                 animationScene.addAnimation(animation);
                 // text.x = -1000 + Math.sin(Math.PI/2 )*(1920/2 + 1000);
             }
