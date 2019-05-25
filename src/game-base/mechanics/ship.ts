@@ -8,9 +8,9 @@ export class Ship extends Phaser.GameObjects.Sprite{
 
     public constructor (scene : Phaser.Scene, x: number, y: number, player : Player){
         if(player.getNameIdentifier() == "P1"){
-            super(scene, x, y, "ssr_ship_on");
+            super(scene, x, y, 'atlas',  "ssr_ship_on");
         }else{
-            super(scene, x, y, "ssb_ship_on");
+            super(scene, x, y,'atlas',  "ssb_ship_on");
         }
 
         this.posX = x;

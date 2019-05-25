@@ -1,4 +1,3 @@
-import {Space} from "../mechanics/space/space";
 import {SubSceneManager} from "../mechanics/intro/sub-scene-manager";
 import Text = Phaser.GameObjects.Text;
 
@@ -14,11 +13,12 @@ export class Intro extends Phaser.Scene {
     }
 
     preload(): void {
-        this.load.pack(
-            "preload",
-            "assets/pack.json",
-            "preload"
-        )
+        this.load.atlas('atlas', 'assets/atlas/pack.png', 'assets/atlas/pack.json');
+        // this.load.pack(
+        //     "preload",
+        //     "assets/pack.json",
+        //     "preload"
+        // )
     }
 
     private fadeText(): void{

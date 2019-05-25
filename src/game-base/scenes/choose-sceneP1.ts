@@ -39,11 +39,11 @@ export class chooseSceneP1 extends Phaser.Scene{
     }
 
     preload(): void{
-        this.load.pack(
-            "preload",
-            "assets/pack.json",
-            "preload"
-        )
+        // this.load.pack(
+        //     "preload",
+        //     "assets/pack.json",
+        //     "preload"
+        // )
     }
 
     create(): void{
@@ -69,19 +69,19 @@ export class chooseSceneP1 extends Phaser.Scene{
         }
 
 
-        this.background = this.add.image(1120, 540,"shop_bg");
+        this.background = this.add.image(1120, 540,'atlas', "shop_bg");
         this.background.setOrigin(0,0.5);
         this.background.setTint(0x782121);
         const text = this.add.text(1920-650, 50, 'choose Weapon Mod', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
 
-        this.add.image(1920-120,40,"button_energy");
+        this.add.image(1920-120,40,'atlas', "button_energy");
         this.energyText = this.add.text(1920-100, 10, " : " +energy, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
-        this.add.image(1920-730,250,"button_energy").setDisplaySize(40,40);
-        this.add.image(1920-730,450,"button_energy").setDisplaySize(40,40);
-        this.add.image(1920-730,650,"button_energy").setDisplaySize(40,40);
+        this.add.image(1920-730,250,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(1920-730,450,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(1920-730,650,'atlas', "button_energy").setDisplaySize(40,40);
         this.energyCostText1 = this.add.text(1920-710, 235, " x " +energyCost, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
         this.energyCostText2 = this.add.text(1920-710, 435, " x " +energyCost, {

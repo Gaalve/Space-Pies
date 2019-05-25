@@ -48,11 +48,11 @@ export class ShopSceneP1 extends Phaser.Scene{
     }
 
     preload(): void{
-        this.load.pack(
-            "preload",
-            "assets/pack.json",
-            "preload"
-        )
+        // this.load.pack(
+        //     "preload",
+        //     "assets/pack.json",
+        //     "preload"
+        // )
     }
 
     create(): void{
@@ -90,21 +90,21 @@ export class ShopSceneP1 extends Phaser.Scene{
         let energy = this.Player1.getEnergy();
         let energyCost = this.Player1.getEnergyCost();
 
-        this.background = this.add.image(1120, 540,"shop_bg");
+        this.background = this.add.image(1120, 540,'atlas', "shop_bg");
         this.background.setOrigin(0,0.5);
         this.background.setTint(0x782121);
         const text1 = this.add.text(1920-650, 50, 'choose action', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
-        this.add.image(1920-120,40,"button_energy");
+        this.add.image(1920-120,40,'atlas', "button_energy");
         this.energyText = this.add.text(1920-100, 10, " : " +energy, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
 
-        this.add.image(1920-730,200,"button_energy").setDisplaySize(40,40);
-        this.add.image(1920-730,350,"button_energy").setDisplaySize(40,40);
-        this.add.image(1920-730,500,"button_energy").setDisplaySize(40,40);
-        this.add.image(1920-730,650,"button_energy").setDisplaySize(40,40);
-        this.add.image(1920-730,800,"button_energy").setDisplaySize(40,40);
+        this.add.image(1920-730,200,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(1920-730,350,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(1920-730,500,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(1920-730,650,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(1920-730,800,'atlas', "button_energy").setDisplaySize(40,40);
         this.energyCostText1 = this.add.text(1920-710, 185, " x " +energyCost, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
         this.energyCostText2 = this.add.text(1920-710, 335, " x " +energyCost, {

@@ -22,10 +22,10 @@ export class Button{
                        bgText: string, imgTex: string, fgTex: string,
                        onClick: Function = ()=>{}) {
         this.scale = 0.95;
-        this.shadow = new Sprite(scene, x, y, shadowTex);
-        this.bg = new Sprite(scene, x, y, bgText);
-        this.img = new Sprite(scene, x, y, imgTex);
-        this.fg = new Sprite(scene, x, y, fgTex);
+        this.shadow = new Sprite(scene, x, y, 'atlas',shadowTex);
+        this.bg = new Sprite(scene, x, y, 'atlas',bgText);
+        this.img = new Sprite(scene, x, y, 'atlas',imgTex);
+        this.fg = new Sprite(scene, x, y, 'atlas',fgTex);
         this.shadow.setOrigin(0.5, 0.5);
         this.bg.setOrigin(0.5, 0.5);
         this.img.setOrigin(0.5, 0.5);

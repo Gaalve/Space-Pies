@@ -23,7 +23,7 @@ export class SpacePiesScene extends SubScene{
         this.subText.setOrigin(0.5, 0.5);
         this.subText.setDepth(1);
 
-        this.logo = new Sprite(scene, -1920/2, 1080/2-200, 'logo_space_pies');
+        this.logo = new Sprite(scene, -1920/2, 1080/2-200, 'atlas', 'logo_space_pies');
         this.logo.setDepth(1);
     }
 

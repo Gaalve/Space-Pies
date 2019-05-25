@@ -8,7 +8,7 @@ export class PWeapon extends Weapon{
 		super(scene, drone, "ssr_weap_pro", "armor", wNr);
 
 		if(drone.getPlayer().getNameIdentifier() == "P2"){
-			this.setTexture("ssb_weap_pro");
+			this.setTexture('atlas', "ssb_weap_pro");
 		}
 
 		scene.add.existing(this);

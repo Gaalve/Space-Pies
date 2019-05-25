@@ -8,7 +8,7 @@ export class LWeapon extends Weapon{
 		super(scene, drone, "ssr_weap_las", "shield", wNr);
 
 		if(drone.getPlayer().getNameIdentifier() == "P2"){
-			this.setTexture("ssb_weap_las");
+			this.setTexture('atlas', "ssb_weap_las");
 		}
 
 		scene.add.existing(this);

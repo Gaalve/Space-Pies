@@ -9,9 +9,9 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
     public onScreenText : Phaser.GameObjects.Text;
 
     public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
-        super(scene, x, y, "ssr_solar_drone");
+        super(scene, x, y, 'atlas', "ssr_solar_drone");
         if(player.getNameIdentifier() == "P2"){
-            this.setTexture("ssb_solar_drone");
+            this.setTexture('atlas', "ssb_solar_drone");
         }
         //reposition external drones
         if(index == 1){

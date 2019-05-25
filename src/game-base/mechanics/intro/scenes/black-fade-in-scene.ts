@@ -6,7 +6,7 @@ export class BlackFadeInScene extends SubScene{
     sprite: Sprite;
     constructor(scene: Phaser.Scene) {
         super(scene, 0, 0.3, 1);
-        this.sprite = new Sprite(scene, 1920/2, 1080/2, 'button_bg');
+        this.sprite = new Sprite(scene, 1920/2, 1080/2, 'atlas', 'button_bg');
         this.sprite.setDepth(1);
         this.sprite.setScale(500);
         this.sprite.setTintFill(0x220b28);

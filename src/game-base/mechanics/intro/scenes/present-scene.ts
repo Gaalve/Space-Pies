@@ -10,7 +10,7 @@ export class PresentScene extends SubScene{
 
     constructor(scene: Phaser.Scene) {
         super(scene, 2, 2, 5);
-        this.logo = new Sprite(scene, 1920/2, 1080/2, "logo");
+        this.logo = new Sprite(scene, 1920/2, 1080/2, 'atlas', "logo");
         this.text = new Text(scene, 1920/2, 1080/2 + 200, "Presents", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 112, fontStyle: 'bold', strokeThickness: 2});
         this.text.setShadow(0,6,'#000', 10);

@@ -19,15 +19,15 @@ export class ChooseZoneSceneP2 extends Phaser.Scene {
     }
 
     preload(): void {
-        this.load.pack(
-            "preload",
-            "assets/pack.json",
-            "preload"
-        )
+        // this.load.pack(
+        //     "preload",
+        //     "assets/pack.json",
+        //     "preload"
+        // )
     }
 
     create(): void {
-        this.background = this.add.image(0, 540,"shop_bg");
+        this.background = this.add.image(0, 540,'atlas', "shop_bg");
         this.background.setOrigin(0, 0.5);
         this.background.setFlipX(true);
         this.background.setTint(0x214478);

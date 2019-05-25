@@ -20,8 +20,8 @@ export class IntroSpace{
 
     public constructor(scene: Phaser.Scene) {
         this.scene = scene;
-        this.lightLeft = new Sprite(scene, 0, 540, "big_oval_light");
-        this.lightRight = new Sprite(scene, 1920, 540, "big_oval_light");
+        this.lightLeft = new Sprite(scene, 0, 540, 'atlas',"big_oval_light");
+        this.lightRight = new Sprite(scene, 1920, 540, 'atlas',"big_oval_light");
         this.lightLeft.setOrigin(0.5, 0.5);
         this.lightRight.setOrigin(0.5, 0.5);
         this.lightLeft.setTint(0xFF0000);

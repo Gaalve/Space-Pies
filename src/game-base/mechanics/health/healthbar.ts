@@ -23,7 +23,7 @@ export class Healthbar {
         this.bars = [];
         this.direction = direction;
         this.position = direction == 1 ? 10 + 50 : 1920 - 10 - 50;
-        this.symbol = new Sprite(scene, this.position - 30 * direction, this.y, isHitZone ? "sym_zone" : "sym_core");
+        this.symbol = new Sprite(scene, this.position - 30 * direction, this.y,'atlas',  isHitZone ? "sym_zone" : "sym_core");
         this.symbol.setOrigin(0.5,0.5);
         this.scene.add.existing(this.symbol);
         this.lastPiSymbolString = lastPiSymbolString;

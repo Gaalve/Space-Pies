@@ -19,7 +19,7 @@ export class FadeScene extends Phaser.Scene {
 
 
     create(data: {shut: string, start: string}): void {
-        this.sprite = new Sprite(this, 1920/2, 1080/2, 'button_bg');
+        this.sprite = new Sprite(this, 1920/2, 1080/2, 'atlas', 'button_bg');
         this.sprite.setScale(500);
         this.sprite.setTint(0x000000);
         this.add.existing(this.sprite);

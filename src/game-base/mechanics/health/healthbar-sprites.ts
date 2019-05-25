@@ -6,7 +6,7 @@ export class HealthbarSprites {
     private readonly type: HealthType;
     private readonly pid: string;
     public constructor(scene: Phaser.Scene, type: HealthType, x: number, y: number, pid: string){
-        this.sprite = new Sprite(scene, x, y, HealthbarSprites.getTexture(type));
+        this.sprite = new Sprite(scene, x, y, 'atlas',  HealthbarSprites.getTexture(type));
         this.type = type;
         this.pid = pid;
         scene.add.existing(this.sprite);

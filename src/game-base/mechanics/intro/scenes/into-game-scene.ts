@@ -17,11 +17,11 @@ export class IntoGameScene extends SubScene{
         super(scene, 2, 0, 2);
         this.skipInTransition = false;
         this.skipOutTransition = true;
-        this.planet = new Sprite(scene, -1000, 540, "intro_planet");
-        this.blue = new Sprite(scene, -1000, 540, "ssb_ship_on");
-        this.red = new Sprite(scene, -1000, 540, "ssr_ship_on");
-        this.tbs = new Sprite(scene, -1000, 540, "intro_textbox_scream_big");
-        this.tbn = new Sprite(scene, -1000, 540, "intro_textbox_normal");
+        this.planet = new Sprite(scene, -1000, 540, 'atlas', "intro_planet");
+        this.blue = new Sprite(scene, -1000, 540, 'atlas', "ssb_ship_on");
+        this.red = new Sprite(scene, -1000, 540, 'atlas', "ssr_ship_on");
+        this.tbs = new Sprite(scene, -1000, 540, 'atlas', "intro_textbox_scream_big");
+        this.tbn = new Sprite(scene, -1000, 540, 'atlas', "intro_textbox_normal");
 
         this.text = new Text(scene, -1920/2, 1080/2 + 200, "Na warte! Dafür wirst\ndu noch bezahlen...", {
             fill: '#222', fontFamily: '"Roboto"', fontSize: 38, fontStyle: 'bold', strokeThickness: 2,

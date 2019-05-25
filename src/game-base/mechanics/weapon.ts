@@ -9,7 +9,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     private piTerm : string;
 
 	public constructor(scene : Phaser.Scene, drone : Drone, texture : string, wClass : string, wNr : number) {
-        super(scene, drone.x, drone.y, texture);
+        super(scene, drone.x, drone.y, 'atlas',  texture);
 		if (drone.getPlayer().getNameIdentifier() == "P1") {
             this.setX(drone.x + 70);
         }else{

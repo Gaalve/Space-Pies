@@ -42,16 +42,16 @@ export class chooseSceneP2 extends Phaser.Scene{
     }
 
     preload(): void{
-        this.load.pack(
-            "preload",
-            "assets/pack.json",
-            "preload"
-        )
+        // this.load.pack(
+        //     "preload",
+        //     "assets/pack.json",
+        //     "preload"
+        // )
     }
 
     create(): void{
 
-        this.background = this.add.image(0, 540,"shop_bg");
+        this.background = this.add.image(0, 540,'atlas', "shop_bg");
         this.background.setOrigin(0, 0.5);
         this.background.setFlipX(true);
         this.background.setTint(0x214478);
@@ -62,11 +62,11 @@ export class chooseSceneP2 extends Phaser.Scene{
         this.Player2 = this.scene.get('MainScene').data.get('P2');
         let energy = this.Player2.getEnergy();
         let energyCost = this.Player2.getEnergyCost();
-        this.add.image(50,40,"button_energy");
+        this.add.image(50,40,'atlas', "button_energy");
 
-        this.add.image(70,250,"button_energy").setDisplaySize(40,40);
-        this.add.image(70,450,"button_energy").setDisplaySize(40,40);
-        this.add.image(70,650,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,250,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(70,450,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(70,650,'atlas', "button_energy").setDisplaySize(40,40);
         this.energyCostText1 = this.add.text(90, 235, " x " +energyCost, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
         this.energyCostText2 = this.add.text(90, 435, " x " +energyCost, {

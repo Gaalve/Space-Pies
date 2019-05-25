@@ -9,7 +9,7 @@ export class Star {
     public constructor(scene: Phaser.Scene, scale: number, x: number){
         this.scale = scale;
         this.lastX = x;
-        this.starSprite = new Phaser.GameObjects.Sprite(scene, x, Math.random()*1120-40, "star");
+        this.starSprite = new Phaser.GameObjects.Sprite(scene, x, Math.random()*1120-40, 'atlas',"star");
         this.starSprite.setOrigin(0.5, 0.5);
         this.starSprite.setScale(scale);
         scene.add.existing(this.starSprite);

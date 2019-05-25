@@ -15,9 +15,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private activatedWeapons: integer;
 
 	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
-		super(scene, x, y, "ssr_wmod");
+		super(scene, x, y, 'atlas', "ssr_wmod");
 	    if(player.getNameIdentifier() == "P2"){
-	    	this.setTexture("ssb_wmod");
+	    	this.setTexture('atlas', "ssb_wmod");
 		}
 	    //reposition external drones
 	    if(index == 1){
@@ -62,23 +62,23 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    if(weapon == "l"){
 			w.setWeaponClass("shield");
 			if(this.player.getNameIdentifier() == "P1"){
-				w.setTexture("ssr_weap_las");
+				w.setTexture('atlas', "ssr_weap_las");
 			}else{
-				w.setTexture("ssb_weap_las");
+				w.setTexture('atlas', "ssb_weap_las");
 			}
         }else if(weapon == "p") {
 			w.setWeaponClass("armor");
 			if(this.player.getNameIdentifier() == "P1"){
-				w.setTexture("ssr_weap_pro");
+				w.setTexture('atlas', "ssr_weap_pro");
 			}else{
-				w.setTexture("ssb_weap_pro");
+				w.setTexture('atlas', "ssb_weap_pro");
 			}
         }else if(weapon == "r"){
 	    	w.setWeaponClass("rocket");			//TODO check name
 			if(this.player.getNameIdentifier() == "P1"){
-				w.setTexture("ssr_weap_rock");
+				w.setTexture('atlas', "ssr_weap_rock");
 			}else{
-				w.setTexture("ssb_weap_rock");
+				w.setTexture('atlas', "ssb_weap_rock");
 			}
 		}
 

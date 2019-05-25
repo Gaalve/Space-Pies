@@ -47,11 +47,11 @@ export class ShopSceneP2 extends Phaser.Scene{
     }
 
     preload(): void{
-        this.load.pack(
-            "preload",
-            "assets/pack.json",
-            "preload"
-        )
+        // this.load.pack(
+        //     "preload",
+        //     "assets/pack.json",
+        //     "preload"
+        // )
     }
 
     create(): void{
@@ -82,22 +82,22 @@ export class ShopSceneP2 extends Phaser.Scene{
         this.Player2 = this.scene.get('MainScene').data.get('P2');
         this.activeWmods = this.Player2.getNrDrones();
         this.activeSmods = this.Player2.getNrSolarDrones();
-        this.background = this.add.image(0, 540,"shop_bg");
+        this.background = this.add.image(0, 540,'atlas', "shop_bg");
         this.background.setOrigin(0, 0.5);
         this.background.setFlipX(true);
         this.background.setTint(0x214478);
 
         let energy = this.Player2.getEnergy();
         let energyCost = this.Player2.getEnergyCost();
-        this.add.image(50,40,"button_energy");
+        this.add.image(50,40,'atlas', "button_energy");
         this.energyText = this.add.text(70, 10, " : " +energy, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
 
-        this.add.image(70,200,"button_energy").setDisplaySize(40,40);
-        this.add.image(70,350,"button_energy").setDisplaySize(40,40);
-        this.add.image(70,500,"button_energy").setDisplaySize(40,40);
-        this.add.image(70,650,"button_energy").setDisplaySize(40,40);
-        this.add.image(70,800,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,200,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(70,350,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(70,500,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(70,650,'atlas', "button_energy").setDisplaySize(40,40);
+        this.add.image(70,800,'atlas', "button_energy").setDisplaySize(40,40);
 
         this.energyCostText1 = this.add.text(90, 185, " x " +energyCost, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
