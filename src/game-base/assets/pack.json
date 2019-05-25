@@ -387,8 +387,53 @@
       },
       {
         "type": "image",
-        "key": "ssbr/ssr_wing_up",
-        "url": "assets/sprites/ssbr/ssr_wing_up.png"
+        "key": "debris/debris_0",
+        "url": "assets/sprites/debris/debris_0"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_1",
+        "url": "assets/sprites/debris/debris_1"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_2",
+        "url": "assets/sprites/debris/debris_2"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_3",
+        "url": "assets/sprites/debris/debris_3"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_4",
+        "url": "assets/sprites/debris/debris_4"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_5",
+        "url": "assets/sprites/debris/debris_5"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_6",
+        "url": "assets/sprites/debris/debris_6"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_7",
+        "url": "assets/sprites/debris/debris_7"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_8",
+        "url": "assets/sprites/debris/debris_8"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_9",
+        "url": "assets/sprites/debris/debris_9"
       }
     ]
   }
