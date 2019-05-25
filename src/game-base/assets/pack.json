@@ -234,6 +234,36 @@
       },
       {
         "type": "image",
+        "key": "logo",
+        "url": "assets/sprites/logo.png"
+      },
+      {
+        "type": "image",
+        "key": "logo_space_pies",
+        "url": "assets/sprites/logo_space_pies.png"
+      },
+      {
+        "type": "image",
+        "key": "intro_textbox_scream",
+        "url": "assets/sprites/intro_textbox_scream.png"
+      },
+      {
+        "type": "image",
+        "key": "intro_textbox_scream_big",
+        "url": "assets/sprites/intro_textbox_scream_big.png"
+      },
+      {
+        "type": "image",
+        "key": "intro_planet",
+        "url": "assets/sprites/intro_planet.png"
+      },
+      {
+        "type": "image",
+        "key": "intro_textbox_normal",
+        "url": "assets/sprites/intro_textbox_normal.png"
+      },
+      {
+        "type": "image",
         "key": "energy_icon",
         "url": "assets/sprites/energy_icon.png"
       },

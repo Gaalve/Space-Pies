@@ -30,9 +30,13 @@ export class MainScene extends Phaser.Scene {
         //     "preload"
         // )
 
+        this.load.spritesheet('bleedingbar', 'assets/sprites/bleedingbar.png', { frameWidth: 19, frameHeight: 42, spacing: 5, startFrame: 0, endFrame: 42, margin: 0});
+
+
     }
 
     create(): void {
+        this.scene.launch('GuiScene');
         this.system = new PiSystem(this, 1,1,1,true);
         this.system.start();
         this.data.set("system", this.system);
