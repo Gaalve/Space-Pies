@@ -2,7 +2,7 @@ import {HealthType} from "./health-type";
 import Sprite = Phaser.GameObjects.Sprite;
 
 export class HealthbarSprites {
-    private readonly sprite: Phaser.GameObjects.Sprite;
+    public readonly sprite: Phaser.GameObjects.Sprite;
     private readonly type: HealthType;
     private readonly pid: string;
     public constructor(scene: Phaser.Scene, type: HealthType, x: number, y: number, pid: string){

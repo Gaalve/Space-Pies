@@ -10,7 +10,7 @@ export class Background extends Phaser.Scene {
     constructor() {
         super({
             key: "Background",
-            active: true
+            active: false
         })
     }
 
