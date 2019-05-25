@@ -1,0 +1,1128 @@
+{
+  "textures": [
+    {
+      "image": "pack.png",
+      "format": "format: RGBA8888",
+      "size": {
+        "w": 4096,
+        "h": 4096
+      },
+      "scale": 1,
+      "frames": [
+        {
+          "filename": "adap_shield",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 16,
+            "h": 42
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 42
+          },
+          "frame": {
+            "x": 3960,
+            "y": 3608,
+            "w": 16,
+            "h": 42
+          }
+        },
+        {
+          "filename": "armor",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 25,
+            "h": 60
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 25,
+            "h": 60
+          },
+          "frame": {
+            "x": 4050,
+            "y": 3670,
+            "w": 25,
+            "h": 60
+          }
+        },
+        {
+          "filename": "armor_shield",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 16,
+            "h": 42
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 42
+          },
+          "frame": {
+            "x": 68,
+            "y": 76,
+            "w": 16,
+            "h": 42
+          }
+        },
+        {
+          "filename": "big_oval_light",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 1542,
+            "h": 2048
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 1542,
+            "h": 2048
+          },
+          "frame": {
+            "x": 2,
+            "y": 1682,
+            "w": 1542,
+            "h": 2048
+          }
+        },
+        {
+          "filename": "button_armor",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 47,
+            "h": 53
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 47,
+            "h": 53
+          },
+          "frame": {
+            "x": 804,
+            "y": 1141,
+            "w": 47,
+            "h": 53
+          }
+        },
+        {
+          "filename": "button_bg",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 70,
+            "h": 70
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 70,
+            "h": 70
+          },
+          "frame": {
+            "x": 1185,
+            "y": 1610,
+            "w": 70,
+            "h": 70
+          }
+        },
+        {
+          "filename": "button_cancel_black",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 38,
+            "h": 38
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 38,
+            "h": 38
+          },
+          "frame": {
+            "x": 3560,
+            "y": 3062,
+            "w": 38,
+            "h": 38
+          }
+        },
+        {
+          "filename": "button_cancel_red",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 38,
+            "h": 38
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 38,
+            "h": 38
+          },
+          "frame": {
+            "x": 3657,
+            "y": 3159,
+            "w": 38,
+            "h": 38
+          }
+        },
+        {
+          "filename": "button_energy",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 43,
+            "h": 56
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 43,
+            "h": 56
+          },
+          "frame": {
+            "x": 3468,
+            "y": 2998,
+            "w": 43,
+            "h": 56
+          }
+        },
+        {
+          "filename": "button_fg",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 78,
+            "h": 78
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 78,
+            "h": 78
+          },
+          "frame": {
+            "x": 448,
+            "y": 520,
+            "w": 78,
+            "h": 78
+          }
+        },
+        {
+          "filename": "button_options",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 50,
+            "h": 50
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 50,
+            "h": 50
+          },
+          "frame": {
+            "x": 1546,
+            "y": 1939,
+            "w": 50,
+            "h": 50
+          }
+        },
+        {
+          "filename": "button_resume",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 50,
+            "h": 50
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 50,
+            "h": 50
+          },
+          "frame": {
+            "x": 2010,
+            "y": 2468,
+            "w": 50,
+            "h": 50
+          }
+        },
+        {
+          "filename": "button_shadow",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 95,
+            "h": 95
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 95,
+            "h": 95
+          },
+          "frame": {
+            "x": 3468,
+            "y": 3102,
+            "w": 95,
+            "h": 95
+          }
+        },
+        {
+          "filename": "button_shield",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 56,
+            "h": 56
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 56,
+            "h": 56
+          },
+          "frame": {
+            "x": 1185,
+            "y": 1552,
+            "w": 56,
+            "h": 56
+          }
+        },
+        {
+          "filename": "button_skip",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 47,
+            "h": 45
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 47,
+            "h": 45
+          },
+          "frame": {
+            "x": 3886,
+            "y": 3549,
+            "w": 47,
+            "h": 45
+          }
+        },
+        {
+          "filename": "button_space_ship",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 47,
+            "h": 49
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 47,
+            "h": 49
+          },
+          "frame": {
+            "x": 3565,
+            "y": 3102,
+            "w": 47,
+            "h": 49
+          }
+        },
+        {
+          "filename": "button_wext",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 53,
+            "h": 44
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 53,
+            "h": 44
+          },
+          "frame": {
+            "x": 1639,
+            "y": 1991,
+            "w": 53,
+            "h": 44
+          }
+        },
+        {
+          "filename": "button_wmod",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 58,
+            "h": 58
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 58,
+            "h": 58
+          },
+          "frame": {
+            "x": 100,
+            "y": 144,
+            "w": 58,
+            "h": 58
+          }
+        },
+        {
+          "filename": "checkbox",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 40,
+            "h": 39
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 39
+          },
+          "frame": {
+            "x": 2246,
+            "y": 2609,
+            "w": 40,
+            "h": 39
+          }
+        },
+        {
+          "filename": "core_explosion",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 59,
+            "h": 60
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 59,
+            "h": 60
+          },
+          "frame": {
+            "x": 3989,
+            "y": 3670,
+            "w": 59,
+            "h": 60
+          }
+        },
+        {
+          "filename": "energy_icon",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 53,
+            "h": 88
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 53,
+            "h": 88
+          },
+          "frame": {
+            "x": 804,
+            "y": 1196,
+            "w": 53,
+            "h": 88
+          }
+        },
+        {
+          "filename": "fire_dark",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 71,
+            "h": 43
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 71,
+            "h": 43
+          },
+          "frame": {
+            "x": 448,
+            "y": 475,
+            "w": 71,
+            "h": 43
+          }
+        },
+        {
+          "filename": "fire_light",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 71,
+            "h": 43
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 71,
+            "h": 43
+          },
+          "frame": {
+            "x": 528,
+            "y": 555,
+            "w": 71,
+            "h": 43
+          }
+        },
+        {
+          "filename": "healthbar",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 40,
+            "h": 23
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 23
+          },
+          "frame": {
+            "x": 1696,
+            "y": 2046,
+            "w": 40,
+            "h": 23
+          }
+        },
+        {
+          "filename": "hitzone_shield",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 16,
+            "h": 42
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 42
+          },
+          "frame": {
+            "x": 448,
+            "y": 431,
+            "w": 16,
+            "h": 42
+          }
+        },
+        {
+          "filename": "laser_shield",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 16,
+            "h": 42
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 42
+          },
+          "frame": {
+            "x": 601,
+            "y": 556,
+            "w": 16,
+            "h": 42
+          }
+        },
+        {
+          "filename": "nano_shield",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 16,
+            "h": 42
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 42
+          },
+          "frame": {
+            "x": 859,
+            "y": 1201,
+            "w": 16,
+            "h": 42
+          }
+        },
+        {
+          "filename": "pause_bg",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 1920,
+            "h": 1080
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          },
+          "frame": {
+            "x": 1546,
+            "y": 2650,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        {
+          "filename": "rocket_shield",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 16,
+            "h": 42
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 16,
+            "h": 42
+          },
+          "frame": {
+            "x": 1185,
+            "y": 1508,
+            "w": 16,
+            "h": 42
+          }
+        },
+        {
+          "filename": "shield",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 25,
+            "h": 60
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 25,
+            "h": 60
+          },
+          "frame": {
+            "x": 2,
+            "y": 2,
+            "w": 25,
+            "h": 60
+          }
+        },
+        {
+          "filename": "shieldbar",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 40,
+            "h": 23
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 23
+          },
+          "frame": {
+            "x": 2154,
+            "y": 2579,
+            "w": 40,
+            "h": 23
+          }
+        },
+        {
+          "filename": "shop_bg",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 800,
+            "h": 1080
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 800,
+            "h": 1080
+          },
+          "frame": {
+            "x": 2,
+            "y": 600,
+            "w": 800,
+            "h": 1080
+          }
+        },
+        {
+          "filename": "ssb_nuke_drone",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 74,
+            "h": 39
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 74,
+            "h": 39
+          },
+          "frame": {
+            "x": 859,
+            "y": 1245,
+            "w": 74,
+            "h": 39
+          }
+        },
+        {
+          "filename": "ssb_ship",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 379,
+            "h": 394
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 379,
+            "h": 394
+          },
+          "frame": {
+            "x": 804,
+            "y": 1286,
+            "w": 379,
+            "h": 394
+          }
+        },
+        {
+          "filename": "ssb_ship_on",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 444,
+            "h": 394
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 444,
+            "h": 394
+          },
+          "frame": {
+            "x": 2,
+            "y": 204,
+            "w": 444,
+            "h": 394
+          }
+        },
+        {
+          "filename": "ssb_solar_drone",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 64,
+            "h": 54
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 54
+          },
+          "frame": {
+            "x": 2,
+            "y": 64,
+            "w": 64,
+            "h": 54
+          }
+        },
+        {
+          "filename": "ssb_weap_las",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 90,
+            "h": 44
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 90,
+            "h": 44
+          },
+          "frame": {
+            "x": 1696,
+            "y": 2071,
+            "w": 90,
+            "h": 44
+          }
+        },
+        {
+          "filename": "ssb_weap_pro",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 90,
+            "h": 44
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 90,
+            "h": 44
+          },
+          "frame": {
+            "x": 2010,
+            "y": 2520,
+            "w": 90,
+            "h": 44
+          }
+        },
+        {
+          "filename": "ssb_weap_rock",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 90,
+            "h": 44
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 90,
+            "h": 44
+          },
+          "frame": {
+            "x": 2154,
+            "y": 2604,
+            "w": 90,
+            "h": 44
+          }
+        },
+        {
+          "filename": "ssb_wmod",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 142,
+            "h": 82
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 142,
+            "h": 82
+          },
+          "frame": {
+            "x": 2010,
+            "y": 2566,
+            "w": 142,
+            "h": 82
+          }
+        },
+        {
+          "filename": "ssb_wmod_off",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 96,
+            "h": 82
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 96,
+            "h": 82
+          },
+          "frame": {
+            "x": 2,
+            "y": 120,
+            "w": 96,
+            "h": 82
+          }
+        },
+        {
+          "filename": "ssr_nuke_drone",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 68,
+            "h": 42
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 68,
+            "h": 42
+          },
+          "frame": {
+            "x": 1257,
+            "y": 1638,
+            "w": 68,
+            "h": 42
+          }
+        },
+        {
+          "filename": "ssr_ship",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 416,
+            "h": 531
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 416,
+            "h": 531
+          },
+          "frame": {
+            "x": 3468,
+            "y": 3199,
+            "w": 416,
+            "h": 531
+          }
+        },
+        {
+          "filename": "ssr_ship_on",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 462,
+            "h": 531
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 462,
+            "h": 531
+          },
+          "frame": {
+            "x": 1546,
+            "y": 2117,
+            "w": 462,
+            "h": 531
+          }
+        },
+        {
+          "filename": "ssr_solar_drone",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 72,
+            "h": 54
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 72,
+            "h": 54
+          },
+          "frame": {
+            "x": 3886,
+            "y": 3596,
+            "w": 72,
+            "h": 54
+          }
+        },
+        {
+          "filename": "ssr_weap_las",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 90,
+            "h": 44
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 90,
+            "h": 44
+          },
+          "frame": {
+            "x": 3468,
+            "y": 3056,
+            "w": 90,
+            "h": 44
+          }
+        },
+        {
+          "filename": "ssr_weap_pro",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 90,
+            "h": 44
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 90,
+            "h": 44
+          },
+          "frame": {
+            "x": 3565,
+            "y": 3153,
+            "w": 90,
+            "h": 44
+          }
+        },
+        {
+          "filename": "ssr_weap_rock",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 91,
+            "h": 44
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 91,
+            "h": 44
+          },
+          "frame": {
+            "x": 1546,
+            "y": 1991,
+            "w": 91,
+            "h": 44
+          }
+        },
+        {
+          "filename": "ssr_wmod",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 148,
+            "h": 78
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 148,
+            "h": 78
+          },
+          "frame": {
+            "x": 1546,
+            "y": 2037,
+            "w": 148,
+            "h": 78
+          }
+        },
+        {
+          "filename": "ssr_wmod_off",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 101,
+            "h": 78
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 101,
+            "h": 78
+          },
+          "frame": {
+            "x": 3886,
+            "y": 3652,
+            "w": 101,
+            "h": 78
+          }
+        },
+        {
+          "filename": "star",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 37,
+            "h": 37
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 37,
+            "h": 37
+          },
+          "frame": {
+            "x": 160,
+            "y": 165,
+            "w": 37,
+            "h": 37
+          }
+        },
+        {
+          "filename": "sym_core",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 40,
+            "h": 40
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 40,
+            "h": 40
+          },
+          "frame": {
+            "x": 2102,
+            "y": 2524,
+            "w": 40,
+            "h": 40
+          }
+        },
+        {
+          "filename": "sym_zone",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 41,
+            "h": 41
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 41,
+            "h": 41
+          },
+          "frame": {
+            "x": 1788,
+            "y": 2074,
+            "w": 41,
+            "h": 41
+          }
+        }
+      ]
+    }
+  ]
+}
