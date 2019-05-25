@@ -1,6 +1,4 @@
 import {Player} from "./player";
-import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import ParticleEmitter = Phaser.GameObjects.Particles.ParticleEmitter;
 import {BaseShip} from "./ship/base-ship";
 import {RedShip} from "./ship/red-ship";
 import {BlueShip} from "./ship/blue-ship";
@@ -59,8 +57,6 @@ export class Ship{
             x: x, y: y, tint: 0xffffdd55, speed: {min: 10, max: 50},
             scale: (particle, key, t) => particle.scaleX = particle.scaleY = t > 0.8 ? 1-(t - 0.8)*5 : 1,
             lifespan: {min: 1200, max: 1400}, on: false});
-        if(!player.isFirstPlayer())
-            scene.time.delayedCall(4000, this.explosion, [], this);
     }
 
     public explosion(): void{
@@ -108,7 +104,6 @@ export class Ship{
     }
 
     private exploedP2(): void{
-        //TODO
         this.scene.time.delayedCall(2000, this.explosion2At, [-10, -130, 0.7, 2.4], this);
         this.scene.time.delayedCall(2500, ()=>{this.modularShip.toDestroyedWingUp()}, [], this);
 

@@ -19,7 +19,7 @@ export class Turn {
     constructor(refScene: Phaser.Scene, players: [Player, Player]){
         this.refScene = refScene;
         this.players = players;
-        this.idx = 1;
+        this.idx = 0;
         this.currentPlayer = this.players[this.idx];
         this.clickable = false;
         this.first1 = true;
