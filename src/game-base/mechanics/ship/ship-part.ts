@@ -27,7 +27,7 @@ export class ShipPart {
         this.isDestroyed = false;
 
         this.normal.setDepth(depth);
-        this.destroyed.setDepth(depth);
+        this.destroyed.setDepth(depth-2);
 
         this.scene.add.existing(this.normal);
     }

@@ -56,16 +56,17 @@ export class Ship{
             x: x, y: y, tint: 0xffffdd55, speed: {min: 10, max: 50},
             scale: (particle, key, t) => particle.scaleX = particle.scaleY = t > 0.8 ? 1-(t - 0.8)*5 : 1,
             lifespan: {min: 1200, max: 1400}, on: false});
-        if(player.isFirstPlayer())
+        if(!player.isFirstPlayer())
             scene.time.delayedCall(4000, this.explosion, [], this);
     }
 
     public explosion(): void{
         this.scene.time.delayedCall(0, this.explosionAt, [0, 0], this);
-        for (let i = 0; i < 110; i++) {
-            this.scene.time.delayedCall(150 * i, this.explosionAt, [Math.random()*300 - 150, Math.random()*300 - 150, Math.random()*0.4 + 0.3], this);
+        for (let i = 0; i < 90; i++) {
+            this.scene.time.delayedCall(170 * i, this.explosionAt, [Math.random()*300 - 150, Math.random()*300 - 150, Math.random()*0.4 + 0.3], this);
         }
         if(this.isRed) this.exploedP1();
+        else this.exploedP2();
     }
 
     public update(delta: number): void{
@@ -95,23 +96,19 @@ export class Ship{
 
     private exploedP2(): void{
         //TODO
-        this.scene.time.delayedCall(2000, this.explosion2At, [40, -130, 0.85, 2.4], this);
+        this.scene.time.delayedCall(2000, this.explosion2At, [-10, -130, 0.7, 2.4], this);
         this.scene.time.delayedCall(2500, ()=>{this.modularShip.toDestroyedWingUp()}, [], this);
 
-        this.scene.time.delayedCall(5000, this.explosion2At, [40, 110, 0.85, 2.4], this);
-        this.scene.time.delayedCall(5050, this.explosion2At, [40, 0, 0.85, 1], this);
+        this.scene.time.delayedCall(5000, this.explosion2At, [-20, 110, 0.7, 2.4], this);
         this.scene.time.delayedCall(5500, ()=>{this.modularShip.toDestroyedWingDown()}, [], this);
 
-        this.scene.time.delayedCall(8000, this.explosion2At, [-60, -100, 0.85, 2.4], this);
-        this.scene.time.delayedCall(8050, this.explosion2At, [-60, 100, 0.85, 2.4], this);
+        this.scene.time.delayedCall(8050, this.explosion2At, [90, 0, 0.85, 2.0], this);
         this.scene.time.delayedCall(8500, ()=>{this.modularShip.toDestroyedBack()}, [], this);
 
+        this.scene.time.delayedCall(11000, this.explosion2At, [-155, 0, 0.5, 1.8], this);
+        this.scene.time.delayedCall(11400, ()=>{this.modularShip.toDestroyedPilot()}, [], this);
 
-        this.scene.time.delayedCall(11000, this.explosion2At, [165, 0, 0.85, 2.4], this);
-        this.scene.time.delayedCall(11500, ()=>{this.modularShip.toDestroyedPilot()}, [], this);
-
-        this.scene.time.delayedCall(14000, this.explosion2At, [20, 0, 0.85, 2.4], this);
-        this.scene.time.delayedCall(14080, this.explosion2At, [150, 0, 0.85, 1.2], this);
+        this.scene.time.delayedCall(14000, this.explosion2At, [-40, 0, 0.85, 2.4], this);
         this.scene.time.delayedCall(14500, ()=>{this.modularShip.toDestroyedHull()}, [], this);
     }
 
