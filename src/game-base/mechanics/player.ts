@@ -28,7 +28,6 @@ export class Player {
         this.scene = scene;
         this.activatedDrones = 0;
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0), new EnergyDrone(scene, x, y, this, 1),new EnergyDrone(scene, x, y, this, 2),new EnergyDrone(scene, x, y, this, 3),new EnergyDrone(scene, x, y, this, 4)];
-        this.activatedDrones = 0;
         this.activatedSolarDrones = 1;
         this.system = piSystem;
         this.health = new Health(scene, this, piSystem);
@@ -189,9 +188,11 @@ export class Player {
         this.energy -= cost;
     }
 
-    gainEnergy(amount: number) : void
+    gainEnergy(value : string, amount: number) : void
     {
-        this.energy += amount;
+        if(value == "1") {
+            this.energy += amount;
+        }
     }
 
     getEnergyCost(): number
