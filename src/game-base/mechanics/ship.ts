@@ -5,6 +5,7 @@ import {BaseShip} from "./ship/base-ship";
 import {RedShip} from "./ship/red-ship";
 import {BlueShip} from "./ship/blue-ship";
 import Scene = Phaser.Scene;
+import {Debris} from "./ship/debris";
 
 
 export class Ship{
@@ -19,6 +20,7 @@ export class Ship{
     private explosionYellow: Phaser.GameObjects.Particles.ParticleEmitter;
     private isRed: boolean;
     private modularShip: BaseShip;
+    private debris: Debris[];
 
     public constructor (scene : Phaser.Scene, x: number, y: number, player : Player){
         this.scene = scene;
@@ -34,6 +36,7 @@ export class Ship{
 
         this.posX = x;
         this.posY = y;
+        this.debris = [];
         // scene.add.existing(this);
         // this.alpha = 0.5;
         // this.setTintFill(0xFFFFFF);
@@ -65,12 +68,22 @@ export class Ship{
         for (let i = 0; i < 90; i++) {
             this.scene.time.delayedCall(170 * i, this.explosionAt, [Math.random()*300 - 150, Math.random()*300 - 150, Math.random()*0.4 + 0.3], this);
         }
+        for (let i = 0; i < 30; i++){
+            this.scene.time.delayedCall(500 * i, this.createDebris, [], this);
+        }
         if(this.isRed) this.exploedP1();
         else this.exploedP2();
     }
 
+    private createDebris(){
+        this.debris.push(new Debris(this.scene, this.posX, this.posY));
+    }
+
     public update(delta: number): void{
         this.modularShip.update(delta);
+        for (let idx in this.debris){
+            this.debris[idx].update(delta);
+        }
     }
 
     private exploedP1(): void{
