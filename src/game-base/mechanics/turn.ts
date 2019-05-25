@@ -83,8 +83,6 @@ export class Turn {
             }
         }
 
-        //Waffen schießen lassen:
-        this.currentPlayer.pushEnergy();
         this.refScene.data.set('turnAction', 'Battle Phase');
         this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
 
