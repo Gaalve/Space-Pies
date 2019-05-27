@@ -85,6 +85,7 @@ export class Ship{
     }
 
     private exploedP1(): void{
+
         this.scene.time.delayedCall(2000, this.explosion2At, [40, -130, 0.85, 2.4], this);
         this.scene.time.delayedCall(2500, ()=>{this.modularShip.toDestroyedWingUp()}, [], this);
         this.scene.time.delayedCall(2700, ()=>{this.player.getDrones()[0].getWeapons()[2].destroy()}, [], this);
@@ -97,7 +98,6 @@ export class Ship{
         this.scene.time.delayedCall(8000, this.explosion2At, [-60, -100, 0.85, 2.4], this);
         this.scene.time.delayedCall(8050, this.explosion2At, [-60, 100, 0.85, 2.4], this);
         this.scene.time.delayedCall(8500, ()=>{this.modularShip.toDestroyedBack()}, [], this);
-
 
         this.scene.time.delayedCall(11000, this.explosion2At, [165, 0, 0.85, 2.4], this);
         this.scene.time.delayedCall(11500, ()=>{this.modularShip.toDestroyedPilot()}, [], this);
@@ -175,5 +175,4 @@ export class Ship{
         this.explosionOrange.emitParticle(80 * lifeScale*speedScale, this.posX + offX, this.posY + offY);
         this.explosionYellow.emitParticle(60 * lifeScale*speedScale, this.posX + offX, this.posY + offY);
     }
-
 }
