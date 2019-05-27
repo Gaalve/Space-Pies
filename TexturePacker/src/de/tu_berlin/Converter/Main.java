@@ -19,7 +19,9 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Writing JSON");
         parsePackToJSON(outPath);
+        System.out.println("Done.");
     }
 
     public static void parsePackToJSON(String path){

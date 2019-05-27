@@ -6,371 +6,420 @@ filter: Nearest,Nearest
 repeat: none
 adap_shield
   rotate: false
-  xy: 3960, 3608
+  xy: 2, 2
   size: 16, 42
   orig: 16, 42
   offset: 0, 0
   index: -1
 armor
   rotate: false
-  xy: 4050, 3670
+  xy: 612, 780
   size: 25, 60
   orig: 25, 60
   offset: 0, 0
   index: -1
 armor_shield
   rotate: false
-  xy: 68, 76
+  xy: 2241, 2414
   size: 16, 42
   orig: 16, 42
   offset: 0, 0
   index: -1
 big_oval_light
   rotate: false
-  xy: 2, 1682
+  xy: 2, 1970
   size: 1542, 2048
   orig: 1542, 2048
   offset: 0, 0
   index: -1
+bleedingbar
+  rotate: false
+  xy: 2, 46
+  size: 16, 1922
+  orig: 16, 1922
+  offset: 0, 0
+  index: -1
 button_armor
   rotate: false
-  xy: 804, 1141
+  xy: 2066, 2040
   size: 47, 53
   orig: 47, 53
   offset: 0, 0
   index: -1
 button_bg
   rotate: false
-  xy: 1185, 1610
+  xy: 822, 1463
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 button_cancel_black
   rotate: false
-  xy: 3560, 3062
+  xy: 4024, 3900
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 button_cancel_red
   rotate: false
-  xy: 3657, 3159
+  xy: 2167, 2362
   size: 38, 38
   orig: 38, 38
   offset: 0, 0
   index: -1
 button_energy
   rotate: false
-  xy: 3468, 2998
+  xy: 2121, 2127
   size: 43, 56
   orig: 43, 56
   offset: 0, 0
   index: -1
 button_fg
   rotate: false
-  xy: 448, 520
+  xy: 3849, 3407
   size: 78, 78
   orig: 78, 78
   offset: 0, 0
   index: -1
 button_options
   rotate: false
-  xy: 1546, 1939
+  xy: 894, 1483
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 button_resume
   rotate: false
-  xy: 2010, 2468
+  xy: 1258, 1629
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 button_shadow
   rotate: false
-  xy: 3468, 3102
+  xy: 1442, 1873
   size: 95, 95
   orig: 95, 95
   offset: 0, 0
   index: -1
 button_shield
   rotate: false
-  xy: 1185, 1552
+  xy: 3849, 3349
   size: 56, 56
   orig: 56, 56
   offset: 0, 0
   index: -1
 button_skip
   rotate: false
-  xy: 3886, 3549
+  xy: 438, 621
   size: 47, 45
   orig: 47, 45
   offset: 0, 0
   index: -1
 button_space_ship
   rotate: false
-  xy: 3565, 3102
+  xy: 333, 258
   size: 47, 49
   orig: 47, 49
   offset: 0, 0
   index: -1
 button_wext
   rotate: false
-  xy: 1639, 1991
+  xy: 1351, 1681
   size: 53, 44
   orig: 53, 44
   offset: 0, 0
   index: -1
 button_wmod
   rotate: false
-  xy: 100, 144
+  xy: 2613, 2798
   size: 58, 58
   orig: 58, 58
   offset: 0, 0
   index: -1
 checkbox
   rotate: false
-  xy: 2246, 2609
+  xy: 704, 847
   size: 40, 39
   orig: 40, 39
   offset: 0, 0
   index: -1
 core_explosion
   rotate: false
-  xy: 3989, 3670
+  xy: 2311, 2480
   size: 59, 60
   orig: 59, 60
   offset: 0, 0
   index: -1
 energy_icon
   rotate: false
-  xy: 804, 1196
+  xy: 2066, 2095
   size: 53, 88
   orig: 53, 88
   offset: 0, 0
   index: -1
 fire_dark
   rotate: false
-  xy: 448, 475
+  xy: 2716, 2893
   size: 71, 43
   orig: 71, 43
   offset: 0, 0
   index: -1
 fire_light
   rotate: false
-  xy: 528, 555
+  xy: 3468, 2962
   size: 71, 43
   orig: 71, 43
   offset: 0, 0
   index: -1
 healthbar
   rotate: false
-  xy: 1696, 2046
+  xy: 1539, 1945
   size: 40, 23
   orig: 40, 23
   offset: 0, 0
   index: -1
 hitzone_shield
   rotate: false
-  xy: 448, 431
+  xy: 2372, 2498
   size: 16, 42
   orig: 16, 42
+  offset: 0, 0
+  index: -1
+intro_planet
+  rotate: false
+  xy: 438, 714
+  size: 172, 172
+  orig: 172, 172
+  offset: 0, 0
+  index: -1
+intro_textbox_normal
+  rotate: false
+  xy: 822, 1535
+  size: 434, 190
+  orig: 434, 190
+  offset: 0, 0
+  index: -1
+intro_textbox_scream
+  rotate: false
+  xy: 20, 124
+  size: 311, 229
+  orig: 311, 229
+  offset: 0, 0
+  index: -1
+intro_textbox_scream_big
+  rotate: false
+  xy: 822, 1727
+  size: 618, 241
+  orig: 618, 241
   offset: 0, 0
   index: -1
 laser_shield
   rotate: false
-  xy: 601, 556
+  xy: 1442, 1773
   size: 16, 42
   orig: 16, 42
   offset: 0, 0
   index: -1
+logo
+  rotate: false
+  xy: 1546, 2009
+  size: 518, 174
+  orig: 518, 174
+  offset: 0, 0
+  index: -1
+logo_space_pies
+  rotate: false
+  xy: 1546, 2185
+  size: 619, 751
+  orig: 619, 751
+  offset: 0, 0
+  index: -1
 nano_shield
   rotate: false
-  xy: 859, 1201
+  xy: 1508, 1829
   size: 16, 42
   orig: 16, 42
   offset: 0, 0
   index: -1
 pause_bg
   rotate: false
-  xy: 1546, 2650
+  xy: 1546, 2938
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
   index: -1
 rocket_shield
   rotate: false
-  xy: 1185, 1508
+  xy: 2613, 2754
   size: 16, 42
   orig: 16, 42
   offset: 0, 0
   index: -1
 shield
   rotate: false
-  xy: 2, 2
+  xy: 3932, 3832
   size: 25, 60
   orig: 25, 60
   offset: 0, 0
   index: -1
 shieldbar
   rotate: false
-  xy: 2154, 2579
+  xy: 20, 53
   size: 40, 23
   orig: 40, 23
   offset: 0, 0
   index: -1
 shop_bg
   rotate: false
-  xy: 2, 600
+  xy: 20, 888
   size: 800, 1080
   orig: 800, 1080
   offset: 0, 0
   index: -1
 ssb_nuke_drone
   rotate: false
-  xy: 859, 1245
+  xy: 3566, 3050
   size: 74, 39
   orig: 74, 39
   offset: 0, 0
   index: -1
 ssb_ship
   rotate: false
-  xy: 804, 1286
+  xy: 3468, 3091
   size: 379, 394
   orig: 379, 394
   offset: 0, 0
   index: -1
 ssb_ship_on
   rotate: false
-  xy: 2, 204
+  xy: 2167, 2542
   size: 444, 394
   orig: 444, 394
   offset: 0, 0
   index: -1
 ssb_solar_drone
   rotate: false
-  xy: 2, 64
+  xy: 1442, 1817
   size: 64, 54
   orig: 64, 54
   offset: 0, 0
   index: -1
 ssb_weap_las
   rotate: false
-  xy: 1696, 2071
+  xy: 20, 78
   size: 90, 44
   orig: 90, 44
   offset: 0, 0
   index: -1
 ssb_weap_pro
   rotate: false
-  xy: 2010, 2520
+  xy: 333, 309
   size: 90, 44
   orig: 90, 44
   offset: 0, 0
   index: -1
 ssb_weap_rock
   rotate: false
-  xy: 2154, 2604
+  xy: 438, 668
   size: 90, 44
   orig: 90, 44
   offset: 0, 0
   index: -1
 ssb_wmod
   rotate: false
-  xy: 2010, 2566
+  xy: 2167, 2458
   size: 142, 82
   orig: 142, 82
   offset: 0, 0
   index: -1
 ssb_wmod_off
   rotate: false
-  xy: 2, 120
+  xy: 3468, 3007
   size: 96, 82
   orig: 96, 82
   offset: 0, 0
   index: -1
 ssr_nuke_drone
   rotate: false
-  xy: 1257, 1638
+  xy: 822, 1419
   size: 68, 42
   orig: 68, 42
   offset: 0, 0
   index: -1
 ssr_ship
   rotate: false
-  xy: 3468, 3199
+  xy: 20, 355
   size: 416, 531
   orig: 416, 531
   offset: 0, 0
   index: -1
 ssr_ship_on
   rotate: false
-  xy: 1546, 2117
+  xy: 3468, 3487
   size: 462, 531
   orig: 462, 531
   offset: 0, 0
   index: -1
 ssr_solar_drone
   rotate: false
-  xy: 3886, 3596
+  xy: 2167, 2402
   size: 72, 54
   orig: 72, 54
   offset: 0, 0
   index: -1
 ssr_weap_las
   rotate: false
-  xy: 3468, 3056
+  xy: 612, 842
   size: 90, 44
   orig: 90, 44
   offset: 0, 0
   index: -1
 ssr_weap_pro
   rotate: false
-  xy: 3565, 3153
+  xy: 3932, 3894
   size: 90, 44
   orig: 90, 44
   offset: 0, 0
   index: -1
 ssr_weap_rock
   rotate: false
-  xy: 1546, 1991
+  xy: 1258, 1681
   size: 91, 44
   orig: 91, 44
   offset: 0, 0
   index: -1
 ssr_wmod
   rotate: false
-  xy: 1546, 2037
+  xy: 3932, 3940
   size: 148, 78
   orig: 148, 78
   offset: 0, 0
   index: -1
 ssr_wmod_off
   rotate: false
-  xy: 3886, 3652
+  xy: 2613, 2858
   size: 101, 78
   orig: 101, 78
   offset: 0, 0
   index: -1
 star
   rotate: false
-  xy: 160, 165
+  xy: 1546, 1970
   size: 37, 37
   orig: 37, 37
   offset: 0, 0
   index: -1
 sym_core
   rotate: false
-  xy: 2102, 2524
+  xy: 530, 672
   size: 40, 40
   orig: 40, 40
   offset: 0, 0
   index: -1
 sym_zone
   rotate: false
-  xy: 1788, 2074
+  xy: 112, 81
   size: 41, 41
   orig: 41, 41
   offset: 0, 0
