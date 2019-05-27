@@ -9,6 +9,7 @@ import {Debris} from "./ship/debris";
 export class Ship{
 
     private scene: Scene;
+    private player: Player;
     private posX : number;
     private posY : number;
     private pem: Phaser.GameObjects.Particles.ParticleEmitterManager;
@@ -32,6 +33,7 @@ export class Ship{
             this.modularShip = new BlueShip(scene, x, y);
         }
 
+        this.player = player;
         this.posX = x;
         this.posY = y;
         this.debris = [];
@@ -85,10 +87,12 @@ export class Ship{
     private exploedP1(): void{
         this.scene.time.delayedCall(2000, this.explosion2At, [40, -130, 0.85, 2.4], this);
         this.scene.time.delayedCall(2500, ()=>{this.modularShip.toDestroyedWingUp()}, [], this);
+        this.scene.time.delayedCall(2700, ()=>{this.player.getDrones()[0].getWeapons()[2].destroy()}, [], this);
 
         this.scene.time.delayedCall(5000, this.explosion2At, [40, 110, 0.85, 2.4], this);
         this.scene.time.delayedCall(5050, this.explosion2At, [40, 0, 0.85, 1], this);
         this.scene.time.delayedCall(5500, ()=>{this.modularShip.toDestroyedWingDown()}, [], this);
+        this.scene.time.delayedCall(5700, ()=>{this.player.getDrones()[0].getWeapons()[1].destroy()}, [], this);
 
         this.scene.time.delayedCall(8000, this.explosion2At, [-60, -100, 0.85, 2.4], this);
         this.scene.time.delayedCall(8050, this.explosion2At, [-60, 100, 0.85, 2.4], this);
@@ -101,14 +105,17 @@ export class Ship{
         this.scene.time.delayedCall(14000, this.explosion2At, [20, 0, 0.85, 2.4], this);
         this.scene.time.delayedCall(14080, this.explosion2At, [150, 0, 0.85, 1.2], this);
         this.scene.time.delayedCall(14500, ()=>{this.modularShip.toDestroyedHull()}, [], this);
+        this.scene.time.delayedCall(14700, ()=>{this.player.getDrones()[0].getWeapons()[0].destroy()}, [], this);
     }
 
     private exploedP2(): void{
         this.scene.time.delayedCall(2000, this.explosion2At, [-10, -130, 0.7, 2.4], this);
         this.scene.time.delayedCall(2500, ()=>{this.modularShip.toDestroyedWingUp()}, [], this);
+        this.scene.time.delayedCall(2700, ()=>{this.player.getDrones()[0].getWeapons()[2].destroy()}, [], this);
 
         this.scene.time.delayedCall(5000, this.explosion2At, [-20, 110, 0.7, 2.4], this);
         this.scene.time.delayedCall(5500, ()=>{this.modularShip.toDestroyedWingDown()}, [], this);
+        this.scene.time.delayedCall(5700, ()=>{this.player.getDrones()[0].getWeapons()[1].destroy()}, [], this);
 
         this.scene.time.delayedCall(8050, this.explosion2At, [90, 0, 0.85, 2.0], this);
         this.scene.time.delayedCall(8500, ()=>{this.modularShip.toDestroyedBack()}, [], this);
@@ -118,6 +125,7 @@ export class Ship{
 
         this.scene.time.delayedCall(14000, this.explosion2At, [-40, 0, 0.85, 2.4], this);
         this.scene.time.delayedCall(14500, ()=>{this.modularShip.toDestroyedHull()}, [], this);
+        this.scene.time.delayedCall(14700, ()=>{this.player.getDrones()[0].getWeapons()[0].destroy()}, [], this);
     }
 
     private explosionAt(offX: number, offY: number, scale: number = 1): void{
