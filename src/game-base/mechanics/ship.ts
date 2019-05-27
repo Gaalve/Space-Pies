@@ -85,6 +85,24 @@ export class Ship{
     }
 
     private exploedP1(): void{
+        if(this.player.getDrones()[1].visible){
+            this.scene.time.delayedCall(3000, this.explosion2At, [300, -300, 0.7, 2.4], this);
+            this.scene.time.delayedCall( 3400, ()=>{this.player.getDrones()[1].destroy();
+                                                                    for(let w of this.player.getDrones()[1].getWeapons()){
+                                                                        w.destroy();
+                                                                    }}, [], this);
+            this.scene.time.delayedCall(3400, ()=>{this.debris.push(new Debris(this.scene, this.posX + 300, this.posY - 300))}, [], this);
+            this.scene.time.delayedCall(3400, ()=>{this.debris.push(new Debris(this.scene, this.posX + 300, this.posY - 300))}, [], this);
+        }
+        if(this.player.getDrones()[2].visible){
+            this.scene.time.delayedCall(3200, this.explosion2At, [300, 300, 0.7, 2.4], this);
+            this.scene.time.delayedCall( 3600, ()=>{this.player.getDrones()[2].destroy();
+                                                                    for(let w of this.player.getDrones()[2].getWeapons()){
+                                                                        w.destroy();
+                                                                    }}, [], this);
+            this.scene.time.delayedCall(3600, ()=>{this.debris.push(new Debris(this.scene, this.posX + 300, this.posY + 300))}, [], this);
+            this.scene.time.delayedCall(3600, ()=>{this.debris.push(new Debris(this.scene, this.posX + 300, this.posY + 300))}, [], this);
+        }
 
         this.scene.time.delayedCall(2000, this.explosion2At, [40, -130, 0.85, 2.4], this);
         this.scene.time.delayedCall(2500, ()=>{this.modularShip.toDestroyedWingUp()}, [], this);
@@ -109,6 +127,26 @@ export class Ship{
     }
 
     private exploedP2(): void{
+
+        if(this.player.getDrones()[1].visible){
+            this.scene.time.delayedCall(3000, this.explosion2At, [-300, -300, 0.7, 2.4], this);
+            this.scene.time.delayedCall( 3400, ()=>{this.player.getDrones()[1].destroy();
+                                                                    for(let w of this.player.getDrones()[1].getWeapons()){
+                                                                        w.destroy();
+                                                                    }}, [], this);
+            this.scene.time.delayedCall(3400, ()=>{this.debris.push(new Debris(this.scene, this.posX - 300, this.posY - 300))}, [], this);
+            this.scene.time.delayedCall(3400, ()=>{this.debris.push(new Debris(this.scene, this.posX - 300, this.posY - 300))}, [], this);
+        }
+        if(this.player.getDrones()[2].visible){
+            this.scene.time.delayedCall(3200, this.explosion2At, [-300, 300, 0.7, 2.4], this);
+            this.scene.time.delayedCall( 3600, ()=>{this.player.getDrones()[2].destroy();
+                                                                    for(let w of this.player.getDrones()[2].getWeapons()){
+                                                                        w.destroy();
+                                                                    }}, [], this);
+            this.scene.time.delayedCall(3600, ()=>{this.debris.push(new Debris(this.scene, this.posX - 300, this.posY + 300))}, [], this);
+            this.scene.time.delayedCall(3600, ()=>{this.debris.push(new Debris(this.scene, this.posX - 300, this.posY + 300))}, [], this);
+        }
+
         this.scene.time.delayedCall(2000, this.explosion2At, [-10, -130, 0.7, 2.4], this);
         this.scene.time.delayedCall(2500, ()=>{this.modularShip.toDestroyedWingUp()}, [], this);
         this.scene.time.delayedCall(2700, ()=>{this.player.getDrones()[0].getWeapons()[2].destroy()}, [], this);
