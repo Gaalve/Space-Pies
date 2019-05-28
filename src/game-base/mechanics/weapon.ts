@@ -1,4 +1,6 @@
 import {Drone} from "./drone";
+import {WeaponType} from "./weapon-type";
+import {Bullet} from "./bullet";
 
 
 export class Weapon extends Phaser.GameObjects.Sprite{
@@ -7,9 +9,11 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	private drone : Drone;						//which drone the weapon belongs to
     private wNr : number;
     private piTerm : string;
+    private bullet: Bullet;
 
-	public constructor(scene : Phaser.Scene, drone : Drone, texture : string, wClass : string, wNr : number) {
-        super(scene, drone.x, drone.y, texture);
+
+	public constructor(scene : Phaser.Scene, drone : Drone, type: WeaponType, wNr: number) {
+        super(scene, drone.x, drone.y, Weapon.getWeaponTex(false, type));
 		if (drone.getPlayer().getNameIdentifier() == "P1") {
             this.setX(drone.x + 70);
         }else{
@@ -17,10 +21,9 @@ export class Weapon extends Phaser.GameObjects.Sprite{
         }
         this.setVisible(false);
         scene.add.existing(this);
-		this.wClass = wClass;
+		this.wClass = Weapon.getWeaponClass(type);
 		this.drone = drone;
 		this.wNr = wNr;
-		//this.setScale(0.5);
 
 		if(wNr == 1){
 		    this.setY(drone.y - 30);
@@ -32,16 +35,18 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		//reposition weapons on ship
 		if(this.drone.getIndex() == 0) {
 		    this.setDepth(4);
-			//this.setScale(0.8);
 			this.repositionWeapons();
 		}
+		this.bullet = null;
 	}
+
+
 
 	/**
 	graphical Repositioning of Weapons on ships
 	 */
 	repositionWeapons() : void{
-		if(this.drone.getPlayer().getNameIdentifier() == "P1"){
+		if(this.drone.getPlayer().isFirstPlayer()){
 			if(this.wNr == 1){
 				this.setX(this.x - 15);
 				this.setY(this.y + 180);
@@ -62,15 +67,36 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 				this.setX(this.x - 50)
 			}
 		}
-
 	}
-	setWeaponClass(wClass : string) : void{
-	    this.wClass = wClass;
-        this.createPiTerm();
-    }
 
-	getWeaponClass() : string{
-		return this.wClass;
+	public setWeapon(isFirstPlayer: boolean, type: WeaponType): void{
+		this.wClass = Weapon.getWeaponClass(type);
+		this.setTexture(Weapon.getWeaponTex(isFirstPlayer, type));
+		this.createPiTerm();
+	}
+
+
+	private static getWeaponClass(type: WeaponType) : string{
+		switch (type) {
+			case WeaponType.LASER_ARMOR: return "armor";
+			case WeaponType.PROJECTILE_SHIELD: return "shield";
+			case WeaponType.ROCKET: return "rocket"
+		}
+	}
+
+	private static getWeaponTex(isFirstPlayer: boolean, type: WeaponType) : string{
+		if(isFirstPlayer)
+			switch (type) {
+				case WeaponType.LASER_ARMOR: return "ssr_weap_las";
+				case WeaponType.PROJECTILE_SHIELD: return "ssr_weap_pro";
+				case WeaponType.ROCKET: return "ssr_weap_rock"
+			}
+		else
+			switch (type) {
+				case WeaponType.LASER_ARMOR: return "ssb_weap_las";
+				case WeaponType.PROJECTILE_SHIELD: return "ssb_weap_pro";
+				case WeaponType.ROCKET: return "ssb_weap_rock"
+			}
 	}
 
 	/**
@@ -88,4 +114,14 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     getPiTerm() : string{
 	    return this.piTerm;
     }
+
+    destroy(fromScene?: boolean): void {
+    	super.destroy(fromScene);
+
+	}
+
+	public update(delta: number): void {
+    	if(this.bullet)
+    		this.bullet.update(delta);
+	}
 }

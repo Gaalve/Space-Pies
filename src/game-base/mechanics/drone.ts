@@ -1,8 +1,6 @@
 import {Player} from "./player";
 import {Weapon} from "./weapon";
-import {PWeapon} from "./projectileweapon";
-import {LWeapon} from "./laserweapon";
-import {PiSystem} from "./picalc/pi-system";
+import {WeaponType} from "./weapon-type";
 
 
 export class Drone extends Phaser.GameObjects.Sprite{
@@ -41,9 +39,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 	    this.activatedWeapons = 0;
 
-	    this.weapons = [new Weapon(scene, this, "ssr_weap_las", "shield", 0),
-						new Weapon(scene, this, "ssr_weap_las", "shield", 1),
-						new Weapon(scene, this, "ssr_weap_las", "shield", 2)];
+	    this.weapons = [new Weapon(scene, this, WeaponType.LASER_ARMOR, 0),
+						new Weapon(scene, this, WeaponType.LASER_ARMOR, 1),
+						new Weapon(scene, this, WeaponType.LASER_ARMOR, 2)];
 
 		this.buildPiTerm();
 	    this.activateOnScreenText();
@@ -59,27 +57,13 @@ export class Drone extends Phaser.GameObjects.Sprite{
      */
     addWeapon(weapon : string) : void{
     	let w = this.weapons[this.getNrWeapons()];
+    	let isFirst = this.player.isFirstPlayer();
 	    if(weapon == "l"){
-			w.setWeaponClass("shield");
-			if(this.player.getNameIdentifier() == "P1"){
-				w.setTexture("ssr_weap_las");
-			}else{
-				w.setTexture("ssb_weap_las");
-			}
+			w.setWeapon(isFirst, WeaponType.LASER_ARMOR);
         }else if(weapon == "p") {
-			w.setWeaponClass("armor");
-			if(this.player.getNameIdentifier() == "P1"){
-				w.setTexture("ssr_weap_pro");
-			}else{
-				w.setTexture("ssb_weap_pro");
-			}
+			w.setWeapon(isFirst, WeaponType.PROJECTILE_SHIELD);
         }else if(weapon == "r"){
-	    	w.setWeaponClass("rocket");			//TODO check name
-			if(this.player.getNameIdentifier() == "P1"){
-				w.setTexture("ssr_weap_rock");
-			}else{
-				w.setTexture("ssb_weap_rock");
-			}
+			w.setWeapon(isFirst, WeaponType.ROCKET);
 		}
 
 	    w.setVisible(true);
@@ -186,5 +170,11 @@ export class Drone extends Phaser.GameObjects.Sprite{
 				this.addWeapon("r");
 			})
 		]))
+	}
+
+	public update(delta: number): void {
+		this.weapons[0].update(delta);
+		this.weapons[1].update(delta);
+		this.weapons[2].update(delta);
 	}
 }

@@ -439,6 +439,21 @@
         "type": "image",
         "key": "debris/debris_9",
         "url": "assets/sprites/debris/debris_9.png"
+      },
+      {
+        "type": "image",
+        "key": "shot_projectile",
+        "url": "assets/sprites/shot_projectile.png"
+      },
+      {
+        "type": "image",
+        "key": "shot_rocket",
+        "url": "assets/sprites/shot_rocket.png"
+      },
+      {
+        "type": "image",
+        "key": "shot_laser",
+        "url": "assets/sprites/shot_laser.png"
       }
     ]
   }
