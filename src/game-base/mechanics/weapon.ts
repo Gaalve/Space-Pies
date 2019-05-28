@@ -10,10 +10,13 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     private wNr : number;
     private piTerm : string;
     private bullet: Bullet;
+    private weaponType: WeaponType;
+	private isFirst: boolean;
 
-
-	public constructor(scene : Phaser.Scene, drone : Drone, type: WeaponType, wNr: number) {
-        super(scene, drone.x, drone.y, Weapon.getWeaponTex(false, type));
+	public constructor(scene : Phaser.Scene, drone : Drone, type: WeaponType, isFirst: boolean, wNr: number) {
+        super(scene, drone.x, drone.y, Weapon.getWeaponTex(isFirst, type));
+        this.weaponType = type;
+        this.isFirst = isFirst;
 		if (drone.getPlayer().getNameIdentifier() == "P1") {
             this.setX(drone.x + 70);
         }else{
@@ -38,6 +41,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 			this.repositionWeapons();
 		}
 		this.bullet = null;
+		this.scene.time.delayedCall(Math.random()*4000 + 2000, this.createBullet, [], this);
 	}
 
 
@@ -69,9 +73,9 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		}
 	}
 
-	public setWeapon(isFirstPlayer: boolean, type: WeaponType): void{
+	public setWeapon(type: WeaponType): void{
 		this.wClass = Weapon.getWeaponClass(type);
-		this.setTexture(Weapon.getWeaponTex(isFirstPlayer, type));
+		this.setTexture(Weapon.getWeaponTex(this.isFirst, type));
 		this.createPiTerm();
 	}
 
@@ -117,11 +121,24 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 
     destroy(fromScene?: boolean): void {
     	super.destroy(fromScene);
-
+    	if(this.bullet) this.bullet.destroy();
 	}
 
 	public update(delta: number): void {
-    	if(this.bullet)
-    		this.bullet.update(delta);
+    	if(this.bullet) {
+			this.bullet.update(delta);
+			if(this.bullet.checkHit() || this.bullet.checkBounds()) this.removeBullet();
+		}
+	}
+
+	public createBullet(): void{
+    	this.removeBullet();
+    	this.bullet = new Bullet(this.scene, this.x, this.y, false, this.weaponType, false) //TODO
+	}
+
+	private removeBullet(): void{
+    	if(!this.bullet) return;
+    	this.bullet.destroy();
+    	this.bullet = null;
 	}
 }

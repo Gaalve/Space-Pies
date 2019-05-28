@@ -96,6 +96,9 @@ export class Player {
 
     public update(delta: number): void{
         this.ship.update(delta);
+        this.drones[0].update(delta);
+        this.drones[1].update(delta);
+        this.drones[2].update(delta);
     }
 
     getNameIdentifier(): string{

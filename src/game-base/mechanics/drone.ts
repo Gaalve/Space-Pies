@@ -38,10 +38,10 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    scene.add.existing(this);
 
 	    this.activatedWeapons = 0;
-
-	    this.weapons = [new Weapon(scene, this, WeaponType.LASER_ARMOR, 0),
-						new Weapon(scene, this, WeaponType.LASER_ARMOR, 1),
-						new Weapon(scene, this, WeaponType.LASER_ARMOR, 2)];
+		let isFirst = this.player.isFirstPlayer();
+	    this.weapons = [new Weapon(scene, this, WeaponType.LASER_ARMOR, isFirst, 0),
+						new Weapon(scene, this, WeaponType.LASER_ARMOR, isFirst,1),
+						new Weapon(scene, this, WeaponType.LASER_ARMOR, isFirst,2)];
 
 		this.buildPiTerm();
 	    this.activateOnScreenText();
@@ -57,13 +57,12 @@ export class Drone extends Phaser.GameObjects.Sprite{
      */
     addWeapon(weapon : string) : void{
     	let w = this.weapons[this.getNrWeapons()];
-    	let isFirst = this.player.isFirstPlayer();
 	    if(weapon == "l"){
-			w.setWeapon(isFirst, WeaponType.LASER_ARMOR);
+			w.setWeapon(WeaponType.LASER_ARMOR);
         }else if(weapon == "p") {
-			w.setWeapon(isFirst, WeaponType.PROJECTILE_SHIELD);
+			w.setWeapon(WeaponType.PROJECTILE_SHIELD);
         }else if(weapon == "r"){
-			w.setWeapon(isFirst, WeaponType.ROCKET);
+			w.setWeapon(WeaponType.ROCKET);
 		}
 
 	    w.setVisible(true);
