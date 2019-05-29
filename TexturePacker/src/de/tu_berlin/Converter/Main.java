@@ -12,8 +12,8 @@ public class Main {
 
     public static void main(String[] args){
 //        parsePackAtlasToJSON("./src/game-base/assets");
-        String path = "./src/game-base/assets/sprites/";
-        String outPath = "./src/game-base/assets/atlas/";
+        String path = "./src/game-base/assets/particles/";
+        String outPath = "./src/game-base/assets/atlas/particles/";
         try {
             TexturePacker.main(new String[]{path, outPath});
         } catch (Exception e) {
