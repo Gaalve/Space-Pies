@@ -3,6 +3,7 @@ import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
 
 import {PiSystem} from "../mechanics/picalc/pi-system";
+import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 
 export class MainScene extends Phaser.Scene {
 
@@ -15,6 +16,7 @@ export class MainScene extends Phaser.Scene {
     private buttonOption: Button;
     private shop: Button;
     private system: PiSystem;
+    private pem: ParticleEmitterManager;
 
     constructor() {
         super({
@@ -31,15 +33,15 @@ export class MainScene extends Phaser.Scene {
         // )
 
         this.load.spritesheet('bleedingbar', 'assets/sprites/bleedingbar.png', { frameWidth: 19, frameHeight: 42, spacing: 5, startFrame: 0, endFrame: 42, margin: 0});
-
-
     }
 
     create(): void {
         this.system = new PiSystem(this, 1,1,1,true);
         this.system.start();
         this.data.set("system", this.system);
-        this.players = [new Player(this, 280, 540, "P1", true, this.system), new Player(this, 1650, 540, "P2", false, this.system)];
+        this.pem = this.add.particles("particle");
+        this.pem.setDepth(5);
+        this.players = [new Player(this, 280, 540, "P1", true, this.system, this.pem), new Player(this, 1650, 540, "P2", false, this.system, this.pem)];
         this.turn = new Turn(this, this.players);
         this.data.set('P1', this.players[0]);
         this.data.set('P2', this.players[1]);

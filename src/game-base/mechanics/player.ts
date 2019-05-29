@@ -3,6 +3,8 @@ import {PiSystem} from "./picalc/pi-system";
 import {Ship} from "./ship";
 import {Health} from "./health/health";
 import {EnergyDrone} from "./energyDrone";
+import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
+import {Explosion} from "./animations/explosion";
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
@@ -18,8 +20,10 @@ export class Player {
     private energy : number;
     private energyCost : number;
 
+    public explosion: Explosion;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem){
+
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager){
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
@@ -32,7 +36,7 @@ export class Player {
         this.drones[0].addWeapon("p");
         this.system = piSystem;
         this.health = new Health(scene, this, piSystem);
-
+        this.explosion = new Explosion(pem);
 
         //TODO: remove when Triebwerke ready
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '', "miss").nullProcess()));
