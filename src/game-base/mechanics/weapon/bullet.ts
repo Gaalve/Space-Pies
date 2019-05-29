@@ -65,7 +65,6 @@ export class Bullet extends Sprite{
                     break;
             }
         }
-
     }
 
     public checkHit(): boolean{

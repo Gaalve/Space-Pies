@@ -489,6 +489,16 @@
         "type": "image",
         "key": "shot_laser",
         "url": "assets/sprites/shot_laser.png"
+      },
+      {
+        "type": "image",
+        "key": "not_miss",
+        "url": "assets/sprites/not_miss.png"
+      },
+      {
+        "type": "image",
+        "key": "not_hit",
+        "url": "assets/sprites/not_hit.png"
       }
     ]
   }

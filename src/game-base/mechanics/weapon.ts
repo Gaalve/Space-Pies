@@ -2,6 +2,7 @@ import {Drone} from "./drone";
 import {WeaponType} from "./weapon/weapon-type";
 import {Bullet} from "./weapon/bullet";
 import {Player} from "./player";
+import {HitMissNotification} from "./weapon/hit-miss-notification";
 
 
 export class Weapon extends Phaser.GameObjects.Sprite{
@@ -10,6 +11,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	private drone : Drone;						//which drone the weapon belongs to
     private wNr : number;
     private piTerm : string;
+    private notification: HitMissNotification;
     private bullet: Bullet;
     private weaponType: WeaponType;
 	private isFirst: boolean;
@@ -44,7 +46,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 			this.repositionWeapons();
 		}
 		this.bullet = null;
-		// this.scene.time.delayedCall(Math.random()*4000 + 2000, this.createBullet, [], this);
+		this.notification = null;
 	}
 
 
@@ -133,16 +135,27 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 			this.bullet.update(delta);
 			if(this.bullet.hasHit() || this.bullet.isOutOfBounds()) this.removeBullet();
 		}
+    	if(this.notification){
+    		this.notification.update(delta);
+    		if (this.notification.shouldRemove()) this.removeNotification();
+		}
 	}
 
 	public createBullet(miss: boolean): void{
     	this.removeBullet();
-    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this.weaponType, !miss, this.player) //TODO
+    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this.weaponType, !miss, this.player); //TODO
+		this.notification = new HitMissNotification(this.scene, this.x, this.y, !miss, this.isFirst);
 	}
 
 	private removeBullet(): void{
     	if(!this.bullet) return;
     	this.bullet.destroy();
     	this.bullet = null;
+	}
+
+	private removeNotification(): void{
+		if(!this.notification) return;
+		this.notification.destroy();
+		this.notification = null;
 	}
 }
