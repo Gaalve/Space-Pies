@@ -187,7 +187,7 @@ export class Player {
     }
 
     /**
-	push pi terms for weapons to the pi system. Has to be done each round again
+	push pi terms for weapons to the pi system. Has to be done each round again // TODO: Remove this, when animation tested
 	 */
     // pushWeapons() : void{
     //     for(let d of this.drones) {

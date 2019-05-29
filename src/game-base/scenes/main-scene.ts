@@ -161,10 +161,18 @@ export class MainScene extends Phaser.Scene {
         let d = drone.toString();
         let weapon = this.system.add.term("Weapon" + p + d, undefined);
 
+
+        // TODO: add callback to weapon animation, drone is needed!
+
+        let droneRef = this.players[player - 1].getDrones()[drone - 1];
+
         let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
-                                                channelOutCB("w1","", () => {}).        //function for weapon animation
-                                                channelOutCB("w2", "", () => {}).
-                                                channelOutCB("w3", "", () => {}).
+                                                channelOutCB("w1","", (_, at) => {
+                                                    droneRef.getWeapons()[0].createBullet(at == 'miss')}).        //function for weapon animation
+                                                channelOutCB("w2", "", (_, at) => {
+                                                    droneRef.getWeapons()[1].createBullet(at == 'miss')}).
+                                                channelOutCB("w3", "", (_, at) => {
+                                                    droneRef.getWeapons()[2].createBullet(at == 'miss')}).
                                                 next(weapon),
                                               this.system.add.channelInCB("wext" + p + d + "1", "w1", (wClass) => {
                                                     this.players[player - 1].getDrones()[drone].addWeapon(wClass);
