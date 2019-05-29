@@ -41,13 +41,24 @@ export class Bullet extends Sprite{
         this.y += delta*this.speedY;
     }
 
-    public checkHit(): boolean{
+    public hasHit(): boolean{
         if(!this.hit) return false;
-        if(!this.isFirst) return this.x < 400;
-        else return this.x > 1520;
+        if(!this.isFirst && this.x < 400){
+            this.playHitAnimation();
+            return true;
+        }
+        else if(this.isFirst && this.x > 1520){
+            this.playHitAnimation();
+            return true;
+        }
+        return false
     }
 
-    public checkBounds(): boolean{
+    public isOutOfBounds(): boolean{
         return this.x < -50 || this.x > 1970;
+    }
+
+    private playHitAnimation(): void{
+        //TODO callback on player to play specific animation
     }
 }

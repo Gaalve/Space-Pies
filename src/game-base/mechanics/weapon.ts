@@ -128,7 +128,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	public update(delta: number): void {
     	if(this.bullet) {
 			this.bullet.update(delta);
-			if(this.bullet.checkHit() || this.bullet.checkBounds()) this.removeBullet();
+			if(this.bullet.hasHit() || this.bullet.isOutOfBounds()) this.removeBullet();
 		}
 	}
 
