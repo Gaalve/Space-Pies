@@ -33,6 +33,8 @@ export class Player {
         this.system = piSystem;
         this.health = new Health(scene, this, piSystem);
 
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '', "ds").nullProcess()));
+
         // z1 starts with 1 shield
         // this.health.addToHz(piSystem, 'rshield', 'z1');
         // this.health.addToHz(piSystem, 'rshield', 'z1');

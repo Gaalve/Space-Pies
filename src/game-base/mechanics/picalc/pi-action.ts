@@ -12,10 +12,10 @@ export abstract class PiAction extends PiResolvable{
     protected isNameScoped: boolean;
     protected isOutputScoped: boolean;
 
-    protected callback: (resolvedName?: string, attachmentOfResolved?: any) => any;
+    protected callback: (resolvedName?: string, attachmentOfResolved?: string) => any;
 
-    public attachment;
-    public attachmentOfResolved;
+    public attachment: string;
+    public attachmentOfResolved: string;
 
     protected constructor(system: PiSystem, name: string, inOutPut: string, isInput: boolean){
         super(system, name.toLowerCase());
