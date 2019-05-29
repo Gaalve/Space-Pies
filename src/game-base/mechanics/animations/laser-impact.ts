@@ -20,7 +20,7 @@ export class LaserImpact {
             rotate: LaserImpact.angleUpdate,
             // blendMode: Phaser.BlendModes.ADD,
             scale: (particle, key, t) => (t > 0.2 ? 1-(t - 0.2)*(1.0/0.8) : 1)*0.55,
-            lifespan: {min: 1800*lifeScale, max: 2000*lifeScale}, on: false});
+            lifespan: {min: 1800*lifeScale, max: 2000*lifeScale}, on: false, frame: "particle_2"});
     }
 
     public impactAt(x: number, y: number, lifeScale: number = 1, speedScale: number = 1, impactAngle: number): void{

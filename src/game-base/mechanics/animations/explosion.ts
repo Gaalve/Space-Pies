@@ -14,19 +14,19 @@ export class Explosion {
         this.explosionSmoke = this.pem.createEmitter( {
             x: 0, y: 0, tint: 0xff333333, speed: {min: 10, max: 120},
             scale: (particle, key, t) => t > 0.8 ? 1-(t - 0.8)*5 : 1,
-            lifespan: {min: 1800, max: 2000}, on: false});
+            lifespan: {min: 1800, max: 2000}, on: false, frame: "particle_1"});
         this.explosionRed = this.pem.createEmitter({
             x: 0, y: 0, tint: 0xffc83737, speed: {min: 10, max: 90},
             scale: (particle, key, t) => particle.scaleX = particle.scaleY = t > 0.8 ? 1-(t - 0.8)*5 : 1,
-            lifespan: {min: 1600, max: 1800}, on: false});
+            lifespan: {min: 1600, max: 1800}, on: false, frame: "particle_1"});
         this.explosionOrange = this.pem.createEmitter({
             x: 0, y: 0, tint: 0xffff9955, speed: {min: 10, max: 70},
             scale: (particle, key, t) => particle.scaleX = particle.scaleY = t > 0.8 ? 1-(t - 0.8)*5 : 1,
-            lifespan: {min: 1400, max: 1600}, on: false});
+            lifespan: {min: 1400, max: 1600}, on: false, frame: "particle_1"});
         this.explosionYellow = this.pem.createEmitter({
             x: 0, y: 0, tint: 0xffffdd55, speed: {min: 10, max: 50},
             scale: (particle, key, t) => particle.scaleX = particle.scaleY = t > 0.8 ? 1-(t - 0.8)*5 : 1,
-            lifespan: {min: 1200, max: 1400}, on: false});
+            lifespan: {min: 1200, max: 1400}, on: false, frame: "particle_1"});
     }
 
     public explosionAt(x: number, y: number, lifeScale: number = 1, speedScale: number = 1): void{

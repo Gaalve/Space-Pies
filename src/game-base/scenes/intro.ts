@@ -18,6 +18,11 @@ export class Intro extends Phaser.Scene {
             "preload",
             "assets/pack.json",
             "preload"
+        );
+        this.load.atlas(
+            "parts",
+            "assets/atlas/particles/pack.png",
+            "assets/atlas/particles/pack.json"
         )
     }
 

@@ -32,7 +32,6 @@ export class Bullet extends Sprite{
             this.x -= 15;
         }
         this.speedY = (540 - y) * (speed / 1100)
-        // console.log("HIT: "+hit);
     }
 
     private static getBulletTex(type: WeaponType) : string{

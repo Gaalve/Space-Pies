@@ -39,7 +39,7 @@ export class MainScene extends Phaser.Scene {
         this.system = new PiSystem(this, 1,1,1,true);
         this.system.start();
         this.data.set("system", this.system);
-        this.pem = this.add.particles("particle_2");
+        this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
         this.players = [new Player(this, 280, 540, "P1", true, this.system, this.pem), new Player(this, 1650, 540, "P2", false, this.system, this.pem)];
         this.turn = new Turn(this, this.players);
