@@ -38,10 +38,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    scene.add.existing(this);
 
 	    this.activatedWeapons = 0;
-		let isFirst = this.player.isFirstPlayer();
-	    this.weapons = [new Weapon(scene, this, WeaponType.LASER_ARMOR, isFirst, 0),
-						new Weapon(scene, this, WeaponType.LASER_ARMOR, isFirst,1),
-						new Weapon(scene, this, WeaponType.LASER_ARMOR, isFirst,2)];
+	    this.weapons = [new Weapon(scene, this, WeaponType.LASER_ARMOR, this.player, 0),
+						new Weapon(scene, this, WeaponType.LASER_ARMOR, this.player,1),
+						new Weapon(scene, this, WeaponType.LASER_ARMOR, this.player,2)];
 
 		this.buildPiTerm();
 	    this.activateOnScreenText();

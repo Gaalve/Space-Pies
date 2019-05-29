@@ -1,6 +1,7 @@
 import {Drone} from "./drone";
 import {WeaponType} from "./weapon/weapon-type";
 import {Bullet} from "./weapon/bullet";
+import {Player} from "./player";
 
 
 export class Weapon extends Phaser.GameObjects.Sprite{
@@ -12,11 +13,13 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     private bullet: Bullet;
     private weaponType: WeaponType;
 	private isFirst: boolean;
+	private player: Player;
 
-	public constructor(scene : Phaser.Scene, drone : Drone, type: WeaponType, isFirst: boolean, wNr: number) {
-        super(scene, drone.x, drone.y, Weapon.getWeaponTex(isFirst, type));
+	public constructor(scene : Phaser.Scene, drone : Drone, type: WeaponType, player: Player, wNr: number) {
+        super(scene, drone.x, drone.y, Weapon.getWeaponTex(player.isFirstPlayer(), type));
         this.weaponType = type;
-        this.isFirst = isFirst;
+        this.isFirst = player.isFirstPlayer();
+        this.player = player;
 		if (drone.getPlayer().getNameIdentifier() == "P1") {
             this.setX(drone.x + 70);
         }else{
@@ -134,7 +137,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 
 	public createBullet(miss: boolean): void{
     	this.removeBullet();
-    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this.weaponType, !miss) //TODO
+    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this.weaponType, !miss, this.player) //TODO
 	}
 
 	private removeBullet(): void{

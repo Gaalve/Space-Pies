@@ -1,5 +1,6 @@
 import {WeaponType} from "./weapon-type";
 import Sprite = Phaser.GameObjects.Sprite;
+import {Player} from "../player";
 
 
 export class Bullet extends Sprite{
@@ -8,9 +9,11 @@ export class Bullet extends Sprite{
     private speedY: number;
     private hit: boolean;
     private isFirst: boolean;
+    private player: Player;
 
-    constructor(scene: Phaser.Scene, x: number, y: number, isFirstPlayer: boolean, type: WeaponType, hit: boolean) {
+    constructor(scene: Phaser.Scene, x: number, y: number, isFirstPlayer: boolean, type: WeaponType, hit: boolean, player: Player) {
         super(scene, x, y, Bullet.getBulletTex(type));
+        this.player = player;
         scene.add.existing(this);
         this.setDepth(10); //TODO
         this.hit = hit;
@@ -60,5 +63,6 @@ export class Bullet extends Sprite{
 
     private playHitAnimation(): void{
         //TODO callback on player to play specific animation
+        this.player.explosion.explosionAt(this.x, this.y, 0.4, 1.2);
     }
 }
