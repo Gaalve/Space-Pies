@@ -31,6 +31,7 @@ export class PiChannelIn extends PiAction{
             let argValue = (<PiChannelOut>other).getOutputName();
             this.next.rename(this.inOutPut, argValue);
             this.resolvedName = argValue;
+            this.attachmentOfResolved = other.attachment;
         }
         return this.next;
     }

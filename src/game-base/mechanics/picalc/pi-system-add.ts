@@ -26,13 +26,13 @@ export  class PiSystemAdd{
         return new PiSystemAddAction(this.system, new PiChannelOut(this.system, name, output))
     }
 
-    public channelInCB(name: string, input: string, callback: Function): PiSystemAddAction{
+    public channelInCB(name: string, input: string, callback: (resolvedName?: string, attachmentOfResolved?: any) => any): PiSystemAddAction{
         let pi = new PiChannelIn(this.system, name, input);
         pi.setCallback(callback);
         return new PiSystemAddAction(this.system, pi)
     }
 
-    public channelOutCB(name: string, output: string, callback: Function): PiSystemAddAction{
+    public channelOutCB(name: string, output: string, callback: (resolvedName?: string, attachmentOfResolved?: any) => any): PiSystemAddAction{
         let pi = new PiChannelOut(this.system, name, output);
         pi.setCallback(callback);
         return new PiSystemAddAction(this.system, pi)
