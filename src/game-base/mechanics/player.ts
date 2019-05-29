@@ -33,7 +33,11 @@ export class Player {
         this.system = piSystem;
         this.health = new Health(scene, this, piSystem);
 
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '', "ds").nullProcess()));
+
+        //TODO: remove when Triebwerke ready
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '', "miss").nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '', "miss").nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '', "miss").nullProcess()));
 
         // z1 starts with 1 shield
         // this.health.addToHz(piSystem, 'rshield', 'z1');
@@ -183,20 +187,20 @@ export class Player {
             if(d.getNrWeapons() == 1) {
                 this.system.pushSymbol(
                     this.system.add.channelIn("lock", "*").
-                    channelOut(d.getWeapons()[0].getPiTerm(), "*").nullProcess()
+                    channelOutCB(d.getWeapons()[0].getPiTerm(), "*", (_, at) => d.getWeapons()[0].createBullet(at && at == 'miss')).nullProcess()
                 );
             } else if (d.getNrWeapons() == 2) {
                 this.system.pushSymbol(
                     this.system.add.channelIn("lock", "*").
-                    channelOut(d.getWeapons()[0].getPiTerm(), "*").
-                    channelOut(d.getWeapons()[1].getPiTerm(), "*").nullProcess()
+                    channelOutCB(d.getWeapons()[0].getPiTerm(), "*",(_, at) => d.getWeapons()[0].createBullet(at && at == 'miss')).
+                    channelOutCB(d.getWeapons()[1].getPiTerm(), "*",(_, at) => d.getWeapons()[0].createBullet(at && at == 'miss')).nullProcess()
                 );
             } else if (d.getNrWeapons() == 3) {
                 this.system.pushSymbol(
                     this.system.add.channelIn("lock", "*").
-                    channelOut(d.getWeapons()[0].getPiTerm(), "*").
-                    channelOut(d.getWeapons()[1].getPiTerm(), "*").
-                    channelOut(d.getWeapons()[2].getPiTerm(), "*").nullProcess()
+                    channelOutCB(d.getWeapons()[0].getPiTerm(), "*", (_, at) => d.getWeapons()[0].createBullet(at && at == 'miss')).
+                    channelOutCB(d.getWeapons()[1].getPiTerm(), "*", (_, at) => d.getWeapons()[2].createBullet(at && at == 'miss')).
+                    channelOutCB(d.getWeapons()[2].getPiTerm(), "*", (_, at) => d.getWeapons()[1].createBullet(at && at == 'miss')).nullProcess()
                 );
             }
         }

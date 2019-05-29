@@ -15,7 +15,7 @@ export class Bullet extends Sprite{
         this.setDepth(10); //TODO
         this.hit = hit;
         this.isFirst = isFirstPlayer;
-        let speed = 1;
+        let speed = 5;
         if(isFirstPlayer){
             this.speedX = speed;
             this.flipX = true;
@@ -24,6 +24,7 @@ export class Bullet extends Sprite{
             this.speedX = -speed;
         }
         this.speedY = (540 - y) * (speed / 1100)
+        // console.log("HIT: "+hit);
     }
 
     private static getBulletTex(type: WeaponType) : string{
@@ -32,6 +33,7 @@ export class Bullet extends Sprite{
             case WeaponType.PROJECTILE_SHIELD: return "shot_projectile";
             case WeaponType.ROCKET: return "shot_rocket"
         }
+        return "shot_laser"
     }
 
     public update(delta: number): void{
@@ -41,7 +43,7 @@ export class Bullet extends Sprite{
 
     public checkHit(): boolean{
         if(!this.hit) return false;
-        if(this.isFirst) return this.x < 400;
+        if(!this.isFirst) return this.x < 400;
         else return this.x > 1520;
     }
 

@@ -41,7 +41,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 			this.repositionWeapons();
 		}
 		this.bullet = null;
-		this.scene.time.delayedCall(Math.random()*4000 + 2000, this.createBullet, [], this);
+		// this.scene.time.delayedCall(Math.random()*4000 + 2000, this.createBullet, [], this);
 	}
 
 
@@ -75,6 +75,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 
 	public setWeapon(type: WeaponType): void{
 		this.wClass = Weapon.getWeaponClass(type);
+		this.weaponType = type;
 		this.setTexture(Weapon.getWeaponTex(this.isFirst, type));
 		this.createPiTerm();
 	}
@@ -131,9 +132,9 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		}
 	}
 
-	public createBullet(): void{
+	public createBullet(miss: boolean): void{
     	this.removeBullet();
-    	this.bullet = new Bullet(this.scene, this.x, this.y, false, this.weaponType, false) //TODO
+    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this.weaponType, !miss) //TODO
 	}
 
 	private removeBullet(): void{
