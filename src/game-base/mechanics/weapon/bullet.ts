@@ -22,9 +22,11 @@ export class Bullet extends Sprite{
         if(isFirstPlayer){
             this.speedX = speed;
             this.flipX = true;
+            this.x += 15;
         }
         else {
             this.speedX = -speed;
+            this.x -= 15;
         }
         this.speedY = (540 - y) * (speed / 1100)
         // console.log("HIT: "+hit);
