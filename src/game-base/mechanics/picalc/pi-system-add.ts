@@ -19,22 +19,28 @@ export  class PiSystemAdd{
     }
 
     public channelIn(name: string, input: string, attachment?: string): PiSystemAddAction{
-        return new PiSystemAddAction(this.system, new PiChannelIn(this.system, name, input))
+        let chan = new PiChannelIn(this.system, name, input);
+        chan.attachment = attachment;
+        return new PiSystemAddAction(this.system, chan)
     }
 
     public channelOut(name: string, output: string, attachment?: string): PiSystemAddAction{
-        return new PiSystemAddAction(this.system, new PiChannelOut(this.system, name, output))
+        let chan = new PiChannelOut(this.system, name, output);
+        chan.attachment = attachment;
+        return new PiSystemAddAction(this.system, chan);
     }
 
     public channelInCB(name: string, input: string, callback: (resolvedName?: string, attachmentOfResolved?: string) => any, attachment?: string): PiSystemAddAction{
         let pi = new PiChannelIn(this.system, name, input);
         pi.setCallback(callback);
+        pi.attachment = attachment;
         return new PiSystemAddAction(this.system, pi)
     }
 
     public channelOutCB(name: string, output: string, callback: (resolvedName?: string, attachmentOfResolved?: string) => any, attachment?: string): PiSystemAddAction{
         let pi = new PiChannelOut(this.system, name, output);
         pi.setCallback(callback);
+        pi.attachment = attachment;
         return new PiSystemAddAction(this.system, pi)
     }
 
