@@ -1,6 +1,6 @@
 import {Player} from "./player";
 import {Weapon} from "./weapon";
-import {WeaponType} from "./weapon-type";
+import {WeaponType} from "./weapon/weapon-type";
 
 
 export class Drone extends Phaser.GameObjects.Sprite{
