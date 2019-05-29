@@ -16,6 +16,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     private weaponType: WeaponType;
 	private isFirst: boolean;
 	private player: Player;
+    private simplePi : string;
 
 	public constructor(scene : Phaser.Scene, drone : Drone, type: WeaponType, player: Player, wNr: number) {
         super(scene, drone.x, drone.y, Weapon.getWeaponTex(player.isFirstPlayer(), type));
@@ -30,6 +31,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
         this.setVisible(false);
         scene.add.existing(this);
 		this.wClass = Weapon.getWeaponClass(type);
+		this.simplePi = this.wClass.charAt(0);
 		this.drone = drone;
 		this.wNr = wNr;
 
@@ -48,8 +50,6 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		this.bullet = null;
 		this.notification = null;
 	}
-
-
 
 	/**
 	graphical Repositioning of Weapons on ships
@@ -76,12 +76,14 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 				this.setX(this.x - 50)
 			}
 		}
+
 	}
 
 	public setWeapon(type: WeaponType): void{
 		this.wClass = Weapon.getWeaponClass(type);
 		this.weaponType = type;
 		this.setTexture(Weapon.getWeaponTex(this.isFirst, type));
+        this.simplePi = this.wClass.charAt(0);
 		this.createPiTerm();
 	}
 
@@ -115,15 +117,21 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	 */
     createPiTerm() : void{
     	if(this.drone.getPlayer().getNameIdentifier() == "P1") {
-			this.piTerm = this.wClass + "P2";
+			this.piTerm = this.wClass + "p2";
+			this.simplePi = this.simplePi + "p2";
 		}else{
-    		this.piTerm = this.wClass + "P1";
+    		this.piTerm = this.wClass + "p1";
+    		this.simplePi = this.simplePi + "p1";
 		}
     }
 
     getPiTerm() : string{
 	    return this.piTerm;
     }
+
+    getSimplePi() : string{
+    	return this.simplePi;
+	}
 
     destroy(fromScene?: boolean): void {
     	super.destroy(fromScene);
