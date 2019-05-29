@@ -44,8 +44,39 @@ export class Bullet extends Sprite{
     }
 
     public update(delta: number): void{
+        let lastX = this.x;
+        let lastY = this.y;
         this.x += delta*this.speedX;
         this.y += delta*this.speedY;
+
+        if(!this.checkHit()){
+            switch (this.weaponType) {
+                case WeaponType.LASER_ARMOR:
+                    this.player.laserTrail.trailAt(this.x, this.y, lastX, lastY,1, 1,
+                        new Vector2(this.speedX, this.speedY).angle()* Phaser.Math.RAD_TO_DEG);
+                    break;
+                case WeaponType.PROJECTILE_SHIELD:
+                    this.player.bulletTrail.trailAt(this.x, this.y, lastX, lastY,1, 1,
+                        new Vector2(this.speedX, this.speedY).angle()* Phaser.Math.RAD_TO_DEG);
+                    break;
+                case WeaponType.ROCKET:
+                    this.player.rocketTrail.trailAt(this.x, this.y, lastX, lastY,1, 1,
+                        new Vector2(this.speedX, this.speedY).angle()* Phaser.Math.RAD_TO_DEG);
+                    break;
+            }
+        }
+
+    }
+
+    public checkHit(): boolean{
+        if(!this.hit) return false;
+        if(!this.isFirst && this.x < 400){
+            return true;
+        }
+        else if(this.isFirst && this.x > 1520){
+            return true;
+        }
+        return false
     }
 
     public hasHit(): boolean{

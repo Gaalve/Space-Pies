@@ -7,6 +7,9 @@ import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterMana
 import {Explosion} from "./animations/explosion";
 import {LaserImpact} from "./animations/laser-impact";
 import {ProjectileImpact} from "./animations/projectile-impact";
+import {LaserTrail} from "./animations/laser-trail";
+import {RocketTrail} from "./animations/rocket-trail";
+import {BulletTrail} from "./animations/bullet-trail";
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
@@ -25,7 +28,9 @@ export class Player {
     public explosion: Explosion;
     public laserImpact: LaserImpact;
     public projectileImpact: ProjectileImpact;
-
+    public laserTrail: LaserTrail;
+    public rocketTrail: RocketTrail;
+    public bulletTrail: BulletTrail;
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager){
         this.nameIdentifier = nameIdentifier;
@@ -43,6 +48,9 @@ export class Player {
         this.explosion = new Explosion(pem);
         this.laserImpact = new LaserImpact(pem);
         this.projectileImpact = new ProjectileImpact(pem);
+        this.laserTrail = new LaserTrail(pem);
+        this.rocketTrail = new RocketTrail(pem);
+        this.bulletTrail = new BulletTrail(pem);
 
         //TODO: remove when Triebwerke ready
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '', "miss").nullProcess()));

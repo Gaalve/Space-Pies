@@ -2,7 +2,7 @@ import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterMana
 import Particle = Phaser.GameObjects.Particles.Particle;
 
 
-export class ProjectileImpact {
+export class BulletTrail {
 
     private pem: Phaser.GameObjects.Particles.ParticleEmitterManager;
     private bulletSpark: Phaser.GameObjects.Particles.ParticleEmitter;
@@ -12,26 +12,31 @@ export class ProjectileImpact {
         let speedScale = 1;
         let lifeScale = 1;
         this.bulletSpark = this.pem.createEmitter( {
-            x: 0, y: 0,  tint: [0xffff7f2a, 0xffffb380, 0xffffd42a, 0xffeeaa],
+            x: 0, y: 0,  tint: 0xffffffff,
             angle: {min: 50 - 13, max: 50 - 3},
             speed: {min: 5*speedScale, max: 120*speedScale},
-            alpha: 0.35,
+            alpha: 0.5,
             radial: true,
-            rotate: ProjectileImpact.angleUpdate,
-            scale: (particle, key, t) => (t > 0.2 ? 1-(t - 0.2)*(1.0/0.8) : 1)*0.55,
+            rotate: BulletTrail.angleUpdate,
+            scale: (particle, key, t) => (t > 0.2 ? 1-(t - 0.2)*(1.0/0.8) : 1)*0.15,
             lifespan: {min: 1800*lifeScale, max: 2000*lifeScale}, on: false, frame: "particle_2"});
     }
 
-    public impactAt(x: number, y: number, lifeScale: number = 1, speedScale: number = 1, impactAngle: number): void{
-        impactAngle += 180;
-        this.setImpactConfig(impactAngle, lifeScale, speedScale);
-        this.bulletSpark.emitParticle(50, x, y);
+    public trailAt(sx: number, sy: number, ex: number, ey: number, lifeScale: number = 1, speedScale: number = 1, trailAngle: number): void{
+        // trailAngle += 180;
+        this.setTrailConfig(trailAngle, lifeScale, speedScale);
+        for (let i = 0; i < 5 ; i++) {
+            let x = sx + (ex - sx)*Math.random()*0.75;
+            let y = sy + (ey - sy)*Math.random()*0.75;
+            this.bulletSpark.emitParticle(1, x, y);
+        }
     }
 
-    private setImpactConfig(impactAngle: number, lifeScale: number = 1, speedScale: number = 1): void{
+    private setTrailConfig(trailAngle: number, lifeScale: number = 1, speedScale: number = 1): void{
+        const angleOffset = 5;
         this.bulletSpark.fromJSON({
-            angle: {min: impactAngle - 20, max: impactAngle + 20},
-            speed: {min: 50*speedScale, max: 200*speedScale},
+            angle: {min: trailAngle - angleOffset, max: trailAngle + angleOffset},
+            speed: {min: 50*speedScale, max: 150*speedScale},
             lifespan: {min: 1800*lifeScale, max: 2000*lifeScale}, on: false});
     }
 

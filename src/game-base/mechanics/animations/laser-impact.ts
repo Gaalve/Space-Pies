@@ -18,7 +18,6 @@ export class LaserImpact {
             alpha: 0.35,
             radial: true,
             rotate: LaserImpact.angleUpdate,
-            // blendMode: Phaser.BlendModes.ADD,
             scale: (particle, key, t) => (t > 0.2 ? 1-(t - 0.2)*(1.0/0.8) : 1)*0.55,
             lifespan: {min: 1800*lifeScale, max: 2000*lifeScale}, on: false, frame: "particle_2"});
     }
@@ -33,23 +32,16 @@ export class LaserImpact {
     }
 
     private setImpactConfig1(impactAngle: number, lifeScale: number = 1, speedScale: number = 1): void{
-        console.log(impactAngle);
         this.laserSpark.fromJSON({
-            x: 0, y: 0,  //tint: 0xffaa0000,//[0xffff2a2a, 0xffff0000, 0xffd40000, 0xffaa0000],
             angle: {min: impactAngle - 13, max: impactAngle - 1},
             speed: {min: 50*speedScale, max: 200*speedScale},
-            radial: true,
-            // scale: (particle, key, t) => (t > 0.2 ? 1-(t - 0.2)*(1.0/0.8) : 1)*0.4,
             lifespan: {min: 1800*lifeScale, max: 2000*lifeScale}, on: false});
     }
     private setImpactConfig2(impactAngle: number, lifeScale: number = 1, speedScale: number = 1): void{
         console.log(impactAngle);
         this.laserSpark.fromJSON({
-            x: 0, y: 0,  //tint: 0xffff2a2a, //[0xffff2a2a, 0xffff0000, 0xffd40000, 0xffaa0000],
             angle: {min: impactAngle + 1, max: impactAngle + 13},
             speed: {min: 50*speedScale, max: 200*speedScale},
-            radial: true,
-            // scale: (particle, key, t) => (t > 0.2 ? 1-(t - 0.2)*(1.0/0.8) : 1)*0.4,
             lifespan: {min: 1800*lifeScale, max: 2000*lifeScale}, on: false});
     }
 
