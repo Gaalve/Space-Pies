@@ -49,7 +49,7 @@ export class PiChannelIn extends PiAction{
     }
 
     public trigger(): void {
-        this.callback(this.resolvedName);
+        this.callback(this.resolvedName, this.attachmentOfResolved);
     }
 
 }

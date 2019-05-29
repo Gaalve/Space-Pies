@@ -94,6 +94,6 @@ export abstract class PiAction extends PiResolvable{
 
     trigger(): void {
         super.trigger();
-        this.callback();
+        this.callback(undefined, this.attachmentOfResolved);
     }
 }
