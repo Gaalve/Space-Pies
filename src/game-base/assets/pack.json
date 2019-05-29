@@ -309,6 +309,11 @@
       },
       {
         "type": "image",
+        "key": "particle_2",
+        "url": "assets/sprites/particle_2.png"
+      },
+      {
+        "type": "image",
         "key": "ssbr/ssb_back",
         "url": "assets/sprites/ssbr/ssb_back.png"
       },

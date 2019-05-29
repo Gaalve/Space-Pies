@@ -5,6 +5,8 @@ import {Health} from "./health/health";
 import {EnergyDrone} from "./energyDrone";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {Explosion} from "./animations/explosion";
+import {LaserImpact} from "./animations/laser-impact";
+import {ProjectileImpact} from "./animations/projectile-impact";
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
@@ -21,6 +23,8 @@ export class Player {
     private energyCost : number;
 
     public explosion: Explosion;
+    public laserImpact: LaserImpact;
+    public projectileImpact: ProjectileImpact;
 
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager){
@@ -37,6 +41,8 @@ export class Player {
         this.system = piSystem;
         this.health = new Health(scene, this, piSystem);
         this.explosion = new Explosion(pem);
+        this.laserImpact = new LaserImpact(pem);
+        this.projectileImpact = new ProjectileImpact(pem);
 
         //TODO: remove when Triebwerke ready
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '', "miss").nullProcess()));

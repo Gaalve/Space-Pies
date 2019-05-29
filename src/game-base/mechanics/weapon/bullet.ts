@@ -1,6 +1,7 @@
 import {WeaponType} from "./weapon-type";
 import Sprite = Phaser.GameObjects.Sprite;
 import {Player} from "../player";
+import Vector2 = Phaser.Math.Vector2;
 
 
 export class Bullet extends Sprite{
@@ -10,9 +11,11 @@ export class Bullet extends Sprite{
     private hit: boolean;
     private isFirst: boolean;
     private player: Player;
+    private weaponType: WeaponType;
 
     constructor(scene: Phaser.Scene, x: number, y: number, isFirstPlayer: boolean, type: WeaponType, hit: boolean, player: Player) {
         super(scene, x, y, Bullet.getBulletTex(type));
+        this.weaponType = type;
         this.player = player;
         scene.add.existing(this);
         this.setDepth(10); //TODO
@@ -64,7 +67,18 @@ export class Bullet extends Sprite{
     }
 
     private playHitAnimation(): void{
-        //TODO callback on player to play specific animation
-        this.player.explosion.explosionAt(this.x, this.y, 0.4, 1.2);
+        switch (this.weaponType) {
+            case WeaponType.LASER_ARMOR:
+                this.player.laserImpact.impactAt(this.x, this.y, 0.32, 5,
+                    new Vector2(this.speedX, this.speedY).angle()* Phaser.Math.RAD_TO_DEG);
+                break;
+            case WeaponType.PROJECTILE_SHIELD:
+                this.player.projectileImpact.impactAt(this.x, this.y, 0.32, 5,
+                    new Vector2(this.speedX, this.speedY).angle()* Phaser.Math.RAD_TO_DEG);
+                break;
+            case WeaponType.ROCKET:
+                this.player.explosion.explosionAt(this.x, this.y, 0.4, 1.2);
+                break;
+        }
     }
 }
