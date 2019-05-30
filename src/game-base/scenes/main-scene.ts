@@ -74,7 +74,7 @@ export class MainScene extends Phaser.Scene {
             "preload",
             "assets/pack.json",
             "preload"
-        )
+        );
 
         this.load.spritesheet('bleedingbar', 'assets/sprites/bleedingbar.png', { frameWidth: 19, frameHeight: 42, spacing: 5, startFrame: 0, endFrame: 42, margin: 0});
 
@@ -86,7 +86,6 @@ export class MainScene extends Phaser.Scene {
         this.system.start();
         this.data.set("system", this.system);
         let system = this.system;
-
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
             if(this.turn.getCurrentRound() != 1){
                 this.switchTextures(this.turn.getCurrentPlayer());
@@ -107,8 +106,6 @@ export class MainScene extends Phaser.Scene {
         }));
         system.pushSymbol(closeShop);
         system.pushSymbol(startShop);
-        let createWMod = (system.add.channelOut('wmod1','*' ).nullProcess()); //wmod2 for p2
-
         this.players = [new Player(this, 280, 540, "P1", true, this.system), new Player(this, 1650, 540, "P2", false, this.system)];
         this.turn = new Turn(this, this.players);
         this.data.set('P1', this.players[0]);
@@ -202,6 +199,8 @@ export class MainScene extends Phaser.Scene {
 
 
         }
+        this.players[0].update(delta);
+        this.players[1].update(delta);
     }
 
 
@@ -423,12 +422,6 @@ export class MainScene extends Phaser.Scene {
             ];
             this.closeShop(this.shopZ, this.shopZText, false);
 
-
-            this.buttonEndTurn.updateStep();
-            this.buttonOption.updateStep();
-        }
-        this.players[0].update(delta);
-        this.players[1].update(delta);
     }
 
     private createChooseType(): void{
