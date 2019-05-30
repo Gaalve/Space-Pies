@@ -92,7 +92,8 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		switch (type) {
 			case WeaponType.LASER_ARMOR: return "armor";
 			case WeaponType.PROJECTILE_SHIELD: return "shield";
-			case WeaponType.ROCKET: return "rocket"
+			case WeaponType.ROCKET: return "rocket";
+            case WeaponType.NONE: return "???";
 		}
 	}
 
@@ -101,13 +102,15 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 			switch (type) {
 				case WeaponType.LASER_ARMOR: return "ssr_weap_las";
 				case WeaponType.PROJECTILE_SHIELD: return "ssr_weap_pro";
-				case WeaponType.ROCKET: return "ssr_weap_rock"
+                case WeaponType.ROCKET: return "ssr_weap_rock";
+                case WeaponType.NONE: return "ssb_weap_las"; // wrong model is intended!
 			}
 		else
 			switch (type) {
 				case WeaponType.LASER_ARMOR: return "ssb_weap_las";
 				case WeaponType.PROJECTILE_SHIELD: return "ssb_weap_pro";
-				case WeaponType.ROCKET: return "ssb_weap_rock"
+				case WeaponType.ROCKET: return "ssb_weap_rock";
+                case WeaponType.NONE: return "ssr_weap_las"; // wrong model is intended!
 			}
 	}
 
@@ -150,6 +153,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	}
 
 	public createBullet(miss: boolean): void{
+        if(this.weaponType == WeaponType.NONE) return;
     	this.removeBullet();
     	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this.weaponType, !miss, this.player); //TODO
 		this.notification = new HitMissNotification(this.scene, this.x, this.y, !miss, this.isFirst);
