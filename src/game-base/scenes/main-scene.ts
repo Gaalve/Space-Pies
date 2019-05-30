@@ -3,6 +3,8 @@ import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
 
 import {PiSystem} from "../mechanics/picalc/pi-system";
+import {PiTerm} from "../mechanics/picalc/pi-term";
+import {PiSymbol} from "../mechanics/picalc/pi-symbol";
 
 export class MainScene extends Phaser.Scene {
 
@@ -83,7 +85,6 @@ export class MainScene extends Phaser.Scene {
 
     create(): void {
         this.system = new PiSystem(this, 1,1,1,true);
-        this.system.start();
         this.data.set("system", this.system);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
@@ -156,6 +157,39 @@ export class MainScene extends Phaser.Scene {
 
 
 
+
+        //Weapons in Pi Calculus
+        for(let i = 1; i<3; i++){
+            for(let j = 0; j < 3; j++){
+                this.buildWeaponsPi(i,j);
+            }
+        }
+        //extra functions to resolve existing channels w1, w2, w3 after attack phase
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w1", "").nullProcess()));
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w2", "").nullProcess()));
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w3", "").nullProcess()));
+
+        //locks for attack phase
+        for(let i = 1; i < 3; i++){
+            this.buildLocksPi(i);
+        }
+
+        //extra functions to resolve existing channels nolock1, nolock2, nolock3 after attack phase
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock1", "").nullProcess()));
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock2", "").nullProcess()));
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock3", "").nullProcess()));
+
+        //create 1 weapon for each player on ship
+        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext101", "shield").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext201", "shield").nullProcess());
+
+    //#####################Testing
+        //this.system.pushSymbol(this.system.add.channelOut("wmod11", "").channelOut("wext111", "armor").nullProcess());
+        //this.system.pushSymbol(this.system.add.channelOut("wmod12", "").channelOut("wext121", "rocket").nullProcess());
+    //#####################Testing
+
+
+        this.system.start();
     }
 
 
@@ -203,6 +237,61 @@ export class MainScene extends Phaser.Scene {
         this.players[1].update(delta);
     }
 
+    /**
+     * builds all weaponmods and weapons in pi calculus
+     * @param player
+     * @param drone
+     */
+    buildWeaponsPi(player : number, drone : number) : void{
+        let p = player.toString();
+        let d = drone.toString();
+        let weapon = this.system.add.term("Weapon" + p + d, undefined);
+
+        let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
+                                                channelOutCB("w1","", () => {}).        //function for weapon animation
+                                                channelOutCB("w2", "", () => {}).
+                                                channelOutCB("w3", "", () => {}).
+                                                next(weapon),
+                                              this.system.add.channelInCB("wext" + p + d + "1", "w1", (wClass) => {
+                                                    this.players[player - 1].getDrones()[drone].addWeapon(wClass);
+                                                    }).
+                                                next(weapon),
+                                              this.system.add.channelInCB("wext" + p + d + "2", "w2", (wClass) => {
+                                                    this.players[player - 1].getDrones()[drone].addWeapon(wClass);
+                                                    }).
+                                                next(weapon),
+                                              this.system.add.channelInCB("wext" + p + d + "3", "w3", (wClass) => {
+                                                    this.players[player - 1].getDrones()[drone].addWeapon(wClass);
+                                                    }).
+                                                next(weapon)]);
+        weapon.symbol = sum;
+
+        this.system.pushSymbol(this.system.add.channelInCB("wmod" + p + d, "", () => {
+                                                    this.players[player - 1].createDrone(drone);
+                                                    }).
+                                                channelOut("newlock" + p + d, "lock" + p).
+                                                next(weapon));
+    }
+
+    buildLocksPi(player : number) : void{
+        let p = player.toString();
+
+        let rlock = this.system.add.term("RLock" + p, undefined);
+        let sum = this.system.add.sum([this.system.add.channelIn("unlock" + p, "").
+                                                channelOut("nolock1", "").
+                                                channelOut("nolock2", "").
+                                                channelOut("nolock3", "").
+                                                channelOut("attackp" + p + "end", "").
+                                                next(rlock),
+                                              this.system.add.channelIn("newlock" + p + "0", "nolock1").
+                                                next(rlock),
+                                              this.system.add.channelIn("newlock" + p + "1", "nolock2").
+                                                next(rlock),
+                                              this.system.add.channelIn("newlock" + p + "2", "nolock3").
+                                                next(rlock)]);
+        rlock.symbol = sum;
+        this.system.pushSymbol(rlock);
+    }
 
     private createShop1(): void
     {
