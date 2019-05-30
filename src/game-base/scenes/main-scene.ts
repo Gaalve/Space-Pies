@@ -85,14 +85,12 @@ export class MainScene extends Phaser.Scene {
         let system = this.system;
 
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
-            this.updateShop1(false);
-            this.updateShopW(false);
             if(this.turn.getCurrentRound() != 1){
                 this.switchTextures(this.turn.getCurrentPlayer());
             }
-            this.updateShop1(false);
-            this.updateShopW(false);
+            //this.updateShopW(false);
             this.displayShop(this.shop1, this.shop1Text);
+            this.updateShop1(false);
             this.shop1Active = true;
             this.shop_bg.setVisible(true);
             this.updateEnergyText();
@@ -240,7 +238,7 @@ export class MainScene extends Phaser.Scene {
             player.raiseEnergyCost(1);
             this.updateEnergyText();
             this.data.set("buy", "w");
-            this.updateShopW(true);
+            //this.updateShopW(true);
             this.updateShop1(true);
 
             this.system.pushSymbol(this.system.add.channelOut('wmod'+ player.getNameIdentifier().charAt(1),'*' ).nullProcess());
@@ -255,7 +253,7 @@ export class MainScene extends Phaser.Scene {
                 let player = this.turn.getCurrentPlayer();
                 player.payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
-                this.updateShopW(false);
+                //this.updateShopW(false);
                 this.data.set("buy", "s");
                 this.updateShop1(true);
 
@@ -331,7 +329,7 @@ export class MainScene extends Phaser.Scene {
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
                 this.updateShop1(false);
-                this.updateShopW(false);
+                //this.updateShopW(false);
                 this.closeShop(this.shopZ, this.shopZText,false);
                 this.displayShop(this.shop1, this.shop1Text);
                 this.shop1Active = true;
@@ -352,7 +350,7 @@ export class MainScene extends Phaser.Scene {
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
                 this.updateShop1(false);
-                this.updateShopW(false);
+                //this.updateShopW(false);
                 this.closeShop(this.shopZ, this.shopZText,false);
                 this.displayShop(this.shop1, this.shop1Text);
                 this.shop1Active = true;
@@ -375,7 +373,7 @@ export class MainScene extends Phaser.Scene {
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
                 this.updateShop1(false);
-                this.updateShopW(false);
+                //this.updateShopW(false);
                 this.closeShop(this.shopZ, this.shopZText,false);
                 this.displayShop(this.shop1, this.shop1Text);
                 this.shop1Active = true;
@@ -398,7 +396,7 @@ export class MainScene extends Phaser.Scene {
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
                 this.updateShop1(false);
-                this.updateShopW(false);
+                //this.updateShopW(false);
                 this.closeShop(this.shopZ, this.shopZText,false);
                 this.displayShop(this.shop1, this.shop1Text);
                 this.shop1Active = true;
@@ -428,6 +426,7 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("type", "l");
                 this.closeShop(this.shopT, this.shopTText, false);
                 this.displayShop(this.shopW, this.shopWText);
+                this.updateShopW(false);
                 this.shopWActive = true;
                 this.shopTActive = false;
             });
@@ -439,6 +438,7 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("type", "p");
                 this.closeShop(this.shopT, this.shopTText, false);
                 this.displayShop(this.shopW, this.shopWText);
+                this.updateShopW(false);
                 this.shopWActive = true;
                 this.shopTActive = false;
             });
@@ -450,6 +450,7 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("type", "r");
                 this.closeShop(this.shopT, this.shopTText, false);
                 this.displayShop(this.shopW, this.shopWText);
+                this.updateShopW(false);
                 this.shopWActive = true;
                 this.shopTActive = false;
             });
@@ -477,7 +478,7 @@ export class MainScene extends Phaser.Scene {
                 this.updateEnergyText();
                 let term = "wext"+player.getNameIdentifier().charAt(1) + "0" + this.data.get("type");
                 this.updateShop1(false);
-                this.updateShopW(true);
+                //this.updateShopW(true);
                 this.data.set("buy", "s");
                 this.system.pushSymbol(this.system.add.channelOut(term, "*").nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
@@ -494,7 +495,7 @@ export class MainScene extends Phaser.Scene {
                 player.payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
                 this.updateShop1(false);
-                this.updateShopW(true);
+                //this.updateShopW(true);
                 this.data.set("buy", "d1");
                 this.system.pushSymbol(this.system.add.channelOut(term, "*").nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
@@ -511,7 +512,7 @@ export class MainScene extends Phaser.Scene {
                 player.payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
                 this.updateShop1(false);
-                this.updateShopW(true);
+                //this.updateShopW(true);
                 this.data.set("buy", "d2");
                 this.system.pushSymbol(this.system.add.channelOut(term, "*").nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
@@ -734,7 +735,7 @@ export class MainScene extends Phaser.Scene {
             else if(buy == "d1"){
                 d1Active++;
             }
-            else{
+            else if(buy == "d2"){
                 d2Active++;
             }
         }
@@ -745,10 +746,10 @@ export class MainScene extends Phaser.Scene {
             this.children.remove(this.shopWText[0]);
             this.shopWText[0] = this.add.text(500-60, 1080 - 50, "max weapons", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
-            }).setVisible(false);
+            }).setVisible(true);
 
         }
-        else{
+        else if(shipActive < 3 && energy >= energyCost){
             this.ship.changeButton(this, false, true, player);
             this.ship.restoreInteractive();
         }
@@ -761,27 +762,27 @@ export class MainScene extends Phaser.Scene {
             if(dronesNr < 2){
                 this.shopWText[1] = this.add.text(800-40, 1080 - 50, "not built", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
-                }).setVisible(false);
+                }).setVisible(true);
             }
             else if(d1Active >= 3){
                 this.shopWText[1] = this.add.text(800-60, 1080 - 50, "max weapons", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
-                }).setVisible(false);
+                }).setVisible(true);
             }
             else{
                 this.shopWText[1] = this.add.text(800-40, 1080 - 50, "! energy", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
-                }).setVisible(false);
+                }).setVisible(true);
             }
         }
 
-        else{
+        else if(dronesNr >= 2 && d1Active < 3 && energy >= energyCost){
             this.drone1.changeButton(this, false, true, player);
             this.drone1.restoreInteractive();
             this.children.remove(this.shopWText[1]);
             this.shopWText[1] = this.add.text(800-40, 1080 - 50, "drone 1", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
-            }).setVisible(false);
+            }).setVisible(true);
 
         }
 
@@ -793,27 +794,27 @@ export class MainScene extends Phaser.Scene {
             if(dronesNr < 3){
                 this.shopWText[2] = this.add.text(1100-40, 1080 - 50, "not built", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
-                }).setVisible(false);
+                }).setVisible(true);
             }
             else if(d1Active >= 3){
                 this.shopWText[2] = this.add.text(1100-60, 1080 - 50, "max weapons", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
-                }).setVisible(false);
+                }).setVisible(true);
             }
             else{
                 this.shopWText[2] = this.add.text(1100-40, 1080 - 50, "! energy", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
-                }).setVisible(false);
+                }).setVisible(true);
             }
         }
 
-        else{
+        else if(dronesNr >= 3 && d2Active < 3 && energy >= energyCost){
             this.drone2.changeButton(this, false,true, player);
             this.drone2.restoreInteractive();
             this.children.remove(this.shopWText[2]);
             this.shopWText[2] = this.add.text(1100-40, 1080 - 50, "drone 2", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
-            }).setVisible(false);
+            }).setVisible(true);
 
         }
     }
