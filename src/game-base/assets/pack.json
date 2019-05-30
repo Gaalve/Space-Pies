@@ -304,6 +304,11 @@
       },
       {
         "type": "image",
+        "key": "button_shop",
+        "url": "assets/sprites/button_shop.png"
+      },
+      {
+        "type": "image",
         "key": "particle",
         "url": "assets/sprites/particle.png"
       },
