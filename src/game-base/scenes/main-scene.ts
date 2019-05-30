@@ -113,7 +113,6 @@ export class MainScene extends Phaser.Scene {
         }));
         system.pushSymbol(closeShop);
         system.pushSymbol(startShop);
-        this.players = [new Player(this, 280, 540, "P1", true, this.system), new Player(this, 1650, 540, "P2", false, this.system)];
         this.turn = new Turn(this, this.players);
         this.data.set('P1', this.players[0]);
         this.data.set('P2', this.players[1]);
@@ -460,7 +459,7 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("buy", "s");
                 this.updateShop1(true);
 
-                system.pushSymbol(system.add.channelOut("solar"+ player.getNameIdentifier().charAt(1), "*").nullProcess())
+                system.pushSymbol(system.add.channelOut("newsolar"+ player.getNameIdentifier().charAt(1)+player.getNrSolarDrones(), "solar"+player.getNameIdentifier().charAt(1)).nullProcess())
 
         });
         this.solar.setAlt(this, 1150, 1080-100, "ssb_solar_drone");
@@ -625,7 +624,7 @@ export class MainScene extends Phaser.Scene {
         this.laser = new Button(this, 600, 1080-100, "button_shadow",
             "button_bg", "button_fg", "ssr_weap_las",
             () => {
-                this.data.set("type", "l");
+                this.data.set("type", "armorp");
                 this.closeShop(this.shopT, this.shopTText, false);
                 this.displayShop(this.shopW, this.shopWText);
                 this.updateShopW(false);
@@ -637,7 +636,7 @@ export class MainScene extends Phaser.Scene {
         this.projectile = new Button(this, 960, 1080-100, "button_shadow",
             "button_bg", "button_fg", "ssr_weap_pro",
             () => {
-                this.data.set("type", "p");
+                this.data.set("type", "shieldp");
                 this.closeShop(this.shopT, this.shopTText, false);
                 this.displayShop(this.shopW, this.shopWText);
                 this.updateShopW(false);
@@ -649,7 +648,7 @@ export class MainScene extends Phaser.Scene {
         this.rocket = new Button(this, 1320, 1080-100, "button_shadow",
             "button_bg", "button_fg", "ssr_weap_rock",
             () => {
-                this.data.set("type", "r");
+                this.data.set("type", "rocketp");
                 this.closeShop(this.shopT, this.shopTText, false);
                 this.displayShop(this.shopW, this.shopWText);
                 this.updateShopW(false);
@@ -678,11 +677,11 @@ export class MainScene extends Phaser.Scene {
                 let player = this.turn.getCurrentPlayer();
                 player.payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
-                let term = "wext"+player.getNameIdentifier().charAt(1) + "0" + player.getDrones()[0].getNrWeapons()+1;
+                let term = "wext"+player.getNameIdentifier().charAt(1) + "0" + player.getDrones()[0].getNrWeapons();
                 this.updateShop1(false);
                 //this.updateShopW(true);
                 this.data.set("buy", "s");
-                this.system.pushSymbol(this.system.add.channelOut(term, "w"+player.getDrones()[0].getNrWeapons()+1).nullProcess());
+                this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
                 this.displayShop(this.shop1, this.shop1Text);
                 this.shop1Active = true;
@@ -693,13 +692,13 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_wmod",
             ()=>{
                 let player = this.turn.getCurrentPlayer();
-                let term = "wext"+player.getNameIdentifier().charAt(1) + "1" + this.data.get("type");
+                let term = "wext"+player.getNameIdentifier().charAt(1) + "1" + player.getDrones()[0].getNrWeapons();
                 player.payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
                 this.updateShop1(false);
                 //this.updateShopW(true);
                 this.data.set("buy", "d1");
-                this.system.pushSymbol(this.system.add.channelOut(term, "*").nullProcess());
+                this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
                 this.displayShop(this.shop1, this.shop1Text);
                 this.shop1Active = true;
@@ -710,13 +709,13 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_wmod",
             ()=>{
                 let player = this.turn.getCurrentPlayer();
-                let term = "wext"+player.getNameIdentifier().charAt(1) + "2" + this.data.get("type");
+                let term = "wext"+player.getNameIdentifier().charAt(1) + "2" + player.getDrones()[0].getNrWeapons();
                 player.payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
                 this.updateShop1(false);
                 //this.updateShopW(true);
                 this.data.set("buy", "d2");
-                this.system.pushSymbol(this.system.add.channelOut(term, "*").nullProcess());
+                this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
                 this.displayShop(this.shop1, this.shop1Text);
                 this.shop1Active = true;
@@ -1081,6 +1080,16 @@ export class MainScene extends Phaser.Scene {
             this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
 
         }
+    }
+
+    getOpponentNr(player:Player): string{
+        if(player.getNameIdentifier() == "P1"){
+            return "2";
+        }
+        else{
+            return "1";
+        }
+
     }
 
 }
