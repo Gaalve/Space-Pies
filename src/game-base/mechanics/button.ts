@@ -1,16 +1,22 @@
 import Sprite = Phaser.GameObjects.Sprite;
+import {Player} from "./player";
 
 export class Button{
 
     private hovering: boolean;
     private scale: number;
     private onClick: Function;
+    private func: Function;
+    private activeP1: boolean;
+    private activeP2: boolean;
 
     //Textures
     private readonly shadow: Phaser.GameObjects.Sprite;
     private readonly bg: Phaser.GameObjects.Sprite;
     private readonly img: Phaser.GameObjects.Sprite;
-    private fg: Phaser.GameObjects.Sprite;
+    private readonly fg: Phaser.GameObjects.Sprite;
+    private readonly inactive: Phaser.GameObjects.Sprite;
+    private alt: Phaser.GameObjects.Sprite;
 
     //Color Interpolation
     private readonly startColor: Phaser.Display.Color;
@@ -26,10 +32,14 @@ export class Button{
         this.bg = new Sprite(scene, x, y, bgText);
         this.img = new Sprite(scene, x, y, imgTex);
         this.fg = new Sprite(scene, x, y, fgTex);
+        this.alt = new Sprite(scene, x, y, fgTex);
+        this.inactive = new Sprite(scene, x, y, "button_cancel_red")
         this.shadow.setOrigin(0.5, 0.5);
         this.bg.setOrigin(0.5, 0.5);
         this.img.setOrigin(0.5, 0.5);
         this.fg.setOrigin(0.5, 0.5);
+        this.inactive.setOrigin(0.5, 0.5);
+        this.alt.setOrigin(0.5,0.5);
         scene.add.existing(this.shadow);
         scene.add.existing(this.bg);
         scene.add.existing(this.img);
@@ -45,6 +55,9 @@ export class Button{
             .on('pointerout', () => this.hovering = false)
             .on('pointerup', () => this.clicked());
         this.onClick = onClick;
+        this.func = onClick;
+        this.activeP1 = true;
+        this.activeP2 = false;
 
     }
 
@@ -55,6 +68,36 @@ export class Button{
 
     public setOnClick(onClick: Function){
         this.onClick = onClick;
+    }
+
+    public removeInteractive(): void{
+        this.onClick = ()=>{};
+    }
+
+    public restoreInteractive(): void{
+        this.onClick = this.func;
+    }
+
+    public setInvisible(): void{
+        this.shadow.setVisible(false);
+        this.bg.setVisible(false);
+        this.img.setVisible(false);
+        this.fg.setVisible(false);
+        this.inactive.setVisible(false)
+        this.alt.setVisible(false)
+
+
+    }
+
+    public setVisible(): void{
+        this.shadow.setVisible(true);
+        this.bg.setVisible(true);
+        this.img.setVisible(true);
+        this.fg.setVisible(true);
+        this.inactive.setVisible(true);
+        this.alt.setVisible(true)
+
+
     }
 
     public updateStep(): void{
@@ -91,10 +134,48 @@ export class Button{
         this.img.setPosition(x, y);
     }
 
-    public changeButton(scene: Phaser.Scene,x: number, y: number, fgTex: string, onClick: Function = ()=>{}): void{
-        scene.children.remove(this.fg)
-        this.fg = new Sprite(scene, x, y, fgTex)
-        scene.add.existing(this.fg);
-        this.onClick = onClick;
+    public changeButton(scene: Phaser.Scene, alt: boolean, active: boolean, player: Player): void{
+        //scene.children.remove(this.fg);
+
+        if(alt){
+            if(!active){
+                scene.children.replace(this.alt, this.inactive);
+
+            }
+            else{
+                scene.children.replace(this.inactive, this.alt);
+               }
+
+        }
+
+        else{
+            if(!active){
+                scene.children.replace(this.fg, this.inactive);
+
+            }
+            else{
+                scene.children.replace(this.inactive, this.fg);
+             }
+        }
+
     }
+
+    public setAlt(scene: Phaser.Scene, x: number, y: number, fgtex : string): void{
+        this.alt = new Sprite(scene, x, y, fgtex);
+    }
+
+    public switchArt(scene: Phaser.Scene, player: Player): void{
+        if(player.getNameIdentifier() == "P1"){
+            scene.children.replace(this.alt, this.fg);
+
+        }
+        else{
+            scene.children.replace(this.fg, this.alt);
+        }
+
+
+    }
+
+
+
 }
