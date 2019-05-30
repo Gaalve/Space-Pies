@@ -156,8 +156,6 @@ export class MainScene extends Phaser.Scene {
         this.createChooseMod();
 
 
-
-
         //Weapons in Pi Calculus
         for(let i = 1; i<3; i++){
             for(let j = 0; j < 3; j++){
@@ -336,7 +334,7 @@ export class MainScene extends Phaser.Scene {
             //this.updateShopW(true);
             this.updateShop1(true);
 
-            this.system.pushSymbol(this.system.add.channelOut('wmod'+ player.getNameIdentifier().charAt(1),'*' ).nullProcess());
+            this.system.pushSymbol(this.system.add.channelOut('wmod'+ player.getNameIdentifier().charAt(1)+ player.getNrDrones(),'*' ).nullProcess());
 
 
         });
@@ -570,11 +568,11 @@ export class MainScene extends Phaser.Scene {
                 let player = this.turn.getCurrentPlayer();
                 player.payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
-                let term = "wext"+player.getNameIdentifier().charAt(1) + "0" + this.data.get("type");
+                let term = "wext"+player.getNameIdentifier().charAt(1) + "0" + player.getDrones()[0].getNrWeapons()+1;
                 this.updateShop1(false);
                 //this.updateShopW(true);
                 this.data.set("buy", "s");
-                this.system.pushSymbol(this.system.add.channelOut(term, "*").nullProcess());
+                this.system.pushSymbol(this.system.add.channelOut(term, "w"+player.getDrones()[0].getNrWeapons()+1).nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
                 this.displayShop(this.shop1, this.shop1Text);
                 this.shop1Active = true;
