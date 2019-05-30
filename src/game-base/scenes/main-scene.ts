@@ -106,7 +106,8 @@ export class MainScene extends Phaser.Scene {
         );
         this.buttonOption.setPosition(1880, 40);
 
-        //Weapons in Pi Calculus
+        //Creating Weapons and Weaponmods###############################################
+        //Weapons in Pi Calc
         for(let i = 1; i<3; i++){
             for(let j = 0; j < 3; j++){
                 this.buildWeaponsPi(i,j);
@@ -117,11 +118,10 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w2", "").nullProcess()));
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w3", "").nullProcess()));
 
-        //locks for attack phase
+        //locks for attack phase in Pi Calc
         for(let i = 1; i < 3; i++){
             this.buildLocksPi(i);
         }
-
         //extra functions to resolve existing channels nolock1, nolock2, nolock3 after attack phase
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock1", "").nullProcess()));
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock2", "").nullProcess()));
@@ -131,11 +131,20 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext101", "shieldp2").nullProcess());
         this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext201", "shieldp1").nullProcess());
 
-    //#####################Testing
-        //this.system.pushSymbol(this.system.add.channelOut("wmod11", "").channelOut("wext111", "armor").nullProcess());
-        //this.system.pushSymbol(this.system.add.channelOut("wmod12", "").channelOut("wext121", "rocket").nullProcess());
-    //#####################Testing
+        //Creating Energy Drones#######################################################
+        for(let i = 1; i < 3; i++){
+            this.buildEnergyDrones(i);
+            this.buildSLocks(i);
+        }
+        //extra functions to resolve existing channels e0 - e4 and nosolar0 - nosolar4 after energy phase
+        for(let i = 0; i < 5; i++) {
+            this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("e" + i.toString(), "").nullProcess()));
+            this.system.pushSymbol(this.system.add.replication(this.system.add.channelOut("nosolar" + i.toString(), "0").nullProcess()));
+        }
 
+        //create 1 energy drone for each player (gain 3 energy per turn)
+        this.system.pushSymbol(this.system.add.channelOut("newsolar10", "solar1").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("newsolar20", "solar2").nullProcess());
 
         this.system.start();
     }
@@ -192,6 +201,11 @@ export class MainScene extends Phaser.Scene {
                                                 next(weapon));
     }
 
+    /**
+     * builds the necessary locks for all weaponmods
+     * @param player
+     */
+
     buildLocksPi(player : number) : void{
         let p = player.toString();
 
@@ -210,6 +224,91 @@ export class MainScene extends Phaser.Scene {
                                                 next(rlock)]);
         rlock.symbol = sum;
         this.system.pushSymbol(rlock);
+    }
+
+    /**
+     * builds the energy drones
+     * @param player
+     */
+    buildEnergyDrones(player : number) : void{
+        let p = player.toString();
+
+        let drone = this.system.add.term("Drone" + p, undefined);
+        let sum = this.system.add.sum([this.system.add.channelIn("energy" + p, "").
+                                                channelOut("e0", "1").
+                                                channelOut("e1", "1").
+                                                channelOut("e2", "1").
+                                                channelOut("e3", "1").
+                                                channelOut("e4", "1").
+                                                next(drone),
+                                              this.system.add.channelInCB("newsolar" + p + "0", "e0", () =>{
+                                                  this.players[player - 1].createSolarDrone(0);
+                                                  }).
+                                                channelOut("newslock" + p + "0", "solar" + p).
+                                                next(drone),
+                                              this.system.add.channelInCB("newsolar" + p + "1", "e1", () =>{
+                                                  this.players[player - 1].createSolarDrone(1);
+                                                  }).
+                                                channelOut("newslock" + p + "1", "solar" + p).
+                                                next(drone),
+                                              this.system.add.channelInCB("newsolar" + p + "2", "e2", () =>{
+                                                  this.players[player - 1].createSolarDrone(2);
+                                                  }).
+                                                channelOut("newslock" + p + "2", "solar" + p).
+                                                next(drone),
+                                              this.system.add.channelInCB("newsolar" + p + "3", "e3", () =>{
+                                                  this.players[player - 1].createSolarDrone(3);
+                                                  }).
+                                                channelOut("newslock" + p + "3", "solar" + p).
+                                                next(drone),
+                                              this.system.add.channelInCB("newsolar" + p + "4", "e4", () =>{
+                                                  this.players[player - 1].createSolarDrone(4);
+                                                  }).
+                                                channelOut("newslock" + p + "4", "solar" + p).
+                                                next(drone)]);
+
+        drone.symbol = sum;
+        this.system.pushSymbol(drone);
+    }
+
+    /**
+     * builds the necessary pi calc terms to regain energy
+     * @param player
+     */
+    buildSLocks(player : number) : void{
+        let p = player.toString();
+
+        let slock = this.system.add.term("SLock" + p, undefined);
+        let sum = this.system.add.sum([this.system.add.channelIn("startephase" + p, "").
+                                                channelOut("energy" + p, "").
+                                                channelInCB("nosolar0", "", (x) => {
+                                                    this.players[player - 1].gainEnergy(x, 3);
+                                                    }).
+                                                channelInCB("nosolar1", "", (x) => {
+                                                    this.players[player - 1].gainEnergy(x, 3);
+                                                    }).
+                                                channelInCB("nosolar2", "", (x) => {
+                                                    this.players[player - 1].gainEnergy(x, 3);
+                                                    }).
+                                                channelInCB("nosolar3", "", (x) => {
+                                                    this.players[player - 1].gainEnergy(x, 3);
+                                                    }).
+                                                channelInCB("nosolar4", "", (x) => {
+                                                    this.players[player - 1].gainEnergy(x, 3);
+                                                    }).
+                                                    next(slock),
+                                              this.system.add.channelIn("newslock" + p + "0", "nosolar0").
+                                                next(slock),
+                                              this.system.add.channelIn("newslock" + p + "1", "nosolar1").
+                                                next(slock),
+                                              this.system.add.channelIn("newslock" + p + "2", "nosolar2").
+                                                next(slock),
+                                              this.system.add.channelIn("newslock" + p + "3", "nosolar3").
+                                                next(slock),
+                                              this.system.add.channelIn("newslock" + p + "4", "nosolar4").
+                                                next(slock)]);
+        slock.symbol = sum;
+        this.system.pushSymbol(slock);
     }
 
 }
