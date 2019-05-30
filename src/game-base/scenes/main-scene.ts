@@ -15,7 +15,7 @@ export class MainScene extends Phaser.Scene {
     private buttonOption: Button;
     private shop: Button;
     private system: PiSystem;
-    private shop_bg: Phaser.GameObjects.Rectangle;
+    private shop_bg: Phaser.GameObjects.Graphics;
     private energy_bg: Phaser.GameObjects.Rectangle;
 
     private shop1: [Button, Button, Button, Button, Button, Button, Button];
@@ -89,6 +89,7 @@ export class MainScene extends Phaser.Scene {
                 this.switchTextures(this.turn.getCurrentPlayer());
             }
             //this.updateShopW(false);
+            this.changeShopColor(this.turn.getCurrentPlayer());
             this.displayShop(this.shop1, this.shop1Text);
             this.updateShop1(false);
             this.shop1Active = true;
@@ -109,7 +110,12 @@ export class MainScene extends Phaser.Scene {
         this.turn = new Turn(this, this.players);
         this.data.set('P1', this.players[0]);
         this.data.set('P2', this.players[1]);
-        this.shop_bg = this.add.rectangle(1920/2, 1080 -100, 1400, 250, 0x000, 0.6).setVisible(true);
+        this.shop_bg = this.add.graphics();
+        this.shop_bg.fillStyle(0x000, 0.6);
+        this.shop_bg.lineStyle(5, 0xAA2222);
+        this.shop_bg.fillRoundedRect(260, 1080-220, 1400, 250, 32);
+        this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
+        //this.shop_bg = this.add.rectangle(1920/2, 1080 - 100, 1400, 250, 0x000, 0.6).setVisible(false).setStrokeStyle(5,0xffff);
         //this.energy_bg = this.add.rectangle(130, 1080- 100, 200, 200, 0x000, 0.6).setVisible(true);
         this.energy = this.add.image(1920/2-50, 200, "energy_icon");
         this.energyT = this.add.text(1920/2-15, 170, "= "+this.turn.getCurrentPlayer().getEnergy(), {
@@ -868,5 +874,17 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
+    changeShopColor(player: Player){
+        if(player.getNameIdentifier() == "P1"){
+            this.shop_bg.lineStyle(5, 0xAA2222);
+            this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
+
+        }
+        else{
+            this.shop_bg.lineStyle(5, 0x2222AA);
+            this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
+
+        }
+    }
 
 }
