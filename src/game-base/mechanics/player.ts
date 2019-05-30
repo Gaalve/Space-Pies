@@ -28,9 +28,7 @@ export class Player {
         this.scene = scene;
         this.activatedDrones = 0;
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0), new EnergyDrone(scene, x, y, this, 1),new EnergyDrone(scene, x, y, this, 2),new EnergyDrone(scene, x, y, this, 3),new EnergyDrone(scene, x, y, this, 4)];
-        this.activatedDrones = 0;
-        this.activatedSolarDrones = 1;
-        this.system = piSystem;
+        this.activatedSolarDrones = 0;
         this.health = new Health(scene, this, piSystem);
 
         // z1 starts with 1 shield
@@ -68,24 +66,6 @@ export class Player {
 
         this.energy = 10;
         this.energyCost = 2;
-
-        if(this.nameIdentifier == "P1"){
-            this.system.pushSymbol(this.system.add.channelIn("solar1","*").process("cD14", () => {
-                this.createSolarDrone(1);
-            }));
-            this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("renergy1","*").process("cD15", () => {
-                this.gainEnergy(3);
-            })));
-
-        }else {
-            this.system.pushSymbol(this.system.add.channelIn("solar2","*").process("cD24", () => {
-                this.createSolarDrone(1);
-            }));
-            this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("renergy2","*").process("cD25", () => {
-                this.gainEnergy(3);
-            })));
-        }
-
     }
 
     public update(delta: number): void{
@@ -133,52 +113,8 @@ export class Player {
 
     createSolarDrone(index : number) : void{
         this.activatedSolarDrones += 1;
-        this.solarDrones[index].setVisible(true);
-
-        if(index == 1){
-            if(this.nameIdentifier == "P1"){
-                this.system.pushSymbol(this.system.add.channelIn('solar1', '*').process("cD13", ()=>{this.createSolarDrone(2)}));
-            }else{
-                this.system.pushSymbol(this.system.add.channelIn('solar2', '*').process("cD23", ()=>{this.createSolarDrone(2)}));
-            }
-        }
-        else if(index == 2){
-            if(this.nameIdentifier == "P1"){
-                this.system.pushSymbol(this.system.add.channelIn('solar1', '*').process("cD16", ()=>{this.createSolarDrone(3)}));
-            }else{
-                this.system.pushSymbol(this.system.add.channelIn('solar2', '*').process("cD26", ()=>{this.createSolarDrone(3)}));
-            }
-        }
-        else if(index == 3){
-            if(this.nameIdentifier == "P1"){
-                this.system.pushSymbol(this.system.add.channelIn('solar1', '*').process("cD17", ()=>{this.createSolarDrone(4)}));
-            }else{
-                this.system.pushSymbol(this.system.add.channelIn('solar2', '*').process("cD27", ()=>{this.createSolarDrone(4)}));
-            }
-        }
-
-    }
-
-    pushEnergy(): void{
-        for(let d of this.solarDrones){
-            if(d.getPlayer().getNameIdentifier() == "P1" && (d.visible || d.getIndex() == 0)){
-                this.system.pushSymbol(
-                    this.system.add.channelIn("locks", "*").
-                    channelOut("renergy1", "*").nullProcess())
-            }
-            else if(d.visible|| d.getIndex() == 0){
-                this.system.pushSymbol(
-                    this.system.add.channelIn("locks", "*").
-                    channelOut("renergy2", "*").nullProcess())
-            }
-
-        }
-        this.unlockSolar();
-    }
-
-    unlockSolar() : void{
-        for(let i = 0; i < this.activatedSolarDrones; i++){
-            this.system.pushSymbol(this.system.add.channelOut("locks", "*").nullProcess());
+        if(index != 0) {
+            this.solarDrones[index].setVisible(true);
         }
     }
 
@@ -192,9 +128,11 @@ export class Player {
         this.energy -= cost;
     }
 
-    gainEnergy(amount: number) : void
+    gainEnergy(value : string, amount: number) : void
     {
-        this.energy += amount;
+        if(value == "1") {
+            this.energy += amount;
+        }
     }
 
     getEnergyCost(): number
