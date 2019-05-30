@@ -10,7 +10,7 @@ export class Player {
     private solarDrones: [EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone];
     private scene : Phaser.Scene;
     private system : PiSystem;
-    private ship : Ship;
+    public ship : Ship;
     private activatedDrones : number;
     private activatedSolarDrones : number;
 
@@ -32,42 +32,45 @@ export class Player {
         this.health = new Health(scene, this, piSystem);
 
         // z1 starts with 1 shield
-        this.health.addToHz(piSystem, 'rshield', 'z1');
-        this.health.addToHz(piSystem, 'rshield', 'z1');
-        this.health.addToHz(piSystem, 'rarmor', 'z1');
-        this.health.addToHz(piSystem, 'rshield', 'z1');
-        this.health.addToHz(piSystem, 'rarmor', 'z1');
-        this.health.addToHz(piSystem, 'rshield', 'z1');
-        this.health.addToHz(piSystem, 'rarmor', 'z1');
-
-        // z2 starts with 1 shield
-        this.health.addToHz(piSystem, 'rshield', 'z2');
-        this.health.addToHz(piSystem, 'rarmor', 'z2');
-        this.health.addToHz(piSystem, 'rarmor', 'z2');
-
-        // z3 starts with 1 armor
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rarmor', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rarmor', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rarmor', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rarmor', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-
-        // z4 starts with 1 armor
-        this.health.addToHz(piSystem, 'rarmor', 'z4');
-        this.health.addToHz(piSystem, 'rarmor', 'z4');
-        this.health.addToHz(piSystem, 'rshield', 'z4');
+        // this.health.addToHz(piSystem, 'rshield', 'z1');
+        // this.health.addToHz(piSystem, 'rshield', 'z1');
+        // this.health.addToHz(piSystem, 'rarmor', 'z1');
+        // this.health.addToHz(piSystem, 'rshield', 'z1');
+        // this.health.addToHz(piSystem, 'rarmor', 'z1');
+        // this.health.addToHz(piSystem, 'rshield', 'z1');
+        // this.health.addToHz(piSystem, 'rarmor', 'z1');
+        //
+        // // z2 starts with 1 shield
+        // this.health.addToHz(piSystem, 'rshield', 'z2');
+        // this.health.addToHz(piSystem, 'rarmor', 'z2');
+        // this.health.addToHz(piSystem, 'rarmor', 'z2');
+        //
+        // // z3 starts with 1 armor
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rarmor', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rarmor', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rarmor', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rarmor', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        //
+        // // z4 starts with 1 armor
+        // this.health.addToHz(piSystem, 'rarmor', 'z4');
+        // this.health.addToHz(piSystem, 'rarmor', 'z4');
+        // this.health.addToHz(piSystem, 'rshield', 'z4');
 
         this.energy = 10;
         this.energyCost = 2;
     }
 
+    public update(delta: number): void{
+        this.ship.update(delta);
+    }
 
     getNameIdentifier(): string{
         return this.nameIdentifier;

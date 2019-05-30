@@ -33,7 +33,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 
 		//reposition weapons on ship
 		if(this.drone.getIndex() == 0) {
-		    this.setDepth(0);
+		    this.setDepth(4);
 			//this.setScale(0.8);
 			this.repositionWeapons();
 		}
