@@ -3,8 +3,10 @@ import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
 
 import {PiSystem} from "../mechanics/picalc/pi-system";
+import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {PiTerm} from "../mechanics/picalc/pi-term";
 import {PiSymbol} from "../mechanics/picalc/pi-symbol";
+import {Drone} from "../mechanics/drone";
 
 export class MainScene extends Phaser.Scene {
 
@@ -17,6 +19,7 @@ export class MainScene extends Phaser.Scene {
     private buttonOption: Button;
     private shop: Button;
     private system: PiSystem;
+    private pem: ParticleEmitterManager;
 
     constructor() {
         super({
@@ -40,7 +43,9 @@ export class MainScene extends Phaser.Scene {
     create(): void {
         this.system = new PiSystem(this, 1,1,1,true);
         this.data.set("system", this.system);
-        this.players = [new Player(this, 280, 540, "P1", true, this.system), new Player(this, 1650, 540, "P2", false, this.system)];
+        this.pem = this.add.particles("parts");
+        this.pem.setDepth(5);
+        this.players = [new Player(this, 280, 540, "P1", true, this.system, this.pem), new Player(this, 1650, 540, "P2", false, this.system, this.pem)];
         this.turn = new Turn(this, this.players);
         this.data.set('P1', this.players[0]);
         this.data.set('P2', this.players[1]);
@@ -166,10 +171,14 @@ export class MainScene extends Phaser.Scene {
         let d = drone.toString();
         let weapon = this.system.add.term("Weapon" + p + d, undefined);
 
+        let droneRef: Drone = this.players[player - 1].getDrones()[drone];
         let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
-                                                channelOutCB("w1","", () => {}).        //function for weapon animation
-                                                channelOutCB("w2", "", () => {}).
-                                                channelOutCB("w3", "", () => {}).
+                                                channelOutCB("w1","", (_, at) => {
+                                                    droneRef.getWeapons()[0].createBullet(at == 'miss')}).        //function for weapon animation
+                                                channelOutCB("w2", "", (_, at) => {
+                                                    droneRef.getWeapons()[1].createBullet(at == 'miss')}).
+                                                channelOutCB("w3", "", (_, at) => {
+                                                    droneRef.getWeapons()[2].createBullet(at == 'miss')}).
                                                 next(weapon),
                                               this.system.add.channelInCB("wext" + p + d + "1", "w1", (wClass) => {
                                                     this.players[player - 1].getDrones()[drone].addWeapon(wClass);

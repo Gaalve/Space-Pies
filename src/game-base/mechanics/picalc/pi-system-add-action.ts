@@ -27,23 +27,29 @@ export  class PiSystemAddAction{
         return this;
     }
 
-    public channelIn(name: string, input: string): this{
-        return this.nextAction(new PiChannelIn(this.system, name, input));
+    public channelIn(name: string, input: string, attachment?: string): this{
+        let chan = new PiChannelIn(this.system, name, input);
+        chan.attachment = attachment;
+        return this.nextAction(chan);
     }
 
-    public channelOut(name: string, output: string): this{
-        return this.nextAction(new PiChannelOut(this.system, name, output));
+    public channelOut(name: string, output: string, attachment?: string): this{
+        let chan = new PiChannelOut(this.system, name, output);
+        chan.attachment = attachment;
+        return this.nextAction(chan);
     }
 
-    public channelInCB(name: string, input: string, callback: Function): this{
+    public channelInCB(name: string, input: string, callback: (resolvedName?: string, attachmentOfResolved?: string) => any, attachment?: string): this{
         let pi = new PiChannelIn(this.system, name, input);
         pi.setCallback(callback);
+        pi.attachment = attachment;
         return this.nextAction(pi);
     }
 
-    public channelOutCB(name: string, output: string, callback: Function): this{
+    public channelOutCB(name: string, output: string, callback: (resolvedName?: string, attachmentOfResolved?: string) => any, attachment?: string): this{
         let pi = new PiChannelOut(this.system, name, output);
         pi.setCallback(callback);
+        pi.attachment = attachment;
         return this.nextAction(pi);
     }
 

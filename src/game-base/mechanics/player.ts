@@ -3,6 +3,13 @@ import {PiSystem} from "./picalc/pi-system";
 import {Ship} from "./ship";
 import {Health} from "./health/health";
 import {EnergyDrone} from "./energyDrone";
+import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
+import {Explosion} from "./animations/explosion";
+import {LaserImpact} from "./animations/laser-impact";
+import {ProjectileImpact} from "./animations/projectile-impact";
+import {LaserTrail} from "./animations/laser-trail";
+import {RocketTrail} from "./animations/rocket-trail";
+import {BulletTrail} from "./animations/bullet-trail";
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
@@ -18,8 +25,14 @@ export class Player {
     private energy : number;
     private energyCost : number;
 
+    public explosion: Explosion;
+    public laserImpact: LaserImpact;
+    public projectileImpact: ProjectileImpact;
+    public laserTrail: LaserTrail;
+    public rocketTrail: RocketTrail;
+    public bulletTrail: BulletTrail;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem){
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager){
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
@@ -30,6 +43,17 @@ export class Player {
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0), new EnergyDrone(scene, x, y, this, 1),new EnergyDrone(scene, x, y, this, 2),new EnergyDrone(scene, x, y, this, 3),new EnergyDrone(scene, x, y, this, 4)];
         this.activatedSolarDrones = 0;
         this.health = new Health(scene, this, piSystem);
+        this.explosion = new Explosion(pem);
+        this.laserImpact = new LaserImpact(pem);
+        this.projectileImpact = new ProjectileImpact(pem);
+        this.laserTrail = new LaserTrail(pem);
+        this.rocketTrail = new RocketTrail(pem);
+        this.bulletTrail = new BulletTrail(pem);
+
+        //TODO: remove when Triebwerke ready
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '', "miss").nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '', "miss").nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '', "miss").nullProcess()));
 
         // z1 starts with 1 shield
         // this.health.addToHz(piSystem, 'rshield', 'z1');
@@ -70,6 +94,9 @@ export class Player {
 
     public update(delta: number): void{
         this.ship.update(delta);
+        this.drones[0].update(delta);
+        this.drones[1].update(delta);
+        this.drones[2].update(delta);
     }
 
     getNameIdentifier(): string{
