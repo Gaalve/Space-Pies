@@ -14,7 +14,7 @@ export class Space{
     private readonly starLayerFG: Star[];
 
     private counter: number;
-    private readonly counterLimit: number;
+    private counterLimit: number;
 
 
     public constructor(scene: Phaser.Scene) {
@@ -64,6 +64,10 @@ export class Space{
         if(this.counter >= this.counterLimit){
             this.counter -= this.counterLimit;
         }
+   }
+
+   public setCounterLimit(limit: number){
+        this.counterLimit = limit;
    }
 
    private updateStepStars(stars: Star[], scale: number, delta: number){

@@ -35,7 +35,7 @@ export class Turn {
         this.system = this.refScene.scene.get("MainScene").data.get("system");
     }
 
-    private playerInput():void{
+    public playerInput():void{
         this.clickable = true;
         this.refScene.data.set('round', ""+(++this.currentRound));
         if(this.currentRound != 1){

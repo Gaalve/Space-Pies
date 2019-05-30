@@ -76,6 +76,9 @@ export class MainScene extends Phaser.Scene {
             "preload"
         )
 
+        this.load.spritesheet('bleedingbar', 'assets/sprites/bleedingbar.png', { frameWidth: 19, frameHeight: 42, spacing: 5, startFrame: 0, endFrame: 42, margin: 0});
+
+
     }
 
     create(): void {
@@ -157,8 +160,6 @@ export class MainScene extends Phaser.Scene {
 
 
     }
-
-
 
 
     update(time: number, delta: number): void {
@@ -423,6 +424,11 @@ export class MainScene extends Phaser.Scene {
             this.closeShop(this.shopZ, this.shopZText, false);
 
 
+            this.buttonEndTurn.updateStep();
+            this.buttonOption.updateStep();
+        }
+        this.players[0].update(delta);
+        this.players[1].update(delta);
     }
 
     private createChooseType(): void{
