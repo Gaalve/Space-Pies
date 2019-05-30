@@ -162,11 +162,7 @@ export class MainScene extends Phaser.Scene {
         let d = drone.toString();
         let weapon = this.system.add.term("Weapon" + p + d, undefined);
 
-
-        // TODO: fix: non existent weapons can shoot (and always hit)
-
         let droneRef: Drone = this.players[player - 1].getDrones()[drone];
-
         let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
                                                 channelOutCB("w1","", (_, at) => {
                                                     droneRef.getWeapons()[0].createBullet(at == 'miss')}).        //function for weapon animation

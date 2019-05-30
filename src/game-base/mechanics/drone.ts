@@ -57,11 +57,12 @@ export class Drone extends Phaser.GameObjects.Sprite{
      */
     addWeapon(weapon : string) : void{
     	let w = this.weapons[this.getNrWeapons()];
-	    if(weapon == "l"){
+		weapon = weapon.substr(0, 3)
+	    if(weapon == "arm"){
 			w.setWeapon(WeaponType.LASER_ARMOR);
-        }else if(weapon == "p") {
+        }else if(weapon == "shi") {
 			w.setWeapon(WeaponType.PROJECTILE_SHIELD);
-        }else if(weapon == "r"){
+        }else if(weapon == "roc"){ // TODO: is this right?
 			w.setWeapon(WeaponType.ROCKET);
 		}
 
