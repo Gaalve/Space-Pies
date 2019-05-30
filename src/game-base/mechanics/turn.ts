@@ -101,4 +101,8 @@ export class Turn {
     getCurrentPlayer(): Player{
         return this.currentPlayer;
     }
+
+    getCurrentRound(): number{
+        return this.currentRound;
+    }
 }

@@ -87,7 +87,11 @@ export class MainScene extends Phaser.Scene {
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
             this.updateShop1(false);
             this.updateShopW(false);
-            this.switchTextures(this.turn.getCurrentPlayer());
+            if(this.turn.getCurrentRound() != 1){
+                this.switchTextures(this.turn.getCurrentPlayer());
+            }
+            this.updateShop1(false);
+            this.updateShopW(false);
             this.displayShop(this.shop1, this.shop1Text);
             this.shop1Active = true;
             this.shop_bg.setVisible(true);
@@ -620,7 +624,7 @@ export class MainScene extends Phaser.Scene {
 
 
         }
-        else{
+        else if(wMods < 3 && energy >= energyCost){
             this.wModule.changeButton(this,false,true, player);
             this.wModule.restoreInteractive();
             this.active = true;
@@ -656,7 +660,7 @@ export class MainScene extends Phaser.Scene {
 
         }
 
-        else{
+        else if(sMods < 5 && energy >= energyCost){
             if(this.turn.getCurrentPlayer().getNameIdentifier() == "P1"){
                 this.solar.changeButton(this,false,true, player);
             }
@@ -687,7 +691,7 @@ export class MainScene extends Phaser.Scene {
 
         }
 
-        else{
+        else if(energy >= energyCost){
             this.armor.changeButton(this, false, true, player);
             this.shield.changeButton(this, false, true, player);
             this.wExt.changeButton(this, false,true, player);

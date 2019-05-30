@@ -7,7 +7,7 @@ export class Button{
     private scale: number;
     private onClick: Function;
     private func: Function;
-    private activeP1: boolean;
+    private active: boolean;
     private activeP2: boolean;
 
     //Textures
@@ -56,7 +56,7 @@ export class Button{
             .on('pointerup', () => this.clicked());
         this.onClick = onClick;
         this.func = onClick;
-        this.activeP1 = true;
+        this.active = true;
         this.activeP2 = false;
 
     }
@@ -140,22 +140,28 @@ export class Button{
         if(alt){
             if(!active){
                 scene.children.replace(this.alt, this.inactive);
+                this.active = false;
 
             }
             else{
                 scene.children.replace(this.inactive, this.alt);
-               }
+                this.active = true;
+
+            }
 
         }
 
         else{
             if(!active){
                 scene.children.replace(this.fg, this.inactive);
+                this.active = false;
 
             }
             else{
                 scene.children.replace(this.inactive, this.fg);
-             }
+                this.active = true;
+
+            }
         }
 
     }
@@ -165,17 +171,33 @@ export class Button{
     }
 
     public switchArt(scene: Phaser.Scene, player: Player): void{
-        if(player.getNameIdentifier() == "P1"){
-            scene.children.replace(this.alt, this.fg);
+        if(this.isActive()){
+            if(player.getNameIdentifier() == "P1"){
+                scene.children.replace(this.alt, this.fg);
 
+            }
+            else{
+                scene.children.replace(this.fg, this.alt);
+            }
         }
+
         else{
-            scene.children.replace(this.fg, this.alt);
+            if(player.getNameIdentifier() == "P1"){
+                scene.children.replace(this.inactive, this.fg);
+
+            }
+            else{
+                scene.children.replace(this.inactive, this.alt);
+            }
         }
+
 
 
     }
 
+    isActive(): boolean{
+        return this.active;
+    }
 
 
 }
