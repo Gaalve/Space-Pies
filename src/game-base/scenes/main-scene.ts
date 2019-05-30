@@ -6,6 +6,7 @@ import {PiSystem} from "../mechanics/picalc/pi-system";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {PiTerm} from "../mechanics/picalc/pi-term";
 import {PiSymbol} from "../mechanics/picalc/pi-symbol";
+import {Drone} from "../mechanics/drone";
 
 export class MainScene extends Phaser.Scene {
 
@@ -127,8 +128,8 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock3", "").nullProcess()));
 
         //create 1 weapon for each player on ship
-        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext101", "shield").nullProcess());
-        this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext201", "shield").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext101", "shieldp2").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext201", "shieldp1").nullProcess());
 
     //#####################Testing
         //this.system.pushSymbol(this.system.add.channelOut("wmod11", "").channelOut("wext111", "armor").nullProcess());
@@ -162,9 +163,9 @@ export class MainScene extends Phaser.Scene {
         let weapon = this.system.add.term("Weapon" + p + d, undefined);
 
 
-        // TODO: add callback to weapon animation, drone is needed!
+        // TODO: fix: non existent weapons can shoot (and always hit)
 
-        let droneRef = this.players[player - 1].getDrones()[drone - 1];
+        let droneRef: Drone = this.players[player - 1].getDrones()[drone];
 
         let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
                                                 channelOutCB("w1","", (_, at) => {
