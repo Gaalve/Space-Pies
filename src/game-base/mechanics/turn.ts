@@ -87,7 +87,13 @@ export class Turn {
         this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
 
         //Waffen schießen lassen:
-        this.currentPlayer.pushEnergy();
+        //TODO: DEBUG STUFF REMOVE
+        this.currentPlayer.getSystem().pushSymbol(
+            this.currentPlayer.getSystem().add.channelOut(
+                'unlock'+this.currentPlayer.getNameIdentifier().charAt(1), '').nullProcess());
+        this.currentPlayer.getSystem().pushSymbol(
+            this.currentPlayer.getSystem().add.channelIn(
+                'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
         this.refScene.data.set('turnAction', 'Battle Phase');
         this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
 

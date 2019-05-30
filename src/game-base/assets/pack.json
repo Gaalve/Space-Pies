@@ -314,6 +314,11 @@
       },
       {
         "type": "image",
+        "key": "particle_2",
+        "url": "assets/sprites/particle_2.png"
+      },
+      {
+        "type": "image",
         "key": "ssbr/ssb_back",
         "url": "assets/sprites/ssbr/ssb_back.png"
       },
@@ -474,6 +479,31 @@
         "type": "image",
         "key": "debris/debris_9",
         "url": "assets/sprites/debris/debris_9.png"
+      },
+      {
+        "type": "image",
+        "key": "shot_projectile",
+        "url": "assets/sprites/shot_projectile.png"
+      },
+      {
+        "type": "image",
+        "key": "shot_rocket",
+        "url": "assets/sprites/shot_rocket.png"
+      },
+      {
+        "type": "image",
+        "key": "shot_laser",
+        "url": "assets/sprites/shot_laser.png"
+      },
+      {
+        "type": "image",
+        "key": "not_miss",
+        "url": "assets/sprites/not_miss.png"
+      },
+      {
+        "type": "image",
+        "key": "not_hit",
+        "url": "assets/sprites/not_hit.png"
       }
     ]
   }

@@ -82,8 +82,8 @@ export class Health {
      * @param regLSCB - callback to regenerate laser shield bar
      * @param regASCB - callback to regenerate armor shield bar
      */
-    private static getPiLaserShield(pi: PiSystem, pid: string, hbid: string, desLSCB: Function,
-                             regLSCB: Function, regASCB: Function): PiTerm{
+    private static getPiLaserShield(pi: PiSystem, pid: string, hbid: string, desLSCB: ()=>any,
+                             regLSCB: ()=>any, regASCB: ()=>any): PiTerm{
         return pi.add.term('LasShld'+pid+hbid, pi.add.sum([
             pi.add.channelInCB('shield'+pid,'', desLSCB) // laser shield of player X
                 .channelOut('regout', '') // sync
@@ -114,8 +114,8 @@ export class Health {
      * @param regLSCB - callback to regenerate laser shield bar
      * @param regASCB - callback to regenerate armor shield bar
      */
-    private static getPiArmorShield(pi: PiSystem, pid: string, hbid: string, desASCB: Function,
-                                    regLSCB: Function, regASCB: Function): PiTerm{
+    private static getPiArmorShield(pi: PiSystem, pid: string, hbid: string, desASCB: ()=>any,
+                                    regLSCB: ()=>any, regASCB: ()=>any): PiTerm{
         return pi.add.term('ArmShld'+pid+hbid, pi.add.sum([
             pi.add.channelInCB('armor'+pid,'', desASCB) // laser shield of player X
                 .channelOut('regout', '') // sync
@@ -166,7 +166,7 @@ export class Health {
      * @param hbid - health bar id
      * @param regLSCB
      */
-    private static addPiHitzoneShield(pi: PiSystem, pid: string, hbid: string, regLSCB: Function){
+    private static addPiHitzoneShield(pi: PiSystem, pid: string, hbid: string, regLSCB: ()=>any){
         pi.pushSymbol(
             pi.add.channelInCB('rshield'+pid+hbid,'*', regLSCB).scope('reg1',
                 pi.add.channelOut('reghelpls'+pid+hbid, 'reg1')

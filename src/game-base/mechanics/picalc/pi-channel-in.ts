@@ -31,6 +31,7 @@ export class PiChannelIn extends PiAction{
             let argValue = (<PiChannelOut>other).getOutputName();
             this.next.rename(this.inOutPut, argValue);
             this.resolvedName = argValue;
+            this.attachmentOfResolved = other.attachment;
         }
         return this.next;
     }
@@ -48,7 +49,7 @@ export class PiChannelIn extends PiAction{
     }
 
     public trigger(): void {
-        this.callback(this.resolvedName);
+        this.callback(this.resolvedName, this.attachmentOfResolved);
     }
 
 }
