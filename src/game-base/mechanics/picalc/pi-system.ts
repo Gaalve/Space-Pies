@@ -236,8 +236,8 @@ export class PiSystem {
      * Calls the second phase.
      */
     private phaseFindResolvingActions(): void{
-        this.logPhase1();
         let startT = this.scene.time.now;
+        this.logPhase1();
         if(this.phase1changed) {
             this.phase1changed = false;
             this.deadlock = true;
@@ -266,6 +266,7 @@ export class PiSystem {
             this.phase2changed = this.potentiallyResolving.length > 0;
         }
         let execTime = this.scene.time.now - startT;
+        if (execTime < 0) console.warn("Phase 1 (Find) is taking too long");
         this.scene.time.delayedCall(this.resolveTimeOut - execTime, ()=>{this.phaseResolveActions()}, [], this);
     }
 
@@ -283,9 +284,9 @@ export class PiSystem {
      * Calls the third phase.
      */
     private phaseResolveActions(): void{
+        let startT = this.scene.time.now;
         this.logPhase2();
         this.phase2changed = false;
-        let startT = this.scene.time.now;
         while(this.potentiallyResolving.length > 0){
             let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
             let resolvablePair: PiResolvingPair = this.potentiallyResolving[randIdx];
@@ -294,6 +295,7 @@ export class PiSystem {
         }
 
         let execTime = this.scene.time.now - startT;
+        if (execTime < 0) console.warn("Phase 2 (Resolve) is taking too long");
         this.scene.time.delayedCall(this.cleanUpTimeOut - execTime, ()=>{this.phaseTriggerSymbols()}, [], this);
     }
 
@@ -309,9 +311,9 @@ export class PiSystem {
      * Calls the first phase.
      */
     private phaseTriggerSymbols(): void{
+        let startT = this.scene.time.now;
         this.logPhase3();
         this.phase3changed = false;
-        let startT = this.scene.time.now;
         let copy: PiSymbol[] = [];
         for(let idx in this.curActiveSymbols){
             copy.push(this.curActiveSymbols[idx]);
@@ -329,6 +331,7 @@ export class PiSystem {
         }
         this.activeSymbolsQueue = [];
         let execTime = this.scene.time.now - startT;
+        if (execTime < 0) console.warn("Phase 3 (Trigger) is taking too long");
         if(this.deadlock) this.onDeadlock();
         if(this.running)this.scene.time.delayedCall(this.findResolvingTimeOut - execTime, ()=>{this.phaseFindResolvingActions()}, [], this);
     }

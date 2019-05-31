@@ -23,7 +23,19 @@
     src: url(media/Roboto-Medium.ttf) format("truetype");
 }
 @font-face {
+    font-family: 'Roboto-Medium';
+    font-style: normal;
+    font-weight: 500;
+    src: url(media/Roboto-Medium.ttf) format("truetype");
+}
+@font-face {
     font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    src: url(media/Roboto-Bold.ttf) format("truetype");
+}
+@font-face {
+    font-family: 'Roboto-Bold';
     font-style: normal;
     font-weight: 700;
     src: url(media/Roboto-Bold.ttf) format("truetype");
