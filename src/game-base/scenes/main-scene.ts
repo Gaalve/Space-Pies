@@ -303,19 +303,22 @@ export class MainScene extends Phaser.Scene {
 
     /**
      * builds the necessary locks for all weaponmods
-     * @param player
+     * @param player - number of player
      */
 
     buildLocksPi(player : number) : void{
         let p = player.toString();
 
         let rlock = this.system.add.term("RLock" + p, undefined);
+
         let sum = this.system.add.sum([this.system.add.channelIn("unlock" + p, "").
-                                                channelOut("nolock1", "").
-                                                channelOut("nolock2", "").
-                                                channelOut("nolock3", "").
-                                                channelOut("attackp" + p + "end", "").
-                                                next(rlock),
+                                                concurrent([
+                                                    this.system.add.channelOut("nolock1", "").nullProcess(),
+                                                    this.system.add.channelOut("nolock2", "").nullProcess(),
+                                                    this.system.add.channelOut("nolock3", "").nullProcess(),
+                                                    this.system.add.channelOut("attackp" + p + "end", "").next(rlock)
+                                                ]),
+
                                               this.system.add.channelIn("newlock" + p + "0", "nolock1").
                                                 next(rlock),
                                               this.system.add.channelIn("newlock" + p + "1", "nolock2").
