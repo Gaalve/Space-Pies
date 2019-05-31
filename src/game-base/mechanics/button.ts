@@ -33,7 +33,7 @@ export class Button{
         this.img = new Sprite(scene, x, y, imgTex);
         this.fg = new Sprite(scene, x, y, fgTex);
         this.alt = new Sprite(scene, x, y, fgTex);
-        this.inactive = new Sprite(scene, x, y, "button_cancel_red")
+        this.inactive = new Sprite(scene, x, y, "button_blocked");
         this.shadow.setOrigin(0.5, 0.5);
         this.bg.setOrigin(0.5, 0.5);
         this.img.setOrigin(0.5, 0.5);
@@ -125,6 +125,8 @@ export class Button{
         this.bg.setScale(this.scale, this.scale);
         this.fg.setScale(this.scale, this.scale);
         this.img.setScale(this.scale, this.scale);
+        this.alt.setScale(this.scale, this.scale);
+        this.inactive.setScale(this.scale, this.scale);
     }
 
     public setPosition(x: number, y: number): void{
@@ -132,6 +134,8 @@ export class Button{
         this.bg.setPosition(x, y);
         this.fg.setPosition(x, y);
         this.img.setPosition(x, y);
+        this.alt.setPosition(x, y);
+        this.inactive.setPosition(x, y);
     }
 
     public changeButton(scene: Phaser.Scene, alt: boolean, active: boolean, player: Player): void{
