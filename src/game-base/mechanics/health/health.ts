@@ -88,6 +88,9 @@ export class Health {
             pi.add.channelInCB('shield'+pid,'', desLSCB) // laser shield of player X
                 .channelOut('regout', '') // sync
                 .nullProcess(),
+            pi.add.channelInCB('rocket'+pid,'', desLSCB)
+                .channelOut('regout','')
+                .nullProcess(),
             pi.add.channelIn('rshield'+pid+hbid, '') // regenerate laser shield
             .scope('reg1',
             pi.add.scope('reg2',
@@ -120,6 +123,9 @@ export class Health {
             pi.add.channelInCB('armor'+pid,'', desASCB) // laser shield of player X
                 .channelOut('regout', '') // sync
                 .nullProcess(),
+            pi.add.channelInCB('rocket'+pid,'', desASCB)
+                .channelOut('regout','')
+                .nullProcess(),
             pi.add.channelIn('rshield'+pid+hbid, '') // regenerate laser shield
                 .scope('reg1',
                 pi.add.scope('reg2',
@@ -136,6 +142,7 @@ export class Health {
                 .channelOut('regout', '*').nullProcess()))
         ]));
     }
+
 
     /**
      * Adds the helper Function for Laser Shields
