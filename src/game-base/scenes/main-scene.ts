@@ -184,7 +184,7 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock3", "").nullProcess()));
 
         //create 1 weapon for each player on ship
-        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext100", "shieldp2").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext100", "rocketp2").nullProcess());
         this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext200", "shieldp1").nullProcess());
 
         //Creating Energy Drones#######################################################

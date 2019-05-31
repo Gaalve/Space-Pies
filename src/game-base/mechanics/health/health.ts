@@ -54,23 +54,26 @@ export class Health {
         let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); });
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar);});
         let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); });
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar);});
         let rockShld = Health.getPiRocketShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); });
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar);});
         let nanoShld = Health.getPiNanoShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); });
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar);});
         let adapShld = Health.getPiAdapShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+            ()=>{zoneBar.destroyBar(); zoneBar.changeSprite("rocket_shield")},
+            ()=>{zoneBar.destroyBar(); zoneBar.changeSprite("armor_shield")},
+            ()=>{zoneBar.destroyBar(); zoneBar.changeSprite("laser_shield")},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); });
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar);});
         Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
         Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
         Health.addPiRocketShieldHelper(pi, pid, hbid, rockShld);
@@ -82,23 +85,26 @@ export class Health {
         let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); });
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar);});
         let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); });
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar); });
         let rockShld = Health.getPiRocketShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); });
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar);});
         let nanoShld = Health.getPiNanoShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); });
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar);});
         let adapShld = Health.getPiAdapShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+            ()=>{zoneBar.destroyBar(); zoneBar.changeSprite("rocket_shield")},
+            ()=>{zoneBar.destroyBar(); zoneBar.changeSprite("armor_shield")},
+            ()=>{zoneBar.destroyBar(); zoneBar.changeSprite("laser_shield")},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); zoneBar.addBar(HealthType.AdaptiveBar); });
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar);});
         Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
         Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
         Health.addPiRocketShieldHelper(pi, pid, hbid, rockShld);
@@ -362,22 +368,19 @@ export class Health {
      * @param regNSCB - callback to regenerate nano shield bar
      * @param regADSCB - callback to regenerate adaptive shield
      */
-    private static getPiAdapShield(pi: PiSystem, pid: string, hbid: string, desADSCB: ()=>any,
+    private static getPiAdapShield(pi: PiSystem, pid: string, hbid: string, desADSCB: ()=>any, changeRocket: ()=>any, changeArmor: ()=>any, changeShield: ()=>any,
                                    regLSCB: ()=>any, regASCB: ()=>any, regRSCB: ()=>any, regNSCB: ()=>any, regADSCB: ()=>any): PiTerm{
         return pi.add.term('AdapShld'+pid+hbid, pi.add.sum([
-            pi.add.channelInCB('armor'+pid,'', desADSCB) // adaptive shield of player X
+            pi.add.channelInCB('armor'+pid,'', changeShield) // adaptive shield of player X
                 .channelInCB('shield'+pid, '', desADSCB)
-                .channelInCB('rocket'+pid,'', desADSCB)
                 .channelOut('regout', '') // sync
                 .nullProcess(),
-            pi.add.channelInCB('shield'+pid,'', desADSCB)
-                .channelInCB('rocket'+pid, '', desADSCB)
+            pi.add.channelInCB('shield'+pid,'', changeArmor)
                 .channelInCB('armor'+pid, '', desADSCB)
                 .channelOut('regout','')
                 .nullProcess(),
-            pi.add.channelInCB('rocket'+pid,'', desADSCB)
-                .channelInCB('armor'+pid,'', desADSCB)
-                .channelInCB('shield'+pid,'', desADSCB)
+            pi.add.channelInCB('rocket'+pid,'', changeRocket)
+                .channelInCB('rocket'+pid,'', desADSCB)
                 .channelOut('regout','')
                 .nullProcess(),
             pi.add.channelIn('radap'+pid+hbid, '') // regenerate adaptive shield

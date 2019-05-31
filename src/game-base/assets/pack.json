@@ -13,6 +13,11 @@
       },
       {
         "type": "image",
+        "key": "adap_shield2",
+        "url": "assets/sprites/adap_shield2.png"
+      },
+      {
+        "type": "image",
         "key": "armor_shield",
         "url": "assets/sprites/armor_shield.png"
       },
