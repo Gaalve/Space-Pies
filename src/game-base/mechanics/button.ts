@@ -33,7 +33,7 @@ export class Button{
         this.img = new Sprite(scene, x, y, imgTex);
         this.fg = new Sprite(scene, x, y, fgTex);
         this.alt = new Sprite(scene, x, y, fgTex);
-        this.inactive = new Sprite(scene, x, y, "button_cancel_red")
+        this.inactive = new Sprite(scene, x, y, "button_blocked");
         this.shadow.setOrigin(0.5, 0.5);
         this.bg.setOrigin(0.5, 0.5);
         this.img.setOrigin(0.5, 0.5);

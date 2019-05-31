@@ -514,7 +514,11 @@
         "type": "image",
         "key": "shop_bg_out",
         "url": "assets/sprites/shop_bg_out.png"
-      }
-    ]
+      },
+      {
+        "type": "image",
+        "key": "button_blocked",
+        "url": "assets/sprites/button_blocked.png"
+      }    ]
   }
 }
