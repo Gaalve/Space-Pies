@@ -252,7 +252,7 @@ export class PiSystem {
 
 
         let execTime = this.date.getTime() - startT;
-        this.phaseResolveActions();
+        setTimeout(()=>{this.phaseResolveActions()}, this.resolveTimeOut - execTime);
     }
 
     /**
@@ -280,7 +280,7 @@ export class PiSystem {
         }
 
         let execTime = this.date.getTime() - startT;
-        this.phaseTriggerSymbols();
+        setTimeout(()=>{this.phaseTriggerSymbols()}, this.cleanUpTimeOut - execTime);
     }
 
     /**
@@ -316,7 +316,7 @@ export class PiSystem {
         this.activeSymbolsQueue = [];
         let execTime = this.date.getTime() - startT;
         if(this.deadlock) this.onDeadlock();
-        if(this.running) this.phaseFindResolvingActions();
+        if(this.running) setTimeout(()=>{this.phaseFindResolvingActions()}, this.findResolvingTimeOut - execTime);
     }
 
     private logPhase1(){

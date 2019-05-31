@@ -11,38 +11,33 @@ describe('test', function() {
 
     it('should ', function () {
 
-        this.timeout(10);
         let gui: Phaser.Scene = new Phaser.Scene({ });
         let te : TestEnvironment = new TestEnvironment(gui, ()=>{});
         te.setOnFinishCallback(()=>{console.log("Pi-Calc-System working: "+te.didSucceed())});
         PiCalcTests.runTestPiChannelCallback1(gui, te);
+        PiCalcTests.runTestPiChannelCallback2(gui, te);
+        PiCalcTests.runTestPiSequential1(gui, te);
+        PiCalcTests.runTestPiSequential2(gui, te);
+        PiCalcTests.runTestPiSequentialND(gui, te);
+        PiCalcTests.runTestPiSequentialNDStatistic(gui);
+        PiCalcTests.runTestPiSum(gui, te);
+        PiCalcTests.runTestPiSum2(gui, te);
+        PiCalcTests.runTestPiSequentialParallel(gui, te);
+        PiCalcTests.runTestPiReplication1(gui, te);
+        PiCalcTests.runTestPiReplication2(gui, te);
+        PiCalcTests.runTestPiTerm(gui, te);
+        PiCalcTests.runTestPiTermRecursion(gui, te);
+        PiCalcTests.runTestPiRename(gui, te);
+        PiCalcTests.runTestPiScopeRename(gui, te);
+        PiCalcTests.runTestPiShieldTest(gui, te);
+        te.start();
+
     });
 });
 
 export class PiCalcTests {
 
-    /*static runTests(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
-
-
-        scene.time.delayedCall(0, ()=>{this.runTestPiChannelCallback2(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequential1(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequential2(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequentialND(scene, testEnvironment)}, [], this);
-        // scene.time.delayedCall(0, ()=>{this.runTestPiSequentialNDStatistic(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSum(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSum2(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequentialParallel(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiReplication1(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiReplication2(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiTerm(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiTermRecursion(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiRename(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiScopeRename(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiShieldTest(scene, testEnvironment)}, [], this);
-        testEnvironment.start();
-    }*/
-
-    static runTestPiChannelCallback1(gui : Phaser.Scene, testEnvironment: TestEnvironment): void{
+    static runTestPiChannelCallback1(gui: Phaser.Scene, testEnvironment: TestEnvironment): void{
 
         let test = new TestBase(testEnvironment, 'PiChannelCallback#1', 0);
         let system : PiSystem = new PiSystem(gui, 1, 1, 1, false);
@@ -55,7 +50,7 @@ export class PiCalcTests {
         system.start();
     }
 
-   /* static runTestPiChannelCallback2(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
+   static runTestPiChannelCallback2(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
         let test = new TestBase(testEnvironment, 'PiChannelCallback#2', 0);
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
         system.setOnDeadlockCallback(()=>{test.fail()});
@@ -128,25 +123,25 @@ export class PiCalcTests {
             runs += 1;
             hits[0] += 1;
             system.stop();
-            scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
+            this.runTestPiSequentialNDStatistic(scene, runs, hits);
         }));
         system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             runs += 1;
             hits[1] += 1;
             system.stop();
-            scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
+            this.runTestPiSequentialNDStatistic(scene, runs, hits);
         }));
         system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             runs += 1;
             hits[2] += 1;
             system.stop();
-            scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
+            this.runTestPiSequentialNDStatistic(scene, runs, hits);
         }));
         system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             runs += 1;
             hits[3] += 1;
             system.stop();
-            scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
+            this.runTestPiSequentialNDStatistic(scene, runs, hits);
         }));
         system.pushSymbol(system.add.channelOut("x", "*").nullProcess());
         system.start();
@@ -378,5 +373,5 @@ export class PiCalcTests {
         );
 
         system.start();
-    }*/
+    }
 }
