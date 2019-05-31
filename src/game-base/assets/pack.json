@@ -504,6 +504,16 @@
         "type": "image",
         "key": "not_hit",
         "url": "assets/sprites/not_hit.png"
+      },
+      {
+        "type": "image",
+        "key": "shop_bg_back",
+        "url": "assets/sprites/shop_bg_back.png"
+      },
+      {
+        "type": "image",
+        "key": "shop_bg_out",
+        "url": "assets/sprites/shop_bg_out.png"
       }
     ]
   }

@@ -7,6 +7,7 @@ import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterMana
 import {PiTerm} from "../mechanics/picalc/pi-term";
 import {PiSymbol} from "../mechanics/picalc/pi-symbol";
 import {Drone} from "../mechanics/drone";
+import Sprite = Phaser.GameObjects.Sprite;
 
 export class MainScene extends Phaser.Scene {
 
@@ -20,8 +21,9 @@ export class MainScene extends Phaser.Scene {
     private shop: Button;
     private system: PiSystem;
     private pem: ParticleEmitterManager;
-    private shop_bg: Phaser.GameObjects.Graphics;
-    private energy_bg: Phaser.GameObjects.Rectangle;
+    private shop_bg_back: Sprite;//Phaser.GameObjects.Graphics;
+    private shop_bg_out: Sprite;
+    // private energy_bg: Phaser.GameObjects.Rectangle;
 
     private shop1: [Button, Button, Button, Button, Button, Button, Button];
     private shopZ: [Button, Button, Button, Button];
@@ -87,7 +89,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.system = new PiSystem(this, 1,1,1,true);
+        this.system = new PiSystem(this, 50,50,50,true);
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
@@ -103,7 +105,8 @@ export class MainScene extends Phaser.Scene {
             this.displayShop(this.shop1, this.shop1Text);
             this.updateShop1(false);
             this.shop1Active = true;
-            this.shop_bg.setVisible(true);
+            this.shop_bg_back.setVisible(true);
+            this.shop_bg_out.setVisible(true);
             this.updateEnergyText();
             this.energy.setVisible(true);
             this.energyT.setVisible(true);
@@ -116,22 +119,27 @@ export class MainScene extends Phaser.Scene {
         system.pushSymbol(startShop);
         this.data.set('P1', this.players[0]);
         this.data.set('P2', this.players[1]);
-        this.shop_bg = this.add.graphics();
-        this.shop_bg.fillStyle(0x000, 0.6);
-        this.shop_bg.lineStyle(5, 0xAA2222);
-        this.shop_bg.fillRoundedRect(260, 1080-220, 1400, 250, 32);
-        this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
+        this.shop_bg_back = new Sprite(this, 1920/2, 990, "shop_bg_back");
+        this.shop_bg_out = new Sprite(this, 1920/2, 990, "shop_bg_out");
+        this.shop_bg_back.setAlpha(0.6);
+        this.add.existing(this.shop_bg_back);
+        this.add.existing(this.shop_bg_out);
+        // this.shop_bg = this.add.graphics();
+        // this.shop_bg.fillStyle(0x000, 0.6);
+        // this.shop_bg.lineStyle(5, 0xAA2222);
+        // this.shop_bg.fillRoundedRect(260, 1080-220, 1400, 250, 32);
+        // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
         //this.shop_bg = this.add.rectangle(1920/2, 1080 - 100, 1400, 250, 0x000, 0.6).setVisible(false).setStrokeStyle(5,0xffff);
         //this.energy_bg = this.add.rectangle(130, 1080- 100, 200, 200, 0x000, 0.6).setVisible(true);
-        this.energy = this.add.image(1920/2-50, 200, "energy_icon");
-        this.energyT = this.add.text(1920/2-15, 170, "= "+this.turn.getCurrentPlayer().getEnergy(), {
+        this.energy = this.add.image(1920/2-50, 800, "energy_icon");
+        this.energyT = this.add.text(1920/2-15, 770, "= "+this.turn.getCurrentPlayer().getEnergy(), {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         //this.add.rectangle(1920-130, 1080- 100, 200, 200, 0x000, 0.6).setVisible(true);
 
         this.shop = new Button(this, 1920/2, 500, "button_shadow",
             "button_bg", "button_fg", "button_shop",
             ()=>{
-                this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess())
+                this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess());
                 this.shop.removeInteractive();
                 this.shop.setInvisible();
                 this.openShop.setVisible(false);
@@ -755,7 +763,8 @@ export class MainScene extends Phaser.Scene {
             b.removeInteractive();
         }
         if(closeBg){
-            this.shop_bg.setVisible(false);
+            this.shop_bg_back.setVisible(false);
+            this.shop_bg_out.setVisible(false);
         }
 
         for(let t of text){
@@ -1030,8 +1039,10 @@ export class MainScene extends Phaser.Scene {
 
     updateEnergyText(): void{
         this.children.remove(this.energyT);
-        this.energyT = this.add.text(1920/2-15, 170, "= "+this.turn.getCurrentPlayer().getEnergy(), {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+        // this.energyT = this.add.text(1920/2-15, 760, "= "+this.turn.getCurrentPlayer().getEnergy(), {
+        //     fill: '#3771c8', fontFamily: '"Roboto-Medium"', fontSize: 64, strokeThickness: 2, stroke: '#214478'});
+        this.energyT = this.add.text(1920/2-15, 760, "= "+this.turn.getCurrentPlayer().getEnergy(), {
+                fill: '#fff', fontFamily: '"Roboto-Medium"', fontSize: 64, strokeThickness: 1, stroke: '#fff'});
     }
 
 
@@ -1071,13 +1082,15 @@ export class MainScene extends Phaser.Scene {
 
     changeShopColor(player: Player){
         if(player.getNameIdentifier() == "P1"){
-            this.shop_bg.lineStyle(5, 0xAA2222);
-            this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
+            // this.shop_bg.lineStyle(5, 0xAA2222);
+            // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
+            this.shop_bg_out.setTint(0xa02c2c);
 
         }
         else{
-            this.shop_bg.lineStyle(5, 0x2222AA);
-            this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
+            // this.shop_bg.lineStyle(5, 0x2222AA);
+            // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
+            this.shop_bg_out.setTint(0x214478);
 
         }
     }
