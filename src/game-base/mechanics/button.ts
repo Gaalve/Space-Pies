@@ -125,6 +125,8 @@ export class Button{
         this.bg.setScale(this.scale, this.scale);
         this.fg.setScale(this.scale, this.scale);
         this.img.setScale(this.scale, this.scale);
+        this.alt.setScale(this.scale, this.scale);
+        this.inactive.setScale(this.scale, this.scale);
     }
 
     public setPosition(x: number, y: number): void{
@@ -132,6 +134,8 @@ export class Button{
         this.bg.setPosition(x, y);
         this.fg.setPosition(x, y);
         this.img.setPosition(x, y);
+        this.alt.setPosition(x, y);
+        this.inactive.setPosition(x, y);
     }
 
     public changeButton(scene: Phaser.Scene, alt: boolean, active: boolean, player: Player): void{
