@@ -1075,8 +1075,16 @@ export class MainScene extends Phaser.Scene {
 
         for(let i = 0; i < 5; i++){
             this.children.remove(this.energyCostText[i]);
-            this.energyCostText[i] = this.add.text(350+(200*i), 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(), {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
+            if(this.turn.getCurrentPlayer().getEnergy() < this.turn.getCurrentPlayer().getEnergyCost()){
+                this.energyCostText[i] = this.add.text(350+(200*i), 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(), {
+                    fill: '#be0120', fontFamily: '"Roboto"', fontSize: 25, stroke:'#be0120', strokeThickness: 2});
+            }
+            else if(this.turn.getCurrentPlayer().getEnergy() >= this.turn.getCurrentPlayer().getEnergyCost()){
+
+                this.energyCostText[i] = this.add.text(350+(200*i), 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(), {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
+            }
+
         }
     }
 
