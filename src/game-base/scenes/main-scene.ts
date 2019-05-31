@@ -209,6 +209,7 @@ export class MainScene extends Phaser.Scene {
         //create 1 energy drone for each player (gain 3 energy per turn)
         this.system.pushSymbol(this.system.add.channelOut("newsolar10", "solar1").nullProcess());
         this.system.pushSymbol(this.system.add.channelOut("newsolar20", "solar2").nullProcess());
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("wait", "").nullProcess()));
 
         this.system.start();
     }
