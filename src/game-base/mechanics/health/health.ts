@@ -143,6 +143,38 @@ export class Health {
         ]));
     }
 
+    private static getPiRocketShield(pi: PiSystem, pid: string, hbid: string, desRSCB: ()=>any,
+                                    regLSCB: ()=>any, regASCB: ()=>any, regRSCB: ()=>any): PiTerm{
+        return pi.add.term('RockShld'+pid+hbid, pi.add.sum([
+            pi.add.channelInCB('armor'+pid,'', desRSCB) // rocketshield of player X
+                .channelOut('regout', '') // sync
+                .nullProcess(),
+            pi.add.channelInCB('shield'+pid,'', desRSCB)
+                .channelOut('regout','')
+                .nullProcess(),
+            pi.add.channelIn('rrocket'+pid+hbid, '') // regenerate rocket shield
+                .scope('reg1',
+                    pi.add.scope('reg2',
+                        pi.add.channelOutCB('reghelpls'+pid+hbid, 'reg1', regRSCB)
+                            .channelIn('reg1', '*')
+                            .channelOut('reghelpas'+pid+hbid, 'reg2').channelIn('reg2', '*')
+                            .channelOut('regout', '*').nullProcess())),
+            pi.add.channelIn('rshield'+pid+hbid, '') // regenerate laser shield
+                .scope('reg1',
+                    pi.add.scope('reg2',
+                        pi.add.channelOutCB('reghelpls'+pid+hbid, 'reg1', regLSCB)
+                            .channelIn('reg1', '*')
+                            .channelOut('reghelpas'+pid+hbid, 'reg2').channelIn('reg2', '*')
+                            .channelOut('regout', '*').nullProcess())),
+            pi.add.channelIn('rarmor'+pid+hbid, '') // regenerate armor shield
+                .scope('reg1',
+                    pi.add.scope('reg2',
+                        pi.add.channelOutCB('reghelpas'+pid+hbid, 'reg1', regASCB)
+                            .channelIn('reg1', '*')
+                            .channelOut('reghelpas'+pid+hbid, 'reg2').channelIn('reg2', '*')
+                            .channelOut('regout', '*').nullProcess()))
+        ]));
+    }
 
     /**
      * Adds the helper Function for Laser Shields
