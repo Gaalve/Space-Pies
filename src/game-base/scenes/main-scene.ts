@@ -184,8 +184,8 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock3", "").nullProcess()));
 
         //create 1 weapon for each player on ship
-        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext101", "shieldp2").nullProcess());
-        this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext201", "shieldp1").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext100", "shieldp2").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext200", "shieldp1").nullProcess());
 
         //Creating Energy Drones#######################################################
         for(let i = 1; i < 3; i++){
@@ -269,15 +269,15 @@ export class MainScene extends Phaser.Scene {
                                                 channelOutCB("w3", "", (_, at) => {
                                                     droneRef.getWeapons()[2].createBullet(at == 'miss')}).
                                                 next(weapon),
-                                              this.system.add.channelInCB("wext" + p + d + "1", "w1", (wClass) => {
+                                              this.system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {
                                                     this.players[player - 1].getDrones()[drone].addWeapon(wClass);
                                                     }).
                                                 next(weapon),
-                                              this.system.add.channelInCB("wext" + p + d + "2", "w2", (wClass) => {
+                                              this.system.add.channelInCB("wext" + p + d + "1", "w2", (wClass) => {
                                                     this.players[player - 1].getDrones()[drone].addWeapon(wClass);
                                                     }).
                                                 next(weapon),
-                                              this.system.add.channelInCB("wext" + p + d + "3", "w3", (wClass) => {
+                                              this.system.add.channelInCB("wext" + p + d + "2", "w3", (wClass) => {
                                                     this.players[player - 1].getDrones()[drone].addWeapon(wClass);
                                                     }).
                                                 next(weapon)]);
@@ -692,7 +692,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_wmod",
             ()=>{
                 let player = this.turn.getCurrentPlayer();
-                let term = "wext"+player.getNameIdentifier().charAt(1) + "1" + player.getDrones()[0].getNrWeapons();
+                let term = "wext"+player.getNameIdentifier().charAt(1) + "1" + player.getDrones()[1].getNrWeapons();
                 player.payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
                 this.updateShop1(false);
@@ -709,7 +709,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_wmod",
             ()=>{
                 let player = this.turn.getCurrentPlayer();
-                let term = "wext"+player.getNameIdentifier().charAt(1) + "2" + player.getDrones()[0].getNrWeapons();
+                let term = "wext"+player.getNameIdentifier().charAt(1) + "2" + player.getDrones()[2].getNrWeapons();
                 player.payEnergy(player.getEnergyCost());
                 this.updateEnergyText();
                 this.updateShop1(false);
