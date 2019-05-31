@@ -315,8 +315,8 @@ export class MainScene extends Phaser.Scene {
                                                 concurrent([
                                                     this.system.add.channelOut("nolock1", "").nullProcess(),
                                                     this.system.add.channelOut("nolock2", "").nullProcess(),
-                                                    this.system.add.channelOut("nolock3", "").nullProcess(),
-                                                    this.system.add.channelOut("attackp" + p + "end", "").next(rlock)
+                                                    this.system.add.channelOut("nolock3", "").
+                                                    channelOut("attackp" + p + "end", "").next(rlock)
                                                 ]),
 
                                               this.system.add.channelIn("newlock" + p + "0", "nolock1").
