@@ -8,13 +8,48 @@
       },
       {
         "type": "image",
-        "key": "big_oval_light",
-        "url": "assets/sprites/big_oval_light.png"
+        "key": "adap_shield",
+        "url": "assets/sprites/adap_shield.png"
       },
       {
         "type": "image",
-        "key": "background_space",
-        "url": "assets/sprites/background_space.png"
+        "key": "armor_shield",
+        "url": "assets/sprites/armor_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "hitzone_shield",
+        "url": "assets/sprites/hitzone_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "laser_shield",
+        "url": "assets/sprites/laser_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "nano_shield",
+        "url": "assets/sprites/nano_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "rocket_shield",
+        "url": "assets/sprites/rocket_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "sym_core",
+        "url": "assets/sprites/sym_core.png"
+      },
+      {
+        "type": "image",
+        "key": "sym_zone",
+        "url": "assets/sprites/sym_zone.png"
+      },
+      {
+        "type": "image",
+        "key": "big_oval_light",
+        "url": "assets/sprites/big_oval_light.png"
       },
       {
         "type": "image",
@@ -45,6 +80,11 @@
         "type": "image",
         "key": "button_skip",
         "url": "assets/sprites/button_skip.png"
+      },
+      {
+        "type": "image",
+        "key": "button_space_shuttle",
+        "url": "assets/sprites/button_space_ship.png"
       },
       {
         "type": "image",
@@ -168,11 +208,6 @@
       },
       {
         "type": "image",
-        "key": "weapon",
-        "url": "assets/sprites/weapon.png"
-      },
-      {
-        "type": "image",
         "key": "button_options",
         "url": "assets/sprites/button_options.png"
       },
@@ -186,6 +221,289 @@
         "key": "shop_bg",
         "url": "assets/sprites/shop_bg.png"
 
+      },
+      {
+        "type": "image",
+        "key": "pause_bg",
+        "url": "assets/sprites/pause_bg.png"
+      },
+      {
+        "type": "image",
+        "key": "logo",
+        "url": "assets/sprites/logo.png"
+      },
+      {
+        "type": "image",
+        "key": "logo_space_pies",
+        "url": "assets/sprites/logo_space_pies.png"
+      },
+      {
+        "type": "image",
+        "key": "intro_textbox_scream",
+        "url": "assets/sprites/intro_textbox_scream.png"
+      },
+      {
+        "type": "image",
+        "key": "intro_textbox_scream_big",
+        "url": "assets/sprites/intro_textbox_scream_big.png"
+      },
+      {
+        "type": "image",
+        "key": "intro_planet",
+        "url": "assets/sprites/intro_planet.png"
+      },
+      {
+        "type": "image",
+        "key": "intro_textbox_normal",
+        "url": "assets/sprites/intro_textbox_normal.png"
+      },
+      {
+        "type": "image",
+        "key": "energy_icon",
+        "url": "assets/sprites/energy_icon.png"
+      },
+      {
+        "type": "image",
+        "key": "fire_dark",
+        "url": "assets/sprites/fire_dark.png"
+      },
+      {
+        "type": "image",
+        "key": "fire_light",
+        "url": "assets/sprites/fire_light.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_solar_drone",
+        "url": "assets/sprites/ssb_solar_drone.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_solar_drone",
+        "url": "assets/sprites/ssr_solar_drone.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_weap_rock",
+        "url": "assets/sprites/ssb_weap_rock.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_weap_rock",
+        "url": "assets/sprites/ssr_weap_rock.png"
+      },
+      {
+        "type": "image",
+        "key": "ssr_nuke_drone",
+        "url": "assets/sprites/ssr_nuke_drone.png"
+      },
+      {
+        "type": "image",
+        "key": "ssb_nuke_drone",
+        "url": "assets/sprites/ssb_nuke_drone.png"
+      },
+      {
+        "type": "image",
+        "key": "button_shop",
+        "url": "assets/sprites/button_shop.png"
+      },
+      {
+        "type": "image",
+        "key": "particle",
+        "url": "assets/sprites/particle.png"
+      },
+      {
+        "type": "image",
+        "key": "particle_2",
+        "url": "assets/sprites/particle_2.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_back",
+        "url": "assets/sprites/ssbr/ssb_back.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_des_back",
+        "url": "assets/sprites/ssbr/ssb_des_back.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_des_pilot",
+        "url": "assets/sprites/ssbr/ssb_des_pilot.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_des_wing_down",
+        "url": "assets/sprites/ssbr/ssb_des_wing_down.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_des_wing_up",
+        "url": "assets/sprites/ssbr/ssb_des_wing_up.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_des_hull",
+        "url": "assets/sprites/ssbr/ssb_des_hull.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_hull",
+        "url": "assets/sprites/ssbr/ssb_hull.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_pilot",
+        "url": "assets/sprites/ssbr/ssb_pilot.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_wing_down",
+        "url": "assets/sprites/ssbr/ssb_wing_down.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssb_wing_up",
+        "url": "assets/sprites/ssbr/ssb_wing_up.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_back_down",
+        "url": "assets/sprites/ssbr/ssr_back_down.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_back_up",
+        "url": "assets/sprites/ssbr/ssr_back_up.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_des_back_down",
+        "url": "assets/sprites/ssbr/ssr_des_back_down.png"
+      },{
+        "type": "image",
+        "key": "ssbr/ssr_des_back_up",
+        "url": "assets/sprites/ssbr/ssr_des_back_up.png"
+      },{
+        "type": "image",
+        "key": "ssbr/ssr_des_hull",
+        "url": "assets/sprites/ssbr/ssr_des_hull.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_des_pilot",
+        "url": "assets/sprites/ssbr/ssr_des_pilot.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_des_wing_down",
+        "url": "assets/sprites/ssbr/ssr_des_wing_down.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_des_wing_up_1",
+        "url": "assets/sprites/ssbr/ssr_des_wing_up_1.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_des_wing_up_2",
+        "url": "assets/sprites/ssbr/ssr_des_wing_up_2.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_hull",
+        "url": "assets/sprites/ssbr/ssr_hull.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_pilot",
+        "url": "assets/sprites/ssbr/ssr_pilot.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_wing_down",
+        "url": "assets/sprites/ssbr/ssr_wing_down.png"
+      },
+      {
+        "type": "image",
+        "key": "ssbr/ssr_wing_up",
+        "url": "assets/sprites/ssbr/ssr_wing_up.png"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_0",
+        "url": "assets/sprites/debris/debris_0.png"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_1",
+        "url": "assets/sprites/debris/debris_1.png"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_2",
+        "url": "assets/sprites/debris/debris_2.png"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_3",
+        "url": "assets/sprites/debris/debris_3.png"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_4",
+        "url": "assets/sprites/debris/debris_4.png"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_5",
+        "url": "assets/sprites/debris/debris_5.png"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_6",
+        "url": "assets/sprites/debris/debris_6.png"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_7",
+        "url": "assets/sprites/debris/debris_7.png"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_8",
+        "url": "assets/sprites/debris/debris_8.png"
+      },
+      {
+        "type": "image",
+        "key": "debris/debris_9",
+        "url": "assets/sprites/debris/debris_9.png"
+      },
+      {
+        "type": "image",
+        "key": "shot_projectile",
+        "url": "assets/sprites/shot_projectile.png"
+      },
+      {
+        "type": "image",
+        "key": "shot_rocket",
+        "url": "assets/sprites/shot_rocket.png"
+      },
+      {
+        "type": "image",
+        "key": "shot_laser",
+        "url": "assets/sprites/shot_laser.png"
+      },
+      {
+        "type": "image",
+        "key": "not_miss",
+        "url": "assets/sprites/not_miss.png"
+      },
+      {
+        "type": "image",
+        "key": "not_hit",
+        "url": "assets/sprites/not_hit.png"
       }
     ]
   }

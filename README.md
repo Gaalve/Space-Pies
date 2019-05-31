@@ -18,8 +18,8 @@ sodass die Nutzer spielend leicht den Pi-Kalkül erlernen können.
 * DevOps-Engineer: @p.berner.1
 * Entwickler: @jkassing98, jkassing; @m.schoppe; @Johnoliver; @kara.kadir
 
-## Concept Art
-![Concept Art](concept_artv3.png)
+## Game Footage
+![Apha Footage](footage_sprint_1.jpg)
 
 ## GitLab CI
 Die GitLab CI testet sowohl den Aufbau der Applikation als auch die Funktionalität von gewünschten Attributen der Applikation. Nach den Tests steht die Anwendung auf dem Server pr.mtv.tu-berlin.de unter <http://pr.mtv.tu-berlin.de/modysy-2019sose/space-pies/master/> zur Verfügung.

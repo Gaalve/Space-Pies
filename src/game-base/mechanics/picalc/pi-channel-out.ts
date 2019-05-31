@@ -30,6 +30,7 @@ export class PiChannelOut extends PiAction{
         if(!this.canResolve(other)){
             throw new Error("Error: resolved channel with wrong action! This: "+this.getFullName()+" other: "+other.getFullName())
         }
+        this.attachmentOfResolved = other.attachment;
         return this.next;
     }
 
@@ -41,6 +42,7 @@ export class PiChannelOut extends PiAction{
         let nextCopy = this.next.copy();
         let thisCopy = new PiChannelOut(this.system, this.name, this.inOutPut);
         thisCopy.next = nextCopy;
+        thisCopy.setCallback(this.callback);
         return thisCopy;
     }
 }
