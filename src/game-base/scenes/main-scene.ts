@@ -272,8 +272,10 @@ export class MainScene extends Phaser.Scene {
         let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
                                                 channelOutCB("w1","", (_, at) => {
                                                     droneRef.getWeapons()[0].createBullet(at == 'miss')}).        //function for weapon animation
+                                                channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
                                                 channelOutCB("w2", "", (_, at) => {
                                                     droneRef.getWeapons()[1].createBullet(at == 'miss')}).
+                                                channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
                                                 channelOutCB("w3", "", (_, at) => {
                                                     droneRef.getWeapons()[2].createBullet(at == 'miss')}).
                                                 next(weapon),
