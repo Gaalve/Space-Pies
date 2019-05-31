@@ -1084,13 +1084,13 @@ export class MainScene extends Phaser.Scene {
         if(player.getNameIdentifier() == "P1"){
             // this.shop_bg.lineStyle(5, 0xAA2222);
             // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
-            this.shop_bg_out.setTint(0xAA2222);
+            this.shop_bg_out.setTint(0xa02c2c);
 
         }
         else{
             // this.shop_bg.lineStyle(5, 0x2222AA);
             // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
-            this.shop_bg_out.setTint(0x2222AA);
+            this.shop_bg_out.setTint(0x214478);
 
         }
     }
