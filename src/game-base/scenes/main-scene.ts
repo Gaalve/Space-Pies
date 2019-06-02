@@ -30,9 +30,6 @@ export class MainScene extends Phaser.Scene {
         //     "preload"
         // )
 
-        this.load.spritesheet('bleedingbar', 'assets/sprites/bleedingbar.png', { frameWidth: 19, frameHeight: 42, spacing: 5, startFrame: 0, endFrame: 42, margin: 0});
-
-
     }
 
     create(): void {
@@ -99,9 +96,6 @@ export class MainScene extends Phaser.Scene {
             }
         );
         this.buttonOption.setPosition(1880, 40);
-
-        // todo: kara check animation
-        this.scene.launch('AnimationScene');
     }
 
 

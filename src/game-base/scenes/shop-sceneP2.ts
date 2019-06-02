@@ -10,13 +10,30 @@ export class ShopSceneP2 extends Phaser.Scene{
     private skip: Button;
     private wModule: Button;
     private wExt: Button;
+    private solar: Button;
     private shield: Button;
     private armor: Button;
     private background: Phaser.GameObjects.Image;
     private activeWmods:integer = 3;
+    private activeSmods: integer = 1;
     private Player2: Player;
     private firstChoose: boolean;
+    private change: boolean;
+    private change2: boolean;
+
     private wModText: Phaser.GameObjects.Text;
+    private energyText: Phaser.GameObjects.Text;
+    private armorText: Phaser.GameObjects.Text;
+    private shieldText: Phaser.GameObjects.Text;
+    private system: PiSystem;
+    private energyCostText1: Phaser.GameObjects.Text;
+    private energyCostText2: Phaser.GameObjects.Text;
+    private energyCostText3: Phaser.GameObjects.Text;
+    private energyCostText4: Phaser.GameObjects.Text;
+    private energyCostText5: Phaser.GameObjects.Text;
+    private solarText: Phaser.GameObjects.Text;
+
+
 
     constructor(){
         super({
@@ -24,6 +41,9 @@ export class ShopSceneP2 extends Phaser.Scene{
             active: false
         });
         this.firstChoose = true;
+        this.change = true;
+        this.change2 = true;
+
     }
 
     preload(): void{
@@ -36,12 +56,22 @@ export class ShopSceneP2 extends Phaser.Scene{
 
     create(): void{
         //let system = new PiSystem(this, 1,1, 1, false);
-        let system = this.scene.get('MainScene').data.get("system");
+        this.system = this.scene.get('MainScene').data.get("system");
+        let system = this.system;
 
-        let createShield = (system.add.channelOut('rShieldP2','*' ).nullProcess());
-        let createArmor = (system.add.channelOut('rArmorP2','*' ).nullProcess());
+        let createShield1 = (system.add.channelOut('rshieldp2z1','*' ).nullProcess());
+        let createArmor1 = (system.add.channelOut('rarmorp2z1','*' ).nullProcess());
+        let createShield2 = (system.add.channelOut('rshieldp2z2','*' ).nullProcess());
+        let createArmor2 = (system.add.channelOut('rarmorp2z2','*' ).nullProcess());
+        let createShield3 = (system.add.channelOut('rshieldp2z3','*' ).nullProcess());
+        let createArmor3 = (system.add.channelOut('rarmorp2z3','*' ).nullProcess());
+        let createShield4 = (system.add.channelOut('rshieldp2z4','*' ).nullProcess());
+        let createArmor4 = (system.add.channelOut('rarmorp2z4','*' ).nullProcess());
         let createWExtShipL = (system.add.channelOut('wext20l','*' ).nullProcess());
         let createWExtShipP = (system.add.channelOut('wext20p','*' ).nullProcess());
+        let createWExtShipR = (system.add.channelOut('wext20r','*' ).nullProcess());
+        let createWExtDrone1R = (system.add.channelOut('wext21r','*' ).nullProcess());
+        let createWExtDrone2R = (system.add.channelOut('wext22r','*' ).nullProcess());
         let createWExtDrone1L = (system.add.channelOut('wext21l','*' ).nullProcess());
         let createWExtDrone1P = (system.add.channelOut('wext21p','*' ).nullProcess());
         let createWExtDrone2L = (system.add.channelOut('wext22l','*' ).nullProcess());
@@ -51,42 +81,98 @@ export class ShopSceneP2 extends Phaser.Scene{
 
         this.Player2 = this.scene.get('MainScene').data.get('P2');
         this.activeWmods = this.Player2.getNrDrones();
+        this.activeSmods = this.Player2.getNrSolarDrones();
         this.background = this.add.image(0, 540,"shop_bg");
         this.background.setOrigin(0, 0.5);
         this.background.setFlipX(true);
         this.background.setTint(0x214478);
+
+        let energy = this.Player2.getEnergy();
+        let energyCost = this.Player2.getEnergyCost();
+        this.add.image(50,40,"button_energy");
+        this.energyText = this.add.text(70, 10, " : " +energy, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
+
+        this.add.image(70,200,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,350,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,500,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,650,"button_energy").setDisplaySize(40,40);
+        this.add.image(70,800,"button_energy").setDisplaySize(40,40);
+
+        this.energyCostText1 = this.add.text(90, 185, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+        this.energyCostText2 = this.add.text(90, 335, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+        this.energyCostText3 = this.add.text(90, 485, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+        this.energyCostText4 = this.add.text(90, 635, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+        this.energyCostText5 = this.add.text(90, 785, " x " +energyCost, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+
+
+
         const text = this.add.text(160, 50, 'choose action', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 40, strokeThickness: 0})
 
-        this.armor = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "button_armor",
-            ()=>{
-            system.pushSymbol(createArmor)
-            });
-        this.armor.setPosition(200, 200);
-        const energyText = this.add.text(300, 180, "Armor", {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
-        const piArmor = this.add.text(500, 180, 'regArmorP2<*>.O',{
+        const piArmor = this.add.text(600, 160, 'regArmorP2<*>.O',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
-        const piShield = this.add.text(500, 330, 'regShieldP2<*>.0',{
+        const piShield = this.add.text(600, 310, 'regShieldP2<*>.0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
-        const piWmod = this.add.text(650, 630, 'wmodP2<*>.0',{
+        const piWmod = this.add.text(600, 610, 'wmodP2<*>.0',{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
+        const piSmod = this.add.text(600, 765, 'solar2<*>.0',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2} )
 
-        this.shield = new Button(this, 500, 500, "button_shadow",
-            "button_bg", "button_fg", "button_shield",
-            ()=>{
-            system.pushSymbol(createShield)
+        if(energy < energyCost){
 
-            });
-        this.shield.setPosition(200, 350);
-        const shieldText = this.add.text(300, 330, "Shield", {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+            this.armor = new Button(this, 500, 500, "button_shadow",
+                "button_bg", "button_fg", "button_cancel_red",
+                ()=>{
+                });
+            this.armor.setPosition(200, 200);
+
+            this.shield = new Button(this, 500, 500, "button_shadow",
+                "button_bg", "button_fg", "button_cancel_red",
+                ()=>{
+
+                });
+            this.shield.setPosition(200, 350);
+            this.shieldText = this.add.text(300, 330, "not enough energy", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+            this.armorText = this.add.text(300, 180, "not enough energy", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+        }
+        else{
+            this.armor = new Button(this, 500, 500, "button_shadow",
+                "button_bg", "button_fg", "button_armor",
+                ()=>{
+                    this.data.set("type", "armor");
+                    this.scene.run("chooseZoneSceneP2");
+                    this.scene.sleep();                });
+            this.armor.setPosition(200, 200);
+
+            this.shield = new Button(this, 500, 500, "button_shadow",
+                "button_bg", "button_fg", "button_shield",
+                ()=>{
+                    this.data.set("type", "shield");
+                    this.scene.run("chooseZoneSceneP2");
+                    this.scene.sleep();                });
+            this.shield.setPosition(200, 350);
+            this.shieldText = this.add.text(300, 330, "Shield", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+            this.armorText = this.add.text(300, 180, "Armor", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+        }
 
         this.wExt = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
-                this.scene.sleep()
+                this.scene.sleep();
                 this.scene.run('chooseTypeSceneP2');
 
             });
@@ -94,23 +180,32 @@ export class ShopSceneP2 extends Phaser.Scene{
         const wExtText = this.add.text(300, 480, "Weapon Extension", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
-        if(this.activeWmods >= 3){
+        if(this.activeWmods >= 3 || energy < energyCost){
             this.wModule = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_cancel_red",
                 ()=>{
 
                 });
             this.wModule.setPosition(200, 650);
-            this.wModText = this.add.text(300, 630, "max Mods reached", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+            if(this.activeWmods >= 3){
+                this.wModText = this.add.text(300, 630, "max Mods reached", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+            }
+            else{
+                this.wModText = this.add.text(300, 630, "not enough energy", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+            }
 
         }
-        if(this.activeWmods < 3){
+        if(this.activeWmods < 3 && energy >= energyCost){
             this.wModule = new Button(this, 500, 500, "button_shadow",
                 "button_bg", "button_fg", "button_wmod",
                 ()=>{
-                    system.pushSymbol(createWMod)
-                    this.activeWmods++;
+                    system.pushSymbol(createWMod);
+                    this.Player2.payEnergy(energyCost);
+                    this.Player2.raiseEnergyCost(1);
                 });
             this.wModule.setPosition(200, 650);
             this.wModText = this.add.text(300, 630, "Weapon Module", {
@@ -118,24 +213,59 @@ export class ShopSceneP2 extends Phaser.Scene{
 
         }
 
+        if(this.activeSmods >= 5 && energy < energyCost){
+            this.solar = this.setButton(200, 800, "button_cancel_red", ()=>{
+
+            });
+
+            if(this.activeSmods >= 5){
+                this.solarText = this.add.text(300, 780, "max reached", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+            }
+            else{
+                this.solarText = this.add.text(300, 780, "not enough energy", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+            }
+
+
+        }
+
+        if(this.activeSmods < 5 && energy >= energyCost){
+            this.solar = this.setButton(200, 800, "ssb_solar_drone", ()=>{
+                system.pushSymbol(system.add.channelOut("solar2", "*").nullProcess());
+                this.Player2.payEnergy(energyCost);
+
+            });
+            this.solarText = this.add.text(300, 780, "Solar drone", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+        }
+
+
+
 
         this.skip = new Button(this, 500, 500, "button_shadow",
             "button_bg", "button_fg", "button_cancel_black",
             ()=>{
             this.events.emit("skip")
             });
-        this.skip.setPosition(200, 800);
-        const skipText = this.add.text(300, 780, "close", {
+        this.skip.setPosition(200, 950);
+        const skipText = this.add.text(300, 930, "close", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
 
         let choose = this.scene.get('chooseSceneP2');
+        let zones = this.scene.get('chooseZoneSceneP2');
+
         choose.events.on('shipL', function () {
             system.pushSymbol(createWExtShipL)
         }, this);
 
         choose.events.on('shipP', function () {
             system.pushSymbol(createWExtShipP)
+        }, this);
+        choose.events.on('shipR', function () {
+            system.pushSymbol(createWExtShipR)
         }, this);
         choose.events.on('drone1L', function () {
             system.pushSymbol(createWExtDrone1L)
@@ -148,11 +278,43 @@ export class ShopSceneP2 extends Phaser.Scene{
         }, this);
         choose.events.on('drone2P', function () {
             system.pushSymbol(createWExtDrone2P)
-        }, this)
+        }, this);
+        choose.events.on('drone1R', function () {
+            system.pushSymbol(createWExtDrone1R)
+        }, this);
+        choose.events.on('drone2R', function () {
+            system.pushSymbol(createWExtDrone2R)
+        }, this);
+        zones.events.on("armorZ1", function () {
+            system.pushSymbol(createArmor1);
+        })
+        zones.events.on("shieldZ1", function () {
+            system.pushSymbol(createShield1);
+        })
+        zones.events.on("armorZ2", function () {
+            system.pushSymbol(createArmor2);
+        })
+        zones.events.on("shieldZ2", function () {
+            system.pushSymbol(createShield2);
+        })
+        zones.events.on("armorZ3", function () {
+            system.pushSymbol(createArmor3);
+        })
+        zones.events.on("shieldZ3", function () {
+            system.pushSymbol(createShield3);
+        })
+        zones.events.on("armorZ4", function () {
+            system.pushSymbol(createArmor4);
+        })
+        zones.events.on("shieldZ4", function () {
+            system.pushSymbol(createShield4);
+        })
     }
 
     update(time: number, delta: number): void {
         this.timeAccumulator += delta;
+        let old = 0;
+        let oldCost = 2;
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
             this.skip.updateStep();
@@ -160,19 +322,149 @@ export class ShopSceneP2 extends Phaser.Scene{
             this.armor.updateStep();
             this.wModule.updateStep();
             this.wExt.updateStep();
-            if(this.firstChoose && this.activeWmods >= 3){
-                this.firstChoose = false;
+            this.solar.updateStep();
+
+            this.activeWmods = this.Player2.getNrDrones();
+            this.activeSmods = this.Player2.getNrSolarDrones();
+            let energy = this.Player2.getEnergy();
+            let energyCost = this.Player2.getEnergyCost();
+            if(energy != old){
+                this.children.remove(this.energyText);
+                this.energyText = this.add.text(70, 20, " = " +energy, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
+
+            }
+
+            if(energyCost != oldCost){
+                this.children.remove(this.energyCostText1);
+                this.children.remove(this.energyCostText2);
+                this.children.remove(this.energyCostText3);
+                this.children.remove(this.energyCostText4);
+                this.children.remove(this.energyCostText5);
+
+                this.energyCostText1 = this.add.text(90, 185, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+                this.energyCostText2 = this.add.text(90, 335, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+                this.energyCostText3 = this.add.text(90, 485, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+                this.energyCostText4 = this.add.text(90, 635, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+                this.energyCostText5 = this.add.text(90, 785, " x " +energyCost, {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 1});
+            }
+
+            if(energy < energyCost && this.change2){
+                this.armor.changeButton(this,200, 200, "button_cancel_red", ()=>{
+                });
+                this.shield.changeButton(this,200, 350, "button_cancel_red", ()=>{
+                });
+                this.children.remove(this.shieldText);
+                this.children.remove(this.armorText);
+                this.shieldText = this.changeText(300, 330, "not enough energy");
+                this.armorText = this.changeText(300, 180, "not enough energy")
+
+                this.change2 = false;
+                //this.changeText()
+            }
+
+            if(energy >= energyCost && !this.change2){
+                this.armor.changeButton(this,200, 200, "button_armor", ()=>{
+                    this.data.set("type", "armor");
+                    this.scene.run("chooseZoneSceneP2");
+                    this.scene.sleep();
+                });
+                this.shield.changeButton(this,200, 350, "button_shield", ()=>{
+                    this.data.set("type", "shield");
+                    this.scene.run("chooseZoneSceneP2");
+                    this.scene.sleep();
+                });
+                this.children.remove(this.shieldText);
+                this.children.remove(this.armorText);
+                this.shieldText = this.changeText(300, 330, "Shield");
+                this.armorText = this.changeText(300, 180, "Armor");
+                this.change2 = true;
+
+                //this.changeText()
+            }
+
+            if(this.firstChoose && this.activeWmods >= 3 || energy < energyCost){
                 this.wModule.changeButton(this,200, 650, "button_cancel_red", ()=>{
                 });
                 this.children.remove(this.wModText);
-                this.wModText = this.add.text(300, 630, "max Mods reached", {
-                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+                if(this.activeWmods >= 3){
+                    this.wModText = this.add.text(300, 630, "max Mods reached", {
+                        fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+                }
+                else{
+                    this.wModText = this.add.text(300, 630, "not enough energy", {
+                        fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+                }
+                this.firstChoose = false;
+
 
 
             }
 
+            if(!this.firstChoose && this.activeWmods < 3 && energy >= energyCost){
+                this.firstChoose = true;
+                this.wModule.changeButton(this,200, 650, "button_wmod", ()=>{
+                    this.system.pushSymbol(this.system.add.channelOut('wmod2','*' ).nullProcess());
+                    this.Player2.payEnergy(energyCost);
+                    this.Player2.raiseEnergyCost(1);
+
+                });
+                this.children.remove(this.wModText);
+                this.wModText = this.add.text(300, 630, "Weapon Mod", {
+                        fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+            }
+            if(this.activeSmods >= 5 && this.change || energy < energyCost){
+                this.change = false;
+                this.solar.changeButton(this,200, 800, "button_cancel_red", ()=>{
+                });
+                this.children.remove(this.solarText);
+                if(this.activeSmods >= 5){
+                    this.solarText = this.add.text(300, 780, "max Mods reached", {
+                        fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+                }
+                else if(energy < energyCost){
+
+                    this.solarText = this.add.text(300, 780, "not enough energy", {
+                        fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+                }
+            }
+            if(this.activeSmods < 5 && !this.change && energy >= energyCost){
+                this.change = true;
+                this.solar.changeButton(this,200, 800, "ssb_solar_drone", ()=> {
+                        this.system.pushSymbol(this.system.add.channelOut("solar2", "*").nullProcess());
+                        this.Player2.payEnergy(energyCost);
+
+                    }
+                );
+                this.children.remove(this.solarText);
+                this.solarText = this.changeText(300, 780, "Solar drone")
+            }
+
+            old = energy;
+            oldCost = energyCost;
+
             // console.log("Update")
         }
+    }
+    changeText(x: number, y: number, newText: string) : Phaser.GameObjects.Text{
+        return this.add.text(x, y, newText, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+
+    }
+    setButton(x : number, y : number, pic : string, onclick: Function = ()=>{}) : Button{
+        return new Button(this, x, y, "button_shadow",
+            "button_bg", "button_fg", pic, onclick);
+
     }
 
 
