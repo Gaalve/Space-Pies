@@ -628,7 +628,7 @@ export class MainScene extends Phaser.Scene {
             });
 
         this.back = new Button(this, 1460, 1080-100, "button_shadow",
-            "button_bg", "button_fg", "button_skip",
+            "button_bg", "button_fg", "button_back",
             ()=>{
 
                     this.closeShop(this.shopZ, this.shopZText, false);
@@ -694,7 +694,7 @@ export class MainScene extends Phaser.Scene {
             });
         this.rocket.setAlt(this, 1100, 1080-100, "ssb_weap_rock");
         this.backT = new Button(this, 1400, 1080-100, "button_shadow",
-            "button_bg", "button_fg", "button_skip",
+            "button_bg", "button_fg", "button_back",
             ()=>{
 
                 this.closeShop(this.shopT, this.shopTText, false);
@@ -786,7 +786,7 @@ export class MainScene extends Phaser.Scene {
                 this.shopWActive = false;
         });
         this.close2 = new Button(this, 1400, 1080-100, "button_shadow",
-            "button_bg", "button_fg", "button_cancel_black",
+            "button_bg", "button_fg", "button_back",
             ()=>{
                 this.closeShop(this.shopW, this.shopWText, false);
                 this.displayShop(this.shop1, this.shop1Text);
