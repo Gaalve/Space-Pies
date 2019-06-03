@@ -39,6 +39,12 @@ export class PiConcurrent extends PiSymbol{
         return new PiConcurrent(this.system, symbolsCopy);
     }
 
+    rename(argName: string, argValue: string): void {
+        for(let idx in this.symbols){
+            this.symbols[idx].rename(argName, argValue);
+        }
+    }
+
     addScope(scope: PiScope): void {
         for(let idx in this.symbols){
             this.symbols[idx].addScope(scope);
