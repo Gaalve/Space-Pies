@@ -243,8 +243,6 @@ export class MainScene extends Phaser.Scene {
 
             }
 
-
-
         }
         this.players[0].update(delta);
         this.players[1].update(delta);

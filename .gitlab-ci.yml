@@ -12,6 +12,7 @@ building_app:
 testing_app:
   stage: test
   script:
+    - "npm install"
     - "npm run test"
 
 deploy_to_server:
