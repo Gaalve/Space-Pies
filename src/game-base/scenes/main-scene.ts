@@ -60,6 +60,8 @@ export class MainScene extends Phaser.Scene {
     private energyT: Phaser.GameObjects.Text;
     private energySym: Phaser.GameObjects.Image[];
     private energyCostText: Phaser.GameObjects.Text[];
+    private energyShopT: Phaser.GameObjects.Image[];
+    private energyCostT: Phaser.GameObjects.Text[];
 
 
 
@@ -382,19 +384,19 @@ export class MainScene extends Phaser.Scene {
         let sum = this.system.add.sum([this.system.add.channelIn("startephase" + p, "").
                                                 channelOut("energy" + p, "").
                                                 channelInCB("nosolar0", "", (x) => {
-                                                    this.players[player - 1].gainEnergy(x, 3);
+                                                    this.players[player - 1].gainEnergy(x, 40);
                                                     }).
                                                 channelInCB("nosolar1", "", (x) => {
-                                                    this.players[player - 1].gainEnergy(x, 3);
+                                                    this.players[player - 1].gainEnergy(x, 15);
                                                     }).
                                                 channelInCB("nosolar2", "", (x) => {
-                                                    this.players[player - 1].gainEnergy(x, 3);
+                                                    this.players[player - 1].gainEnergy(x, 15);
                                                     }).
                                                 channelInCB("nosolar3", "", (x) => {
-                                                    this.players[player - 1].gainEnergy(x, 3);
+                                                    this.players[player - 1].gainEnergy(x, 15);
                                                     }).
                                                 channelInCB("nosolar4", "", (x) => {
-                                                    this.players[player - 1].gainEnergy(x, 3);
+                                                    this.players[player - 1].gainEnergy(x, 15);
                                                     }).
                                                     next(slock),
                                               this.system.add.channelIn("newslock" + p + "0", "nosolar0").
@@ -438,6 +440,7 @@ export class MainScene extends Phaser.Scene {
             ()=>{
             this.closeShop(this.shop1, this.shop1Text, false);
             this.displayShop(this.shopT, this.shopTText);
+            this.updateShopT();
             this.shop1Active = false;
             this.shopTActive = true;
                 //system.pushSymbol(createWMod)
@@ -447,8 +450,8 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_wmod",
             ()=>{
             let player = this.turn.getCurrentPlayer();
-            player.payEnergy(player.getEnergyCost());
-            player.raiseEnergyCost(1);
+            player.payEnergy(player.getEnergyCost("wmod"));
+            player.raiseEnergyCost("wmod", 15);
             this.updateEnergyText();
             this.data.set("buy", "w");
             //this.updateShopW(true);
@@ -464,7 +467,8 @@ export class MainScene extends Phaser.Scene {
         this.solar = this.setButton(1150, 1080-100, "ssr_solar_drone", ()=>{
                 let system = this.system;
                 let player = this.turn.getCurrentPlayer();
-                player.payEnergy(player.getEnergyCost());
+                player.payEnergy(player.getEnergyCost("solar"));
+                player.raiseEnergyCost("solar", 20);
                 this.updateEnergyText();
                 //this.updateShopW(false);
                 this.data.set("buy", "s");
@@ -539,12 +543,12 @@ export class MainScene extends Phaser.Scene {
                     let createShield = (this.system.add.channelOut('rshieldp'+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'z1','*' ).nullProcess());
                     this.system.pushSymbol(createShield)
                 }
-                this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost());
+                this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost("shield"));
                 this.updateEnergyText();
-                this.updateShop1(false);
                 //this.updateShopW(false);
                 this.closeShop(this.shopZ, this.shopZText,false);
                 this.displayShop(this.shop1, this.shop1Text);
+                this.updateShop1(false);
                 this.shop1Active = true;
                 this.shopZActive = false;
 
@@ -560,12 +564,12 @@ export class MainScene extends Phaser.Scene {
                 else{
                     let term = (this.system.add.channelOut('rshieldp'+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'z2','*' ).nullProcess());
                     this.system.pushSymbol(term)                }
-                this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost());
+                this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost("shield"));
                 this.updateEnergyText();
-                this.updateShop1(false);
                 //this.updateShopW(false);
                 this.closeShop(this.shopZ, this.shopZText,false);
                 this.displayShop(this.shop1, this.shop1Text);
+                this.updateShop1(false);
                 this.shop1Active = true;
                 this.shopZActive = false;
             });
@@ -583,12 +587,12 @@ export class MainScene extends Phaser.Scene {
                     this.system.pushSymbol(term)
                 }
 
-                this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost());
+                this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost("shield"));
                 this.updateEnergyText();
-                this.updateShop1(false);
                 //this.updateShopW(false);
                 this.closeShop(this.shopZ, this.shopZText,false);
                 this.displayShop(this.shop1, this.shop1Text);
+                this.updateShop1(false);
                 this.shop1Active = true;
                 this.shopZActive = false;
             });
@@ -606,12 +610,12 @@ export class MainScene extends Phaser.Scene {
                     this.system.pushSymbol(term)
                 }
 
-                this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost());
+                this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost("shield"));
                 this.updateEnergyText();
-                this.updateShop1(false);
                 //this.updateShopW(false);
                 this.closeShop(this.shopZ, this.shopZText,false);
                 this.displayShop(this.shop1, this.shop1Text);
+                this.updateShop1(false);
                 this.shop1Active = true;
                 this.shopZActive = false;
             });
@@ -678,6 +682,8 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
 
         ];
+        this.energyShopT = this.createEnergyCostIconsT();
+        this.energyCostT = this.createEnergyCostTextT();
         this.closeShop(this.shopT, this.shopTText, false);
     }
 
@@ -686,15 +692,20 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_space_shuttle",
             ()=>{
                 let player = this.turn.getCurrentPlayer();
-                player.payEnergy(player.getEnergyCost());
+                if(this.data.get("type") == "rocketp"){
+                    player.payEnergy(player.getEnergyCost("rocket"));
+                }
+                else{
+                    player.payEnergy(player.getEnergyCost("weapon"));
+                }
                 this.updateEnergyText();
                 let term = "wext"+player.getNameIdentifier().charAt(1) + "0" + player.getDrones()[0].getNrWeapons();
-                this.updateShop1(false);
                 //this.updateShopW(true);
                 this.data.set("buy", "s");
                 this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
                 this.displayShop(this.shop1, this.shop1Text);
+                this.updateShop1(false);
                 this.shop1Active = true;
                 this.shopWActive = false;
                 //system.pushSymbol(createWMod)
@@ -704,14 +715,18 @@ export class MainScene extends Phaser.Scene {
             ()=>{
                 let player = this.turn.getCurrentPlayer();
                 let term = "wext"+player.getNameIdentifier().charAt(1) + "1" + player.getDrones()[1].getNrWeapons();
-                player.payEnergy(player.getEnergyCost());
-                this.updateEnergyText();
-                this.updateShop1(false);
+                if(this.data.get("type") == "rocket"){
+                    player.payEnergy(player.getEnergyCost("rocket"));
+                }
+                else{
+                    player.payEnergy(player.getEnergyCost("weapon"));
+                }                this.updateEnergyText();
                 //this.updateShopW(true);
                 this.data.set("buy", "d1");
                 this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
                 this.displayShop(this.shop1, this.shop1Text);
+                this.updateShop1(false);
                 this.shop1Active = true;
                 this.shopWActive = false;
         });
@@ -721,14 +736,18 @@ export class MainScene extends Phaser.Scene {
             ()=>{
                 let player = this.turn.getCurrentPlayer();
                 let term = "wext"+player.getNameIdentifier().charAt(1) + "2" + player.getDrones()[2].getNrWeapons();
-                player.payEnergy(player.getEnergyCost());
-                this.updateEnergyText();
-                this.updateShop1(false);
+                if(this.data.get("type") == "rocket"){
+                    player.payEnergy(player.getEnergyCost("rocket"));
+                }
+                else{
+                    player.payEnergy(player.getEnergyCost("weapon"));
+                }                this.updateEnergyText();
                 //this.updateShopW(true);
                 this.data.set("buy", "d2");
                 this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
                 this.displayShop(this.shop1, this.shop1Text);
+                this.updateShop1(false);
                 this.shop1Active = true;
                 this.shopWActive = false;
         });
@@ -782,6 +801,14 @@ export class MainScene extends Phaser.Scene {
                 t.setVisible(false);
             }
         }
+        else if(array == this.shopT) {
+            for (let i of this.energyShopT) {
+                i.setVisible(false);
+            }
+            for (let t of this.energyCostT) {
+                t.setVisible(false);
+            }
+        }
     }
 
     displayShop(array: Button[], text: Phaser.GameObjects.Text[]): void{
@@ -801,12 +828,24 @@ export class MainScene extends Phaser.Scene {
                 t.setVisible(true);
             }
         }
+        else if(array == this.shopT) {
+            for (let i of this.energyShopT) {
+                i.setVisible(true);
+            }
+            for (let t of this.energyCostT) {
+                t.setVisible(true);
+            }
+        }
     }
 
     updateShop1(bought: boolean): void{
         let player = this.turn.getCurrentPlayer();
         let energy = player.getEnergy();
-        let energyCost = player.getEnergyCost();
+        let shieldCost = player.getEnergyCost("shield");
+        let wmodCost = player.getEnergyCost("wmod");
+        let weaponCost = player.getEnergyCost("weapon");
+        let solarCost = player.getEnergyCost("solar");
+
         let wMods = player.getNrDrones();
         let sMods = player.getNrSolarDrones();
         this.updateEnergyCostText();
@@ -819,7 +858,7 @@ export class MainScene extends Phaser.Scene {
                 sMods++;
             }
         }
-        if(wMods >= 3 || energy < energyCost){
+        if(wMods >= 3 || energy < wmodCost){
             this.wModule.changeButton(this,false,false, player);
             this.wModule.removeInteractive();
             if(wMods >= 3) {
@@ -838,7 +877,7 @@ export class MainScene extends Phaser.Scene {
 
 
         }
-        else if(wMods < 3 && energy >= energyCost){
+        else if(wMods < 3 && energy >= wmodCost){
             this.wModule.changeButton(this,false,true, player);
             this.wModule.restoreInteractive();
             this.active = true;
@@ -850,7 +889,7 @@ export class MainScene extends Phaser.Scene {
 
 
 
-        if(sMods >= 5 || energy < energyCost){
+        if(sMods >= 5 || energy < solarCost){
 
             if(this.turn.getCurrentPlayer().getNameIdentifier() == "P1"){
                 this.solar.changeButton(this,false,false, player);
@@ -874,7 +913,7 @@ export class MainScene extends Phaser.Scene {
 
         }
 
-        else if(sMods < 5 && energy >= energyCost){
+        else if(sMods < 5 && energy >= solarCost){
             if(this.turn.getCurrentPlayer().getNameIdentifier() == "P1"){
                 this.solar.changeButton(this,false,true, player);
             }
@@ -888,15 +927,14 @@ export class MainScene extends Phaser.Scene {
             })
         }
 
-        if(energy < energyCost){
+        if(energy < shieldCost){
             this.armor.changeButton(this,false,false, player);
             this.armor.removeInteractive();
             this.shield.changeButton(this,false, false, player);
             this.shield.removeInteractive();
-            this.wExt.changeButton(this,false,false, player);
-            this.wExt.removeInteractive();
 
-            for(let i = 0; i < 3; i++){
+
+            for(let i = 0; i < 2; i++){
                 this.children.remove(this.shop1Text[i]);
                 this.shop1Text[i] = this.add.text((315 + (200*i))-10, 1080 - 50, "! energy", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
@@ -905,13 +943,11 @@ export class MainScene extends Phaser.Scene {
 
         }
 
-        else if(energy >= energyCost){
+        else if(energy >= shieldCost){
             this.armor.changeButton(this, false, true, player);
             this.shield.changeButton(this, false, true, player);
-            this.wExt.changeButton(this, false,true, player);
             this.armor.restoreInteractive();
             this.shield.restoreInteractive();
-            this.wExt.restoreInteractive();
             this.children.remove(this.shop1Text[0]);
             this.shop1Text[0] = this.add.text(315, 1080 - 50, "Armor", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
@@ -920,6 +956,21 @@ export class MainScene extends Phaser.Scene {
             this.shop1Text[1] = this.add.text(515, 1080 - 50, "Shield", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
             });
+
+        }
+
+        if(energy < weaponCost){
+            this.wExt.changeButton(this,false,false, player);
+            this.wExt.removeInteractive();
+            this.children.remove(this.shop1Text[2]);
+            this.shop1Text[2] = this.add.text((315 + (200*2))-10, 1080 - 50, "! energy", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
+            });
+        }
+
+        else if(energy >= weaponCost){
+            this.wExt.changeButton(this, false,true, player);
+            this.wExt.restoreInteractive();
             this.children.remove(this.shop1Text[2]);
             this.shop1Text[2] = this.add.text(715, 1080 - 50, "wExt", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
@@ -931,7 +982,7 @@ export class MainScene extends Phaser.Scene {
     {
         let player = this.turn.getCurrentPlayer();
         let energy = player.getEnergy();
-        let energyCost = player.getEnergyCost();
+        let weaponCost = player.getEnergyCost("weapon");
         let drones = player.getDrones();
         let dronesNr = player.getNrDrones();
         let shipActive = drones[0].getNrWeapons();
@@ -953,7 +1004,7 @@ export class MainScene extends Phaser.Scene {
             }
         }
 
-        if(shipActive >= 3 || energy < energyCost){
+        if(shipActive >= 3 || energy < weaponCost){
             this.ship.changeButton(this, false, false, player);
             this.ship.removeInteractive();
             this.children.remove(this.shopWText[0]);
@@ -962,12 +1013,17 @@ export class MainScene extends Phaser.Scene {
             }).setVisible(true);
 
         }
-        else if(shipActive < 3 && energy >= energyCost){
+        else if(shipActive < 3 && energy >= weaponCost){
             this.ship.changeButton(this, false, true, player);
             this.ship.restoreInteractive();
+            this.children.remove(this.shopWText[0]);
+            this.shopWText[0] = this.add.text(500-30, 1080 - 50, "ship", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
+            }).setVisible(true);
+
         }
 
-        if(dronesNr < 2 || d1Active >= 3 || energy < energyCost)
+        if(dronesNr < 2 || d1Active >= 3 || energy < weaponCost)
         {
             this.drone1.changeButton(this, false, false, player);
             this.drone1.removeInteractive();
@@ -989,7 +1045,7 @@ export class MainScene extends Phaser.Scene {
             }
         }
 
-        else if(dronesNr >= 2 && d1Active < 3 && energy >= energyCost){
+        else if(dronesNr >= 2 && d1Active < 3 && energy >= weaponCost){
             this.drone1.changeButton(this, false, true, player);
             this.drone1.restoreInteractive();
             this.children.remove(this.shopWText[1]);
@@ -999,7 +1055,7 @@ export class MainScene extends Phaser.Scene {
 
         }
 
-        if(dronesNr < 3 || d2Active >= 3 || energy < energyCost)
+        if(dronesNr < 3 || d2Active >= 3 || energy < weaponCost)
         {
             this.drone2.changeButton(this, false,false, player);
             this.drone2.removeInteractive();
@@ -1021,7 +1077,7 @@ export class MainScene extends Phaser.Scene {
             }
         }
 
-        else if(dronesNr >= 3 && d2Active < 3 && energy >= energyCost){
+        else if(dronesNr >= 3 && d2Active < 3 && energy >= weaponCost){
             this.drone2.changeButton(this, false,true, player);
             this.drone2.restoreInteractive();
             this.children.remove(this.shopWText[2]);
@@ -1029,6 +1085,40 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
             }).setVisible(true);
 
+        }
+    }
+
+    updateShopT(): void{
+        let player = this.turn.getCurrentPlayer();
+        let energy = player.getEnergy();
+        let weaponCost = player.getEnergyCost("weapon");
+        let rocketCost = player.getEnergyCost("rocket");
+        this.updateEnergyCostT();
+        if(energy < rocketCost){
+            if(player.getNameIdentifier() == "P1"){
+                this.rocket.changeButton(this, false, false, player);
+            }
+            else{
+                this.rocket.changeButton(this, true, false, player);
+            }
+            this.rocket.removeInteractive();
+            this.children.remove(this.shopTText[2]);
+            this.shopTText[2] = this.add.text(1270, 1080 - 50, "! energy", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
+            }).setVisible(true);
+        }
+        else if(energy >= rocketCost){
+            if(player.getNameIdentifier() == "P1"){
+                this.rocket.changeButton(this, false, true, player);
+            }
+            else{
+                this.rocket.changeButton(this, true, true, player);
+            }
+            this.rocket.restoreInteractive();
+            this.children.remove(this.shopTText[2]);
+            this.shopTText[2] = this.add.text(1285, 1080 - 50, "rocket", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
+            }).setVisible(true);
         }
     }
 
@@ -1060,31 +1150,74 @@ export class MainScene extends Phaser.Scene {
     }
     createEnergyCostText(): Phaser.GameObjects.Text[]{
         return [
-            this.add.text(350, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(), {
+            this.add.text(350, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("shield"), {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
-            this.add.text(550, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(), {
+            this.add.text(550, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("shield"), {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
-            this.add.text(750, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(), {
+            this.add.text(750, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("weapon"), {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
-            this.add.text(950, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(), {
+            this.add.text(950, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("wmod"), {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
-            this.add.text(1150, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(), {
+            this.add.text(1150, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("solar"), {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
 
         ]
     }
 
-    updateEnergyCostText(): void{
+    createEnergyCostIconsT(): Phaser.GameObjects.Image[]{
+        return [
+            this.add.image(580, 1080-180, "energy_icon").setScale(0.5,0.5),
+            this.add.image(940, 1080-180, "energy_icon").setScale(0.5,0.5),
+            this.add.image(1300, 1080-180, "energy_icon").setScale(0.5,0.5)
+        ]
+    }
+    createEnergyCostTextT(): Phaser.GameObjects.Text[]{
+        return [
+            this.add.text(600, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("weapon"), {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
+            this.add.text(960, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("weapon"), {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
+            this.add.text(1320, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("rocket"), {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        ]
+    }
 
+    updateEnergyCostT(): void{
+        let energy = this.turn.getCurrentPlayer().getEnergy();
+        let cost = this.turn.getCurrentPlayer().getEnergyCost("rocket");
+        if(energy < cost){
+            this.children.remove(this.energyCostT[2]);
+            this.energyCostT[2] = this.add.text(1320, 1080-200, "x "+cost, {
+                fill: '#be0120', fontFamily: '"Roboto"', fontSize: 25, stroke:'#be0120', strokeThickness: 2});
+        }
+
+        else if(energy >= cost){
+            this.children.remove(this.energyCostT[2]);
+            this.energyCostT[2] = this.add.text(1320, 1080-200, "x "+cost, {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
+        }
+    }
+
+
+    updateEnergyCostText(): void{
+        let type = "";
         for(let i = 0; i < 5; i++){
             this.children.remove(this.energyCostText[i]);
-            if(this.turn.getCurrentPlayer().getEnergy() < this.turn.getCurrentPlayer().getEnergyCost()){
-                this.energyCostText[i] = this.add.text(350+(200*i), 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(), {
+            switch (i) {
+                case(0): type = "shield"; break;
+                case(1): type = "shield"; break;
+                case(2): type = "weapon"; break;
+                case(3): type = "wmod"; break;
+                case(4): type = "solar"; break;
+
+            }
+            if(this.turn.getCurrentPlayer().getEnergy() < this.turn.getCurrentPlayer().getEnergyCost(type)){
+                this.energyCostText[i] = this.add.text(350+(200*i), 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(type), {
                     fill: '#be0120', fontFamily: '"Roboto"', fontSize: 25, stroke:'#be0120', strokeThickness: 2});
             }
-            else if(this.turn.getCurrentPlayer().getEnergy() >= this.turn.getCurrentPlayer().getEnergyCost()){
+            else if(this.turn.getCurrentPlayer().getEnergy() >= this.turn.getCurrentPlayer().getEnergyCost(type)){
 
-                this.energyCostText[i] = this.add.text(350+(200*i), 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(), {
+                this.energyCostText[i] = this.add.text(350+(200*i), 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(type), {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
             }
 
