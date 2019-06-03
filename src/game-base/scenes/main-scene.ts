@@ -1138,7 +1138,7 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto-Medium"', fontSize: 64, strokeThickness: 1, stroke: '#fff'});
     }
 
-
+    // energy display for main shop
     createEnergyCostIcons(): Phaser.GameObjects.Image[]{
         return [
             this.add.image(330, 1080-180, "energy_icon").setScale(0.5,0.5),
@@ -1164,6 +1164,8 @@ export class MainScene extends Phaser.Scene {
         ]
     }
 
+
+    // energy display for choose weapon type
     createEnergyCostIconsT(): Phaser.GameObjects.Image[]{
         return [
             this.add.image(580, 1080-180, "energy_icon").setScale(0.5,0.5),
