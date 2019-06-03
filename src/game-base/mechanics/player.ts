@@ -29,6 +29,7 @@ export class Player {
     private weaponCost : number = 25; // cost for laser/projectile weapon
     private rocketCost : number = 40;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
+    private adaptCost: number = 20; // cost for adaptive shield
 
 
 
@@ -188,6 +189,9 @@ export class Player {
         }
         case("solar"):{
             return this.solarCost;
+        }
+        case("adapt"):{
+            return this.adaptCost;
         }
         default: return 0;
 
