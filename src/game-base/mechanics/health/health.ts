@@ -4,6 +4,7 @@ import {Healthbar} from "./healthbar";
 import {PiTerm} from "../picalc/pi-term";
 import {HealthType} from "./health-type";
 import {HealthbarSprites} from "./healthbar-sprites";
+import {PiAction} from "../picalc/pi-action";
 
 export class Health {
     private player: Player;
@@ -362,6 +363,9 @@ export class Health {
      * @param pid - player id
      * @param hbid - health bar id
      * @param desADSCB - callback to destroy an adaptive shield bar
+     * @param changeRocket - changes the sprite of the second healthbar to rocket shield
+     * @param changeArmor - changes the sprite of the second healthbar to armor shield
+     * @param changeShield - changes the sprite of the second healthbar to laser shield
      * @param regLSCB - callback to regenerate laser shield bar
      * @param regASCB - callback to regenerate armor shield bar
      * @param regRSCB - callback to regenerate rocket shield bar
@@ -370,54 +374,83 @@ export class Health {
      */
     private static getPiAdapShield(pi: PiSystem, pid: string, hbid: string, desADSCB: ()=>any, changeRocket: ()=>any, changeArmor: ()=>any, changeShield: ()=>any,
                                    regLSCB: ()=>any, regASCB: ()=>any, regRSCB: ()=>any, regNSCB: ()=>any, regADSCB: ()=>any): PiTerm{
-        return pi.add.term('AdapShld'+pid+hbid, pi.add.sum([
-            pi.add.channelInCB('armor'+pid,'', changeShield) // adaptive shield of player X
-                .channelInCB('shield'+pid, '', desADSCB)
-                .channelOut('regout', '') // sync
-                .nullProcess(),
-            pi.add.channelInCB('shield'+pid,'', changeArmor)
-                .channelInCB('armor'+pid, '', desADSCB)
-                .channelOut('regout','')
-                .nullProcess(),
-            pi.add.channelInCB('rocket'+pid,'', changeRocket)
-                .channelInCB('rocket'+pid,'', desADSCB)
-                .channelOut('regout','')
-                .nullProcess(),
-            pi.add.channelIn('radap'+pid+hbid, '') // regenerate adaptive shield
-                .scope('reg1',
-                    pi.add.scope('reg2',
-                        pi.add.channelOutCB('reghelpads'+pid+hbid, 'reg1', regADSCB)
-                            .channelIn('reg1', '*')
-                            .channelOut('reghelpads'+pid+hbid, 'reg2').channelIn('reg2', '*')
-                            .channelOut('regout', '*').nullProcess())),
-            pi.add.channelIn('rshield'+pid+hbid, '') // regenerate laser shield
-                .scope('reg1',
-                    pi.add.scope('reg2',
-                        pi.add.channelOutCB('reghelpls'+pid+hbid, 'reg1', regLSCB)
-                            .channelIn('reg1', '*')
-                            .channelOut('reghelpads'+pid+hbid, 'reg2').channelIn('reg2', '*')
-                            .channelOut('regout', '*').nullProcess())),
-            pi.add.channelIn('rarmor'+pid+hbid, '') // regenerate armor shield
-                .scope('reg1',
-                    pi.add.scope('reg2',
-                        pi.add.channelOutCB('reghelpas'+pid+hbid, 'reg1', regASCB)
-                            .channelIn('reg1', '*')
-                            .channelOut('reghelpads'+pid+hbid, 'reg2').channelIn('reg2', '*')
-                            .channelOut('regout', '*').nullProcess())),
-            pi.add.channelIn('rrocket'+pid+hbid, '') // regenerate armor shield
+
+        let regAdap : PiAction = pi.add.channelIn('radap'+pid+hbid,'')
+            .scope('reg1',
+                pi.add.scope('reg2',
+                    pi.add.channelOutCB('reghelpads'+pid+hbid, 'reg1', regADSCB)
+                        .channelIn('reg1','*')
+                        .channelOut('reghelpads'+pid+hbid, 'reg2').channelIn('reg2','*')
+                        .channelOut('regout','*').nullProcess()));
+
+        let regShield : PiAction = pi.add.channelIn('rshield'+pid+hbid,'')
+            .scope('reg1',
+                pi.add.scope('reg2',
+                    pi.add.channelOutCB('reghelpls'+pid+hbid, 'reg1', regLSCB)
+                        .channelIn('reg1','*')
+                        .channelOut('reghelpads'+pid+hbid, 'reg2').channelIn('reg2','*')
+                        .channelOut('regout','*').nullProcess()));
+
+        let regArmor : PiAction = pi.add.channelIn('rarmor'+pid+hbid,'')
+            .scope('reg1',
+                pi.add.scope('reg2',
+                    pi.add.channelOutCB('reghelpas'+pid+hbid, 'reg1', regASCB)
+                        .channelIn('reg1','*')
+                        .channelOut('reghelpads'+pid+hbid, 'reg2').channelIn('reg2','*')
+                        .channelOut('regout','*').nullProcess()));
+
+        let regRocket : PiAction = pi.add.channelIn('rrocket'+pid+hbid, '') // regenerate armor shield
                 .scope('reg1',
                     pi.add.scope('reg2',
                         pi.add.channelOutCB('reghelprs'+pid+hbid, 'reg1', regRSCB)
                             .channelIn('reg1', '*')
                             .channelOut('reghelpads'+pid+hbid, 'reg2').channelIn('reg2', '*')
-                            .channelOut('regout', '*').nullProcess())),
-            pi.add.channelIn('rnano'+pid+hbid, '') // regenerate armor shield
-                .scope('reg1',
-                    pi.add.scope('reg2',
-                        pi.add.channelOutCB('reghelpns'+pid+hbid, 'reg1', regNSCB)
-                            .channelIn('reg1', '*')
-                            .channelOut('reghelpads'+pid+hbid, 'reg2').channelIn('reg2', '*')
-                            .channelOut('regout', '*').nullProcess())),
+                            .channelOut('regout', '*').nullProcess()));
+
+        let regNano : PiAction = pi.add.channelIn('rnano'+pid+hbid, '') // regenerate armor shield
+            .scope('reg1',
+                pi.add.scope('reg2',
+                    pi.add.channelOutCB('reghelpns'+pid+hbid, 'reg1', regNSCB)
+                        .channelIn('reg1', '*')
+                        .channelOut('reghelpads'+pid+hbid, 'reg2').channelIn('reg2', '*')
+                        .channelOut('regout', '*').nullProcess()));
+
+
+        return pi.add.term('AdapShld'+pid+hbid, pi.add.sum([
+            pi.add.channelInCB('armor'+pid,'', changeShield) // adaptive shield of player X
+                .channelOut('regout', '')
+                .sum([
+                    pi.add.channelInCB('shield'+pid, '', desADSCB)
+                        .channelOut('regout', '')
+                        .nullProcess(),
+                    pi.add.channelInCB('rocket'+pid,'',desADSCB)
+                        .channelOut('regout', '')
+                        .nullProcess(),
+                    regAdap, regShield, regArmor, regRocket,regNano]),
+
+            pi.add.channelInCB('shield'+pid,'', changeArmor)
+                .channelOut('regout','')
+                .sum([
+                    pi.add.channelInCB('armor'+pid,'',desADSCB)
+                        .channelOut('regout', '')
+                        .nullProcess(),
+                    pi.add.channelInCB('rocket'+pid,'',desADSCB)
+                        .channelOut('regout','')
+                        .nullProcess(),
+                    regAdap, regShield, regArmor, regRocket,regNano]),
+
+            pi.add.channelInCB('rocket'+pid,'', changeRocket)
+                .channelOut('regout', '')
+                .sum([
+                    pi.add.channelInCB('armor'+pid,'', desADSCB)
+                        .channelOut('regout', '')
+                        .nullProcess(),
+                    pi.add.channelInCB('shield'+pid, '', desADSCB)
+                        .channelOut('regout', '')
+                        .nullProcess(),
+                    regAdap, regShield, regArmor, regRocket,regNano]),
+
+            regAdap, regShield, regArmor, regRocket, regNano
         ]));
     }
 
