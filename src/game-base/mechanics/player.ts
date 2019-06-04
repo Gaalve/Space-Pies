@@ -175,6 +175,12 @@ export class Player {
         case("shield"):{
                return this.shieldCost;
            }
+        case("armor"):{
+            return this.shieldCost;
+        }
+        case("rocket"):{
+            return this.shieldCost;
+        }
         case("nano"):{
             return this.nanoCost;
         }
@@ -184,7 +190,7 @@ export class Player {
         case("weapon"):{
             return this.weaponCost;
         }
-        case("rocket"):{
+        case("rocketl"):{
             return this.rocketCost;
         }
         case("solar"):{
