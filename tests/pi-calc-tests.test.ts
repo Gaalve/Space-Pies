@@ -353,6 +353,41 @@ export class PiCalcTests {
         system.start();
     }
 
+    static runTestPiRenameSum(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
+        let test = new TestBase(testEnvironment, 'PiRenameSum', 0);
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.setOnDeadlockCallback(()=>{test.fail()});
+
+        system.pushSymbol(system.add.channelIn('x', 'a').channelOut('r', '*')
+            .sum([system.add.channelOut('a', '*').nullProcess(),
+                system.add.channelOut('s', '*').nullProcess()]));
+        system.pushSymbol(system.add.channelIn('r', '*').nullProcess());
+        system.pushSymbol(system.add.channelOut('x', 'y').nullProcess());
+        system.pushSymbol(system.add.channelIn('y', '*').process("Out", ()=>{
+            test.success();
+            system.stop();
+        }));
+        system.start();
+    }
+
+    static runTestPiRenameConc(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
+        let test = new TestBase(testEnvironment, 'PiRenameConc', 0);
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.setOnDeadlockCallback(()=>{test.fail()});
+
+        system.pushSymbol(system.add.channelIn('x', 'a').channelOut('r', '*')
+            .concurrent([system.add.channelOut('a', '*').nullProcess(),
+                system.add.channelOut('s', '*').nullProcess()]));
+        system.pushSymbol(system.add.channelIn('r', '*').nullProcess());
+        system.pushSymbol(system.add.channelIn('s', '*').nullProcess());
+        system.pushSymbol(system.add.channelOut('x', 'y').nullProcess());
+        system.pushSymbol(system.add.channelIn('y', '*').process("Out", ()=>{
+            test.success();
+            system.stop();
+        }));
+        system.start();
+    }
+
     static runTestPiScopeRename(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
         let test = new TestBase(testEnvironment, 'PiScopeRename', 0);
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);

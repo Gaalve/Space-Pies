@@ -124,8 +124,8 @@ export class PiSystem {
      * Calls the second phase.
      */
     private phaseFindResolvingActions(): void{
-        this.logPhase1();
         let startT = Date.now();
+        this.logPhase1();
         if(this.phase1changed) {
             this.phase1changed = false;
             this.deadlock = true;
@@ -155,7 +155,7 @@ export class PiSystem {
         }
 
         let execTime = Date.now() - startT;
-
+        if (execTime < 0) console.warn("Phase 1 (Find) is taking too long");
         setTimeout(()=>{this.phaseResolveActions()},this.resolveTimeOut - execTime);
     }
 
@@ -173,11 +173,9 @@ export class PiSystem {
      * Calls the third phase.
      */
     private phaseResolveActions(): void{
-
-        this.logPhase2();
-
-        this.phase2changed = false;
         let startT = Date.now();
+        this.logPhase2();
+        this.phase2changed = false;
 
         while(this.potentiallyResolving.length > 0){
             let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
@@ -187,6 +185,7 @@ export class PiSystem {
         }
 
         let execTime = Date.now() - startT;
+        if (execTime < 0) console.warn("Phase 2 (Resolve) is taking too long");
         setTimeout(()=>{this.phaseTriggerSymbols()},this.cleanUpTimeOut - execTime);
     }
 
@@ -202,10 +201,9 @@ export class PiSystem {
      * Calls the first phase.
      */
     private phaseTriggerSymbols(): void{
-
+        let startT = Date.now();
         this.logPhase3();
         this.phase3changed = false;
-        let startT = Date.now();
         let copy: PiSymbol[] = [];
 
         for(let idx in this.curActiveSymbols){
@@ -226,6 +224,7 @@ export class PiSystem {
 
         this.activeSymbolsQueue = [];
         let execTime = Date.now() - startT;
+        if (execTime < 0) console.warn("Phase 3 (Trigger) is taking too long");
 
         if(this.deadlock) this.onDeadlock();
 
