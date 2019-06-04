@@ -19,22 +19,24 @@ describe('test', function() {
         let gui: Phaser.Scene = new Phaser.Scene({ });
         let te : TestEnvironment = new TestEnvironment(gui, ()=>{});
         te.setOnFinishCallback(()=>{console.log("Pi-Calc-System working: "+te.didSucceed())});
-        PiCalcTests.runTestPiChannelCallback1(gui, te);
-        /*PiCalcTests.runTestPiChannelCallback2(gui, te);
-        PiCalcTests.runTestPiSequential1(gui, te);
-        PiCalcTests.runTestPiSequential2(gui, te);
-        PiCalcTests.runTestPiSequentialND(gui, te);
-        PiCalcTests.runTestPiSequentialNDStatistic(gui);
-        PiCalcTests.runTestPiSum(gui, te);
-        PiCalcTests.runTestPiSum2(gui, te);
-        PiCalcTests.runTestPiSequentialParallel(gui, te);
-        PiCalcTests.runTestPiReplication1(gui, te);
-        PiCalcTests.runTestPiReplication2(gui, te);
-        PiCalcTests.runTestPiTerm(gui, te);
-        PiCalcTests.runTestPiTermRecursion(gui, te);
-        PiCalcTests.runTestPiRename(gui, te);
-        PiCalcTests.runTestPiScopeRename(gui, te);
-        PiCalcTests.runTestPiShieldTest(gui, te);*/
+        setTimeout(() =>{PiCalcTests.runTestPiChannelCallback1(gui, te)}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiChannelCallback2(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSequential1(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSequential2(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSequentialND(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSequentialNDStatistic(gui);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSum(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSum2(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSequentialParallel(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiReplication1(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiReplication2(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiTerm(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiTermRecursion(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiRename(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiRenameSum(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiRenameConc(gui, te);}, 1);
+        /**/setTimeout(() =>{PiCalcTests.runTestPiScopeRename(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiShieldTest(gui, te);}, 1);
         te.start();
     });
 });
@@ -58,15 +60,6 @@ export class PiCalcTests {
         system.pushSymbol(symbolA);
         system.pushSymbol(symbolB);
         system.start();
-
-        setTimeout(() => {}, 1000);
-
-
-        //console.log(system.getCurChannelIn()[0].getFullName());
-        //console.log(system.getCurChannelOut()[0].getFullName());
-        //expect(system.getCurChannelIn().length).to.equal(0);
-        expect(system.getCurChannelOut().length).to.equal(1);
-        expect(system.getCurChannelOut()[0].getFullName()).to.equal("y<*>");
     }
 
     static runTestPiChannelCallback2(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
@@ -87,11 +80,6 @@ export class PiCalcTests {
         system.pushSymbol(symbolA);
         system.pushSymbol(symbolB);
         system.start();
-
-        setTimeout(() => {}, 1000);
-
-        expect(system.getCurChannelIn().length).to.equal(0);
-        expect(system.getCurChannelOut().length).to.equal(0);
     }
 
     static runTestPiSequential1(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
@@ -391,7 +379,7 @@ export class PiCalcTests {
     static runTestPiScopeRename(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
         let test = new TestBase(testEnvironment, 'PiScopeRename', 0);
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.setOnDeadlockCallback(()=>{test.success()});
+        system.setOnDeadlockCallback(()=>{test.success(); system.stop();});
         system.pushSymbol(system.add.scope('x', system.add.channelIn('x', 'a').channelOut('a', '*').nullProcess()));
         system.pushSymbol(system.add.channelOut('x', 'y').nullProcess());
         system.pushSymbol(system.add.channelIn('y', '*').process("Out", ()=>{
@@ -430,6 +418,7 @@ export class PiCalcTests {
                         .channelOut('w1', 'reg1').channelOut('w1', 's2')
                         .channelIn('reg1', '*').channelIn('s2', '*').process('CoreExplosion', ()=>{
                             test.success();
+                            system.stop();
                         })
                 ))
         );
