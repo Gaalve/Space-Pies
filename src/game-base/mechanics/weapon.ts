@@ -3,6 +3,7 @@ import {WeaponType} from "./weapon/weapon-type";
 import {Bullet} from "./weapon/bullet";
 import {Player} from "./player";
 import {HitMissNotification} from "./weapon/hit-miss-notification";
+import {Turn} from "./turn";
 
 
 export class Weapon extends Phaser.GameObjects.Sprite{
@@ -152,11 +153,16 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		}
 	}
 
-	public createBullet(miss: boolean): void{
+	public createBullet(miss: boolean, turn: Turn): void{
         if(this.weaponType == WeaponType.NONE) return;
     	this.removeBullet();
-    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this.weaponType, !miss, this.player); //TODO
-		this.notification = new HitMissNotification(this.scene, this.x, this.y, !miss, this.isFirst);
+
+    	if (turn.getSunEruption()) miss = false;
+
+    	if (!turn.getBlackHole() || this.weaponType != WeaponType.PROJECTILE_SHIELD) {
+            this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this.weaponType, !miss, this.player); //TODO
+            this.notification = new HitMissNotification(this.scene, this.x, this.y, !miss, this.isFirst);
+        }
 	}
 
 	private removeBullet(): void{

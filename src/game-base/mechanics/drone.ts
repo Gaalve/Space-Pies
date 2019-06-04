@@ -72,6 +72,16 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		this.activatedWeapons = this.activatedWeapons + 1;
     }
 
+	/**
+	 remove all weapons from the drone (has to be done via pi calculus)
+	 */
+    removeWeapons() : void {
+    	for (let i = 0; i < this.weapons.length; i++){
+    		this.weapons[i].setVisible(false)
+		}
+    	this.activatedWeapons = 0;
+	}
+
     /**
     get number of installed weapons
      */
@@ -110,6 +120,11 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			this.piTerm = this.piTerm + "0";
 			this.simplePi = this.simplePi + "0";
 		}
+	}
+
+	resetPiTerm() : void {
+		this.piTerm = "";
+		this.simplePi = "";
 	}
 
 	toString() : string{

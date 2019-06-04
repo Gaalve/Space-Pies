@@ -4,8 +4,6 @@ import {Button} from "../mechanics/button";
 
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import {PiTerm} from "../mechanics/picalc/pi-term";
-import {PiSymbol} from "../mechanics/picalc/pi-symbol";
 import {Drone} from "../mechanics/drone";
 import Sprite = Phaser.GameObjects.Sprite;
 
@@ -60,8 +58,6 @@ export class MainScene extends Phaser.Scene {
     private energyT: Phaser.GameObjects.Text;
     private energySym: Phaser.GameObjects.Image[];
     private energyCostText: Phaser.GameObjects.Text[];
-
-
 
 
 
@@ -168,7 +164,6 @@ export class MainScene extends Phaser.Scene {
         this.createChooseType();
         this.createChooseMod();
 
-
         //Weapons in Pi Calculus
         //Creating Weapons and Weaponmods###############################################
         //Weapons in Pi Calc
@@ -177,6 +172,7 @@ export class MainScene extends Phaser.Scene {
                 this.buildWeaponsPi(i,j);
             }
         }
+        this.buildAnomalies();
         //extra functions to resolve existing channels w1, w2, w3 after attack phase
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w1", "").nullProcess()));
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w2", "").nullProcess()));
@@ -252,11 +248,11 @@ export class MainScene extends Phaser.Scene {
 
             }
 
-
-
         }
         this.players[0].update(delta);
         this.players[1].update(delta);
+
+        this.turn.update();
     }
 
     /**
@@ -272,13 +268,13 @@ export class MainScene extends Phaser.Scene {
         let droneRef: Drone = this.players[player - 1].getDrones()[drone];
         let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
                                                 channelOutCB("w1","", (_, at) => {
-                                                    droneRef.getWeapons()[0].createBullet(at == 'miss')}).        //function for weapon animation
+                                                    droneRef.getWeapons()[0].createBullet(at == 'miss', this.turn)}).        //function for weapon animation
                                                 channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
                                                 channelOutCB("w2", "", (_, at) => {
-                                                    droneRef.getWeapons()[1].createBullet(at == 'miss')}).
+                                                    droneRef.getWeapons()[1].createBullet(at == 'miss', this.turn)}).
                                                 channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
                                                 channelOutCB("w3", "", (_, at) => {
-                                                    droneRef.getWeapons()[2].createBullet(at == 'miss')}).
+                                                    droneRef.getWeapons()[2].createBullet(at == 'miss', this.turn)}).
                                                 next(weapon),
                                               this.system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {
                                                     this.players[player - 1].getDrones()[drone].addWeapon(wClass);
@@ -371,6 +367,22 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(drone);
     }
 
+    buildAnomalies() : void {
+
+        let anomaly = this.system.add.term("Anomaly", undefined);
+        let sum = this.system.add.sum([this.system.add.channelOutCB("worm", "", () =>{
+                for (let i = 0; i<2; i++){
+                    this.players[i].destroyAllDrones();
+                }
+            }).next(anomaly),
+            this.system.add.channelOut("absorb", "").next(anomaly),
+            this.system.add.channelOut("erupt", "").next(anomaly)
+        ]);
+
+        anomaly.symbol = sum;
+        this.system.pushSymbol(anomaly);
+    }
+
     /**
      * builds the necessary pi calc terms to regain energy
      * @param player
@@ -419,8 +431,6 @@ export class MainScene extends Phaser.Scene {
             this.displayShop(this.shopZ, this.shopZText);
             this.shop1Active = false;
             this.shopZActive = true;
-
-
         });
 
 
@@ -490,6 +500,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_skip",
             ()=>{
                 if(this.turn.clickable){
+
                     this.turn.Attackturn();
                     this.closeShop(this.shop1, this.shop1Text, true);
                     this.shop1Active = false;

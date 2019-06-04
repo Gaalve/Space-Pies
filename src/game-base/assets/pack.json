@@ -519,6 +519,18 @@
         "type": "image",
         "key": "button_blocked",
         "url": "assets/sprites/button_blocked.png"
+      },{
+        "type": "image",
+        "key": "worm_hole",
+        "url": "assets/sprites/worm_hole.png"
+      },{
+        "type": "image",
+        "key": "sun_erupt",
+        "url": "assets/sprites/sun_erupt.png"
+      },{
+        "type": "image",
+        "key": "black_hole",
+        "url": "assets/sprites/black_hole.png"
       }    ]
   }
 }

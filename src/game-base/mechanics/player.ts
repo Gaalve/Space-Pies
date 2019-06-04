@@ -180,4 +180,21 @@ export class Player {
     {
         this.energy = 10;
     }
+
+    destroyAllDrones() : void {
+        this.activatedDrones = 0;
+        this.activatedSolarDrones = 0;
+
+        for (let i = 0; i < this.drones.length; i++){
+            this.drones[i].setVisible(false);
+            this.drones[i].removeWeapons();
+            this.drones[i].resetPiTerm();
+            this.drones[i].refreshOnScreenText();
+        }
+
+        for (let i = 0; i < this.solarDrones.length; i++){
+            this.solarDrones[i].setVisible(false);
+        }
+    }
+
 }
