@@ -519,6 +519,15 @@
         "type": "image",
         "key": "button_blocked",
         "url": "assets/sprites/button_blocked.png"
+      },
+      {
+        "type": "image",
+        "key": "button_back",
+        "url": "assets/sprites/button_back.png"
+      }, {
+        "type": "image",
+        "key": "button_regen",
+        "url": "assets/sprites/button_regen.png"
       },{
         "type": "image",
         "key": "worm_hole",

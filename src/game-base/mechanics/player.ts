@@ -23,7 +23,15 @@ export class Player {
 
     private health : Health;
     private energy : number;
-    private energyCost : number;
+    private shieldCost : number = 10; // cost for armor/shield/rocket shield
+    private nanoCost : number = 5;  // cost for nano shield
+    private wModCost : number = 10;  // cost for wMod
+    private weaponCost : number = 25; // cost for laser/projectile weapon
+    private rocketCost : number = 40;  // cost for rocket launcher
+    private solarCost: number = 60; // cost for solar drone
+
+
+
 
     public explosion: Explosion;
     public laserImpact: LaserImpact;
@@ -88,8 +96,7 @@ export class Player {
         // this.health.addToHz(piSystem, 'rarmor', 'z4');
         // this.health.addToHz(piSystem, 'rshield', 'z4');
 
-        this.energy = 10;
-        this.energyCost = 2;
+        this.energy = 55;
     }
 
     public update(delta: number): void{
@@ -162,14 +169,44 @@ export class Player {
         }
     }
 
-    getEnergyCost(): number
-    {
-        return this.energyCost;
+    getEnergyCost(type: string): number
+    {   switch (type) {
+        case("shield"):{
+               return this.shieldCost;
+           }
+        case("nano"):{
+            return this.nanoCost;
+        }
+        case("wmod"):{
+            return this.wModCost;
+        }
+        case("weapon"):{
+            return this.weaponCost;
+        }
+        case("rocket"):{
+            return this.rocketCost;
+        }
+        case("solar"):{
+            return this.solarCost;
+        }
+        default: return 0;
+
+        }
     }
 
-    raiseEnergyCost(amount: number) : void
+    raiseEnergyCost(type: string, amount: number) : void
     {
-        this.energyCost += amount;
+        switch (type) {
+            case("wmod"): {
+                this.wModCost += amount;
+                break;
+            }
+            case("solar"):{
+                this.solarCost += amount;
+                break;
+            }
+            default: return;
+        }
     }
 
     setEnergy(amount: number) : void
@@ -178,7 +215,7 @@ export class Player {
     }
     resetEnergy() : void
     {
-        this.energy = 10;
+        this.energy = 55;
     }
 
     destroyAllDrones() : void {
