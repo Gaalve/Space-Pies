@@ -55,23 +55,24 @@ export class Health {
         let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar)});
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar)});
         let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar)});
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar)});
         let rockShld = Health.getPiRocketShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar)});
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar)});
         let nanoShld = Health.getPiNanoShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar)});
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar)});
         let adapShld = Health.getPiAdapShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar)});
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar)},
+            ()=>{zoneBar.removeBar()});
         Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
         Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
         Health.addPiRocketShieldHelper(pi, pid, hbid, rockShld);
@@ -83,23 +84,24 @@ export class Health {
         let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar)});
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar)});
         let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar)});
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar)});
         let rockShld = Health.getPiRocketShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar)});
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar)});
         let nanoShld = Health.getPiNanoShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar)});
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar)});
         let adapShld = Health.getPiAdapShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)},
-            ()=>{zoneBar.addBar(HealthType.AdaptiveBar)});
+            ()=>{zoneBar.addBar(HealthType.AdaptiveBar2); zoneBar.addBar(HealthType.AdaptiveBar)},
+            ()=>{zoneBar.removeBar()});
         Health.addPiLaserShieldHelper(pi, pid, hbid, lasShld);
         Health.addPiArmorShieldHelper(pi, pid, hbid, armShld);
         Health.addPiRocketShieldHelper(pi, pid, hbid, rockShld);
@@ -364,7 +366,7 @@ export class Health {
      * @param regADSCB - callback to regenerate adaptive shield
      */
     private static getPiAdapShield(pi: PiSystem, pid: string, hbid: string, desADSCB: ()=>any,
-                                   regLSCB: ()=>any, regASCB: ()=>any, regRSCB: ()=>any, regNSCB: ()=>any, regADSCB: ()=>any): PiTerm{
+                                   regLSCB: ()=>any, regASCB: ()=>any, regRSCB: ()=>any, regNSCB: ()=>any, regADSCB: ()=>any, remAdap: ()=>any): PiTerm{
 
         let regAdap : PiAction = pi.add.channelIn('radap'+pid+hbid,'')
             .scope('reg1',
@@ -411,16 +413,19 @@ export class Health {
             pi.add.channelInCB('armor'+pid,'', desADSCB) // adaptive shield of player X
                 .channelOut('regout', '')
                 .channelOut('rshield' + pid + hbid, '')
+                .channelOut('wait', '').channelOutCB('wait', '', remAdap)
                 .nullProcess(),
 
             pi.add.channelInCB('shield'+pid,'', desADSCB)
                 .channelOut('regout','')
                 .channelOut('rarmor' + pid + hbid, '')
+                .channelOut('wait', '').channelOutCB('wait', '', remAdap)
                 .nullProcess(),
 
             pi.add.channelInCB('rocket'+pid,'', desADSCB)
                 .channelOut('regout', '')
                 .channelOut('rrocket' + pid + hbid, '')
+                .channelOut('wait', '').channelOutCB('wait', '', remAdap)
                 .nullProcess(),
 
             regAdap, regShield, regArmor, regRocket, regNano
