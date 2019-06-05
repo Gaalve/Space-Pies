@@ -587,7 +587,7 @@ export class MainScene extends Phaser.Scene {
 
         });
         this.adapt = this.setButton(1250, 1080-100, "button_adapt", ()=>{
-            this.data.set("type", "adapt");
+            this.data.set("type", "adap");
             this.closeShop(this.shopS, this.shopSText, false);
             this.displayShop(this.shopZ, this.shopZText);
             this.shopSActive = false;
