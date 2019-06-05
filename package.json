@@ -28,6 +28,6 @@
     "dev-production": "webpack --mode production && webpack-dev-server --mode production",
     "build": "webpack --mode production",
     "test": "mocha -r ts-node/register -r jsdom-global/register tests/**/*.test.ts",
-    "testWithCoverage": "nyc -r lcov -e .ts -x \"*.test.ts\" mocha -r ts-node/register tests/**/*.test.ts && nyc report"
+    "testWithCoverage": "nyc -r lcov -e .ts -x \"*.test.ts\" mocha -r ts-node/register -r jsdom-global/register tests/**/*.test.ts && nyc report"
   }
 }
