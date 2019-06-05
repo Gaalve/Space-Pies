@@ -796,7 +796,7 @@ export class MainScene extends Phaser.Scene {
             ()=>{
                 let player = this.turn.getCurrentPlayer();
                 if(this.data.get("type") == "rocketp"){
-                    player.payEnergy(player.getEnergyCost("rocket"));
+                    player.payEnergy(player.getEnergyCost("rocketl"));
                 }
                 else{
                     player.payEnergy(player.getEnergyCost("weapon"));
@@ -818,8 +818,8 @@ export class MainScene extends Phaser.Scene {
             ()=>{
                 let player = this.turn.getCurrentPlayer();
                 let term = "wext"+player.getNameIdentifier().charAt(1) + "1" + player.getDrones()[1].getNrWeapons();
-                if(this.data.get("type") == "rocket"){
-                    player.payEnergy(player.getEnergyCost("rocket"));
+                if(this.data.get("type") == "rocketp"){
+                    player.payEnergy(player.getEnergyCost("rocketl"));
                 }
                 else{
                     player.payEnergy(player.getEnergyCost("weapon"));
@@ -839,8 +839,8 @@ export class MainScene extends Phaser.Scene {
             ()=>{
                 let player = this.turn.getCurrentPlayer();
                 let term = "wext"+player.getNameIdentifier().charAt(1) + "2" + player.getDrones()[2].getNrWeapons();
-                if(this.data.get("type") == "rocket"){
-                    player.payEnergy(player.getEnergyCost("rocket"));
+                if(this.data.get("type") == "rocketp"){
+                    player.payEnergy(player.getEnergyCost("rocketl"));
                 }
                 else{
                     player.payEnergy(player.getEnergyCost("weapon"));
