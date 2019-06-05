@@ -13,6 +13,11 @@
       },
       {
         "type": "image",
+        "key": "adap_shield2",
+        "url": "assets/sprites/adap_shield2.png"
+      },
+      {
+        "type": "image",
         "key": "armor_shield",
         "url": "assets/sprites/armor_shield.png"
       },
@@ -528,6 +533,20 @@
         "type": "image",
         "key": "button_regen",
         "url": "assets/sprites/button_regen.png"
+      },
+      {
+        "type": "image",
+        "key": "button_adapt",
+        "url": "assets/sprites/button_adapt.png"
+      },
+      {
+        "type": "image",
+        "key": "button_nano",
+        "url": "assets/sprites/button_nano.png"
+      }, {
+        "type": "image",
+        "key": "button_rocket",
+        "url": "assets/sprites/button_rocket.png"
       }
     ]
   }
