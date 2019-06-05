@@ -17,7 +17,6 @@ export class PiResolvingPair {
     public getLeftResolvedSymbol(): PiSymbol{
         this.leftAction = this.left.getAction(this.leftAction.getFullName());
         return this.leftAction.resolve(this.rightAction);
-
     }
 
     public getRightResolvedSymbol(): PiSymbol{

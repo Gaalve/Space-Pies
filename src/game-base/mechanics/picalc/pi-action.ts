@@ -5,6 +5,7 @@ import {PiResolvable} from "./pi-resolvable";
 import {PiScope} from "./pi-scope";
 
 export abstract class PiAction extends PiResolvable{
+
     protected next: PiSymbol;
     protected inOutPut: string;
     protected isInput: boolean;
