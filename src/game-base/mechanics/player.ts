@@ -15,7 +15,7 @@ export class Player {
     private firstPlayer: boolean;
     private drones : [Drone, Drone, Drone];
     private solarDrones: [EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone];
-    private scene : Phaser.Scene;
+    public scene : Phaser.Scene;
     private system : PiSystem;
     public ship : Ship;
     private activatedDrones : number;
@@ -64,7 +64,7 @@ export class Player {
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '', "miss").nullProcess()));
 
         // z1 starts with 1 shield
-         this.health.addToHz(piSystem, 'radap', 'z1');
+        // this.health.addToHz(piSystem, 'radap', 'z1');
         // this.health.addToHz(piSystem, 'rshield', 'z1');
         // this.health.addToHz(piSystem, 'rarmor', 'z1');
         // this.health.addToHz(piSystem, 'rshield', 'z1');
@@ -73,12 +73,12 @@ export class Player {
         // this.health.addToHz(piSystem, 'rarmor', 'z1');
         //
         // // z2 starts with 1 shield
-        // this.health.addToHz(piSystem, 'rshield', 'z2');
+        // this.health.addToHz(piSystem, 'radap', 'z2');
         // this.health.addToHz(piSystem, 'rarmor', 'z2');
         // this.health.addToHz(piSystem, 'rarmor', 'z2');
         //
         // // z3 starts with 1 armor
-        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'radap', 'z3');
         // this.health.addToHz(piSystem, 'rarmor', 'z3');
         // this.health.addToHz(piSystem, 'rshield', 'z3');
         // this.health.addToHz(piSystem, 'rshield', 'z3');
@@ -92,11 +92,11 @@ export class Player {
         // this.health.addToHz(piSystem, 'rshield', 'z3');
         //
         // // z4 starts with 1 armor
-        // this.health.addToHz(piSystem, 'rarmor', 'z4');
+        // this.health.addToHz(piSystem, 'radap', 'z4');
         // this.health.addToHz(piSystem, 'rarmor', 'z4');
         // this.health.addToHz(piSystem, 'rshield', 'z4');
 
-        this.energy = 55;
+        this.energy = 100;
     }
 
     public update(delta: number): void{
