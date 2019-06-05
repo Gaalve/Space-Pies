@@ -86,4 +86,10 @@ export class Healthbar {
         }
         return destroy;
     }
+
+    public changeSprite(texture : string): void{
+        let healthBar = this.bars.pop();
+        healthBar.sprite.setTexture(texture);
+        this.bars.push(healthBar);
+    }
 }
