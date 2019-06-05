@@ -1,8 +1,5 @@
 import {Player} from "./player";
-import {ShopSceneP1} from "../scenes/shop-sceneP1";
-import {PiCalcTests} from "../tests/pi-calc-tests";
 import {PiSystem} from "../mechanics/picalc/pi-system";
-import {chooseSceneP1} from "../scenes/choose-sceneP1";
 
 export class Turn {
     private refScene: Phaser.Scene;
@@ -14,6 +11,7 @@ export class Turn {
     public clickable: boolean;
     public first1: boolean;
     public first2: boolean;
+    private system: PiSystem;
 
 
     constructor(refScene: Phaser.Scene, players: [Player, Player]){
@@ -34,9 +32,10 @@ export class Turn {
         this.refScene.data.set('turnAction', 'Create');
         this.refScene.time.delayedCall(0, () => (this.playerInput()), [], this);
         this.refScene.data.set('click', this.clickable);
+        this.system = this.refScene.scene.get("MainScene").data.get("system");
     }
 
-    private playerInput():void{
+    public playerInput():void{
         this.clickable = true;
         this.refScene.data.set('round', ""+(++this.currentRound));
         if(this.currentRound != 1){
@@ -48,13 +47,16 @@ export class Turn {
         }
 
         if(this.currentPlayer.getNameIdentifier() == "P1"){
-            this.refScene.scene.run( 'ShopSceneP1');
+            //this.refScene.scene.run( 'ShopSceneP1');
             // system.pushSymbol(startShop)
           //  system.pushSymbol(system.add.channelOut('shopp1', '*').nullProcess())
+            //this.refScene.events.emit("newTurn")
+            //this.refScene.scene.get("MainScene").events.emit("newTurn");
+            this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess())
 
         }
         else {
-            this.refScene.scene.run('ShopSceneP2');
+            this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess())
         }
         this.awaitInput = true; //nächster Spieler
 
@@ -65,7 +67,7 @@ export class Turn {
     public Attackturn():void{
         if (!this.awaitInput) return;
         this.clickable = false;
-        this.refScene.scene.sleep('ShopSceneP1');
+        /*this.refScene.scene.sleep('ShopSceneP1');
         if(this.refScene.scene.get("chooseSceneP1").scene.isActive()){
             this.refScene.scene.sleep('chooseSceneP1');
         }
@@ -81,13 +83,31 @@ export class Turn {
             if(this.refScene.scene.get("chooseTypeSceneP2").scene.isActive()) {
                 this.refScene.scene.sleep('chooseTypeSceneP2');
             }
-        }
+        }*/
+        this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
 
         //Waffen schießen lassen:
-        this.currentPlayer.pushWeapons();
-        this.currentPlayer.pushEnergy();
+        //TODO: DEBUG STUFF REMOVE
+        this.currentPlayer.getSystem().pushSymbol(
+            this.currentPlayer.getSystem().add.channelOut(
+                'unlock'+this.currentPlayer.getNameIdentifier().charAt(1), '').nullProcess());
+        this.currentPlayer.getSystem().pushSymbol(
+            this.currentPlayer.getSystem().add.channelIn(
+                'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
         this.refScene.data.set('turnAction', 'Battle Phase');
         this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
 
+    }
+
+    getScene(): Phaser.Scene{
+        return this.refScene;
+    }
+
+    getCurrentPlayer(): Player{
+        return this.currentPlayer;
+    }
+
+    getCurrentRound(): number{
+        return this.currentRound;
     }
 }
