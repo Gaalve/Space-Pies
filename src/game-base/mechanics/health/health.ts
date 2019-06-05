@@ -222,7 +222,7 @@ export class Health {
                             .channelIn('reg1', '*')
                             .channelOut('reghelpas'+pid+hbid, 'reg2').channelIn('reg2', '*')
                             .channelOut('regout', '*').nullProcess())),
-            pi.add.channelIn('radap'+pid+hbid, '') // regenerate adaptive shield
+            pi.add.channelIn('radapt'+pid+hbid, '') // regenerate adaptive shield
                 .scope('reg1',
                     pi.add.scope('reg2',
                         pi.add.channelOutCB('reghelpads'+pid+hbid, 'reg1', regADSCB)
