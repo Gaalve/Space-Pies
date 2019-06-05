@@ -65,10 +65,10 @@ export class Player {
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '', "miss").nullProcess()));
 
         // z1 starts with 1 shield
-         this.health.addToHz(piSystem, 'radap', 'z1');
+        // this.health.addToHz(piSystem, 'rrocket', 'z1');
         // this.health.addToHz(piSystem, 'rshield', 'z1');
         // this.health.addToHz(piSystem, 'rarmor', 'z1');
-        // this.health.addToHz(piSystem, 'rshield', 'z1');
+        // this.health.addToHz(piSystem, 'rnano', 'z1');
         // this.health.addToHz(piSystem, 'rarmor', 'z1');
         // this.health.addToHz(piSystem, 'rshield', 'z1');
         // this.health.addToHz(piSystem, 'rarmor', 'z1');
