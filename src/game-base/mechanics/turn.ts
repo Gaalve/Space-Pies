@@ -1,7 +1,6 @@
 import {Player} from "./player";
 import {PiSystem} from "../mechanics/picalc/pi-system";
 
-
 export class Turn {
     private refScene: Phaser.Scene;
     private readonly players: [Player, Player];
@@ -107,6 +106,8 @@ export class Turn {
        //  this.setAttackTurn()
        // this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
        //  this.endAttackTurn()
+        // this.system.pushSymbol(this.system.add.channelOut("startephase"+this.currentPlayer.getNameIdentifier().charAt(1), "").nullProcess())
+        //
     }
     public setShopTurn(){
         this.refScene.data.set('turnAction', 'Shopping Phase');

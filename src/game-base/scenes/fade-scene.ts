@@ -41,7 +41,7 @@ export class FadeScene extends Phaser.Scene {
             this.sprite.setAlpha(alpha);
             if(this.timer > FadeScene.transitionDuration){
                 this.sprite.setAlpha(0);
-                this.scene.remove('FadeScene');
+                this.scene.stop('FadeScene');
             }
         }
         else {
