@@ -8,6 +8,7 @@ import {PiTerm} from "../mechanics/picalc/pi-term";
 import {PiSymbol} from "../mechanics/picalc/pi-symbol";
 import {Drone} from "../mechanics/drone";
 import Sprite = Phaser.GameObjects.Sprite;
+import {BattleTimeBar} from "../mechanics/battleTimeBar";
 
 export class MainScene extends Phaser.Scene {
 
@@ -75,6 +76,8 @@ export class MainScene extends Phaser.Scene {
     private energyShopS: Phaser.GameObjects.Image[];
     private energyTextS: Phaser.GameObjects.Text[];
 
+    private battleTime: BattleTimeBar;
+
 
 
 
@@ -103,6 +106,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
+        this.battleTime = new BattleTimeBar(this);
         this.system = new PiSystem(this, 10,10,10,true);
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
@@ -224,7 +228,7 @@ export class MainScene extends Phaser.Scene {
             this.system.pushSymbol(this.system.add.replication(this.system.add.channelOut("nosolar" + i.toString(), "0").nullProcess()));
         }
 
-        //create 1 energy drone for each player (gain 3 energy per turn)
+        //create 1 energy drone for each player (gain 40 energy per turn)
         this.system.pushSymbol(this.system.add.channelOut("newsolar10", "solar1").nullProcess());
         this.system.pushSymbol(this.system.add.channelOut("newsolar20", "solar2").nullProcess());
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("wait", "").nullProcess()));
@@ -299,13 +303,15 @@ export class MainScene extends Phaser.Scene {
         let weapon = this.system.add.term("Weapon" + p + d, undefined);
 
         let droneRef: Drone = this.players[player - 1].getDrones()[drone];
-        let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
+        let sum = this.system.add.sum([this.system.add.channelIn("lock" + p + d,"").
                                                 channelOutCB("w1","", (_, at) => {
                                                     droneRef.getWeapons()[0].createBullet(at == 'miss')}).        //function for weapon animation
                                                 channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
+                                                channelOut("wait","").channelOut("wait","").
                                                 channelOutCB("w2", "", (_, at) => {
                                                     droneRef.getWeapons()[1].createBullet(at == 'miss')}).
                                                 channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
+                                                channelOut("wait","").channelOut("wait","").
                                                 channelOutCB("w3", "", (_, at) => {
                                                     droneRef.getWeapons()[2].createBullet(at == 'miss')}).
                                                 next(weapon),
@@ -326,7 +332,7 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.channelInCB("wmod" + p + d, "", () => {
                                                     this.players[player - 1].createDrone(drone);
                                                     }).
-                                                channelOut("newlock" + p + d, "lock" + p).
+                                                channelOut("newlock" + p + d, "lock" + p + d).
                                                 next(weapon));
     }
 
@@ -337,17 +343,45 @@ export class MainScene extends Phaser.Scene {
 
     buildLocksPi(player : number) : void{
         let p = player.toString();
+        let bt = this.battleTime;
 
         let rlock = this.system.add.term("RLock" + p, undefined);
 
-        let sum = this.system.add.sum([this.system.add.channelIn("unlock" + p, "").
-                                                concurrent([
-                                                    this.system.add.channelOut("nolock1", "").nullProcess(),
-                                                    this.system.add.channelOut("nolock2", "").nullProcess(),
-                                                    this.system.add.channelOut("nolock3", "").
-                                                    channelOut("attackp" + p + "end", "").next(rlock)
-                                                ]),
-
+        let sum = this.system.add.sum([this.system.add.channelIn("unlock" + p, "")
+                                                    .channelOutCB("nolock1", "", ()=>{bt.setVisible(true); bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB("nolock2", "", ()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB("nolock3", "", ()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
+                                                    .channelOutCB("attackp" + p + "end", "",()=>{bt.setVisible(false); bt.resetTime()}).next(rlock),
                                               this.system.add.channelIn("newlock" + p + "0", "nolock1").
                                                 next(rlock),
                                               this.system.add.channelIn("newlock" + p + "1", "nolock2").

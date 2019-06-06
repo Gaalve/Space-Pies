@@ -11,6 +11,7 @@ export class PauseScene extends Phaser.Scene {
     private background;
     private buttonResume: Button;
     private buttonReset: Button;
+    private buttonDebug: Button;
     private P1: Player;
     private P2: Player;
 
@@ -69,6 +70,22 @@ export class PauseScene extends Phaser.Scene {
         const resetText = this.add.text(1920/2+80, 1080/2+50, "Reset", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
+        const debugText = this.add.text(1760, 1020, "Change Debug",{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20});
+        debugText.setOrigin(0.5);
+        const debugState = this.add.text(1760, 1050, "State: true",{
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20});
+        debugState.setOrigin(0.5);
+
+        this.buttonDebug = new Button(this, 100, 100, "button_shadow",
+            "button_bg", "button_fg","button_options",
+            ()=>{
+            let bool = this.P1.getSystem().changeDebugLogger();
+            debugState.setText("State: " + bool);
+            })
+
+        this.buttonDebug.setPosition(1880, 1040);
+
     }
 
     update(time: number, delta: number): void {
@@ -78,6 +95,7 @@ export class PauseScene extends Phaser.Scene {
 
             this.buttonReset.updateStep();
             this.buttonResume.updateStep();
+            this.buttonDebug.updateStep();
 
         }
     }
