@@ -3,9 +3,13 @@ import {PiSystem} from "./picalc/pi-system";
 import {Ship} from "./ship";
 import {Health} from "./health/health";
 import {EnergyDrone} from "./energyDrone";
-import {Animation} from "./animation/Animation";
-import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
-
+import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
+import {Explosion} from "./animations/explosion";
+import {LaserImpact} from "./animations/laser-impact";
+import {ProjectileImpact} from "./animations/projectile-impact";
+import {LaserTrail} from "./animations/laser-trail";
+import {RocketTrail} from "./animations/rocket-trail";
+import {BulletTrail} from "./animations/bullet-trail";
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
@@ -13,90 +17,95 @@ export class Player {
     private solarDrones: [EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone];
     private scene : Phaser.Scene;
     private system : PiSystem;
-    private ship : Ship;
+    public ship : Ship;
     private activatedDrones : number;
     private activatedSolarDrones : number;
 
     private health : Health;
     private energy : number;
-    private energyCost : number;
+    private shieldCost : number = 10; // cost for armor/shield/rocket shield
+    private nanoCost : number = 5;  // cost for nano shield
+    private wModCost : number = 10;  // cost for wMod
+    private weaponCost : number = 25; // cost for laser/projectile weapon
+    private rocketCost : number = 40;  // cost for rocket launcher
+    private solarCost: number = 60; // cost for solar drone
+    private adaptCost: number = 20; // cost for adaptive shield
 
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem){
+
+
+    public explosion: Explosion;
+    public laserImpact: LaserImpact;
+    public projectileImpact: ProjectileImpact;
+    public laserTrail: LaserTrail;
+    public rocketTrail: RocketTrail;
+    public bulletTrail: BulletTrail;
+
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager){
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
         this.ship = new Ship(scene, x, y, this);
         this.drones = [new Drone(scene, x, y, this, 0), new Drone(scene, x, y, this, 1), new Drone(scene, x, y, this,2 )];
         this.scene = scene;
+        this.activatedDrones = 0;
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0), new EnergyDrone(scene, x, y, this, 1),new EnergyDrone(scene, x, y, this, 2),new EnergyDrone(scene, x, y, this, 3),new EnergyDrone(scene, x, y, this, 4)];
-        this.activatedDrones = 1;
-        this.activatedSolarDrones = 1;
-        this.drones[0].addWeapon("p");
-        this.system = piSystem;
+        this.activatedSolarDrones = 0;
         this.health = new Health(scene, this, piSystem);
+        this.explosion = new Explosion(pem);
+        this.laserImpact = new LaserImpact(pem);
+        this.projectileImpact = new ProjectileImpact(pem);
+        this.laserTrail = new LaserTrail(pem);
+        this.rocketTrail = new RocketTrail(pem);
+        this.bulletTrail = new BulletTrail(pem);
+
+        //TODO: remove when Triebwerke ready
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '', "miss").nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '', "miss").nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '', "miss").nullProcess()));
 
         // z1 starts with 1 shield
-        this.health.addToHz(piSystem, 'rshield', 'z1');
-        this.health.addToHz(piSystem, 'rshield', 'z1');
-        this.health.addToHz(piSystem, 'rarmor', 'z1');
-        this.health.addToHz(piSystem, 'rshield', 'z1');
-        this.health.addToHz(piSystem, 'rarmor', 'z1');
-        this.health.addToHz(piSystem, 'rshield', 'z1');
-        this.health.addToHz(piSystem, 'rarmor', 'z1');
+        // this.health.addToHz(piSystem, 'rrocket', 'z1');
+        // this.health.addToHz(piSystem, 'rshield', 'z1');
+        // this.health.addToHz(piSystem, 'rarmor', 'z1');
+        // this.health.addToHz(piSystem, 'rnano', 'z1');
+        // this.health.addToHz(piSystem, 'rarmor', 'z1');
+        // this.health.addToHz(piSystem, 'rshield', 'z1');
+        // this.health.addToHz(piSystem, 'rarmor', 'z1');
+        //
+        // // z2 starts with 1 shield
+        // this.health.addToHz(piSystem, 'rshield', 'z2');
+        // this.health.addToHz(piSystem, 'rarmor', 'z2');
+        // this.health.addToHz(piSystem, 'rarmor', 'z2');
+        //
+        // // z3 starts with 1 armor
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rarmor', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rarmor', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rarmor', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        // this.health.addToHz(piSystem, 'rarmor', 'z3');
+        // this.health.addToHz(piSystem, 'rshield', 'z3');
+        //
+        // // z4 starts with 1 armor
+        // this.health.addToHz(piSystem, 'rarmor', 'z4');
+        // this.health.addToHz(piSystem, 'rarmor', 'z4');
+        // this.health.addToHz(piSystem, 'rshield', 'z4');
 
-        // z2 starts with 1 shield
-        this.health.addToHz(piSystem, 'rshield', 'z2');
-        this.health.addToHz(piSystem, 'rarmor', 'z2');
-        this.health.addToHz(piSystem, 'rarmor', 'z2');
-
-        // z3 starts with 1 armor
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rarmor', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rarmor', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rarmor', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-        this.health.addToHz(piSystem, 'rarmor', 'z3');
-        this.health.addToHz(piSystem, 'rshield', 'z3');
-
-        // z4 starts with 1 armor
-        this.health.addToHz(piSystem, 'rarmor', 'z4');
-        this.health.addToHz(piSystem, 'rarmor', 'z4');
-        this.health.addToHz(piSystem, 'rshield', 'z4');
-
-        this.energy = 10;
-        this.energyCost = 2;
-
-        if(this.nameIdentifier == "P1"){
-            this.system.pushSymbol(this.system.add.channelIn("wmod1","*").process("cD11", () => {
-                this.createDrone(1);
-            }));
-            this.system.pushSymbol(this.system.add.channelIn("solar1","*").process("cD14", () => {
-                this.createSolarDrone(1);
-            }));
-            this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("renergy1","*").process("cD15", () => {
-                this.gainEnergy(3);
-            })));
-
-        }else {
-            this.system.pushSymbol(this.system.add.channelIn("wmod2", "*").process("cD21", () => {
-                this.createDrone(1);
-            }));
-            this.system.pushSymbol(this.system.add.channelIn("solar2","*").process("cD24", () => {
-                this.createSolarDrone(1);
-            }));
-            this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("renergy2","*").process("cD25", () => {
-                this.gainEnergy(3);
-            })));
-        }
-
+        this.energy = 55;
     }
 
+    public update(delta: number): void{
+        this.ship.update(delta);
+        this.drones[0].update(delta);
+        this.drones[1].update(delta);
+        this.drones[2].update(delta);
+    }
 
     getNameIdentifier(): string{
         return this.nameIdentifier;
@@ -129,141 +138,19 @@ export class Player {
      */
     createDrone(index : number) : void{
         this.activatedDrones = this.activatedDrones + 1;
-        this.drones[index].piTermWExtensions();
-        this.drones[index].setVisible(true);
-
-        if(index == 1){
-            if(this.nameIdentifier == "P1"){
-                this.system.pushSymbol(this.system.add.channelIn('wmod1', '*').process("cD12", ()=>{this.createDrone(2)}));
-            }else{
-                this.system.pushSymbol(this.system.add.channelIn('wmod2', '*').process("cD22", ()=>{this.createDrone(2)}));
-            }
+        if(index != 0) {
+            this.drones[index].setVisible(true);
         }
+        this.drones[index].buildPiTerm();
+        this.drones[index].refreshOnScreenText();
 
     }
 
     createSolarDrone(index : number) : void{
         this.activatedSolarDrones += 1;
-        this.solarDrones[index].setVisible(true);
-
-        if(index == 1){
-            if(this.nameIdentifier == "P1"){
-                this.system.pushSymbol(this.system.add.channelIn('solar1', '*').process("cD13", ()=>{this.createSolarDrone(2)}));
-            }else{
-                this.system.pushSymbol(this.system.add.channelIn('solar2', '*').process("cD23", ()=>{this.createSolarDrone(2)}));
-            }
+        if(index != 0) {
+            this.solarDrones[index].setVisible(true);
         }
-        else if(index == 2){
-            if(this.nameIdentifier == "P1"){
-                this.system.pushSymbol(this.system.add.channelIn('solar1', '*').process("cD16", ()=>{this.createSolarDrone(3)}));
-            }else{
-                this.system.pushSymbol(this.system.add.channelIn('solar2', '*').process("cD26", ()=>{this.createSolarDrone(3)}));
-            }
-        }
-        else if(index == 3){
-            if(this.nameIdentifier == "P1"){
-                this.system.pushSymbol(this.system.add.channelIn('solar1', '*').process("cD17", ()=>{this.createSolarDrone(4)}));
-            }else{
-                this.system.pushSymbol(this.system.add.channelIn('solar2', '*').process("cD27", ()=>{this.createSolarDrone(4)}));
-            }
-        }
-
-    }
-
-    /**
-	push pi terms for weapons to the pi system. Has to be done each round again
-	 */
-    pushWeapons() : void{
-        for(let d of this.drones) {
-            if(d.getNrWeapons() == 1) {
-                this.system.pushSymbol(
-                    this.system.add.channelIn("lock", "*").
-                    channelOut(d.getWeapons()[0].getPiTerm(), "*").nullProcess()
-                );
-            } else if (d.getNrWeapons() == 2) {
-                this.system.pushSymbol(
-                    this.system.add.channelIn("lock", "*").
-                    channelOut(d.getWeapons()[0].getPiTerm(), "*").
-                    channelOut(d.getWeapons()[1].getPiTerm(), "*").nullProcess()
-                );
-            } else if (d.getNrWeapons() == 3) {
-                this.system.pushSymbol(
-                    this.system.add.channelIn("lock", "*").
-                    channelOut(d.getWeapons()[0].getPiTerm(), "*").
-                    channelOut(d.getWeapons()[1].getPiTerm(), "*").
-                    channelOut(d.getWeapons()[2].getPiTerm(), "*").nullProcess()
-                );
-            }
-
-            if (d.getNrWeapons() > 0)
-            {
-                let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
-                let text = d.onScreenText.text.split(".");
-
-                let toColor = this.firstPlayer ? '#990000' : '#458899';
-                let fromX = d.onScreenText.x;
-                let fromY = d.onScreenText.y;
-                let toX = 1920/2 - (d.onScreenText.width);
-                let toY = 1080/1.3;
-
-                let animation = new Animation("(lock)", animationScene, fromX, fromY, toX, toY, d.onScreenText.setAngle(0), 1000);
-                animation.move = true;
-                animation.interpolate = true;
-                animation.scaleFont = true;
-                animation.toColor = toColor;
-                animationScene.addConcurrentAnimation(animation);
-
-                // for (let j = 0; j < text.length; j++)
-                // {
-                //     let partText = text[j];
-                //     let resolveText = animationScene.add.text(fromX, fromY, partText, {
-                //         fill: toColor , fontFamily: '"Roboto"', fontSize: 20
-                //     });
-                //     d.onScreenText.text = d.onScreenText.text.substr(partText.length + 1, d.onScreenText.text.length);
-                // let toX = this.isFirstPlayer() ? 1920/3 : 1920/1.7;
-                // let toY = 1080/2;
-                // let id = partText.indexOf("lock") >= 0 ? "lock" : this.getNameIdentifier();
-                // }
-            }
-        }
-        this.unlockWeapons();
-    }
-
-    pushEnergy(): void{
-        for(let d of this.solarDrones){
-            if(d.getPlayer().getNameIdentifier() == "P1" && (d.visible || d.getIndex() == 0)){
-                this.system.pushSymbol(
-                    this.system.add.channelIn("locks", "*").
-                    channelOut("renergy1", "*").nullProcess())
-            }
-            else if(d.visible|| d.getIndex() == 0){
-                this.system.pushSymbol(
-                    this.system.add.channelIn("locks", "*").
-                    channelOut("renergy2", "*").nullProcess())
-            }
-
-        }
-        this.unlockSolar();
-    }
-
-    /**
-    unlock the existing weapons in attack phase to deal damage to the opponents hit-points
-     */
-    unlockWeapons() : void{
-        for(let i = 0; i < this.activatedDrones; i++){
-            this.system.pushSymbol(this.system.add.channelOut("lock", "*").nullProcess());
-        }
-    }
-
-    unlockSolar() : void{
-        for(let i = 0; i < this.activatedSolarDrones; i++){
-            this.system.pushSymbol(this.system.add.channelOut("locks", "*").nullProcess());
-        }
-    }
-
-    getPiSystem() : PiSystem
-    {
-        return this.system;
     }
 
     getEnergy() : number
@@ -276,19 +163,60 @@ export class Player {
         this.energy -= cost;
     }
 
-    gainEnergy(amount: number) : void
+    gainEnergy(value : string, amount: number) : void
     {
-        this.energy += amount;
+        if(value == "1") {
+            this.energy += amount;
+        }
     }
 
-    getEnergyCost(): number
-    {
-        return this.energyCost;
+    getEnergyCost(type: string): number
+    {   switch (type) {
+        case("shield"):{
+               return this.shieldCost;
+           }
+        case("armor"):{
+            return this.shieldCost;
+        }
+        case("rocket"):{
+            return this.shieldCost;
+        }
+        case("nano"):{
+            return this.nanoCost;
+        }
+        case("wmod"):{
+            return this.wModCost;
+        }
+        case("weapon"):{
+            return this.weaponCost;
+        }
+        case("rocketl"):{
+            return this.rocketCost;
+        }
+        case("solar"):{
+            return this.solarCost;
+        }
+        case("adapt"):{
+            return this.adaptCost;
+        }
+        default: return 0;
+
+        }
     }
 
-    raiseEnergyCost(amount: number) : void
+    raiseEnergyCost(type: string, amount: number) : void
     {
-        this.energyCost += amount;
+        switch (type) {
+            case("wmod"): {
+                this.wModCost += amount;
+                break;
+            }
+            case("solar"):{
+                this.solarCost += amount;
+                break;
+            }
+            default: return;
+        }
     }
 
     setEnergy(amount: number) : void
@@ -297,6 +225,6 @@ export class Player {
     }
     resetEnergy() : void
     {
-        this.energy = 10;
+        this.energy = 55;
     }
 }

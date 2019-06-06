@@ -10,7 +10,7 @@ export class Background extends Phaser.Scene {
     constructor() {
         super({
             key: "Background",
-            active: true
+            active: false
         })
     }
 
@@ -24,16 +24,13 @@ export class Background extends Phaser.Scene {
 
     create(): void {
         this.space = new Space(this);
-        this.scene.launch('MainScene')
+        this.scene.launch('StartScene')
+
     }
 
 
     update(time: number, delta: number): void {
-        // this.timeAccumulator += delta;
-        // while (this.timeAccumulator >= this.timeUpdateTick) {
-        //     this.timeAccumulator -= this.timeUpdateTick;
-        //     this.space.updateStep();
-        // }
+
         this.space.update(delta/1000);
     }
 }

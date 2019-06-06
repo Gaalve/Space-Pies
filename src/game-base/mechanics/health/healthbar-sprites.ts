@@ -2,7 +2,7 @@ import {HealthType} from "./health-type";
 import Sprite = Phaser.GameObjects.Sprite;
 
 export class HealthbarSprites {
-    private readonly sprite: Phaser.GameObjects.Sprite;
+    public readonly sprite: Phaser.GameObjects.Sprite;
     private readonly type: HealthType;
     private readonly pid: string;
     public constructor(scene: Phaser.Scene, type: HealthType, x: number, y: number, pid: string){
@@ -22,6 +22,8 @@ export class HealthbarSprites {
                 return "armor_shield";
             case HealthType.AdaptiveBar:
                 return "adap_shield";
+            case HealthType.AdaptiveBar2:
+                return "adap_shield2";
             case HealthType.NanoBar:
                 return "nano_shield";
             case HealthType.RocketBar:
@@ -39,6 +41,8 @@ export class HealthbarSprites {
             case HealthType.ArmorBar:
                 return "a";
             case HealthType.AdaptiveBar:
+                return "x";
+            case HealthType.AdaptiveBar2:
                 return "x";
             case HealthType.NanoBar:
                 return "n";
