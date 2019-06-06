@@ -1,53 +1,84 @@
-import {PiSystem} from "../mechanics/picalc/pi-system";
+import {PiSystem} from "../src/game-base/mechanics/picalc/pi-system";
 import {TestEnvironment} from "./test-environment";
 import {TestBase} from "./test-base";
+import "../src/phaser";
+import { expect } from "chai";
+import "mocha";
+import {PiChannelIn} from "../src/game-base/mechanics/picalc/pi-channel-in";
+import {PiChannelOut} from "../src/game-base/mechanics/picalc/pi-channel-out";
+import {PiSymbol} from "../src/game-base/mechanics/picalc/pi-symbol";
+import {PiSum} from "../src/game-base/mechanics/picalc/pi-sum";
+import {PiReplication} from "../src/game-base/mechanics/picalc/pi-replication";
+import {PiResolvingPair} from "../src/game-base/mechanics/picalc/pi-resolving-pair";
+
+
+describe('test', function() {
+
+    it('should ', function () {
+
+        let gui: Phaser.Scene = new Phaser.Scene({ });
+        let te : TestEnvironment = new TestEnvironment(gui, ()=>{});
+        te.setOnFinishCallback(()=>{console.log("Pi-Calc-System working: "+te.didSucceed())});
+        setTimeout(() =>{PiCalcTests.runTestPiChannelCallback1(gui, te)}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiChannelCallback2(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSequential1(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSequential2(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSequentialND(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSequentialNDStatistic(gui);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSum(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSum2(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiSequentialParallel(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiReplication1(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiReplication2(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiTerm(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiTermRecursion(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiRename(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiRenameSum(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiRenameConc(gui, te);}, 1);
+        /**/setTimeout(() =>{PiCalcTests.runTestPiScopeRename(gui, te);}, 1);
+        setTimeout(() =>{PiCalcTests.runTestPiShieldTest(gui, te);}, 1);
+        te.start();
+    });
+});
 
 export class PiCalcTests {
 
-    static runTests(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
+    static runTestPiChannelCallback1(gui: Phaser.Scene, testEnvironment: TestEnvironment): void{
 
-        scene.time.delayedCall(0, ()=>{this.runTestPiChannelCallback1(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiChannelCallback2(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequential1(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequential2(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequentialND(scene, testEnvironment)}, [], this);
-        // scene.time.delayedCall(0, ()=>{this.runTestPiSequentialNDStatistic(scene)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSum(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSum2(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiSequentialParallel(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiReplication1(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiReplication2(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiTerm(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiTermRecursion(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiRename(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiRenameSum(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiRenameConc(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiScopeRename(scene, testEnvironment)}, [], this);
-        scene.time.delayedCall(0, ()=>{this.runTestPiShieldTest(scene, testEnvironment)}, [], this);
-        testEnvironment.start();
-    }
-
-    static runTestPiChannelCallback1(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
         let test = new TestBase(testEnvironment, 'PiChannelCallback#1', 0);
-        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.setOnDeadlockCallback(()=>{test.success()});
-        system.pushSymbol(system.add.channelIn("x", "*").channelOutCB("y", '*', ()=>{
+        let system : PiSystem = new PiSystem(gui, 1, 1, 1, false);
+
+        system.setOnDeadlockCallback(()=>{test.success(); system.stop();});
+
+        let symbolA = system.add.channelIn("x", "*").channelOutCB("y", '*', ()=>{
             test.fail();
             system.stop();
-        }).nullProcess());
-        system.pushSymbol(system.add.channelOut("x", "*").nullProcess());
+        }).nullProcess();
+
+        let symbolB = system.add.channelOut("x", "*").nullProcess();
+
+        system.pushSymbol(symbolA);
+        system.pushSymbol(symbolB);
         system.start();
     }
 
     static runTestPiChannelCallback2(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
+
         let test = new TestBase(testEnvironment, 'PiChannelCallback#2', 0);
+
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+
         system.setOnDeadlockCallback(()=>{test.fail()});
-        system.pushSymbol(system.add.channelIn("x", "*").channelOutCB("y", '*', ()=>{
+
+        let symbolA = system.add.channelIn("x", "*").channelOutCB("y", '*', ()=>{
             test.success();
             system.stop();
-        }).nullProcess());
-        system.pushSymbol(system.add.channelOut("x", "*").channelIn('y', '*').nullProcess());
+        }).nullProcess();
+
+        let symbolB = system.add.channelOut("x", "*").channelIn('y', '*').nullProcess();
+
+        system.pushSymbol(symbolA);
+        system.pushSymbol(symbolB);
         system.start();
     }
 
@@ -112,25 +143,25 @@ export class PiCalcTests {
             runs += 1;
             hits[0] += 1;
             system.stop();
-            scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
+            this.runTestPiSequentialNDStatistic(scene, runs, hits);
         }));
         system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             runs += 1;
             hits[1] += 1;
             system.stop();
-            scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
+            this.runTestPiSequentialNDStatistic(scene, runs, hits);
         }));
         system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             runs += 1;
             hits[2] += 1;
             system.stop();
-            scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
+            this.runTestPiSequentialNDStatistic(scene, runs, hits);
         }));
         system.pushSymbol(system.add.channelIn("x", "*").process("Out", ()=>{
             runs += 1;
             hits[3] += 1;
             system.stop();
-            scene.time.delayedCall(1, ()=>{this.runTestPiSequentialNDStatistic(scene, runs, hits)}, [], this);
+            this.runTestPiSequentialNDStatistic(scene, runs, hits);
         }));
         system.pushSymbol(system.add.channelOut("x", "*").nullProcess());
         system.start();
@@ -348,7 +379,7 @@ export class PiCalcTests {
     static runTestPiScopeRename(scene: Phaser.Scene, testEnvironment: TestEnvironment): void{
         let test = new TestBase(testEnvironment, 'PiScopeRename', 0);
         let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
-        system.setOnDeadlockCallback(()=>{test.success()});
+        system.setOnDeadlockCallback(()=>{test.success(); system.stop();});
         system.pushSymbol(system.add.scope('x', system.add.channelIn('x', 'a').channelOut('a', '*').nullProcess()));
         system.pushSymbol(system.add.channelOut('x', 'y').nullProcess());
         system.pushSymbol(system.add.channelIn('y', '*').process("Out", ()=>{
@@ -387,6 +418,7 @@ export class PiCalcTests {
                         .channelOut('w1', 'reg1').channelOut('w1', 's2')
                         .channelIn('reg1', '*').channelIn('s2', '*').process('CoreExplosion', ()=>{
                             test.success();
+                            system.stop();
                         })
                 ))
         );
