@@ -98,4 +98,7 @@ export class Healthbar {
         this.updateText();
     }
 
+    public getBars() : number{
+        return this.bars.length;
+    }
 }
