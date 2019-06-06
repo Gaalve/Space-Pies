@@ -39,7 +39,7 @@ export class SubSceneManager {
             new TransitionSceneFast(scene, this.space,3), new LoreScene(scene), new LoreScene2(scene),
             new TransitionScene(scene, this.space, 0.5), new LoreScene3(scene),
             new LoreScene4(scene), new LoreScene5(scene), new LoreScene6(scene),
-            new TransitionScene(scene,this.space, 0.5), new IntoGameScene(scene)];
+            new TransitionScene(scene,this.space, 0.5)];
 
         this.idx = 0;
         this.time = 0;
