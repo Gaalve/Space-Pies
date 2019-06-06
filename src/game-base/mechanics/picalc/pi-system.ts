@@ -256,12 +256,12 @@ export class PiSystem {
                 }
             );
 
-            this.curSums.forEach(
-                (val1, idx1) => {
-                    this.curSums.forEach((val2, idx2) => {if(idx1 != idx2)this.addAllResolvablePair(val1, val2);});
-                    this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
-                }
-            );
+            // this.curSums.forEach(
+            //     (val1, idx1) => {
+            //         this.curSums.forEach((val2, idx2) => {if(idx1 != idx2)this.addAllResolvablePair(val1, val2);});
+            //         this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+            //     }
+            // );
 
             this.phase2changed = this.potentiallyResolving.length > 0;
         }
