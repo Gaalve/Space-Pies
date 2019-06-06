@@ -1,47 +1,81 @@
+import "phaser"
 import {PiSystem} from "../src/game-base/mechanics/picalc/pi-system";
 import {TestEnvironment} from "./test-environment";
 import {TestBase} from "./test-base";
 import "../src/phaser";
-import { expect } from "chai";
 import "mocha";
-import {PiChannelIn} from "../src/game-base/mechanics/picalc/pi-channel-in";
-import {PiChannelOut} from "../src/game-base/mechanics/picalc/pi-channel-out";
-import {PiSymbol} from "../src/game-base/mechanics/picalc/pi-symbol";
-import {PiSum} from "../src/game-base/mechanics/picalc/pi-sum";
-import {PiReplication} from "../src/game-base/mechanics/picalc/pi-replication";
-import {PiResolvingPair} from "../src/game-base/mechanics/picalc/pi-resolving-pair";
+import Scene = Phaser.Scene;
+import {TestScene} from "./test-scene";
+import READY = Phaser.Scenes.Events.READY;
+import DESTROY = Phaser.Core.Events.DESTROY;
 
 
 describe('test', function() {
 
-    it('should ', function () {
+    let game : Phaser.Game;
 
-        let gui: Phaser.Scene = new Phaser.Scene({ });
-        let te : TestEnvironment = new TestEnvironment(gui, ()=>{});
-        te.setOnFinishCallback(()=>{console.log("Pi-Calc-System working: "+te.didSucceed())});
-        setTimeout(() =>{PiCalcTests.runTestPiChannelCallback1(gui, te)}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiChannelCallback2(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiSequential1(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiSequential2(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiSequentialND(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiSequentialNDStatistic(gui);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiSum(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiSum2(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiSequentialParallel(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiReplication1(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiReplication2(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiTerm(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiTermRecursion(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiRename(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiRenameSum(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiRenameConc(gui, te);}, 1);
-        /**/setTimeout(() =>{PiCalcTests.runTestPiScopeRename(gui, te);}, 1);
-        setTimeout(() =>{PiCalcTests.runTestPiShieldTest(gui, te);}, 1);
-        te.start();
+    it('should return true when the pi system works', function () {
+        const config: GameConfig = {
+            type: Phaser.HEADLESS,
+            scene: [TestScene],
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    debug: false,
+                    gravity: { y: 0 }
+                }
+            },
+            autoFocus: false,
+            context: null,
+            fps: {
+                forceSetTimeOut: true
+            }
+        };
+        game = new Phaser.Game(config);
+        game.events.emit(READY);
+        let success = undefined;
+        let loop = true;
+        game.events.on("success", ()=>{success = true; loop = false;});
+        game.events.on("fail", ()=>{success = false; loop = false;});
+        while (loop){
+            game.headlessStep(0,1);
+        }
+        if(!success) throw new Error("PiSystem is not working correctly");
+        console.log("Pi-Calc-System working: "+success);
     });
 });
 
 export class PiCalcTests {
+
+
+    static async wait(){
+        return new Promise(() => {
+            setTimeout(() => {
+            }, 10000);
+        });
+    }
+
+    static startTests(gui: Scene, te: TestEnvironment){
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiChannelCallback1(gui, te)}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiChannelCallback2(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequential1(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequential2(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialND(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialNDStatistic(gui);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum2(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialParallel(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication1(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication2(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiTerm(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiTermRecursion(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRename(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameSum(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameConc(gui, te);}, [], this);
+        /**/gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiScopeRename(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiShieldTest(gui, te);}, [], this);
+        te.start();
+    }
 
     static runTestPiChannelCallback1(gui: Phaser.Scene, testEnvironment: TestEnvironment): void{
 
