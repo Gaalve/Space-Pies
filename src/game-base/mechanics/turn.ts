@@ -55,16 +55,10 @@ export class Turn {
         )
     ); */
 
+        this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess());
 
-    if(this.currentPlayer.getNameIdentifier() == "P1"){
-       this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess())
-
-       }
-       else {
-          this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess())
-       }
-       this.awaitInput = true; //nächster Spieler
-       this.refScene.data.set('turnAction', 'Shopping Phase');
+        this.awaitInput = true; //nächster Spieler
+        this.refScene.data.set('turnAction', 'Shopping Phase');
 
     }
 
