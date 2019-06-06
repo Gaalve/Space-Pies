@@ -411,19 +411,16 @@ export class Health {
 
         return pi.add.term('AdapShld'+pid+hbid, pi.add.sum([
             pi.add.channelInCB('armor'+pid,'', desADSCB) // adaptive shield of player X
-                .channelOut('wait', '')
                 .channelOut('regout', '')
                 .channelOutCB('rshield' + pid + hbid, '', remAdap)
                 .nullProcess(),
 
             pi.add.channelInCB('shield'+pid,'', desADSCB)
-                .channelOut('wait', '')
                 .channelOut('regout','')
                 .channelOutCB('rarmor' + pid + hbid, '', remAdap)
                 .nullProcess(),
 
             pi.add.channelInCB('rocket'+pid,'', desADSCB)
-                .channelOut('wait','')
                 .channelOut('regout', '')
                 .channelOutCB('rrocket' + pid + hbid, '', remAdap)
                 .nullProcess(),
