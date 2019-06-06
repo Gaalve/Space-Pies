@@ -3,6 +3,11 @@
     "files": [
       {
         "type": "image",
+        "key": "battletime",
+        "url": "assets/sprites/battletime.png"
+      },
+      {
+        "type": "image",
         "key": "armor",
         "url": "assets/sprites/armor.png"
       },
