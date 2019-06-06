@@ -38,7 +38,9 @@ export class EndSceneP1 extends Phaser.Scene {
         this.buttonMain = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_skip",
             ()=>{
-            this.scene.launch('FadeScene', {shut: 'EndSceneP1', start: 'MainScene'});this.scene.get('FadeScene').scene.bringToTop()
+                this.scene.resume("MainScene");
+                this.scene.sleep();
+            //this.scene.launch('FadeScene', {shut: 'EndSceneP1', start: 'StartScene'});this.scene.get('FadeScene').scene.bringToTop()
             });
 
         this.buttonMain.setPosition(1920/2-100, 1080/2-75);

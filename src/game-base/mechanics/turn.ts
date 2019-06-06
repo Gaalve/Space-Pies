@@ -98,7 +98,7 @@ export class Turn {
             this.currentPlayer.getSystem().add.channelIn(
                 'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
         this.refScene.data.set('turnAction', 'Battle Phase');
-        this.refScene.time.delayedCall(2600, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+        this.refScene.time.delayedCall(3000, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
 
     }
 
