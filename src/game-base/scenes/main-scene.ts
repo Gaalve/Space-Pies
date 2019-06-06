@@ -103,7 +103,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.system = new PiSystem(this, 50,50,50,true);
+        this.system = new PiSystem(this, 10,10,10,true);
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);

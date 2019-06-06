@@ -36,8 +36,10 @@ export class Turn {
         //Turn for Player1
         this.system.pushSymbol(
             this.system.add.replication(
-                this.system.add.channelIn('player1', '').channelOutCB('shopp1', '', () => this.setShopTurn()).
-                channelIn('shopp1end', '').channelOutCB('unlock1', '', () => this.setAttackTurn()).
+                this.system.add.channelIn('player1', '').
+                channelOutCB('shopp1', '', () => this.setShopTurn()).
+                channelIn('shopp1end', '').channelOut("startephase1", "")
+                    .channelOutCB('unlock1', '', () => this.setAttackTurn()).
                 channelIn('attackp1end', '').
                     channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -50,14 +52,17 @@ export class Turn {
 
         this.system.pushSymbol(
                 this.system.add.channelOutCB('shopp1', '', () => this.setShopTurn()).
-                channelIn('shopp1end', '').channelOutCB('player2', '', () => this.endAttackTurn()).nullProcess()
+                channelIn('shopp1end', '').channelOut("startephase1", "").channelOutCB('player2', '', () => this.endAttackTurn()).nullProcess()
         );
 
         //Turn for Player2
         this.system.pushSymbol(
             this.system.add.replication(
-                this.system.add.channelIn('player2', '').channelOutCB('shopp1', '', () => this.setShopTurn()).
-                channelIn('shopp2end', '').channelOutCB('unlock2', '', () => this.setAttackTurn()).
+                this.system.add.channelIn('player2', '').
+                channelOutCB('shopp1', '', () => this.setShopTurn()).
+                channelIn('shopp2end', '').
+                channelOut("startephase2", "").
+                channelOutCB('unlock2', '', () => this.setAttackTurn()).
                 channelIn('attackp2end', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
