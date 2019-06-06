@@ -33,6 +33,26 @@ export class Turn {
         this.refScene.time.delayedCall(0, () => (this.playerInput()), [], this);
         this.refScene.data.set('click', this.clickable);
         this.system = this.refScene.scene.get("MainScene").data.get("system");
+
+        //Turn for Player1
+        this.system.pushSymbol(
+            this.system.add.replication(
+                this.system.add.channelIn('player1', '').channelOutCB('shopp1', '', () => this.setShopTurn()).
+                channelIn('shopp1end', '').channelOutCB('unlock1', '', () => this.setAttackTurn()).
+                channelIn('attack1end', '').channelOut('player2', '').nullProcess()
+            )
+        );
+
+        //Turn for Player2
+        this.system.pushSymbol(
+            this.system.add.replication(
+                this.system.add.channelIn('player2', '').channelOutCB('shopp1', '', () => this.setShopTurn()).
+                channelIn('shopp2end', '').channelOutCB('unlock2', '', () => this.setAttackTurn()).
+                channelIn('attack2end', '').channelOut('player1', '').nullProcess()
+            )
+        );
+
+
     }
 
     public playerInput():void{
@@ -46,19 +66,11 @@ export class Turn {
 
         }
 
-      //  let sys = this.currentPlayer.getSystem();
-   /* this.system.pushSymbol(
-        this.system.add.replication(
-        this.system.add.channelIn('player2', '').channelOut('shopp2', '').
-        channelIn('shopp2end', '').channelOut('unlock2', '').
-        channelIn('attack2end', '').channelOut('player1', '').nullProcess()
-        )
-    ); */
-
         this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess());
 
         this.awaitInput = true; //nächster Spieler
-        this.refScene.data.set('turnAction', 'Shopping Phase');
+        this.setShopTurn() //vorläufig
+        //this.refScene.data.set('turnAction', 'Shopping Phase');
 
     }
 
@@ -75,9 +87,17 @@ export class Turn {
         this.currentPlayer.getSystem().pushSymbol(
             this.currentPlayer.getSystem().add.channelIn(
                 'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
-        this.refScene.data.set('turnAction', 'Battle Phase');
+       // this.refScene.data.set('turnAction', 'Battle Phase');
+        this.setAttackTurn() //vorläufig
         this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
 
+    }
+    public setShopTurn(){
+        this.refScene.data.set('turnAction', 'Shopping Phase');
+    }
+
+    public setAttackTurn(){
+        this.refScene.data.set('turnAction', 'Battle Phase');
     }
 
     getScene(): Phaser.Scene{
