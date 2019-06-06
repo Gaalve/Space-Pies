@@ -36,6 +36,9 @@ export class Turn {
     }
 
     public playerInput():void{
+        if (this.players[0].isDead || this.players[1].isDead) {
+            return;
+        }else {
         this.clickable = true;
         this.refScene.data.set('round', ""+(++this.currentRound));
         if(this.currentRound != 1){
@@ -43,7 +46,7 @@ export class Turn {
             this.currentPlayer = this.players[this.idx];
             //this.currentPlayer.gainEnergy(3);
             this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
-
+        }
         }
 
         if(this.currentPlayer.getNameIdentifier() == "P1"){
@@ -95,7 +98,7 @@ export class Turn {
             this.currentPlayer.getSystem().add.channelIn(
                 'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
         this.refScene.data.set('turnAction', 'Battle Phase');
-        this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+        this.refScene.time.delayedCall(2600, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
 
     }
 

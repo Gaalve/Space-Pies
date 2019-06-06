@@ -20,6 +20,7 @@ export class Player {
     public ship : Ship;
     private activatedDrones : number;
     private activatedSolarDrones : number;
+    public isDead:boolean;
 
     private health : Health;
     private energy : number;
@@ -42,6 +43,7 @@ export class Player {
     public bulletTrail: BulletTrail;
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager){
+        this.isDead=false;
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
