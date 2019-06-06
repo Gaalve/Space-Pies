@@ -39,7 +39,7 @@ export class Turn {
             this.system.add.replication(
                 this.system.add.channelIn('player1', '').channelOutCB('shopp1', '', () => this.setShopTurn()).
                 channelIn('shopp1end', '').channelOutCB('unlock1', '', () => this.setAttackTurn()).
-                channelIn('attack1end', '').channelOut('player2', '').nullProcess()
+                channelIn('attack1end', '').channelOutCB('player2', '', () => this.endAttackTurn()).nullProcess()
             )
         );
 
@@ -48,7 +48,7 @@ export class Turn {
             this.system.add.replication(
                 this.system.add.channelIn('player2', '').channelOutCB('shopp1', '', () => this.setShopTurn()).
                 channelIn('shopp2end', '').channelOutCB('unlock2', '', () => this.setAttackTurn()).
-                channelIn('attack2end', '').channelOut('player1', '').nullProcess()
+                channelIn('attack2end', '').channelOutCB('player1', '', () => this.endAttackTurn()).nullProcess()
             )
         );
 
@@ -69,7 +69,7 @@ export class Turn {
         this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess());
 
         this.awaitInput = true; //nächster Spieler
-        this.setShopTurn() //vorläufig
+        this.setShopTurn()
         //this.refScene.data.set('turnAction', 'Shopping Phase');
 
     }
@@ -88,9 +88,9 @@ export class Turn {
             this.currentPlayer.getSystem().add.channelIn(
                 'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
        // this.refScene.data.set('turnAction', 'Battle Phase');
-        this.setAttackTurn() //vorläufig
-        this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
-
+        this.setAttackTurn()
+       // this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+        this.endAttackTurn()
     }
     public setShopTurn(){
         this.refScene.data.set('turnAction', 'Shopping Phase');
@@ -98,6 +98,10 @@ export class Turn {
 
     public setAttackTurn(){
         this.refScene.data.set('turnAction', 'Battle Phase');
+    }
+
+    public endAttackTurn(){
+        this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
     }
 
     getScene(): Phaser.Scene{
