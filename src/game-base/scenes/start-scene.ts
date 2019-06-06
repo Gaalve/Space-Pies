@@ -70,14 +70,14 @@ export class StartScene extends Phaser.Scene {
 
         this.ship.startFollow({
             ease: 'Linear',
-            duration: 8000,
+            duration: 3500,
             rotateToPath: true,
             verticalAdjust: true
             //callbackAtEnd: this.enda()
         });
 
         this.ship2.startFollow({
-            duration: 8000,
+            duration: 3500,
             rotateToPath: true,
             verticalAdjust: true,
         });
