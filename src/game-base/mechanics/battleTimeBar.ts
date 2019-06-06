@@ -1,10 +1,10 @@
 
 
-export class BattleTimeBar extends Phaser.GameObjects.Rectangle{
+export class BattleTimeBar extends Phaser.GameObjects.Sprite{
 
 
     public constructor(scene : Phaser.Scene){
-        super(scene, 0, 0, 200, 10, 0xffffff);
+        super(scene, 0, 0, "battletime");
         this.x = 1920/2;
         this.y = 155;
         this.setVisible(false)

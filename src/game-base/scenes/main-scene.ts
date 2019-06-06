@@ -380,7 +380,7 @@ export class MainScene extends Phaser.Scene {
                                                     .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
                                                     .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
                                                     .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB("attackp" + p + "end", "",()=>{bt.setVisible(false); bt.setTime()}).next(rlock),
+                                                    .channelOutCB("attackp" + p + "end", "",()=>{bt.setVisible(false); bt.resetTime()}).next(rlock),
                                               this.system.add.channelIn("newlock" + p + "0", "nolock1").
                                                 next(rlock),
                                               this.system.add.channelIn("newlock" + p + "1", "nolock2").
