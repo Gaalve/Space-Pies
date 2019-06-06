@@ -12,7 +12,8 @@ building_app:
 testing_app:
   stage: test
   script:
-    - "ls"
+    - "npm install"
+    - "npm run test"
 
 deploy_to_server:
   stage: deploy

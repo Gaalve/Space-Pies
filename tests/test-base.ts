@@ -10,23 +10,21 @@ export class TestBase {
     public constructor(environment: TestEnvironment, name: string, timeout: number){
         this.environment = environment;
         this.name = name;
-        if(timeout > 0 ){
+        /*if (timeout > 0){
             // TODO timeout
-        }
-        else {
-            environment.scene.time.delayedCall(10000, this.fail, [], this);
-        }
+        }*/
         this.environment.addTest(this);
+        this.succeeded = false;
+        this.statusSet = false;
     }
 
+    // getter methods
 
-    public fail(): void{
-        this.setState(false);
+    public getSucceeded(): boolean{
+        return this.succeeded;
     }
 
-    public success(): void{
-        this.setState(true);
-    }
+    // setter methods
 
     public setState(succeeded): void{
         if(!this.statusSet){
@@ -36,8 +34,14 @@ export class TestBase {
         }
     }
 
-    public didSucceed(): boolean{
-        return this.succeeded;
+    // assisting methoda
+
+    public success(): void{
+        this.setState(true);
+    }
+
+    public fail(): void{
+        this.setState(false);
     }
 
     public getStateAsMessage(): string{

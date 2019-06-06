@@ -2,10 +2,10 @@ import {TestBase} from "./test-base";
 
 export class TestEnvironment {
     public readonly scene: Phaser.Scene;
-    private tests: TestBase[];
+    private readonly tests: TestBase[];
     private finishedTests: TestBase[];
-    private started: boolean;
-    private onFinish: Function;
+    private started: boolean;   // true if testing started
+    private onFinish: Function; // function to call when finished
     private success: boolean;
 
     public constructor(scene: Phaser.Scene, onFinish: Function){
@@ -15,6 +15,32 @@ export class TestEnvironment {
         this.onFinish = onFinish;
         this.success = true;
     }
+
+    // getter methods
+
+    // setter methods
+
+    public setOnFinishCallback(callback: Function): void{
+        this.onFinish = callback;
+    }
+
+    // functionality methods
+
+    public start(): void{
+        this.started = true;
+        console.log("Running tests");
+        this.callOnFinish();
+    }
+
+    private callOnFinish(){
+        if (!this.started) return;
+        if(this.finishedTests.length == this.tests.length && this.tests.length > 0){
+            console.log(this.getStateAsMessage());
+            this.onFinish();
+        }
+    }
+
+    // assisting methods
 
     public addTest(test: TestBase): void{
         this.tests.push(test);
@@ -35,40 +61,29 @@ export class TestEnvironment {
         }
     }
 
-    private callOnFinish(){
-        if (!this.started) return;
-        if(this.finishedTests.length == this.tests.length && this.tests.length > 0){
-            console.log(this.getStateAsMessage());
-            this.onFinish();
-        }
-    }
-
     public didSucceed(): boolean{
         if(this.finishedTests.length == this.tests.length) return this.success;
         return false;
     }
 
+    // return result for test set
     public getStateAsMessage(): string{
-        let amount: number = 0;
+
+        let amount: number = 0; // number of succeeded tests
+
+        // raise amount for every succeeded test
         for(let idx in this.tests){
-            if (this.tests[idx].didSucceed()) amount++;
+            if (this.tests[idx].getSucceeded()) amount++;
         }
-        let msg : string = 'TE: ' + amount + '/' + this.tests.length + ' Test succeeded:\n';
+
+        let msg : string = 'TE: ' + amount + '/' + this.tests.length + ' test(s) succeeded:\n';
+
+        // add single test output
         for(let idx in this.tests){
             msg += this.tests[idx].getStateAsMessage() + '\n';
         }
+
         return msg;
     }
-
-    public start(): void{
-        this.started = true;
-        console.log("Running tests");
-        this.callOnFinish();
-    }
-
-    public setOnFinishCallback(callback: Function): void{
-        this.onFinish = callback;
-    }
-
 
 }
