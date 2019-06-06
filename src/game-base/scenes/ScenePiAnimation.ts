@@ -5,6 +5,9 @@ import {Animation} from "../mechanics/animation/Animation";
 import Sprite = Phaser.GameObjects.Sprite;
 import Color = Phaser.Display.Color;
 
+
+
+
 export class ScenePiAnimation extends Phaser.Scene{
 
     private firstChoose: boolean;
@@ -12,6 +15,9 @@ export class ScenePiAnimation extends Phaser.Scene{
     private animationRunning: boolean;
     private queuedAnimations: Array<Animation>;
     private finishedAnimations: Array<Animation>;
+    private
+    private finalAnimations: Array<Animation>;
+    private parallelAnimations: Array<Array<Animation>>;
 
     constructor(){
         super({
@@ -21,6 +27,12 @@ export class ScenePiAnimation extends Phaser.Scene{
         this.firstChoose = true;
         this.queuedAnimations = new Array<Animation>();
         this.finishedAnimations = new Array<Animation>();
+        this.finalAnimations = new Array<Animation>();
+        this.parallelAnimations = new Array<Array<Animation>>();
+        this.parallelAnimations[0] = new Array<Animation>();
+        this.parallelAnimations[1] = new Array<Animation>();
+        this.parallelAnimations[2] = new Array<Animation>();
+        this.parallelAnimations[3] = new Array<Animation>();
     }
 
     preload(): void{
@@ -44,12 +56,9 @@ export class ScenePiAnimation extends Phaser.Scene{
             {
 
                 let animation = <Animation> this.queuedAnimations[i];
-                let deltaX = Math.abs(animation.toX - animation.fromX);
-                let deltaY = Math.abs(animation.toY - animation.fromY);
-
                 animation.currentTime += delta;
-                let halfDuration = animation.duration;
 
+                let halfDuration = animation.duration;
                 if (animation.move)
                 {
                     this.moveSin(animation.fromX, animation.toX, animation.fromY, animation.toY, animation.currentTime / animation.duration, animation.text);
@@ -62,8 +71,13 @@ export class ScenePiAnimation extends Phaser.Scene{
                 }
                 if (animation.interpolate)
                 {
-                    let color = !animation.locked ? "#990000" : "#006c9b";
+                    let color = !animation.locked ? animation.toColor : "#006c9b";
                     this.colorSin(animation.text.style.color, color , animation.currentTime/animation.duration, animation.text);
+                }
+                if (animation.vanish)
+                {
+                    let fontScale = !animation.locked ? 50 : 30;
+                    this.scaleSin(parseInt(animation.text.style.fontSize, 10), 0, animation.currentTime / halfDuration, animation.text);
                 }
 
 
@@ -73,40 +87,101 @@ export class ScenePiAnimation extends Phaser.Scene{
                     animation.finished = true;
                     let finishedAnimation = this.queuedAnimations.shift();
                     this.finishedAnimations.push(finishedAnimation);
-                    // // if(!animation.locked)
-                    // // {
-                    // //     let fromX = text.x;
-                    // //     let fromY = text.y;
-                    // //     let toXY = this.lockCounterpartXY(animation);
-                    // //     let toX = toXY != null ? toXY.x : 1920/7;
-                    // //     let toY = toXY != null ? toXY.y : 1080/7;
-                    // //     let newAnim = new Animation(animation.id.toString(), this, fromX, fromY, toX, toY, text, 500);
-                    // //     newAnim.locked = true;
-                    // //     this.addAnimation(newAnim);
-                    // // }
-                    // this.removeAnimation(animation);
+                }
+            }
+        }
+        if (this.finishedAnimations.length > 0)
+        {
+            for (let i = 0; i < this.finishedAnimations.length; i++)
+            {
+                let anim = this.finishedAnimations[i];
+
+                if (anim.locked)
+                    continue;
+
+                if (anim.stage == 0)
+                {
+                    let resolveLocks = this.getResolvingLocksAnimation(anim);
+                    if (resolveLocks != null)
+                    {
+                        this.addConcurrentAnimation(resolveLocks.animationOutput);
+                        this.addConcurrentAnimation(resolveLocks.animationInput);
+                        this.finishedAnimations.splice(i,1);
+                    }
+                }
+
+                if (anim.stage == 1)
+                {
+                    let resolvingAnimations = this.getResolvingAnimation(anim);
+                    if (resolvingAnimations != null)
+                    {
+                        this.addConcurrentAnimation(resolvingAnimations.animationNew);
+                        this.addConcurrentAnimation(resolvingAnimations.animationNewCounterPart);
+                        this.finishedAnimations.splice(i,1);
+                    }
+                }
+                else if (anim.stage == 2)
+                {
+                    let finalAnimations = this.getFinalAnimation(anim);
+                    if (finalAnimations != null)
+                    {
+                        this.addConcurrentAnimation(finalAnimations.animationNew);
+                        this.addConcurrentAnimation(finalAnimations.animationNewCounterpart);
+                        this.finishedAnimations.splice(i,1);
+                    }
                 }
             }
         }
 
-    }
-
-    private lockCounterpartXY(animation: Animation) {
-        for (let i = 0; i < this.finishedAnimations.length; i++)
+        if (this.parallelAnimations.length > 0)
         {
-            let anim = this.finishedAnimations[i];
-            let x, y;
-            if (anim == animation) continue;
-            if (anim.id != animation.id && !anim.locked)
+            for (let i = 0; i < this.parallelAnimations.length; i++)
             {
-                anim.locked = true;
-                x =  anim.text.x - animation.text.width;
-                y =  anim.text.y - animation.text.height;
-                return {x, y};
+                let sameStageAnimations = this.parallelAnimations[i];
+                for (let j = 0; j < sameStageAnimations.length; j++)
+                {
+                    let animation = sameStageAnimations[j];
+                    animation.currentTime += delta;
+
+                    this.animate(animation);
+
+                    if (animation.currentTime >= animation.duration)
+                    {
+                        animation.finished = true;
+                        let finishedAnimation = sameStageAnimations.splice(j, 1);
+                        this.finishedAnimations.push(finishedAnimation[0]);
+                    }
+                }
             }
         }
-        return null;
     }
+
+    private animate(animation: Animation) {
+        let halfDuration = animation.duration;
+        if (animation.move)
+        {
+            this.moveSin(animation.fromX, animation.toX, animation.fromY, animation.toY, animation.currentTime / animation.duration, animation.text);
+        }
+
+        if (animation.scaleFont)
+        {
+            let fontScale = !animation.locked ? 50 : 30;
+            this.scaleSin(20, 50, animation.currentTime / halfDuration, animation.text);
+        }
+
+        if (animation.interpolate)
+        {
+            let color = !animation.locked ? animation.toColor : "#006c9b";
+            this.colorSin(animation.text.style.color, color , animation.currentTime/animation.duration, animation.text);
+        }
+
+        if (animation.vanish)
+        {
+            this.scaleSin(parseInt(animation.text.style.fontSize, 10), 1, animation.currentTime / halfDuration, animation.text);
+        }
+    }
+
+
 
     setAnimationRunning(boolean : boolean)
     {
@@ -118,21 +193,16 @@ export class ScenePiAnimation extends Phaser.Scene{
         for (let i = 0 ; i < this.queuedAnimations.length; i++)
         {
             // ADJUST XY SO IT DOESN'T OVERLAP WITH OTHER TEXTS
-            if (animation.toY >= this.queuedAnimations[i].toY - this.queuedAnimations[i].text.height && animation.toY <= this.queuedAnimations[i].toY + this.queuedAnimations[i].text.height)
+            let anim = this.queuedAnimations[i];
+            if (anim.id == animation.id)
             {
-                animation.toY += animation.text.height;
+                if (animation.toX >= this.queuedAnimations[i].toX - this.queuedAnimations[i].text.height && animation.toX <= this.queuedAnimations[i].toX + this.queuedAnimations[i].text.height) {
+                    animation.toX += animation.text.width;
+                }
             }
         }
         this.queuedAnimations.push(animation);
     }
-
-    // public removeAnimation(animation: Animation)
-    // {
-    //     for (let i = 0; i < this.animations.length; i++)
-    //         if (this.animations[i] == animation)
-    //             this.animations.splice(i, 1);
-    //
-    // }
 
     private moveCos(fromX: number, toX: number, fromY: number, toY: number, delta:number, text: Phaser.GameObjects.Text){
         text.x = toX - Math.cos(delta*Math.PI/2 )*(toX - fromX);
@@ -197,4 +267,185 @@ export class ScenePiAnimation extends Phaser.Scene{
 
         return "#" + newR + newG + newB;
     }
+
+    public getTotalAnimationTime()
+    {
+        let totalTime = 0;
+        for (let i = 0; i < this.queuedAnimations.length; i++)
+            totalTime += this.queuedAnimations[i].duration * 3;
+        return totalTime;
+    }
+
+
+    public addConcurrentAnimation(animation: Animation)
+    {
+        for (let i = 0 ; i < this.queuedAnimations.length; i++)
+        {
+            // ADJUST XY SO IT DOESN'T OVERLAP WITH OTHER TEXTS
+            let anim = this.queuedAnimations[i];
+            if (anim.id == animation.id)
+            {
+                if (animation.toX >= anim.toX - anim.text.height && animation.toX <= anim.toX + anim.text.height) {
+                    animation.toX += animation.text.width;
+                }
+            }
+        }
+        for (let i = 0 ; i < this.parallelAnimations.length; i++)
+        {
+            let sameStageAnimations = this.parallelAnimations[i];
+            for (let j = 0; j < sameStageAnimations.length; j++)
+            {
+                let anim = sameStageAnimations[j];
+                if (anim.id == animation.id)
+                {
+                    // ADJUST XY SO IT DOESN'T OVERLAP WITH OTHER TEXTS
+                    if (animation.toX >= anim.toX - anim.text.height && animation.toX <= anim.toX + anim.text.height) {
+                        animation.toX += animation.text.width;
+                    }
+                }
+            }
+
+
+        }
+
+        let stage = -1;
+        if (animation.stage == 0)
+            stage = 0;
+        if (animation.stage == 1)
+            stage = 1;
+        if (animation.stage == 2)
+            stage = 2;
+        if (animation.stage == 3)
+            stage = 3;
+        this.parallelAnimations[stage].push(animation);
+    }
+
+    private getResolvingAnimation(animation: Animation) {
+
+        if (isInput(animation.text))
+            return;;
+
+        for (let i = 0; i < this.finishedAnimations.length; i++)
+        {
+            let anim = this.finishedAnimations[i];
+            let toX, toY;
+            let toXCounterPart, toYCounterPart;
+            if (anim == animation) continue;
+
+            if (anim.id != animation.id && !anim.locked)
+            {
+                // todo: check for implementation
+            }
+        }
+        return null;
+    }
+
+    private getFinalAnimation(anim: Animation)
+    {
+        if (isInput(anim.text))
+            return;
+
+        for (let i = 0; i < this.finishedAnimations.length; i++)
+        {
+            let animation = this.finishedAnimations[i];
+
+            if (anim.id.indexOf("resolving") >= 0 && anim.id == animation.id && !animation.locked)
+            {
+                anim.locked = true;
+                animation.locked = true;
+
+                let animationNew = new Animation("final" + anim.id, this, null, null, null, null, anim.text, 500);
+                let animationNewCounterpart = new Animation("final" + animation.id, this, null, null, null, null, animation.text, 500);
+
+                animationNew.stage = 3;
+                animationNew.vanish = true;
+                animationNewCounterpart.stage = 3;
+                animationNewCounterpart.vanish = true;
+
+                return {animationNew, animationNewCounterpart};
+            }
+        }
+        return null;
+    }
+
+    private getResolvingLocksAnimation(animation: Animation) {
+
+        if (isInput(animation.text))
+            return;
+
+        for (let i = 0; i < this.finishedAnimations.length; i++)
+        {
+            let anim = this.finishedAnimations[i];
+            if (anim.locked || anim == animation)
+                continue;
+
+            if (anim.id == "(lock)")
+            {
+                anim.locked = true;
+                animation.locked = true;
+
+                let firstSymbol = popSymbol(anim, this);
+                let outputAnimationText = this.add.text(animation.text.x + 30, animation.text.y + animation.text.height, "lock<*>", anim.text.style);
+
+                let toX =  (1920/2) - outputAnimationText.width - 20;
+                let toY =  (1080/2);
+                let toXCounterPart =  (1920/2);
+                let toYCounterPart = (1080/2);
+
+                let animationOutput = new Animation("resolving (lock)", this, animation.text.x, animation.text.y, toX, toY, outputAnimationText, 500);
+                let animationInput = new Animation("resolving (lock)", this, anim.text.x, anim.text.y, toXCounterPart, toYCounterPart, firstSymbol, 500);
+
+                animationOutput.stage = 0;
+                animationOutput.move = true;
+                animationOutput.interpolate = true;
+                animationOutput.toColor = '#ff6600'
+                animationInput.stage = 0;
+                animationInput.move = true;
+                animationInput.interpolate = true;
+                animationInput.toColor = '#ff6600'
+
+                this.finishedAnimations.splice(i,1);
+                return {animationOutput, animationInput};
+            }
+            if (anim.id == "resolving (lock)")
+            {
+                let animationInput = new Animation("resolved (lock)", this, null, null, null, null, anim.text, 500);
+                let animationOutput = new Animation("resolved (lock)", this, null, null, null, null, animation.text, 500);
+                animationInput.vanish = true;
+                animationInput.stage = 0;
+                animationOutput.vanish = true;
+                animationOutput.stage = 0;
+
+                this.finishedAnimations.splice(i,1);
+                return {animationOutput, animationInput};
+            }
+            if (anim.id == "resolved (lock)")
+            {
+                anim.text.destroy();
+                animation.text.destroy();
+
+                this.finishedAnimations.splice(i,1);
+                return null;
+            }
+        }
+    }
+}
+
+function isInput(text: Phaser.GameObjects.Text) {
+    let textObject = text;
+    if (textObject.text.toString().indexOf("(*)") >= 0)
+        return true;
+    return false;
+}
+
+function popSymbol(anim: Animation, scene: Phaser.Scene) {
+
+    let text = anim.text;
+    let term = anim.text.text;
+    let firstSymbol = term.indexOf("!(") >= 0 ? term.substr(2, term.length - 1) : term.split(".")[0];
+    let textObject = scene.add.text(anim.text.x, anim.text.y, firstSymbol, {
+        fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2});
+    text.text = term.substr(firstSymbol.length + 1, term.length);
+    return textObject;
+
 }

@@ -24,12 +24,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     preload(): void {
-        // this.load.pack(
-        //     "preload",
-        //     "assets/pack.json",
-        //     "preload"
-        // )
-
+        this.scene.launch("AnimationScene");
     }
 
     create(): void {
@@ -40,7 +35,7 @@ export class MainScene extends Phaser.Scene {
         this.turn = new Turn(this, this.players);
         this.data.set('P1', this.players[0]);
         this.data.set('P2', this.players[1]);
-        this.buttonEndTurn = new Button(this, 500, 500, "button_shadow",
+        this.buttonEndTurn = new Button(this, 100, 1000, "button_shadow",
             "button_bg", "button_fg", "button_skip",
             ()=>{
                 if(this.turn.clickable){
@@ -49,12 +44,12 @@ export class MainScene extends Phaser.Scene {
                     this.turn.Attackturn();
                 }
                 });
-        this.buttonEndTurn.setPosition(1920/2, 500);
+        this.buttonEndTurn.setPosition(1920/2, 1000);
 
-        const openShop1 = this.add.text(910, 600, "shop",{
+        const openShop1 = this.add.text(1100, 1000, "shop",{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2}).setVisible(false);
 
-        const openShop2 = this.add.text(910, 600, "shop",{
+        const openShop2 = this.add.text(800, 1000, "shop",{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2}).setVisible(false);
 
         this.scene.get('ShopSceneP1').events.on("skip", function () {

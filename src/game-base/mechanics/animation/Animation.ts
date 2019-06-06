@@ -15,6 +15,9 @@ export class Animation {
     private _interpolate: boolean;
     private _move: boolean;
     private _scaleFont: boolean;
+    private _toColor: string;
+    private _vanish: boolean;
+    private _stage : number;
 
 
 
@@ -111,6 +114,7 @@ export class Animation {
         this._currentTime = 0;
         this._id = id;
         this._locked = false;
+        this._stage = 0;
     }
 
     get interpolate(): boolean {
@@ -143,5 +147,29 @@ export class Animation {
 
     set finished(value: boolean) {
         this._finished = value;
+    }
+
+    get toColor(): string {
+        return this._toColor;
+    }
+
+    set toColor(value: string) {
+        this._toColor = value;
+    }
+
+    get vanish(): boolean {
+        return this._vanish;
+    }
+
+    set vanish(value: boolean) {
+        this._vanish = value;
+    }
+
+    get stage(): number {
+        return this._stage;
+    }
+
+    set stage(value: number) {
+        this._stage = value;
     }
 }

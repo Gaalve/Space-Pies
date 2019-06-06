@@ -3,6 +3,9 @@ import {PiSystem} from "./picalc/pi-system";
 import {Ship} from "./ship";
 import {Health} from "./health/health";
 import {EnergyDrone} from "./energyDrone";
+import {Animation} from "./animation/Animation";
+import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
+
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
@@ -190,6 +193,37 @@ export class Player {
                     channelOut(d.getWeapons()[1].getPiTerm(), "*").
                     channelOut(d.getWeapons()[2].getPiTerm(), "*").nullProcess()
                 );
+            }
+
+            if (d.getNrWeapons() > 0)
+            {
+                let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
+                let text = d.onScreenText.text.split(".");
+
+                let toColor = this.firstPlayer ? '#990000' : '#458899';
+                let fromX = d.onScreenText.x;
+                let fromY = d.onScreenText.y;
+                let toX = 1920/2 - (d.onScreenText.width);
+                let toY = 1080/1.3;
+
+                let animation = new Animation("(lock)", animationScene, fromX, fromY, toX, toY, d.onScreenText.setAngle(0), 1000);
+                animation.move = true;
+                animation.interpolate = true;
+                animation.scaleFont = true;
+                animation.toColor = toColor;
+                animationScene.addConcurrentAnimation(animation);
+
+                // for (let j = 0; j < text.length; j++)
+                // {
+                //     let partText = text[j];
+                //     let resolveText = animationScene.add.text(fromX, fromY, partText, {
+                //         fill: toColor , fontFamily: '"Roboto"', fontSize: 20
+                //     });
+                //     d.onScreenText.text = d.onScreenText.text.substr(partText.length + 1, d.onScreenText.text.length);
+                // let toX = this.isFirstPlayer() ? 1920/3 : 1920/1.7;
+                // let toY = 1080/2;
+                // let id = partText.indexOf("lock") >= 0 ? "lock" : this.getNameIdentifier();
+                // }
             }
         }
         this.unlockWeapons();

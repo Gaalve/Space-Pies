@@ -3,6 +3,8 @@ import {ShopSceneP1} from "../scenes/shop-sceneP1";
 import {PiCalcTests} from "../tests/pi-calc-tests";
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import {chooseSceneP1} from "../scenes/choose-sceneP1";
+import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
+import {Animation} from "./animation/Animation";
 
 export class Turn {
     private refScene: Phaser.Scene;
@@ -83,11 +85,29 @@ export class Turn {
             }
         }
 
+        // ANIMATION
+        let animationScene = <ScenePiAnimation> this.refScene.scene.get("AnimationScene");
+        let toColor = '#faf000';
+        let text = this.refScene.add.text(1920/2, 0, "!(lock<*>)", {
+            fill: toColor , fontFamily: '"Roboto"', fontSize: 20
+        });
+        let toX = 1920/2.3;
+        let toY = 1080/4.7;
+        let animation = new Animation("<lock>", animationScene, text.x, text.y, toX, toY, text, 1000);
+        animation.move = true;
+        animation.interpolate = true;
+        animation.scaleFont = true;
+        animation.toColor = toColor;
+        animationScene.addConcurrentAnimation(animation);
+
         //Waffen schießen lassen:
         this.currentPlayer.pushWeapons();
         this.currentPlayer.pushEnergy();
+
+
+
         this.refScene.data.set('turnAction', 'Battle Phase');
-        this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+        this.refScene.time.delayedCall(3000, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
 
     }
 }
