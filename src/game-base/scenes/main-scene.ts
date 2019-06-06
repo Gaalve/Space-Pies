@@ -298,7 +298,7 @@ export class MainScene extends Phaser.Scene {
         let weapon = this.system.add.term("Weapon" + p + d, undefined);
 
         let droneRef: Drone = this.players[player - 1].getDrones()[drone];
-        let sum = this.system.add.sum([this.system.add.channelIn("lock" + p,"").
+        let sum = this.system.add.sum([this.system.add.channelIn("lock" + p + d,"").
                                                 channelOutCB("w1","", (_, at) => {
                                                     droneRef.getWeapons()[0].createBullet(at == 'miss')}).        //function for weapon animation
                                                 channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
@@ -325,7 +325,7 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(this.system.add.channelInCB("wmod" + p + d, "", () => {
                                                     this.players[player - 1].createDrone(drone);
                                                     }).
-                                                channelOut("newlock" + p + d, "lock" + p).
+                                                channelOut("newlock" + p + d, "lock" + p + d).
                                                 next(weapon));
     }
 
@@ -339,14 +339,20 @@ export class MainScene extends Phaser.Scene {
 
         let rlock = this.system.add.term("RLock" + p, undefined);
 
-        let sum = this.system.add.sum([this.system.add.channelIn("unlock" + p, "").
-                                                concurrent([
-                                                    this.system.add.channelOut("nolock1", "").nullProcess(),
-                                                    this.system.add.channelOut("nolock2", "").nullProcess(),
-                                                    this.system.add.channelOut("nolock3", "").
-                                                    channelOut("attackp" + p + "end", "").next(rlock)
-                                                ]),
-
+        let sum = this.system.add.sum([this.system.add.channelIn("unlock" + p, "")
+                                                    .channelOut("nolock1", "")
+                                                    .channelOut('wait','').channelOut('wait','').channelOut('wait','').channelOut('wait','')
+                                                    .channelOut('wait','').channelOut('wait','').channelOut('wait','').channelOut('wait','')
+                                                    .channelOut('wait','').channelOut('wait','').channelOut('wait','').channelOut('wait','')
+                                                    .channelOut("nolock2", "")
+                                                    .channelOut('wait','').channelOut('wait','').channelOut('wait','').channelOut('wait','')
+                                                    .channelOut('wait','').channelOut('wait','').channelOut('wait','').channelOut('wait','')
+                                                    .channelOut('wait','').channelOut('wait','').channelOut('wait','').channelOut('wait','')
+                                                    .channelOut("nolock3", "")
+                                                    .channelOut('wait','').channelOut('wait','').channelOut('wait','').channelOut('wait','')
+                                                    .channelOut('wait','').channelOut('wait','').channelOut('wait','').channelOut('wait','')
+                                                    .channelOut('wait','').channelOut('wait','').channelOut('wait','').channelOut('wait','')
+                                                    .channelOut("attackp" + p + "end", "").next(rlock),
                                               this.system.add.channelIn("newlock" + p + "0", "nolock1").
                                                 next(rlock),
                                               this.system.add.channelIn("newlock" + p + "1", "nolock2").
