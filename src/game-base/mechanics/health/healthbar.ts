@@ -74,7 +74,12 @@ export class Healthbar {
                 str += '( ).';
             }
         }
-        str += this.lastPiSymbolString;
+        if(this.bars.length > 0){
+            str += this.lastPiSymbolString;
+            str += ".0";
+        }else{
+            this.symbol.destroy()
+        }
         return str;
     }
 
