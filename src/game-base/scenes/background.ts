@@ -10,7 +10,7 @@ export class Background extends Phaser.Scene {
     constructor() {
         super({
             key: "Background",
-            active: true
+            active: false
         })
     }
 
@@ -24,7 +24,8 @@ export class Background extends Phaser.Scene {
 
     create(): void {
         this.space = new Space(this);
-        this.scene.launch('MainScene')
+        this.scene.launch('MainScene');
+        this.scene.launch("GuiScene");
     }
 
 

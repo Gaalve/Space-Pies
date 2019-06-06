@@ -5,6 +5,7 @@ import {PiResolvable} from "./pi-resolvable";
 import {PiScope} from "./pi-scope";
 
 export abstract class PiAction extends PiResolvable{
+
     protected next: PiSymbol;
     protected inOutPut: string;
     protected isInput: boolean;
@@ -12,7 +13,10 @@ export abstract class PiAction extends PiResolvable{
     protected isNameScoped: boolean;
     protected isOutputScoped: boolean;
 
-    protected callback: Function;
+    protected callback: (resolvedName?: string, attachmentOfResolved?: string) => any;
+
+    public attachment: string;
+    public attachmentOfResolved: string;
 
     protected constructor(system: PiSystem, name: string, inOutPut: string, isInput: boolean){
         super(system, name.toLowerCase());
@@ -85,12 +89,12 @@ export abstract class PiAction extends PiResolvable{
         throw new Error("Can't find action. this: "+this.getFullName()+ " other: "+fullName );
     }
 
-    public setCallback(callback: Function){
+    public setCallback(callback: (resolvedName?: string, attachmentOfResolved?: any) => any){
         this.callback = callback;
     }
 
     trigger(): void {
         super.trigger();
-        this.callback();
+        this.callback(undefined, this.attachmentOfResolved);
     }
 }

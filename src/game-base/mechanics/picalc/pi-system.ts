@@ -10,6 +10,8 @@ import {PiTerm} from "./pi-term";
 
 export class PiSystem {
 
+    // class variables
+
     private scene: Phaser.Scene;
     private findResolvingTimeOut: number;
     private resolveTimeOut: number;
@@ -33,12 +35,13 @@ export class PiSystem {
 
     private running;
 
-
     private phase1changed: boolean;
     private phase2changed: boolean;
     private phase3changed: boolean;
     private deadlock: boolean;
     private onDeadlockFunction: Function;
+
+    // constructors
 
     public constructor(scene: Phaser.Scene, findResolvingTimeOut: number,
                        resolveTimeOut: number, cleanUpTimeOut: number, enableDebugLogging: boolean){
@@ -65,10 +68,8 @@ export class PiSystem {
          * Removing
          */
 
-
         this.enableDebugLogging = enableDebugLogging;
         this.running = false;
-
 
         this.phase1changed = true;
         this.phase2changed = true;
@@ -78,166 +79,53 @@ export class PiSystem {
         this.onDeadlockFunction = ()=>{};
     }
 
-    private indexOfReservedName(name: string): number{
-        for(let idx = 0; idx < this.reservedNames.length; ++idx){
-            if(this.reservedNames[idx][0] == name) return idx;
-        }
-        return -1;
+    //getter methods
+
+    public getCurChannelIn(): PiChannelIn[] {
+        return this.curChannelIn;
     }
 
-    public newReservedName(name: string): string{
-        let idx = this.indexOfReservedName(name);
-        let reservedName: string = undefined;
-        if(idx > -1){
-            let amount = this.reservedNames[idx].length;
-            reservedName = name + '\'' + amount;
-            this.reservedNames[idx].push(reservedName);
-        }
-        else{
-            reservedName = name+'\'1';
-            this.reservedNames.push([name, reservedName]);
-        }
-        return reservedName;
+    public getCurChannelOut(): PiChannelOut[] {
+        return this.curChannelOut;
     }
+
+    public getCurSums(): PiSum[] {
+        return this.curSums;
+    }
+
+    public getCurReplications(): PiReplication[] {
+        return this.curReplications;
+    }
+
+    // setter methods
+
+    public setOnDeadlockCallback(callback: Function): void{
+        this.onDeadlockFunction = callback;
+    }
+
+    // functionality methods
 
     /**
-     * Adds a symbol as concurrent term.
-     * @param symbol
+     * Starts the Pi-Calc-System by calling the first phase.
      */
-    public pushSymbol(symbol: PiSymbol): void{
-        this.phase1changed = true;
-        this.phase3changed = true;
-        this.deadlock = false;
-        if(this.existing.indexOf(symbol)==-1){
-            this.existing.push(symbol);
-        }
-        else if (!(symbol instanceof PiTerm)){// exception for PiTerm (Recursions)
-            console.log("Warning: Symbol already exists: "+symbol.getName());
-        }
-        if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
-        else if (symbol instanceof PiChannelOut) this.curChannelOut.push(symbol);
-        else if (symbol instanceof PiSum) this.curSums.push(symbol);
-        else if (symbol instanceof PiReplication) this.curReplications.push(symbol);
-        else this.curActiveSymbols.push(symbol);
-    }
+    public start(): void{
 
+        if (this.enableDebugLogging) console.log("Starting Pi-Calc-Simulation");
 
-    /**
-     * Remove active symbol from the list. Should be used after the symbol got triggered.
-     * @param symbol
-     */
-    private removeActiveSymbol(symbol: PiSymbol): void{
-        PiSystem.removeFromList(this.curActiveSymbols, symbol);
-    }
-
-    /**
-     * Removes the item from the list or prints a warning to the console, if it is not contained within the list.
-     * @param list
-     * @param item
-     */
-    private static removeFromList(list: any[], item: any): void{
-        let idx: number = list.indexOf(item, 0);
-        if(idx == -1){
-            console.log("Warning! Symbol is not active");
-        }
-        else {
-            list.splice(idx, 1);
-        }
-    }
-
-    /**
-     * Returns the index of the item or -1, if it is not contained within the list.
-     * @param list
-     * @param item
-     */
-    private static containedInList(list: any[], item: any): boolean{
-        return list.indexOf(item, 0) > -1;
-    }
-
-    /**
-     * Moves the resolvable to curActiveSymbols (marks it as not active)
-     * @param resolvable
-     */
-    private moveResolvable(resolvable: PiResolvable){
-        if (resolvable instanceof PiChannelIn) PiSystem.removeFromList(this.curChannelIn, resolvable);
-        else if (resolvable instanceof PiChannelOut) PiSystem.removeFromList(this.curChannelOut, resolvable);
-        else if (resolvable instanceof PiSum) PiSystem.removeFromList(this.curSums, resolvable);
-        else if (resolvable instanceof PiReplication){ // prob a shitty workaround TODO
-            // PiSystem.removeFromList(this.curReplications, resolvable);
-            // resolvable.trigger();
-        }
-        else console.log("Error: Tried to move unknown Resolvable"); //TODO
-        // this.curActiveSymbols.push(resolvable);
-    }
-
-
-    /**
-     * Return true if the resolbable is active.
-     * @param resolvable
-     */
-    private isResolvableActive(resolvable: PiResolvable): boolean{
-        if (resolvable instanceof PiChannelIn) return PiSystem.containedInList(this.curChannelIn, resolvable);
-        else if (resolvable instanceof PiChannelOut) return PiSystem.containedInList(this.curChannelOut, resolvable);
-        else if (resolvable instanceof PiSum) return PiSystem.containedInList(this.curSums, resolvable);
-        else if (resolvable instanceof PiReplication) return PiSystem.containedInList(this.curReplications, resolvable);
-        else console.log("Error: Tried to find unknown Resolvable"); //TODO
-        return false;
-    }
-
-    /**
-     * Returns true if both resolvables are currently active.
-     * @param resolvablePair
-     */
-    private isResolvePairActive(resolvablePair: PiResolvingPair): boolean{
-        return this.isResolvableActive(resolvablePair.left) && this.isResolvableActive(resolvablePair.right);
-    }
-
-
-    /**
-     * Resolves to channels. Should only be called by pi-resolving!
-     * @param resolvablePair
-     */
-    private resolve(resolvablePair: PiResolvingPair): void{
-
-        if(!this.isResolvePairActive(resolvablePair)) {
-            return;
-        }
-        this.moveResolvable(resolvablePair.left);
-        this.moveResolvable(resolvablePair.right);
-
-        this.curActiveSymbols.push(resolvablePair.leftAction);
-        this.curActiveSymbols.push(resolvablePair.rightAction);
-
-        this.activeSymbolsQueue.push(resolvablePair.getLeftResolvedSymbol());
-        this.activeSymbolsQueue.push(resolvablePair.getRightResolvedSymbol());
-    }
-
-
-    private addAllResolvablePair(left: PiResolvable, right: PiResolvable): void{
-        let actionsLeft = left.getAllActions();
-        let actionsRight = right.getAllActions();
-        for(let leftIdx in actionsLeft){
-            let lAction = actionsLeft[leftIdx];
-            for (let rightIdx in actionsRight){
-                let rAction = actionsRight[rightIdx];
-                if(lAction.canResolve(rAction)){
-                    this.potentiallyResolving.push(new PiResolvingPair(left, lAction, right, rAction));
-                }
-            }
-        }
-
+        this.running = true;
+        setTimeout(()=>{this.phaseFindResolvingActions()}, this.findResolvingTimeOut);
     }
 
     /**
      * First phase:
      *
-     * Find blocking input and output channels and add the as potentially resolving channels
+     * Find blocking input and output channels and add them as potentially resolving channels
      *
      * Calls the second phase.
      */
     private phaseFindResolvingActions(): void{
+        let startT = Date.now();
         this.logPhase1();
-        let startT = this.scene.time.now;
         if(this.phase1changed) {
             this.phase1changed = false;
             this.deadlock = true;
@@ -265,8 +153,10 @@ export class PiSystem {
 
             this.phase2changed = this.potentiallyResolving.length > 0;
         }
-        let execTime = this.scene.time.now - startT;
-        this.scene.time.delayedCall(this.resolveTimeOut - execTime, ()=>{this.phaseResolveActions()}, [], this);
+
+        let execTime = Date.now() - startT;
+        if (execTime < 0) console.warn("Phase 1 (Find) is taking too long");
+        setTimeout(()=>{this.phaseResolveActions()},this.resolveTimeOut - execTime);
     }
 
     /**
@@ -283,9 +173,10 @@ export class PiSystem {
      * Calls the third phase.
      */
     private phaseResolveActions(): void{
+        let startT = Date.now();
         this.logPhase2();
         this.phase2changed = false;
-        let startT = this.scene.time.now;
+
         while(this.potentiallyResolving.length > 0){
             let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
             let resolvablePair: PiResolvingPair = this.potentiallyResolving[randIdx];
@@ -293,8 +184,9 @@ export class PiSystem {
             this.potentiallyResolving.splice(randIdx, 1);
         }
 
-        let execTime = this.scene.time.now - startT;
-        this.scene.time.delayedCall(this.cleanUpTimeOut - execTime, ()=>{this.phaseTriggerSymbols()}, [], this);
+        let execTime = Date.now() - startT;
+        if (execTime < 0) console.warn("Phase 2 (Resolve) is taking too long");
+        setTimeout(()=>{this.phaseTriggerSymbols()},this.cleanUpTimeOut - execTime);
     }
 
     /**
@@ -309,67 +201,34 @@ export class PiSystem {
      * Calls the first phase.
      */
     private phaseTriggerSymbols(): void{
+        let startT = Date.now();
         this.logPhase3();
         this.phase3changed = false;
-        let startT = this.scene.time.now;
         let copy: PiSymbol[] = [];
+
         for(let idx in this.curActiveSymbols){
             copy.push(this.curActiveSymbols[idx]);
         }
+
         for(let idx in copy){ // shitty workaround TODO
             this.removeActiveSymbol(copy[idx]);
         }
+
         for(let idx in copy){ // shitty workaround TODO
             copy[idx].trigger();
         }
 
-
         for(let idx in this.activeSymbolsQueue){
             this.pushSymbol(this.activeSymbolsQueue[idx]);
         }
+
         this.activeSymbolsQueue = [];
-        let execTime = this.scene.time.now - startT;
+        let execTime = Date.now() - startT;
+        if (execTime < 0) console.warn("Phase 3 (Trigger) is taking too long");
+
         if(this.deadlock) this.onDeadlock();
-        if(this.running)this.scene.time.delayedCall(this.findResolvingTimeOut - execTime, ()=>{this.phaseFindResolvingActions()}, [], this);
-    }
 
-    private logPhase1(){
-        if(!this.phase1changed || !this.enableDebugLogging)return;
-        let allActiveSymbols: PiSymbol[] = [];
-        allActiveSymbols = allActiveSymbols.concat(this.curActiveSymbols,
-            this.curReplications, this.curChannelIn, this.curChannelOut, this.curSums);
-        console.log('#### Current Active Symbols ####');
-        for(let idx in allActiveSymbols){
-            console.log(allActiveSymbols[idx].getSymbolSequence());
-        }
-        console.log('################################');
-    }
-
-    private logPhase2(){
-        if(!this.phase2changed || !this.enableDebugLogging)return;
-        console.log('#### Potentially Resolving ####');
-        for(let idx in this.potentiallyResolving){
-            console.log(this.potentiallyResolving[idx].left.getFullName() + " => " + this.potentiallyResolving[idx].right.getFullName());
-        }
-        console.log('################################');
-    }
-
-    private logPhase3(){
-        if(!this.phase3changed || !this.enableDebugLogging)return;
-        console.log('#### Triggering Symbols ####');
-        for(let idx in this.curActiveSymbols){
-            console.log(this.curActiveSymbols[idx].getFullName());
-        }
-        console.log('################################');
-    }
-
-    /**
-     * Starts the Pi-Calc-System by calling the first phase.
-     */
-    public start(): void{
-        if (this.enableDebugLogging) console.log("Starting Pi-Calc-Simulation");
-        this.running = true;
-        this.scene.time.delayedCall(this.findResolvingTimeOut, ()=>{this.phaseFindResolvingActions()}, [], this);
+        if(this.running) setTimeout(()=>{this.phaseFindResolvingActions()},this.findResolvingTimeOut - execTime);
     }
 
     /**
@@ -379,10 +238,203 @@ export class PiSystem {
         this.running = false;
     }
 
-    public setOnDeadlockCallback(callback: Function): void{
-        this.onDeadlockFunction = callback;
+    // assisting methods
+
+    private logPhase1(){
+        if(!this.phase1changed || !this.enableDebugLogging) return;
+
+        let allActiveSymbols: PiSymbol[] = [];
+        allActiveSymbols = allActiveSymbols.concat(this.curActiveSymbols,
+            this.curReplications, this.curChannelIn, this.curChannelOut, this.curSums);
+
+        console.log('#### Current Active Symbols ####');
+
+        // log symbol sequences
+        for(let idx in allActiveSymbols){
+            console.log(allActiveSymbols[idx].getSymbolSequence());
+        }
+
+        console.log('################################');
     }
 
+    private addAllResolvablePair(left: PiResolvable, right: PiResolvable): void{
+
+        let actionsLeft = left.getAllActions();
+        let actionsRight = right.getAllActions();
+
+        for(let leftIdx in actionsLeft){
+            let lAction = actionsLeft[leftIdx];
+
+            for (let rightIdx in actionsRight){
+                let rAction = actionsRight[rightIdx];
+
+                if(lAction.canResolve(rAction)){
+                    this.potentiallyResolving.push(new PiResolvingPair(left, lAction, right, rAction));
+                }
+            }
+        }
+
+    }
+
+    private logPhase2(){
+        if(!this.phase2changed || !this.enableDebugLogging) return;
+
+        console.log('#### Potentially Resolving ####');
+
+        for(let idx in this.potentiallyResolving){
+            console.log(this.potentiallyResolving[idx].left.getFullName() + " => " + this.potentiallyResolving[idx].right.getFullName());
+        }
+
+        console.log('################################');
+    }
+
+    /**
+     * Resolves to channels. Should only be called by pi-resolving!
+     * @param resolvablePair
+     */
+    private resolve(resolvablePair: PiResolvingPair): void{
+
+        if(!this.isResolvePairActive(resolvablePair)) {
+            return;
+        }
+
+        this.moveResolvable(resolvablePair.left);
+        this.moveResolvable(resolvablePair.right);
+
+        this.curActiveSymbols.push(resolvablePair.leftAction);
+        this.curActiveSymbols.push(resolvablePair.rightAction);
+
+        this.activeSymbolsQueue.push(resolvablePair.getLeftResolvedSymbol());
+        this.activeSymbolsQueue.push(resolvablePair.getRightResolvedSymbol());
+    }
+
+    /**
+     * Returns true if both resolvables are currently active.
+     * @param resolvablePair
+     */
+    private isResolvePairActive(resolvablePair: PiResolvingPair): boolean{
+        return this.isResolvableActive(resolvablePair.left) && this.isResolvableActive(resolvablePair.right);
+    }
+
+    /**
+     * Return true if the resolbable is active.
+     * @param resolvable
+     */
+    private isResolvableActive(resolvable: PiResolvable): boolean{
+        if (resolvable instanceof PiChannelIn) return PiSystem.containedInList(this.curChannelIn, resolvable);
+        else if (resolvable instanceof PiChannelOut) return PiSystem.containedInList(this.curChannelOut, resolvable);
+        else if (resolvable instanceof PiSum) return PiSystem.containedInList(this.curSums, resolvable);
+        else if (resolvable instanceof PiReplication) return PiSystem.containedInList(this.curReplications, resolvable);
+        else console.log("Error: Tried to find unknown Resolvable"); //TODO
+        return false;
+    }
+
+    /**
+     * Returns the index of the item or -1, if it is not contained within the list.
+     * @param list
+     * @param item
+     */
+    private static containedInList(list: any[], item: any): boolean{
+        return list.indexOf(item, 0) > -1;
+    }
+
+    private indexOfReservedName(name: string): number{
+        for(let idx = 0; idx < this.reservedNames.length; ++idx){
+            if(this.reservedNames[idx][0] == name) return idx;
+        }
+        return -1;
+    }
+
+    /**
+     * Moves the resolvable to curActiveSymbols (marks it as not active)
+     * @param resolvable
+     */
+    private moveResolvable(resolvable: PiResolvable){
+        if (resolvable instanceof PiChannelIn) PiSystem.removeFromList(this.curChannelIn, resolvable);
+        else if (resolvable instanceof PiChannelOut) PiSystem.removeFromList(this.curChannelOut, resolvable);
+        else if (resolvable instanceof PiSum) PiSystem.removeFromList(this.curSums, resolvable);
+        else if (resolvable instanceof PiReplication){ // prob a shitty workaround TODO
+            // PiSystem.removeFromList(this.curReplications, resolvable);
+            // resolvable.trigger();
+        }
+        else console.log("Error: Tried to move unknown Resolvable"); //TODO
+        // this.curActiveSymbols.push(resolvable);
+    }
+
+    private logPhase3(){
+        if(!this.phase3changed || !this.enableDebugLogging) return;
+
+        console.log('#### Triggering Symbols ####');
+
+        for(let idx in this.curActiveSymbols){
+            console.log(this.curActiveSymbols[idx].getFullName());
+        }
+
+        console.log('################################');
+    }
+
+    /**
+     * Remove active symbol from the list. Should be used after the symbol got triggered.
+     * @param symbol
+     */
+    private removeActiveSymbol(symbol: PiSymbol): void{
+        PiSystem.removeFromList(this.curActiveSymbols, symbol);
+    }
+
+    /**
+     * Removes the item from the list or prints a warning to the console, if it is not contained within the list.
+     * @param list
+     * @param item
+     */
+    private static removeFromList(list: any[], item: any): void{
+
+        let idx: number = list.indexOf(item, 0);
+
+        if(idx == -1){
+            console.log("Warning! Symbol is not active");
+        }
+        else {
+            list.splice(idx, 1);
+        }
+    }
+
+    /**
+     * Adds a symbol as concurrent term.
+     * @param symbol
+     */
+    public pushSymbol(symbol: PiSymbol): void{
+        this.phase1changed = true;
+        this.phase3changed = true;
+        this.deadlock = false;
+
+        if(this.existing.indexOf(symbol)==-1){
+            this.existing.push(symbol);
+        }
+        else if (!(symbol instanceof PiTerm)){// exception for PiTerm (Recursions)
+            console.log("Warning: Symbol already exists: "+symbol.getName());
+        }
+
+        if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
+        else if (symbol instanceof PiChannelOut) this.curChannelOut.push(symbol);
+        else if (symbol instanceof PiSum) this.curSums.push(symbol);
+        else if (symbol instanceof PiReplication) this.curReplications.push(symbol);
+        else this.curActiveSymbols.push(symbol);
+    }
+
+    public newReservedName(name: string): string{
+        let idx = this.indexOfReservedName(name);
+        let reservedName: string = undefined;
+        if(idx > -1){
+            let amount = this.reservedNames[idx].length;
+            reservedName = name + '\'' + amount;
+            this.reservedNames[idx].push(reservedName);
+        }
+        else{
+            reservedName = name+'\'1';
+            this.reservedNames.push([name, reservedName]);
+        }
+        return reservedName;
+    }
 
     private onDeadlock(): void{
         this.onDeadlockFunction();

@@ -4,8 +4,11 @@ import {PiChannelOut} from "./pi-channel-out";
 
 export class PiChannelIn extends PiAction{
 
+    private resolvedName;
+
     public constructor(system: PiSystem, name: string, input: string){
         super(system, name, input, true);
+        this.resolvedName = 'None';
     }
 
     public getFullName(): string {
@@ -27,6 +30,8 @@ export class PiChannelIn extends PiAction{
         else {
             let argValue = (<PiChannelOut>other).getOutputName();
             this.next.rename(this.inOutPut, argValue);
+            this.resolvedName = argValue;
+            this.attachmentOfResolved = other.attachment;
         }
         return this.next;
     }
@@ -41,6 +46,10 @@ export class PiChannelIn extends PiAction{
         thisCopy.next = nextCopy;
         thisCopy.setCallback(this.callback);
         return thisCopy;
+    }
+
+    public trigger(): void {
+        this.callback(this.resolvedName, this.attachmentOfResolved);
     }
 
 }
