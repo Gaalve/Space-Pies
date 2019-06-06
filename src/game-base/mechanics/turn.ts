@@ -85,7 +85,7 @@ export class Turn {
             }
         }*/
         this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
-
+        this.system.pushSymbol(this.system.add.channelOut("startephase"+this.currentPlayer.getNameIdentifier().charAt(1), "").nullProcess())
         //Waffen schießen lassen:
         //TODO: DEBUG STUFF REMOVE
         this.currentPlayer.getSystem().pushSymbol(
