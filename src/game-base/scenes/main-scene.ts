@@ -512,7 +512,11 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_skip",
             ()=>{
                 if(this.turn.clickable){
-                    this.turn.Attackturn();
+                    // this.turn.Attackturn();
+                    this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
+                    this.system.pushSymbol(this.system.add.channelOut(
+                        'shopp'+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'end', '').
+                    nullProcess());
                     this.closeShop(this.shop1, this.shop1Text, true);
                     this.shop1Active = false;
                     this.energy.setVisible(false);

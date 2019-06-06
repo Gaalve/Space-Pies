@@ -39,8 +39,19 @@ export class Turn {
             this.system.add.replication(
                 this.system.add.channelIn('player1', '').channelOutCB('shopp1', '', () => this.setShopTurn()).
                 channelIn('shopp1end', '').channelOutCB('unlock1', '', () => this.setAttackTurn()).
-                channelIn('attack1end', '').channelOutCB('player2', '', () => this.endAttackTurn()).nullProcess()
+                channelIn('attackp1end', '').
+                    channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+
+                channelOutCB('player2', '', () => this.endAttackTurn()).nullProcess()
             )
+        );
+
+        this.system.pushSymbol(
+                this.system.add.channelOutCB('shopp1', '', () => this.setShopTurn()).
+                channelIn('shopp1end', '').channelOutCB('player2', '', () => this.endAttackTurn()).nullProcess()
         );
 
         //Turn for Player2
@@ -48,7 +59,12 @@ export class Turn {
             this.system.add.replication(
                 this.system.add.channelIn('player2', '').channelOutCB('shopp1', '', () => this.setShopTurn()).
                 channelIn('shopp2end', '').channelOutCB('unlock2', '', () => this.setAttackTurn()).
-                channelIn('attack2end', '').channelOutCB('player1', '', () => this.endAttackTurn()).nullProcess()
+                channelIn('attackp2end', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOutCB('player1', '', () => this.endAttackTurn()).nullProcess()
             )
         );
 
@@ -66,10 +82,10 @@ export class Turn {
 
         }
 
-        this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess());
+        // this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess());
 
         this.awaitInput = true; //nächster Spieler
-        this.setShopTurn()
+        // this.setShopTurn()
         //this.refScene.data.set('turnAction', 'Shopping Phase');
 
     }
@@ -77,20 +93,20 @@ export class Turn {
     public Attackturn():void{
         if (!this.awaitInput) return;
         this.clickable = false;
-        this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
+        // this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
 
         //Waffen schießen lassen:
         //TODO: DEBUG STUFF REMOVE
-        this.currentPlayer.getSystem().pushSymbol(
-            this.currentPlayer.getSystem().add.channelOut(
-                'unlock'+this.currentPlayer.getNameIdentifier().charAt(1), '').nullProcess());
-        this.currentPlayer.getSystem().pushSymbol(
-            this.currentPlayer.getSystem().add.channelIn(
-                'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
+        // this.currentPlayer.getSystem().pushSymbol(
+        //     this.currentPlayer.getSystem().add.channelOut(
+        //         'unlock'+this.currentPlayer.getNameIdentifier().charAt(1), '').nullProcess());
+        // this.currentPlayer.getSystem().pushSymbol(
+        //     this.currentPlayer.getSystem().add.channelIn(
+        //         'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
        // this.refScene.data.set('turnAction', 'Battle Phase');
-        this.setAttackTurn()
+       //  this.setAttackTurn()
        // this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
-        this.endAttackTurn()
+       //  this.endAttackTurn()
     }
     public setShopTurn(){
         this.refScene.data.set('turnAction', 'Shopping Phase');
@@ -101,7 +117,8 @@ export class Turn {
     }
 
     public endAttackTurn(){
-        this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+        this.playerInput()
+        //this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
     }
 
     getScene(): Phaser.Scene{
