@@ -77,7 +77,7 @@ export class Turn {
 
     public playerInput():void{
         if (this.players[0].isDead || this.players[1].isDead) {
-            return;
+            this.system.stop();
         }else {
         this.clickable = true;
         this.refScene.data.set('round', ""+(++this.currentRound));
@@ -87,14 +87,14 @@ export class Turn {
             //this.currentPlayer.gainEnergy(3);
             this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
         }
-        }
+
 
         // this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess());
 
         this.awaitInput = true; //nächster Spieler
         // this.setShopTurn()
         //this.refScene.data.set('turnAction', 'Shopping Phase');
-
+        }
     }
 
     public Attackturn():void{
@@ -125,9 +125,9 @@ export class Turn {
         this.refScene.data.set('turnAction', 'Battle Phase');
     }
 
-    public endAttackTurn(){
-        this.playerInput()
-        //this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+    public endAttackTurn() {
+            this.playerInput()
+            //this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
     }
 
     getScene(): Phaser.Scene{
