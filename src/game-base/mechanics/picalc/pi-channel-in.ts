@@ -24,15 +24,10 @@ export class PiChannelIn extends PiAction{
     }
 
     public resolve(other: PiAction) {
-        if(!this.canResolve(other)){
-            throw new Error("Error: resolved channel with wrong action! This: "+this.getFullName()+" other: "+other.getFullName())
-        }
-        else {
-            let argValue = (<PiChannelOut>other).getOutputName();
-            this.next.rename(this.inOutPut, argValue);
-            this.resolvedName = argValue;
-            this.attachmentOfResolved = other.attachment;
-        }
+        let argValue = (<PiChannelOut>other).getOutputName();
+        this.next.rename(this.inOutPut, argValue);
+        this.resolvedName = argValue;
+        this.attachmentOfResolved = other.attachment;
         return this.next;
     }
 
