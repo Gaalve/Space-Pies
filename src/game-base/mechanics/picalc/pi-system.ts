@@ -6,7 +6,6 @@ import {PiChannelOut} from "./pi-channel-out";
 import {PiResolvingPair} from "./pi-resolving-pair";
 import {PiReplication} from "./pi-replication";
 import {PiResolvable} from "./pi-resolvable";
-import {PiTerm} from "./pi-term";
 
 export class PiSystem {
 
@@ -17,7 +16,7 @@ export class PiSystem {
 
     private reservedNames: string[][];
 
-    private existing: PiSymbol[];                   // all existing symbols; may get delete later
+    // private existing: PiSymbol[];                   // all existing symbols; may get delete later
 
     private curChannelIn: PiChannelIn[];
     private curChannelOut: PiChannelOut[];
@@ -47,7 +46,7 @@ export class PiSystem {
         this.resolveTimeOut = resolveTimeOut;
         this.cleanUpTimeOut = cleanUpTimeOut;
 
-        this.existing = [];
+        // this.existing = [];
         this.curChannelIn = [];
         this.curChannelOut = [];
         this.potentiallyResolving = [];
@@ -108,12 +107,12 @@ export class PiSystem {
         this.phase1changed = true;
         this.phase3changed = true;
         this.deadlock = false;
-        if(this.existing.indexOf(symbol)==-1){ // TODO: can probably be removed
-            this.existing.push(symbol);
-        }
-        else if (!(symbol instanceof PiTerm)){// exception for PiTerm (Recursions)
-            console.log("Warning: Symbol already exists: "+symbol.getName());
-        }
+        // if(this.existing.indexOf(symbol)==-1){ // TODO: can probably be removed
+        //     this.existing.push(symbol);
+        // }
+        // else if (!(symbol instanceof PiTerm)){// exception for PiTerm (Recursions)
+        //     console.log("Warning: Symbol already exists: "+symbol.getName());
+        // }
 
         if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
         else if (symbol instanceof PiChannelOut) this.curChannelOut.push(symbol);
