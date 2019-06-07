@@ -14,7 +14,7 @@ export class PiSum extends PiResolvable{
         this.checkForNameEquality();
     }
 
-    public getSymbolSequence(): string{
+    public getSymbolSequenceNonCached(): string{
         let str = "(";
         let idx: number;
         for(idx = 0; idx < this.actions.length - 1; ++idx){
@@ -57,6 +57,7 @@ export class PiSum extends PiResolvable{
         for(let idx in this.actions){
             this.actions[idx].rename(argName, argValue);
         }
+        this.renewSequence();
     }
 
     addScope(scope: PiScope): void {
@@ -69,6 +70,7 @@ export class PiSum extends PiResolvable{
         for(let idx in this.actions){
             this.actions[idx].alphaRename(argName, argValue, scope);
         }
+        this.renewSequence();
     }
 
     public getAction(fullName: string): PiAction {
@@ -76,5 +78,18 @@ export class PiSum extends PiResolvable{
             if(this.actions[idx].getFullName() == fullName) return this.actions[idx];
         }
         throw new Error("Can't find action.");
+    }
+
+    isNameInSequence(name: string): boolean {
+        for (let idx in this.actions){
+            if(this.actions[idx].isNameInSequence(name)) return true;
+        }
+        return false;
+    }
+
+
+    public renewSequence(): void{
+        this.actions.forEach( value => value.renewSequence());
+        this.cachedSequence = this.getSymbolSequenceNonCached();
     }
 }

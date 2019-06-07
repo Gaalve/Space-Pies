@@ -5,6 +5,8 @@ export abstract class PiSymbol {
     protected system: PiSystem;
     protected name: string;
     protected scopes: PiScope[];
+    protected cachedSequence: string;
+
     protected constructor(system: PiSystem, name: string){
         this.system = system;
         this.name = name;
@@ -17,7 +19,6 @@ export abstract class PiSymbol {
      */
     public abstract getFullName(): string;
 
-
     /**
      * Returns the name of this symbol.
      * E.g.: x(a) => x
@@ -26,12 +27,21 @@ export abstract class PiSymbol {
         return this.name;
     }
 
+    /**
+     * Returns the complete sequence of symbols that may follow after this symbol.
+     *
+     * Must not be overwritten
+     * E.g.: x(a).z(b).P
+     */
+    public getSymbolSequence(): string{
+        return this.cachedSequence;
+    }
 
     /**
      * Returns the complete sequence of symbols that may follow after this symbol.
      * E.g.: x(a).z(b).P
      */
-    public getSymbolSequence(): string{
+    public getSymbolSequenceNonCached(): string{
         return this.name;
     }
 
@@ -46,16 +56,14 @@ export abstract class PiSymbol {
     }
 
     /**
-     * Should only be called by Pi-Channel-In!
+     * Should only be called by Pi-Symbols!
      *
      * Binds the transferred name (argValue) to the free name (argName).
      * E.g. x<a> | x(q) => argName:= q, argValue:= a
      * @param argName
      * @param argValue
      */
-    public rename(argName: string, argValue: string): void{
-        // Default: Do nothing! TODO: should probably be overwritten by all symbols
-    }
+    public abstract rename(argName: string, argValue: string): void;
 
     public abstract alphaRename(argName: string, argValue: string, scope: PiScope): void;
     /**
@@ -64,4 +72,31 @@ export abstract class PiSymbol {
     public abstract copy(): PiSymbol;
 
     public abstract addScope(scope: PiScope): void;
+
+
+    /**
+     * Renews the cached symbol sequence. Should be called on copy, rename, alphaRename
+     * and must not be overwritten. Is used to reduce recursions in case renewSequence is overloaded,
+     */
+    public renewSymbol(): void{
+        this.cachedSequence = this.getSymbolSequenceNonCached();
+    }
+
+    /**
+     * Renews the cached symbol sequence. Should be called on push (sys)
+     */
+    public renewSequence(): void{
+        this.cachedSequence = this.getSymbolSequenceNonCached();
+    }
+
+
+
+    /**
+     * Searches the name in the symbol sequence and returns true if the name was found.
+     * Will be used by Pi-Term to determine if renaming of term itself is necessary
+     * (e.g. T instead of T[x/y], if y is not contained within the sequence)
+     * @param name - the name to search for
+     * @return returns true if the given name is in the sequence.
+     */
+    public abstract isNameInSequence(name: string): boolean;
 }

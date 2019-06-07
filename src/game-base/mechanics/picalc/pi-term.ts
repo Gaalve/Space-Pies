@@ -3,9 +3,7 @@ import {PiSystem} from "./pi-system";
 import {PiScope} from "./pi-scope";
 
 export class PiTerm extends PiSymbol{
-
     public symbol: PiSymbol;
-
     private renames: [string, string][];
     private alphaRenames: [string, string, PiScope][];
 
@@ -24,7 +22,7 @@ export class PiTerm extends PiSymbol{
         return this.getName() + ":= " + this.symbol.getSymbolSequence();
     }
 
-    getSymbolSequence(): string {
+    getSymbolSequenceNonCached(): string {
         return this.getName();
     }
 
@@ -45,14 +43,20 @@ export class PiTerm extends PiSymbol{
     }
 
     rename(argName: string, argValue: string): void { //TODO: dont rename Term if Symbol is not contained
-        super.rename(argName, argValue);
         this.renames.push([argName, argValue]);
-        this.name += '['+argValue+'/'+argName+']';
+        if(this.symbol.isNameInSequence(argName))
+            this.name += '['+argValue+'/'+argName+']';
+        this.renewSymbol();
     }
 
     alphaRename(argName: string, argValue: string, scope: PiScope): void {
         this.alphaRenames.push([argName, argValue, scope]);
-        this.name += '['+argValue+'/'+argName+']';
+        if(this.symbol.isNameInSequence(argName))
+            this.name += '['+argValue+'/'+argName+']';
+        this.renewSymbol();
     }
 
+    isNameInSequence(name: string): boolean {
+        return false;
+    }
 }

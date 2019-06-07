@@ -33,4 +33,8 @@ export class PiProcess extends PiSymbol{
     rename(argName: string, argValue: string): void {
         //TODO
     }
+
+    isNameInSequence(name: string): boolean {
+        return false;
+    }
 }

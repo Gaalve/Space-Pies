@@ -28,23 +28,9 @@ export abstract class PiAction extends PiResolvable{
         this.callback = ()=>{};
     }
 
-
-    public abstract getSymbolSequence(): string;
-
-
     public setNextSymbol(symbol: PiSymbol): void{
         this.next = symbol;
     }
-
-    /**
-     * Renames the channel name and/or output name to argValue, if they equal argName.
-     * Forwards parameters to next symbol.
-     * @param argName the name that received the name (argValue)
-     * @param argValue the bound name
-     *
-     * Recap: only free names can be bound, see ./src/game-base/docs/Pi-Kalkül-Doc.pdf, Section: Freie und Gebundene Namen.
-     */
-
 
     public abstract canResolve(other: PiAction): boolean;
 
@@ -60,10 +46,19 @@ export abstract class PiAction extends PiResolvable{
         return this.next;
     }
 
+    /**
+     * Renames the channel name and/or output name to argValue, if they equal argName.
+     * Forwards parameters to next symbol.
+     * @param argName the name that received the name (argValue)
+     * @param argValue the bound name
+     *
+     * Recap: only free names can be bound, see ./src/game-base/docs/Pi-Kalkül-Doc.pdf, Section: Freie und Gebundene Namen.
+     */
     public rename(argName: string, argValue: string): void{
         if(this.name == argName && !this.isNameScoped) this.name = argValue;
         if(!this.isInput && this.inOutPut == argName && !this.isOutputScoped) this.inOutPut = argValue;
         this.next.rename(argName, argValue);
+        this.renewSequence();
     }
 
     public alphaRename(argName: string, argValue: string, scope: PiScope): void {
@@ -71,6 +66,7 @@ export abstract class PiAction extends PiResolvable{
         if(argName == this.name && (this.scopes.indexOf(scope) > -1 || !this.isNameScoped))this.name = argValue;
         if(argName == this.inOutPut && (this.scopes.indexOf(scope) > -1 || !this.isNameScoped))this.inOutPut = argValue;
         this.next.alphaRename(argName, argValue, scope);
+        this.renewSequence();
     }
 
     public addScope(scope: PiScope): void {
@@ -96,5 +92,15 @@ export abstract class PiAction extends PiResolvable{
     trigger(): void {
         super.trigger();
         this.callback(undefined, this.attachmentOfResolved);
+    }
+
+    isNameInSequence(name: string): boolean {
+        if (this.name == name) return true;
+        return this.next.isNameInSequence(name);
+    }
+
+    public renewSequence(): void{
+        this.next.renewSequence();
+        this.cachedSequence = this.getSymbolSequenceNonCached();
     }
 }

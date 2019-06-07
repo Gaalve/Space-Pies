@@ -108,12 +108,16 @@ export class PiSystem {
         this.phase1changed = true;
         this.phase3changed = true;
         this.deadlock = false;
-        if(this.existing.indexOf(symbol)==-1){
+        if(this.existing.indexOf(symbol)==-1){ // TODO: can probably be removed
             this.existing.push(symbol);
         }
         else if (!(symbol instanceof PiTerm)){// exception for PiTerm (Recursions)
             console.log("Warning: Symbol already exists: "+symbol.getName());
         }
+
+        // Renews symbol sequence. At this point the sequence must NEVER be changed,
+        // but renaming can still happen.
+        symbol.renewSequence();
         if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
         else if (symbol instanceof PiChannelOut) this.curChannelOut.push(symbol);
         else if (symbol instanceof PiSum) this.curSums.push(symbol);
@@ -256,10 +260,17 @@ export class PiSystem {
                 }
             );
 
+
+            // TODO: maybe add a boolean to activated full simulation?
             // this.curSums.forEach(
             //     (val1, idx1) => {
             //         this.curSums.forEach((val2, idx2) => {if(idx1 != idx2)this.addAllResolvablePair(val1, val2);});
             //         this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+            //     }
+            // );
+            // this.curReplications.forEach(
+            //     (val1, idx1) => {
+            //         this.curReplications.forEach((val2, idx2) => {if(idx1 != idx2)this.addAllResolvablePair(val1, val2);});
             //     }
             // );
 
@@ -396,10 +407,6 @@ export class PiSystem {
     }
 
     public changeDebugLogger() : void{
-        if(this.enableDebugLogging){
-            this.enableDebugLogging = false;
-        }else{
-            this.enableDebugLogging = true;
-        }
+        this.enableDebugLogging = !this.enableDebugLogging;
     }
 }
