@@ -1484,7 +1484,7 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
             this.add.text(1050, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("nano"), {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
-            this.add.text(1250, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("adapt"), {
+            this.add.text(1250, 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost("adap"), {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
 
         ]
@@ -1559,7 +1559,7 @@ export class MainScene extends Phaser.Scene {
                 case(1): type = "shield"; break;
                 case(2): type = "rocket"; break;
                 case(3): type = "nano"; break;
-                case(4): type = "adapt"; break;
+                case(4): type = "adap"; break;
 
             }
             if(this.turn.getCurrentPlayer().getEnergy() < this.turn.getCurrentPlayer().getEnergyCost(type)){
