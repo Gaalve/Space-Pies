@@ -4,6 +4,9 @@ import {RedShip} from "./ship/red-ship";
 import {BlueShip} from "./ship/blue-ship";
 import Scene = Phaser.Scene;
 import {Debris} from "./ship/debris";
+import {GuiScene} from "../scenes/gui-scene";
+import {MainScene} from "../scenes/main-scene";
+import {EndSceneP1} from "../scenes/end-sceneP1";
 
 
 export class Ship{
@@ -35,15 +38,23 @@ export class Ship{
     }
 
     public explosion(): void{
+        this.player.isDead=true;
+        //this.scene.scene.sleep('GuiScene');
+        this.scene.time.delayedCall(5000, ()=>{this.scene.scene.launch('EndSceneP1');this.scene.scene.bringToTop('EndSceneP1') }, [], this);
+
         this.scene.time.delayedCall(0, this.explosionAt, [0, 0], this);
+
+
         for (let i = 0; i < 90; i++) {
             this.scene.time.delayedCall(170 * i, this.explosionAt, [Math.random()*300 - 150, Math.random()*300 - 150, Math.random()*0.4 + 0.3], this);
         }
+
         for (let i = 0; i < 30; i++){
             this.scene.time.delayedCall(500 * i, this.createDebris, [], this);
         }
-        if(this.isRed) this.exploedP1();
-        else this.exploedP2();
+        if(this.isRed) {
+            this.exploedP1();
+        }else this.exploedP2();
     }
 
     private createDebris(){
@@ -58,6 +69,7 @@ export class Ship{
     }
 
     private exploedP1(): void{
+
         if(this.player.getDrones()[1].visible){
             this.scene.time.delayedCall(3000, this.explosion2At, [300, -300, 0.7, 2.4], this);
             this.scene.time.delayedCall( 3400, ()=>{this.player.getDrones()[1].destroy();
@@ -100,6 +112,8 @@ export class Ship{
         this.scene.time.delayedCall(14080, this.explosion2At, [150, 0, 0.85, 1.2], this);
         this.scene.time.delayedCall(14500, ()=>{this.modularShip.toDestroyedHull()}, [], this);
         this.scene.time.delayedCall(14700, ()=>{this.player.getDrones()[0].getWeapons()[0].destroy();}, [], this);
+
+
     }
 
     private exploedP2(): void{

@@ -63,7 +63,7 @@ export class PauseScene extends Phaser.Scene {
             this.scene.get('MainScene').scene.restart();
             this.P2.resetEnergy();
             this.P1.resetEnergy();
-            this.scene.sleep();});
+            this.scene.sleep();});0
 
         this.buttonReset.setPosition(1920/2, 1080/2+75);
 
