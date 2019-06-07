@@ -15,11 +15,12 @@ export class Player {
     private firstPlayer: boolean;
     private drones : [Drone, Drone, Drone];
     private solarDrones: [EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone];
-    private scene : Phaser.Scene;
+    public scene : Phaser.Scene;
     private system : PiSystem;
     public ship : Ship;
     private activatedDrones : number;
     private activatedSolarDrones : number;
+    public isDead:boolean;
 
     private health : Health;
     private energy : number;
@@ -50,6 +51,7 @@ export class Player {
     }
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager){
+        this.isDead=false;
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
@@ -73,10 +75,10 @@ export class Player {
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '', "miss").nullProcess()));
 
         // z1 starts with 1 shield
-        // this.health.addToHz(piSystem, 'rrocket', 'z1');
+        // this.health.addToHz(piSystem, 'radap', 'z1');
         // this.health.addToHz(piSystem, 'rshield', 'z1');
         // this.health.addToHz(piSystem, 'rarmor', 'z1');
-        // this.health.addToHz(piSystem, 'rnano', 'z1');
+        // this.health.addToHz(piSystem, 'rshield', 'z1');
         // this.health.addToHz(piSystem, 'rarmor', 'z1');
         // this.health.addToHz(piSystem, 'rshield', 'z1');
         // this.health.addToHz(piSystem, 'rarmor', 'z1');
@@ -204,7 +206,7 @@ export class Player {
         case("solar"):{
             return this.solarCost;
         }
-        case("adapt"):{
+        case("adap"):{
             return this.adaptCost;
         }
         default: return 0;
@@ -234,5 +236,9 @@ export class Player {
     resetEnergy() : void
     {
         this.energy = 55;
+    }
+
+    getHealth(): Health{
+        return this.health;
     }
 }

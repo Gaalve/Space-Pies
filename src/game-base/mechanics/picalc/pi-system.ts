@@ -390,4 +390,16 @@ export class PiSystem {
     private onDeadlock(): void{
         this.onDeadlockFunction();
     }
+
+    public getDebugLogState(): boolean{
+        return this.enableDebugLogging;
+    }
+
+    public changeDebugLogger() : void{
+        if(this.enableDebugLogging){
+            this.enableDebugLogging = false;
+        }else{
+            this.enableDebugLogging = true;
+        }
+    }
 }
