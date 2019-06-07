@@ -11,7 +11,7 @@ export class PiConcurrent extends PiSymbol{
         this.symbols = actions;
     }
 
-    public getSymbolSequenceNonCached(): string{
+    public getSymbolSequence(): string{
         let str = "(";
         let idx: number;
         for(idx = 0; idx < this.symbols.length - 1; ++idx){
@@ -43,7 +43,6 @@ export class PiConcurrent extends PiSymbol{
         for(let idx in this.symbols){
             this.symbols[idx].rename(argName, argValue);
         }
-        this.renewSequence();
     }
 
     addScope(scope: PiScope): void {
@@ -56,7 +55,6 @@ export class PiConcurrent extends PiSymbol{
         for(let idx in this.symbols){
             this.symbols[idx].alphaRename(argName, argValue, scope);
         }
-        this.renewSequence();
     }
 
     isNameInSequence(name: string): boolean {
@@ -66,8 +64,4 @@ export class PiConcurrent extends PiSymbol{
         return false;
     }
 
-    public renewSequence(): void{
-        this.symbols.forEach( value => value.renewSequence());
-        this.cachedSequence = this.getSymbolSequenceNonCached();
-    }
 }

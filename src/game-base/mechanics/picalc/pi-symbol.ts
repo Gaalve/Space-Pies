@@ -5,7 +5,6 @@ export abstract class PiSymbol {
     protected system: PiSystem;
     protected name: string;
     protected scopes: PiScope[];
-    protected cachedSequence: string;
 
     protected constructor(system: PiSystem, name: string){
         this.system = system;
@@ -30,20 +29,12 @@ export abstract class PiSymbol {
     /**
      * Returns the complete sequence of symbols that may follow after this symbol.
      *
-     * Must not be overwritten
      * E.g.: x(a).z(b).P
      */
     public getSymbolSequence(): string{
-        return this.cachedSequence;
-    }
-
-    /**
-     * Returns the complete sequence of symbols that may follow after this symbol.
-     * E.g.: x(a).z(b).P
-     */
-    public getSymbolSequenceNonCached(): string{
         return this.name;
     }
+
 
     /**
      * Should only be called by Pi-System!
@@ -73,21 +64,6 @@ export abstract class PiSymbol {
 
     public abstract addScope(scope: PiScope): void;
 
-
-    /**
-     * Renews the cached symbol sequence. Should be called on copy, rename, alphaRename
-     * and must not be overwritten. Is used to reduce recursions in case renewSequence is overloaded,
-     */
-    public renewSymbol(): void{
-        this.cachedSequence = this.getSymbolSequenceNonCached();
-    }
-
-    /**
-     * Renews the cached symbol sequence. Should be called on push (sys)
-     */
-    public renewSequence(): void{
-        this.cachedSequence = this.getSymbolSequenceNonCached();
-    }
 
 
 

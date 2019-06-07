@@ -22,7 +22,7 @@ export class PiTerm extends PiSymbol{
         return this.getName() + ":= " + this.symbol.getSymbolSequence();
     }
 
-    getSymbolSequenceNonCached(): string {
+    getSymbolSequence(): string {
         return this.getName();
     }
 
@@ -46,14 +46,12 @@ export class PiTerm extends PiSymbol{
         this.renames.push([argName, argValue]);
         if(this.symbol.isNameInSequence(argName))
             this.name += '['+argValue+'/'+argName+']';
-        this.renewSymbol();
     }
 
     alphaRename(argName: string, argValue: string, scope: PiScope): void {
         this.alphaRenames.push([argName, argValue, scope]);
         if(this.symbol.isNameInSequence(argName))
             this.name += '['+argValue+'/'+argName+']';
-        this.renewSymbol();
     }
 
     isNameInSequence(name: string): boolean {

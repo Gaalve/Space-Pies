@@ -58,7 +58,6 @@ export abstract class PiAction extends PiResolvable{
         if(this.name == argName && !this.isNameScoped) this.name = argValue;
         if(!this.isInput && this.inOutPut == argName && !this.isOutputScoped) this.inOutPut = argValue;
         this.next.rename(argName, argValue);
-        this.renewSequence();
     }
 
     public alphaRename(argName: string, argValue: string, scope: PiScope): void {
@@ -66,7 +65,6 @@ export abstract class PiAction extends PiResolvable{
         if(argName == this.name && (this.scopes.indexOf(scope) > -1 || !this.isNameScoped))this.name = argValue;
         if(argName == this.inOutPut && (this.scopes.indexOf(scope) > -1 || !this.isNameScoped))this.inOutPut = argValue;
         this.next.alphaRename(argName, argValue, scope);
-        this.renewSequence();
     }
 
     public addScope(scope: PiScope): void {
@@ -99,8 +97,4 @@ export abstract class PiAction extends PiResolvable{
         return this.next.isNameInSequence(name);
     }
 
-    public renewSequence(): void{
-        this.next.renewSequence();
-        this.cachedSequence = this.getSymbolSequenceNonCached();
-    }
 }

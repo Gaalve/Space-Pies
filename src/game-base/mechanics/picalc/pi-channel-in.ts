@@ -15,7 +15,7 @@ export class PiChannelIn extends PiAction{
         return this.name+"("+this.inOutPut+")";
     }
 
-    public getSymbolSequenceNonCached(): string{
+    public getSymbolSequence(): string{
         return this.getFullName() + '.' + this.next.getSymbolSequence();
     }
 

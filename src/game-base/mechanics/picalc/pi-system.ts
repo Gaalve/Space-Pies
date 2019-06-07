@@ -115,9 +115,6 @@ export class PiSystem {
             console.log("Warning: Symbol already exists: "+symbol.getName());
         }
 
-        // Renews symbol sequence. At this point the sequence must NEVER be changed,
-        // but renaming can still happen.
-        symbol.renewSequence();
         if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
         else if (symbol instanceof PiChannelOut) this.curChannelOut.push(symbol);
         else if (symbol instanceof PiSum) this.curSums.push(symbol);

@@ -16,7 +16,7 @@ export class PiChannelOut extends PiAction{
         return this.name+"<"+this.inOutPut+">";
     }
 
-    public getSymbolSequenceNonCached(): string{
+    public getSymbolSequence(): string{
         return this.getFullName() + '.' + this.next.getSymbolSequence();
     }
 
@@ -45,7 +45,5 @@ export class PiChannelOut extends PiAction{
         thisCopy.setCallback(this.callback);
         return thisCopy;
     }
-
-
 
 }

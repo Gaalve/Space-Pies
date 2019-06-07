@@ -14,7 +14,7 @@ export class PiReplication extends PiResolvable{
         return this.action.isNameInSequence(name);
     }
 
-    public getSymbolSequenceNonCached(): string{
+    public getSymbolSequence(): string{
         return '!('+ this.action.getSymbolSequence() + ")";
     }
 
@@ -40,12 +40,10 @@ export class PiReplication extends PiResolvable{
 
     rename(argName: string, argValue: string): void {
         this.action.rename(argName, argValue);
-        this.renewSequence();
     }
 
     alphaRename(argName: string, argValue: string, scope: PiScope): void {
         this.action.alphaRename(argName, argValue, scope);
-        this.renewSequence();
     }
 
     public getAction(fullName: string): PiAction {
@@ -53,8 +51,4 @@ export class PiReplication extends PiResolvable{
         throw new Error("Can't find action.");
     }
 
-    public renewSequence(): void{
-        this.action.renewSequence();
-        this.cachedSequence = this.getSymbolSequenceNonCached();
-    }
 }

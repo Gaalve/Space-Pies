@@ -56,7 +56,7 @@ export class PiScope extends PiSymbol{
         return new PiScope(this.system, this.scopedName, this.symbolStart.copy(), false);
     }
 
-    getSymbolSequenceNonCached(): string {
+    getSymbolSequence(): string {
         if(this.extendedScope) return this.reservedName;
         if(this.symbolStart instanceof PiScope){
             return this.getName()+".("+this.symbols[0].getSymbolSequence()+')';
@@ -104,10 +104,5 @@ export class PiScope extends PiSymbol{
 
     isNameInSequence(name: string): boolean {
         return this.symbolStart.isNameInSequence(name);
-    }
-
-    public renewSequence(): void{
-        this.symbolStart.renewSequence();
-        this.cachedSequence = this.getSymbolSequenceNonCached();
     }
 }
