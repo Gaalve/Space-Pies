@@ -2,6 +2,7 @@ import {PiAction} from "./pi-action";
 import {PiSystem} from "./pi-system";
 import {PiResolvable} from "./pi-resolvable";
 import {PiScope} from "./pi-scope";
+import {PiChannelOut} from "./pi-channel-out";
 
 
 export class PiSum extends PiResolvable{
@@ -27,10 +28,10 @@ export class PiSum extends PiResolvable{
 
     private checkForNameEquality(){
         for(let idx1 in this.actions){
+            // if (this.actions[idx1] instanceof PiChannelOut) throw new Error('We do not want output channels in sums (so we can improve the perf)'); // For debugging
             for(let idx2 in this.actions){
                 if(idx1 != idx2 &&
                     this.actions[idx1].getName() == this.actions[idx2].getName()){
-
                     console.log("Error: equal names!");
                 }
             }

@@ -20,6 +20,8 @@ const config: GameConfig = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
 
+    render: {batchSize: 4096},
+
     scene: [Intro, Background, MainScene, StartScene,  GuiScene, PauseScene, FadeScene, EndSceneP1],
     //scene: [Background, MainScene,  GuiScene, ShopSceneP1, ShopSceneP2, chooseSceneP1,ChooseTypeSceneP2, ChooseTypeSceneP1,chooseSceneP2, PauseScene, ChooseZoneSceneP1, ChooseZoneSceneP2],
 

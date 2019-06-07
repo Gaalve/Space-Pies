@@ -245,7 +245,7 @@ export class PiSystem {
             this.curChannelIn.forEach(
                 (val1) => {
                     this.curChannelOut.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
-                    this.curSums.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+                    // this.curSums.forEach((val2) => {this.addAllResolvablePair(val1, val2);}); // Hehe performance drastically improved
                     this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
                 }
             );
