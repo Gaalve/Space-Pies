@@ -12,7 +12,7 @@ export class PiSum extends PiResolvable{
     public constructor(system: PiSystem, actions: PiAction[]){
         super(system, "PiSum");
         this.actions = actions;
-        this.checkForNameEquality();
+        // this.checkForNameEquality(); // only for debugging
     }
 
     public getSymbolSequence(): string{

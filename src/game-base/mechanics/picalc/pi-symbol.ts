@@ -56,6 +56,8 @@ export abstract class PiSymbol {
      */
     public abstract rename(argName: string, argValue: string): void;
 
+
+    //TODO: seems like this method is never used...
     public abstract alphaRename(argName: string, argValue: string, scope: PiScope): void;
     /**
      * Creates a deep copy of this symbol (except for Pi-Term).

@@ -51,8 +51,7 @@ export class PiScope extends PiSymbol{
         return this.symbols[this.symbols.length - 1];
     }
 
-    copy(): PiSymbol { //TODO
-        // return undefined;
+    copy(): PiSymbol {
         return new PiScope(this.system, this.scopedName, this.symbolStart.copy(), false);
     }
 

@@ -42,7 +42,7 @@ export class PiTerm extends PiSymbol{
         this.symbol.addScope(scope);
     }
 
-    rename(argName: string, argValue: string): void { //TODO: dont rename Term if Symbol is not contained
+    rename(argName: string, argValue: string): void {
         this.renames.push([argName, argValue]);
         if(this.symbol.isNameInSequence(argName))
             this.name += '['+argValue+'/'+argName+']';
