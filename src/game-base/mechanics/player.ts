@@ -196,7 +196,7 @@ export class Player {
         case("solar"):{
             return this.solarCost;
         }
-        case("adapt"):{
+        case("adap"):{
             return this.adaptCost;
         }
         default: return 0;
@@ -226,5 +226,9 @@ export class Player {
     resetEnergy() : void
     {
         this.energy = 55;
+    }
+
+    getHealth(): Health{
+        return this.health;
     }
 }
