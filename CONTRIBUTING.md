@@ -11,7 +11,8 @@
 	        	7. Evtl. vorhandene Conflicts beheben
         		8. Nun in IntelliJ seinen Branch commiten, kommentar nicht vergessen
 	        	9. git push im Terminal von IntelliJ, oder anders pushen
-	        	
+	        	WICHTIG: Immer mal wieder zwischen drin mergen mit dem master wenn das Issue sehr lange dauert. 
+	        	Damit der commit dann nicht unzählig commits hinterher ist
 		
 <h4>Code: </h4>	
         -Wir benutzen einen K&R Style 
