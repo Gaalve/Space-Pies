@@ -73,7 +73,7 @@ export class PauseScene extends Phaser.Scene {
         const debugText = this.add.text(1760, 1020, "Change Debug",{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20});
         debugText.setOrigin(0.5);
-        const debugState = this.add.text(1760, 1050, "State: true",{
+        const debugState = this.add.text(1760, 1050, "State: " + this.P1.getSystem().getDebugLogState(),{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20});
         debugState.setOrigin(0.5);
 
@@ -81,8 +81,8 @@ export class PauseScene extends Phaser.Scene {
         this.buttonDebug = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg","button_options",
             ()=>{
-            let bool = this.P1.getSystem().changeDebugLogger();
-            debugState.setText("State: " + bool);
+            this.P1.getSystem().changeDebugLogger();
+            debugState.setText("State: " + this.P1.getSystem().getDebugLogState());
             })
 
         this.buttonDebug.setPosition(1880, 1040);

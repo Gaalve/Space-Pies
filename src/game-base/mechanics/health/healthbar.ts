@@ -94,8 +94,8 @@ export class Healthbar {
 
     public removeBar() : void{
         let sprite = this.bars.pop().sprite;
-        sprite.destroy();
-        this.updateText();
+        this.scene.time.delayedCall(500,()=>{sprite.destroy()}, [],this);
+        this.scene.time.delayedCall(500,()=>{this.updateText()}, [],this);
     }
 
     public getBars() : number{
