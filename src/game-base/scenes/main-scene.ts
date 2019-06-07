@@ -133,6 +133,7 @@ export class MainScene extends Phaser.Scene {
             this.closeShop(this.shop1, this.shop1Text, true);
             this.shop1Active = false;
         }));
+        //this.system.pushSymbol(this.system.add.channelOut("closeshop", "").nullProcess());
         system.pushSymbol(closeShop);
         system.pushSymbol(startShop);
         this.data.set('P1', this.players[0]);
@@ -289,6 +290,7 @@ export class MainScene extends Phaser.Scene {
         }
         this.players[0].update(delta);
         this.players[1].update(delta);
+
     }
 
     /**
@@ -589,6 +591,7 @@ export class MainScene extends Phaser.Scene {
             this.data.set("type", "armor");
             this.closeShop(this.shopS, this.shopSText, false);
             this.displayShop(this.shopZ, this.shopZText);
+            this.updateShopZ();
             this.shopSActive = false;
             this.shopZActive = true;
 
@@ -600,6 +603,7 @@ export class MainScene extends Phaser.Scene {
             this.data.set("type", "shield");
             this.closeShop(this.shopS, this.shopSText, false);
             this.displayShop(this.shopZ, this.shopZText);
+            this.updateShopZ();
             this.shopSActive = false;
             this.shopZActive = true;
 
@@ -609,6 +613,7 @@ export class MainScene extends Phaser.Scene {
             this.data.set("type", "rocket");
             this.closeShop(this.shopS, this.shopSText, false);
             this.displayShop(this.shopZ, this.shopZText);
+            this.updateShopZ();
             this.shopSActive = false;
             this.shopZActive = true;
 
@@ -620,6 +625,7 @@ export class MainScene extends Phaser.Scene {
             this.data.set("type", "nano");
             this.closeShop(this.shopS, this.shopSText, false);
             this.displayShop(this.shopZ, this.shopZText);
+            this.updateShopZ();
             this.shopSActive = false;
             this.shopZActive = true;
 
@@ -628,6 +634,7 @@ export class MainScene extends Phaser.Scene {
             this.data.set("type", "adap");
             this.closeShop(this.shopS, this.shopSText, false);
             this.displayShop(this.shopZ, this.shopZText);
+            this.updateShopZ();
             this.shopSActive = false;
             this.shopZActive = true;
 
@@ -1381,6 +1388,44 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
+    updateShopZ(): void{
+        let player = this.turn.getCurrentPlayer();
+        let zone1 = player.getHealth().zone1Bar.getBars();
+        let zone2 = player.getHealth().zone2Bar.getBars();
+        let zone3 = player.getHealth().zone3Bar.getBars();
+        let zone4 = player.getHealth().zone4Bar.getBars();
+
+        if(zone1 == 0){
+            this.zone1.changeButton(this, false, false, player);
+            this.zone1.removeInteractive();
+            this.children.remove(this.shopZText[0]);
+            this.shopZText[0] = this.add.text(410, 1080-50, "destroyed", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
+        if(zone2 == 0){
+            this.zone2.changeButton(this, false, false, player);
+            this.zone2.removeInteractive();
+            this.children.remove(this.shopZText[1]);
+            this.shopZText[1] = this.add.text(660, 1080-50, "destroyed", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
+        if(zone3 == 0){
+            this.zone3.changeButton(this, false, false, player);
+            this.zone3.removeInteractive();
+            this.children.remove(this.shopZText[2]);
+            this.shopZText[2] = this.add.text(910, 1080-50, "destroyed", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
+        if(zone4 == 0){
+            this.zone4.changeButton(this, false, false, player);
+            this.zone4.removeInteractive();
+            this.children.remove(this.shopZText[3]);
+            this.shopZText[3] = this.add.text(1160, 1080-50, "destroyed", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
+
+    }
+
     switchTextures(player: Player): void{
         this.solar.switchArt(this, player);
         this.laser.switchArt(this, player);
@@ -1554,5 +1599,6 @@ export class MainScene extends Phaser.Scene {
         }
 
     }
+
 
 }

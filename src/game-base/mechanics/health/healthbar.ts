@@ -98,4 +98,7 @@ export class Healthbar {
         this.scene.time.delayedCall(500,()=>{this.updateText()}, [],this);
     }
 
+    public getBars() : number{
+        return this.bars.length;
+    }
 }
