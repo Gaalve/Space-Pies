@@ -33,6 +33,10 @@ export class Intro extends Phaser.Scene {
     }
 
     create(): void {
+        // todo: REMOVE FOLLOWING LINE
+        this.scene.launch('GuiScene');
+        return;
+
         let counter = 0;
         this.text = new Text(this, 1900, 20, "Click to skip.", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 32, fontStyle: 'bold', strokeThickness: 2});
@@ -40,8 +44,13 @@ export class Intro extends Phaser.Scene {
         this.text.setOrigin(1, 0);
         this.text.setDepth(2);
         this.time.delayedCall(4000, ()=>{this.fadeText()}, [], this);
+
+
+
         this.input.on('pointerdown', ()=>{
             switch (counter) {
+
+
                 case 0: this.text.setText("Are you sure?");
                     this.text.setAlpha(1);
                     this.time.removeAllEvents();
@@ -80,6 +89,7 @@ export class Intro extends Phaser.Scene {
 
 
     update(time: number, delta: number): void {
-        this.mgr.update(delta/1000);
+        // todo: ADD FOLLOWING LINE BACK IN
+        // this.mgr.update(delta/1000);
     }
 }

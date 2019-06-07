@@ -4,7 +4,6 @@ import {Healthbar} from "./healthbar";
 import {PiTerm} from "../picalc/pi-term";
 import {HealthType} from "./health-type";
 import {HealthbarSprites} from "./healthbar-sprites";
-import {PiAction} from "../picalc/pi-action";
 
 export class Health {
     private player: Player;
@@ -13,6 +12,17 @@ export class Health {
     public readonly zone2Bar: Healthbar;
     public readonly zone3Bar: Healthbar;
     public readonly zone4Bar: Healthbar;
+
+    public updateAllTerms()
+    {
+        this.shipBar.updateText();
+        this.zone1Bar.updateText();
+        this.zone2Bar.updateText();
+        this.zone3Bar.updateText();
+        this.zone4Bar.updateText();
+
+    }
+
 
     public constructor(scene: Phaser.Scene, player: Player, pi: PiSystem){
         this.player = player;
@@ -31,10 +41,10 @@ export class Health {
 
 
         pi.pushSymbol(
-            pi.add.channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
-                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
-                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
-                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
+            pi.add.channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar(HealthType.HitZoneBar)})
+                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar(HealthType.HitZoneBar)})
+                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar(HealthType.HitZoneBar)})
+                .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar(HealthType.HitZoneBar)})
                 .process("CoreExplosion"+pid, ()=>{console.log(pid+" lost."); this.player.ship.explosion()})
         );
         this.shipBar.addBar(HealthType.HitZoneBar);
@@ -52,16 +62,16 @@ export class Health {
     }
 
     private createHitZoneInPiShield(pi: PiSystem, pid:string, hbid: string, zoneBar: Healthbar){
-        let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar(HealthType.ShieldBar)},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)});
-        let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)});
-        let rockShld = Health.getPiRocketShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let rockShld = Health.getPiRocketShield(pi, pid, hbid, ()=>{zoneBar.destroyBar(HealthType.RocketBar)},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)});
-        let nanoShld = Health.getPiNanoShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let nanoShld = Health.getPiNanoShield(pi, pid, hbid, ()=>{zoneBar.destroyBar(HealthType.NanoBar)},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)});
 
@@ -72,16 +82,16 @@ export class Health {
         Health.addPiHitzoneShield(pi, pid, hbid,()=>{zoneBar.addBar(HealthType.ShieldBar)});
     }
     private createHitZoneInPiArmor(pi: PiSystem, pid:string, hbid: string, zoneBar: Healthbar){
-        let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let lasShld = Health.getPiLaserShield(pi, pid, hbid, ()=>{zoneBar.destroyBar(HealthType.ShieldBar)},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)});
-        let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let armShld = Health.getPiArmorShield(pi, pid, hbid, ()=>{zoneBar.destroyBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)});
-        let rockShld = Health.getPiRocketShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let rockShld = Health.getPiRocketShield(pi, pid, hbid, ()=>{zoneBar.destroyBar(HealthType.RocketBar)},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)});
-        let nanoShld = Health.getPiNanoShield(pi, pid, hbid, ()=>{zoneBar.destroyBar()},
+        let nanoShld = Health.getPiNanoShield(pi, pid, hbid, ()=>{zoneBar.destroyBar(HealthType.NanoBar)},
             ()=>{zoneBar.addBar(HealthType.ShieldBar)}, ()=>{zoneBar.addBar(HealthType.ArmorBar)},
             ()=>{zoneBar.addBar(HealthType.RocketBar)}, ()=>{zoneBar.addBar(HealthType.NanoBar)});
 

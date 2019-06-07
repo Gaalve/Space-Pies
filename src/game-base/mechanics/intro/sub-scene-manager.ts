@@ -118,6 +118,9 @@ export class SubSceneManager {
 
     public skipToLastScene(){
         this.skipped = true;
-        this.scene.scene.launch('FadeScene', {shut: 'Intro', start: 'Background'});
+        // todo: REMOVE FOLLOWING LINE
+        this.scene.scene.launch('GuiScene');
+        // todo: ADD THIS LINE BACK IN
+        // this.scene.scene.launch('FadeScene', {shut: 'Intro', start: 'Background'});
     }
 }

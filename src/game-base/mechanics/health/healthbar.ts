@@ -1,8 +1,10 @@
 import {HealthbarSprites} from "./healthbar-sprites";
-import Sprite = Phaser.GameObjects.Sprite;
 import {HealthType} from "./health-type";
+import {ScenePiAnimation} from "../../scenes/ScenePiAnimation";
+import {Animation} from "../animation/Animation";
+import {AnimationUtilities} from "../animation/AnimationUtilites";
+import Sprite = Phaser.GameObjects.Sprite;
 import Text = Phaser.GameObjects.Text;
-import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
@@ -44,7 +46,49 @@ export class Healthbar {
         this.updateText();
     }
 
-    public destroyBar(): void{
+    public destroyBar(healthtype : HealthType): void{
+
+        // ANIMATION
+        let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
+        let onScreenText = this.term.text.length > 0 ? this.term : null;
+
+
+        if (onScreenText)
+        {
+            let animationText = AnimationUtilities.popSymbol(onScreenText, animationScene);
+            let toColor = AnimationUtilities.getHealthbarColor(healthtype);
+            let fromX = onScreenText.x;
+            let fromY = onScreenText.y;
+            let toX = 1920/2 - (onScreenText.width);
+            let toY = 1080/1.3;
+            let id = AnimationUtilities.getTerm(healthtype) + (this.direction == 1 ? "p1" : "p2");
+            let animation = new Animation(id, animationScene, fromX, fromY, toX, toY, animationText.setAngle(0), 1000);
+            animation.stage = 1;
+            animation.move = true;
+            animation.interpolate = true;
+            animation.scaleFont = true;
+            animation.toColor = toColor;
+            animationScene.addConcurrentAnimation(animation);
+            if (onScreenText.text.split(".")[0].indexOf("<") >= 0)
+            {
+                let animationText = AnimationUtilities.popSymbol(onScreenText, animationScene);
+                let toColor = AnimationUtilities.getHealthbarColor(HealthType.HitZoneBar);
+                let fromX = onScreenText.x;
+                let fromY = onScreenText.y;
+                let toX = 1920/2 + (onScreenText.width);
+                let toY = 1080/1.3;
+                let id = AnimationUtilities.getTerm(HealthType.HitZoneBar) + (this.direction == 1 ? "p1" : "p2");
+                let animation = new Animation(id, animationScene, fromX, fromY, toX, toY, animationText.setAngle(0), 1000);
+                animation.stage = 1;
+                animation.move = true;
+                animation.interpolate = true;
+                animation.scaleFont = true;
+                animation.toColor = toColor;
+                animationScene.addConcurrentAnimation(animation);
+            }
+        }
+
+        // BLEEDING SPRITE ANIMATION
         let sprite = this.bars.pop().sprite;
         let bleedingSprite = this.scene.add.sprite(sprite.x, sprite.y, "bleedingbar");
         bleedingSprite.setFrame(0);
@@ -56,10 +100,12 @@ export class Healthbar {
         bleedingSprite.on('animationcomplete', this.destroy(bleedingSprite));
         bleedingSprite.anims.play("bleeding");
         sprite.destroy();
+
+        // UPDATE HEALTHBAR TEXT
         this.updateText();
     }
 
-    private updateText(): void{
+    public updateText(): void{
         this.term.setText(this.toString());
     }
 

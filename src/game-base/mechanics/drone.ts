@@ -144,7 +144,8 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	refreshes the displayed Pi Term, if any changes (add Weapons) where made
 	 */
 	refreshOnScreenText() : void{
-		this.onScreenText.setText(this.simplePi);
+		this.onScreenText.destroy();
+		this.activateOnScreenText();
 		//this.onScreenText.setDisplayOrigin(0.5);
 	}
 

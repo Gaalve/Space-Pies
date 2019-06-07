@@ -1,5 +1,7 @@
 import {Player} from "./player";
 import {PiSystem} from "../mechanics/picalc/pi-system";
+import {Animation} from "./animation/Animation";
+import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
 
 export class Turn {
     private refScene: Phaser.Scene;
@@ -30,73 +32,112 @@ export class Turn {
         this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
         this.refScene.data.set('round', ""+(this.currentRound));
         this.refScene.data.set('turnAction', 'Create');
-        this.refScene.time.delayedCall(0, () => (this.playerInput()), [], this);
+        this.refScene.time.delayedCall(0, () => (this.playerInput()()), [], this);
         this.refScene.data.set('click', this.clickable);
         this.system = this.refScene.scene.get("MainScene").data.get("system");
     }
 
-    public playerInput():void{
-        this.clickable = true;
-        this.refScene.data.set('round', ""+(++this.currentRound));
-        if(this.currentRound != 1){
-            this.idx = 1 - this.idx;
-            this.currentPlayer = this.players[this.idx];
-            //this.currentPlayer.gainEnergy(3);
-            this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
+    public playerInput():Function{
+        let turn : Turn = this;
+       let playerInput = function() {
+           turn.clickable = true;
+           turn.refScene.data.set('round', "" + (++turn.currentRound));
+           if (turn.currentRound != 1) {
+               turn.idx = 1 - turn.idx;
+               turn.currentPlayer = turn.players[turn.idx];
+               //this.currentPlayer.gainEnergy(3);
+               turn.refScene.data.set('currentPlayer', turn.currentPlayer.getNameIdentifier());
 
-        }
+           }
 
-        if(this.currentPlayer.getNameIdentifier() == "P1"){
-            //this.refScene.scene.run( 'ShopSceneP1');
-            // system.pushSymbol(startShop)
-          //  system.pushSymbol(system.add.channelOut('shopp1', '*').nullProcess())
-            //this.refScene.events.emit("newTurn")
-            //this.refScene.scene.get("MainScene").events.emit("newTurn");
-            this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess())
+           if (turn.currentPlayer.getNameIdentifier() == "P1") {
+               turn.system.pushSymbol(turn.system.add.channelOut("shopp1", "*").nullProcess())
 
-        }
-        else {
-            this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess())
-        }
-        this.awaitInput = true; //nächster Spieler
+           } else {
+               turn.system.pushSymbol(turn.system.add.channelOut("shopp1", "*").nullProcess())
+           }
+           turn.currentPlayer.updateAllTerms();
+           turn.awaitInput = true; //nächster Spieler
 
-        this.refScene.data.set('turnAction', 'Shopping Phase');
-
+           turn.refScene.data.set('turnAction', 'Shopping Phase');
+       }
+       return playerInput;
     }
 
     public Attackturn():void{
-        if (!this.awaitInput) return;
-        this.clickable = false;
-        /*this.refScene.scene.sleep('ShopSceneP1');
-        if(this.refScene.scene.get("chooseSceneP1").scene.isActive()){
-            this.refScene.scene.sleep('chooseSceneP1');
-        }
-        if(this.refScene.scene.get("chooseTypeSceneP1").scene.isActive()) {
-            this.refScene.scene.sleep('chooseTypeSceneP1');
-        }
+        this.animatedAttack();
+        this.attack()();
+    }
 
-        if(this.currentRound != 1){
-            this.refScene.scene.sleep('ShopSceneP2');
-            if(this.refScene.scene.get("chooseSceneP2").scene.isActive()) {
-                this.refScene.scene.sleep('chooseSceneP2');
-            }
-            if(this.refScene.scene.get("chooseTypeSceneP2").scene.isActive()) {
-                this.refScene.scene.sleep('chooseTypeSceneP2');
-            }
-        }*/
-        this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
-        this.system.pushSymbol(this.system.add.channelOut("startephase"+this.currentPlayer.getNameIdentifier().charAt(1), "").nullProcess())
-        //Waffen schießen lassen:
-        //TODO: DEBUG STUFF REMOVE
-        this.currentPlayer.getSystem().pushSymbol(
-            this.currentPlayer.getSystem().add.channelOut(
-                'unlock'+this.currentPlayer.getNameIdentifier().charAt(1), '').nullProcess());
-        this.currentPlayer.getSystem().pushSymbol(
-            this.currentPlayer.getSystem().add.channelIn(
-                'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
-        this.refScene.data.set('turnAction', 'Battle Phase');
-        this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+    animatedAttack() // THE ATTACK WILL BE EXECUTED ONCE ANIMATION IS FINISHED (LOOK INSIDE ScenePiAnimation FOR FUNCTION CALL TO attack())
+    {
+        // todo: ANIMATION LOCKS
+        let animationScene = <ScenePiAnimation> this.refScene.scene.get("AnimationScene");
+        animationScene.finalCallback = this.playerInput();
+        let toColor = '#faf000';
+        let text = this.refScene.add.text(1920/2, 0, "!(lock<*>)", {
+            fill: toColor , fontFamily: '"Roboto"', fontSize: 20
+        });
+        let toX = 1920/2.3;
+        let toY = 1080/4.7;
+        let animation = new Animation("<lock>", animationScene, text.x, text.y, toX, toY, text, 1000);
+        // animation.callback = this.attack();
+        animation.move = true;
+        animation.interpolate = true;
+        animation.scaleFont = true;
+        animation.toColor = toColor;
+        animationScene.addConcurrentAnimation(animation);
 
+        // todo: ANIMATION WEAPONS
+        let currentPlayer = this.getCurrentPlayer();
+        let drones = currentPlayer.getDrones();
+        drones.forEach( drone =>
+            {
+                let animationScene = <ScenePiAnimation> this.refScene.scene.get("AnimationScene");
+                let onScreenText = drone.onScreenText.text.length > 0 ? drone.onScreenText : null;
+
+                if (onScreenText)
+                {
+                    let toColor = currentPlayer.isFirstPlayer() ? '#990000' : '#458899';
+                    let fromX = drone.onScreenText.x;
+                    let fromY = drone.onScreenText.y;
+                    let toX = 1920/2 - (drone.onScreenText.width);
+                    let toY = 1080/1.1;
+                    let animation = new Animation("(lock)", animationScene, fromX, fromY, toX, toY, onScreenText.setAngle(0), 1000);
+                    // animation.callback = this.attack();
+                    animation.move = true;
+                    animation.interpolate = true;
+                    animation.scaleFont = true;
+                    animation.toColor = toColor;
+                    animationScene.addConcurrentAnimation(animation);
+                }
+            }
+        );
+    }
+
+    attack()
+    {
+        const turn: Turn = this
+        const currentPlayer = turn.currentPlayer;
+        let attack = function()
+        {
+
+            if (!turn.awaitInput) return;
+            turn.clickable = false;
+            turn.system.pushSymbol(turn.system.add.channelOut("closeshop", "*").nullProcess());
+            turn.system.pushSymbol(turn.system.add.channelOut("startephase"+currentPlayer.getNameIdentifier().charAt(1), "").nullProcess())
+            //Waffen schießen lassen:
+            //TODO: DEBUG STUFF REMOVE
+            currentPlayer.getSystem().pushSymbol(
+                currentPlayer.getSystem().add.channelOut(
+                    'unlock'+currentPlayer.getNameIdentifier().charAt(1), '').nullProcess());
+            currentPlayer.getSystem().pushSymbol(
+                currentPlayer.getSystem().add.channelIn(
+                    'attackp'+currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
+            turn.refScene.data.set('turnAction', 'Battle Phase');
+            // turn.refScene.time.delayedCall(1250, () => (turn.playerInput()), [], turn); //hier dauer der attackturn bestimmen
+        }
+        return attack;
     }
 
     getScene(): Phaser.Scene{

@@ -4,6 +4,8 @@ import {MainScene} from "./main-scene";
 import {Animation} from "../mechanics/animation/Animation";
 import Sprite = Phaser.GameObjects.Sprite;
 import Color = Phaser.Display.Color;
+import {AnimationUtilities} from "../mechanics/animation/AnimationUtilites";
+import {Turn} from "../mechanics/turn";
 
 
 
@@ -15,14 +17,14 @@ export class ScenePiAnimation extends Phaser.Scene{
     private animationRunning: boolean;
     private queuedAnimations: Array<Animation>;
     private finishedAnimations: Array<Animation>;
-    private
+    private _finalCallback: Function;
     private finalAnimations: Array<Animation>;
     private parallelAnimations: Array<Array<Animation>>;
 
     constructor(){
         super({
             key: 'AnimationScene',
-            active: false
+            active: true
         });
         this.firstChoose = true;
         this.queuedAnimations = new Array<Animation>();
@@ -76,8 +78,7 @@ export class ScenePiAnimation extends Phaser.Scene{
                 }
                 if (animation.vanish)
                 {
-                    let fontScale = !animation.locked ? 50 : 30;
-                    this.scaleSin(parseInt(animation.text.style.fontSize, 10), 0, animation.currentTime / halfDuration, animation.text);
+                    this.scaleSin(parseInt(animation.text.style.fontSize, 10), 1, animation.currentTime / halfDuration, animation.text);
                 }
 
 
@@ -115,8 +116,8 @@ export class ScenePiAnimation extends Phaser.Scene{
                     let resolvingAnimations = this.getResolvingAnimation(anim);
                     if (resolvingAnimations != null)
                     {
-                        this.addConcurrentAnimation(resolvingAnimations.animationNew);
-                        this.addConcurrentAnimation(resolvingAnimations.animationNewCounterPart);
+                        this.addConcurrentAnimation(resolvingAnimations.animationInput);
+                        this.addConcurrentAnimation(resolvingAnimations.animationOutput);
                         this.finishedAnimations.splice(i,1);
                     }
                 }
@@ -125,15 +126,15 @@ export class ScenePiAnimation extends Phaser.Scene{
                     let finalAnimations = this.getFinalAnimation(anim);
                     if (finalAnimations != null)
                     {
-                        this.addConcurrentAnimation(finalAnimations.animationNew);
-                        this.addConcurrentAnimation(finalAnimations.animationNewCounterpart);
+                        this.addConcurrentAnimation(finalAnimations.animationInput);
+                        this.addConcurrentAnimation(finalAnimations.animationOutput);
                         this.finishedAnimations.splice(i,1);
                     }
                 }
             }
         }
-
-        if (this.parallelAnimations.length > 0)
+        let animationsQueued = this.parallelAnimations[0].length > 0 || this.parallelAnimations[1].length > 0 || this.parallelAnimations[2].length > 0 || this.parallelAnimations[3].length > 0;
+        if (animationsQueued)
         {
             for (let i = 0; i < this.parallelAnimations.length; i++)
             {
@@ -154,6 +155,26 @@ export class ScenePiAnimation extends Phaser.Scene{
                 }
             }
         }
+
+        if (!this.animationsLeft())
+            this.nextTurn();
+    }
+
+    private animationsLeft() {
+        for (let i = 0; i < this.parallelAnimations.length; i++)
+                if (this.parallelAnimations[i].length > 0)
+                    return true;
+        for (let i = 0; i < this.parallelAnimations[i].length; i++)
+            if (this.finishedAnimations.length > 0)
+                return true;
+        return false;
+    }
+
+    private nextTurn() {
+        if (typeof this._finalCallback != 'undefined')
+            this.finalCallback();
+        this.finalCallback = undefined;
+
     }
 
     private animate(animation: Animation) {
@@ -177,7 +198,15 @@ export class ScenePiAnimation extends Phaser.Scene{
 
         if (animation.vanish)
         {
-            this.scaleSin(parseInt(animation.text.style.fontSize, 10), 1, animation.currentTime / halfDuration, animation.text);
+            if (animation.text)
+                this.scaleSin(parseInt(animation.text.style.fontSize, 10), 1, animation.currentTime / halfDuration, animation.text);
+            if (parseInt(animation.text.style.fontSize.substr(0, animation.text.style.fontSize  .indexOf("px")), 10) <= 2 )
+            {
+                animation.text.destroy();
+                animation.currentTime += 10000;
+                animation.finished = true;
+                animation.locked = true;
+            }
         }
     }
 
@@ -320,7 +349,7 @@ export class ScenePiAnimation extends Phaser.Scene{
         this.parallelAnimations[stage].push(animation);
     }
 
-    private getResolvingAnimation(animation: Animation) {
+    private getFinalAnimation(animation: Animation) {
 
         if (isInput(animation.text))
             return;;
@@ -328,42 +357,75 @@ export class ScenePiAnimation extends Phaser.Scene{
         for (let i = 0; i < this.finishedAnimations.length; i++)
         {
             let anim = this.finishedAnimations[i];
-            let toX, toY;
-            let toXCounterPart, toYCounterPart;
-            if (anim == animation) continue;
+            if (anim.locked || anim == animation)
+                continue;
 
-            if (anim.id != animation.id && !anim.locked)
+            if (animation.id.toLowerCase().substr(0,3) == anim.id.toLowerCase().substr(0,3))
             {
-                // todo: check for implementation
+                anim.locked = true;
+                animation.locked = true;
+
+                let animationInput = new Animation(anim.id.toString(), this, null, null, null, null, anim.text, 500);
+                let animationOutput = new Animation(animation.id.toString(), this, null, null, null, null, animation.text, 500);
+                // animationInput.callback = v => {anim.text.destroy()};
+                // animationOutput.callback = v => {animation.text.destroy()};
+                animationInput.vanish = true;
+                animationInput.stage = 2;
+                animationOutput.vanish = true;
+                animationOutput.stage = 2;
+
+                this.finishedAnimations.splice(i,1);
+                return {animationOutput, animationInput};
             }
         }
         return null;
     }
 
-    private getFinalAnimation(anim: Animation)
+    private getResolvingAnimation(animation: Animation)
     {
-        if (isInput(anim.text))
+        if (isInput(animation.text))
             return;
+
 
         for (let i = 0; i < this.finishedAnimations.length; i++)
         {
-            let animation = this.finishedAnimations[i];
+            let anim = this.finishedAnimations[i];
+            if (anim.locked || anim == animation)
+                continue;
 
-            if (anim.id.indexOf("resolving") >= 0 && anim.id == animation.id && !animation.locked)
+            if (animation.id.toLowerCase().substr(0,3) == anim.id.toLowerCase().substr(0,3))
             {
                 anim.locked = true;
                 animation.locked = true;
 
-                let animationNew = new Animation("final" + anim.id, this, null, null, null, null, anim.text, 500);
-                let animationNewCounterpart = new Animation("final" + animation.id, this, null, null, null, null, animation.text, 500);
+                // let firstSymbol = AnimationUtilities.popSymbol(animation.text, this);
+                // let restId = AnimationUtilities.peekSymbol(animation.text, this);
+                //     let restToX = restId == "0" ? animation.text.x : 1920/2 - animation.text.width;
+                // let restToY = restId == "0" ? 1200 : animation.text.y;
+                // let restAnimation = new Animation(restId, this, anim.text.x, anim.text.y, restToX, restToY, anim.text, 500);
+                // restAnimation.stage = 1;
+                // this.addConcurrentAnimation(restAnimation);
 
-                animationNew.stage = 3;
-                animationNew.vanish = true;
-                animationNewCounterpart.stage = 3;
-                animationNewCounterpart.vanish = true;
+                let toX =  (1920/2) - animation.text.width;
+                let toY =  (1080/2);
+                let toXCounterPart =  (1920/2);
+                let toYCounterPart = (1080/2);
 
-                return {animationNew, animationNewCounterpart};
+                let animationOutput = new Animation(animation.id.toString(), this, animation.text.x, animation.text.y, toX, toY, animation.text, 500);
+                let animationInput = new Animation(anim.id.toString(), this, anim.text.x, anim.text.y, toXCounterPart, toYCounterPart, anim.text, 500);
+
+                animationOutput.stage = 2;
+                animationOutput.move = true;
+                // animationOutput.scaleFont = true;
+                animationInput.stage = 2;
+                animationInput.move = true;
+                // animationInput.scaleFont = true;
+
+                return {animationOutput, animationInput};
             }
+
+            if (animation.id == "0")
+                animation.text.destroy();
         }
         return null;
     }
@@ -384,7 +446,11 @@ export class ScenePiAnimation extends Phaser.Scene{
                 anim.locked = true;
                 animation.locked = true;
 
-                let firstSymbol = popSymbol(anim, this);
+                let firstSymbol = AnimationUtilities.popSymbol(anim.text, this);
+                let restId = AnimationUtilities.peekSymbol(anim.text, this);
+                let restAnimation = new Animation(restId, this, anim.text.x, anim.text.y, 1920/2, 1080/2, anim.text, 500);
+                restAnimation.stage = 1;
+                this.addConcurrentAnimation(restAnimation);
                 let outputAnimationText = this.add.text(animation.text.x + 30, animation.text.y + animation.text.height, "lock<*>", anim.text.style);
 
                 let toX =  (1920/2) - outputAnimationText.width - 20;
@@ -395,10 +461,12 @@ export class ScenePiAnimation extends Phaser.Scene{
                 let animationOutput = new Animation("resolving (lock)", this, animation.text.x, animation.text.y, toX, toY, outputAnimationText, 500);
                 let animationInput = new Animation("resolving (lock)", this, anim.text.x, anim.text.y, toXCounterPart, toYCounterPart, firstSymbol, 500);
 
+                animationOutput.callback = animation.callback;
                 animationOutput.stage = 0;
                 animationOutput.move = true;
                 animationOutput.interpolate = true;
                 animationOutput.toColor = '#ff6600'
+                animationInput.callback = anim.callback;
                 animationInput.stage = 0;
                 animationInput.move = true;
                 animationInput.interpolate = true;
@@ -409,8 +477,13 @@ export class ScenePiAnimation extends Phaser.Scene{
             }
             if (anim.id == "resolving (lock)")
             {
+                anim.locked = true;
+                animation.locked = true;
+
                 let animationInput = new Animation("resolved (lock)", this, null, null, null, null, anim.text, 500);
                 let animationOutput = new Animation("resolved (lock)", this, null, null, null, null, animation.text, 500);
+                animationInput.callback = anim.callback;
+                animationOutput.callback = animation.callback;
                 animationInput.vanish = true;
                 animationInput.stage = 0;
                 animationOutput.vanish = true;
@@ -421,13 +494,40 @@ export class ScenePiAnimation extends Phaser.Scene{
             }
             if (anim.id == "resolved (lock)")
             {
-                anim.text.destroy();
-                animation.text.destroy();
+                anim.locked = true;
+                animation.locked = true;
 
+                anim.text.destroy();
+                if (!this.locksRemaining())
+                {
+                    let animationFadeOut = Animation.create("fade (lock)", this, animation.text.x, animation.text.y, animation.text.x, -50, animation.text, 300, destroy => { animation.text.destroy();});
+                    animationFadeOut.move = true;
+                    animationFadeOut.stage = 0;
+                    this.addConcurrentAnimation(animationFadeOut);
+                }
                 this.finishedAnimations.splice(i,1);
                 return null;
             }
         }
+    }
+
+    private locksRemaining() {
+        for (let i = 0; i < this.parallelAnimations.length; i++)
+            for (let j = 0; j < this.parallelAnimations[i].length; j++)
+                if (this.parallelAnimations[i][j].text.text.indexOf("lock") >= 0)
+                    return true;
+        for (let i = 0; i < this.parallelAnimations[i].length; i++)
+            if (this.finishedAnimations[i].text.text.indexOf("lock") >= 0)
+                return true;
+        return false;
+    }
+
+    get finalCallback(): Function {
+        return this._finalCallback;
+    }
+
+    set finalCallback(value: Function) {
+        this._finalCallback = value;
     }
 }
 
@@ -438,14 +538,3 @@ function isInput(text: Phaser.GameObjects.Text) {
     return false;
 }
 
-function popSymbol(anim: Animation, scene: Phaser.Scene) {
-
-    let text = anim.text;
-    let term = anim.text.text;
-    let firstSymbol = term.indexOf("!(") >= 0 ? term.substr(2, term.length - 1) : term.split(".")[0];
-    let textObject = scene.add.text(anim.text.x, anim.text.y, firstSymbol, {
-        fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2});
-    text.text = term.substr(firstSymbol.length + 1, term.length);
-    return textObject;
-
-}

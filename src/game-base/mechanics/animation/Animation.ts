@@ -18,7 +18,7 @@ export class Animation {
     private _toColor: string;
     private _vanish: boolean;
     private _stage : number;
-
+    private _callback : Function;
 
 
     get id(): String {
@@ -103,6 +103,13 @@ export class Animation {
         this._locked = value;
     }
 
+    static create(id: string, animationScene: Phaser.Scene, fromX: number, fromY: number, toX: number, toY: number, text: Phaser.GameObjects.Text, duration: number, callback: Function)
+    {
+        let newInstance = new this(id, animationScene, fromX, fromY, toX, toY, text, duration);
+        newInstance.callback = callback;
+        return newInstance;
+    }
+
     constructor(id: string, animationScene: Phaser.Scene, fromX: number, fromY: number, toX: number, toY: number, text: Phaser.GameObjects.Text, duration: number) {
         this._animationScene = animationScene;
         this._fromX = fromX;
@@ -171,5 +178,13 @@ export class Animation {
 
     set stage(value: number) {
         this._stage = value;
+    }
+
+    get callback(): Function {
+        return this._callback;
+    }
+
+    set callback(value: Function) {
+        this._callback = value;
     }
 }

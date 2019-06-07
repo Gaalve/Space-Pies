@@ -73,7 +73,7 @@ export class MainScene extends Phaser.Scene {
     private energyShopT: Phaser.GameObjects.Image[];
     private energyCostT: Phaser.GameObjects.Text[];
     private energyShopS: Phaser.GameObjects.Image[];
-    private energyTextS: Phaser.GameObjects.Text[];
+    private  energyTextS: Phaser.GameObjects.Text[];
 
 
 
@@ -103,6 +103,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
+        this.scene.launch("AnimationScene");
         this.system = new PiSystem(this, 50,50,50,true);
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
@@ -172,13 +173,23 @@ export class MainScene extends Phaser.Scene {
         this.buttonOption = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_options",
             ()=>{
-            this.scene.pause();
-            this.scene.run('PauseScene');
-            this.scene.setVisible(true,"PauseScene");
+                this.scene.pause();
+                this.scene.run('PauseScene');
+                this.scene.setVisible(true,"PauseScene");
 
             }
         );
         this.buttonOption.setPosition(1880, 40);
+
+        let buttonPauseAnimation = new Button(this, 1800, 40, "button_shadow",
+            "button_bg", "button_fg", "button_options",
+            ()=>{
+                this.scene.setVisible(false,"AnimationScene");
+                this.scene.stop('AnimationScene');
+                this.scene.get("AnimationScene");
+            }
+        );
+        buttonPauseAnimation.setPosition(1800, 40);
 
         this.creatChooseRegen();
         this.createShop1();

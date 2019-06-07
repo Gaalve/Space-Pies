@@ -41,6 +41,14 @@ export class Player {
     public rocketTrail: RocketTrail;
     public bulletTrail: BulletTrail;
 
+    public updateAllTerms()
+    {
+        this.health.updateAllTerms();
+        this.drones[0].refreshOnScreenText();
+        this.drones[1].refreshOnScreenText();
+        this.drones[2].refreshOnScreenText();
+    }
+
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager){
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
