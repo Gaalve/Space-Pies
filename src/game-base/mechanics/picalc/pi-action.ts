@@ -17,6 +17,7 @@ export abstract class PiAction extends PiResolvable{
 
     public attachment: string;
     public attachmentOfResolved: string;
+    public resolvingChance: number;
 
     protected constructor(system: PiSystem, name: string, inOutPut: string, isInput: boolean){
         super(system, name.toLowerCase());
@@ -26,6 +27,7 @@ export abstract class PiAction extends PiResolvable{
         this.isNameScoped = false;
         this.isOutputScoped = false;
         this.callback = ()=>{};
+        this.resolvingChance = 1;
     }
 
     public setNextSymbol(symbol: PiSymbol): void{

@@ -6,6 +6,7 @@ import {PiChannelOut} from "./pi-channel-out";
 import {PiResolvingPair} from "./pi-resolving-pair";
 import {PiReplication} from "./pi-replication";
 import {PiResolvable} from "./pi-resolvable";
+import {PiAction} from "./pi-action";
 
 export class PiSystem {
 
@@ -228,6 +229,7 @@ export class PiSystem {
 
     }
 
+
     /**
      * First phase:
      *
@@ -277,6 +279,19 @@ export class PiSystem {
         this.scene.time.delayedCall(this.resolveTimeOut - execTime, ()=>{this.phaseResolveActions()}, [], this);
     }
 
+
+    private canResolveWithAnotherPair(pair: PiResolvingPair): boolean{
+        if (!this.isResolvePairActive(pair)) return false;
+        for (let idx in this.potentiallyResolving){
+            let other = this.potentiallyResolving[idx];
+            if (pair != other && this.isResolvePairActive(other)){
+                if (other.contains(pair.left) || other.contains(pair.right)) return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * Second phase:
      *
@@ -295,10 +310,13 @@ export class PiSystem {
         this.logPhase2();
         this.phase2changed = false;
         while(this.potentiallyResolving.length > 0){
-            let randIdx = Math.floor(Math.random() * this.potentiallyResolving.length);
+            let randChance = Math.random();
+            let randIdx = Math.floor(randChance * this.potentiallyResolving.length);
             let resolvablePair: PiResolvingPair = this.potentiallyResolving[randIdx];
-            this.resolve(resolvablePair);
-            this.potentiallyResolving.splice(randIdx, 1);
+            if (randChance < resolvablePair.resolvingChance || !this.canResolveWithAnotherPair(resolvablePair)) {
+                this.resolve(resolvablePair);
+                this.potentiallyResolving.splice(randIdx, 1);
+            }
         }
 
         let execTime = this.scene.time.now - startT;
