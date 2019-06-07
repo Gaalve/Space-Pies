@@ -90,21 +90,27 @@ export class PauseScene extends Phaser.Scene {
 
 
         // Weapons Hints
-        this.add.text(120,150,'Waepon Hints:',{
+        this.add.text(120,150,'Weapon Hints:',{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 28, strokeThickness: 2});
 
 
         this.add.image(120,350,'ssr_weap_pro');
         this.add.image(120,400,'ssb_weap_pro');
-        this.add.text(230,350+25,'Projectile Weapons to attack Armor-shields');
+        this.add.text(230,350+22,'Projectile Weapons attack laser and rocket shields.');
+        this.add.image(200, 350,"laser_shield");
+        this.add.image(200, 400, "rocket_shield");
 
         this.add.image(120,550,'ssr_weap_las');
         this.add.image(120,600,'ssb_weap_las');
-        this.add.text(230,550+25,'Laser Weapons to attack energy-shields');
+        this.add.text(230,550+22,'Laser Weapons attack armor and rocket shields.');
+        this.add.image(200, 550,"armor_shield");
+        this.add.image(200, 600, "rocket_shield");
 
         this.add.image(120,750,'ssr_weap_rock');
         this.add.image(120,800,'ssb_weap_rock');
-        this.add.text(230,750+25,'Rocket launcher to destory all kinds of shields');
+        this.add.text(230,750+22,'Rocket launchers attack armor and laser shields.');
+        this.add.image(200, 750,"armor_shield");
+        this.add.image(200, 800, "laser_shield");
 
 
         // Shield Hints
@@ -114,19 +120,25 @@ export class PauseScene extends Phaser.Scene {
 
 
         this.add.image(1920-120,340,'button_shield');
-        this.add.text(1920-600,340,'Energy-shield protects from Laser Weapons,\nvisualis by blue bars\nPi-Kalk:');
+        this.add.image(1920-170,340,"laser_shield");
+        this.add.text(1920-600,320,'Laser shields protect against\nlaser weapons.');
 
         this.add.image(1920-120,460,'button_armor');
-        this.add.text(1920-600,440,'Armor-shield protects from Projectile Weapons,\nvisualis by grey bars');
+        this.add.image(1920-170,460, "armor_shield");
+        this.add.text(1920-600,440,'Armor shields protect against\nprojectile weapons.');
 
         this.add.image(1920-120,580,'button_rocket');
-        this.add.text(1920-600,560,'Rocket-shield protects from Rocket launcher,\nvisualis by red bars');
+        this.add.image(1920-170,580, "rocket_shield");
+        this.add.text(1920-600,560,'Rocket shields protect against\nrocket launchers.');
 
         this.add.image(1920-120,700,'button_nano');
-        this.add.text(1920-600,680,'Nano-shield cheap and weak shield,\nthat protects from all kinds of Weapons\nvisualis by braun bars');
+        this.add.image(1920-170,700, "nano_shield");
+        this.add.text(1920-600,680,'Nano shields are cheap, but can be\nattacked by all kinds of weapons.');
 
         this.add.image(1920-120,820,'button_adapt');
-        this.add.text(1920-600,800,'Super-shield expensive and strong shield,\nthat protects from all kinds of Weapons');
+        this.add.image(1920-185,820, "adap_shield");
+        this.add.image(1920-170,820, "adap_shield2");
+        this.add.text(1920-600,795,'Adaptive shields can be attacked by\nall kinds of weapons.\nSecond bar will adapt to protect against\nthe weapon that hit the first bar.');
 
     }
 
