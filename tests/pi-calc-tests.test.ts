@@ -56,38 +56,38 @@ export class PiCalcTests {
     }
 
     static startTests(gui: Scene, te: TestEnvironment){
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiChannelCallback1(gui, te)}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiChannelCallback2(gui, te);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequential1(gui, te);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequential2(gui, te);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialND(gui, te);}, [], this);
-        // // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialNDStatistic(gui);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum(gui, te);}, [], this);
-        //
-        // // we only want chanIns in Sum (to improve performance) so we skip this test
-        // // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum2(gui, te);}, [], this);
-        //
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialParallel(gui, te);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication1(gui, te);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication2(gui, te);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiTerm(gui, te);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiTermRecursion(gui, te);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRename(gui, te);}, [], this);
-        //
-        // // we only want chanIns in Sum (to improve performance) so we skip this test
-        // // we can not rename chanIns, so this test wont work
-        // // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameSum(gui, te);}, [], this);
-        //
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameConc(gui, te);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiScopeRename(gui, te);}, [], this);
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiShieldTest(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiChannelCallback1(gui, te)}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiChannelCallback2(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequential1(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequential2(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialND(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialNDStatistic(gui);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum(gui, te);}, [], this);
+
+        // we only want chanIns in Sum (to improve performance) so we skip this test
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum2(gui, te);}, [], this);
+
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialParallel(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication1(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication2(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiTerm(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiTermRecursion(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRename(gui, te);}, [], this);
+
+        // we only want chanIns in Sum (to improve performance) so we skip this test
+        // we can not rename chanIns, so this test wont work
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameSum(gui, te);}, [], this);
+
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameConc(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiScopeRename(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiShieldTest(gui, te);}, [], this);
 
 
-        for (let i = 0.0; i < 20.0; i++) {
-            gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
-                0, (100 - i * 5)/100, 0, 0, 10000, te)},
-                [], this);
-        }
+        // for (let i = 0.0; i < 20.0; i++) {
+        //     gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+        //         0, (100 - i * 5)/100, 0, 0, 10000, te)},
+        //         [], this);
+        // }
 
 
         te.start();
