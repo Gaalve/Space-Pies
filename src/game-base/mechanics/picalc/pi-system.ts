@@ -313,6 +313,7 @@ export class PiSystem {
             let randChance = Math.random();
             let randIdx = Math.floor(randChance * this.potentiallyResolving.length);
             let resolvablePair: PiResolvingPair = this.potentiallyResolving[randIdx];
+            // console.log("[PI] chance: " + randChance + " / " + resolvablePair.resolvingChance + " other? " + this.canResolveWithAnotherPair(resolvablePair));
             if (randChance < resolvablePair.resolvingChance || !this.canResolveWithAnotherPair(resolvablePair)) {
                 this.resolve(resolvablePair);
                 this.potentiallyResolving.splice(randIdx, 1);

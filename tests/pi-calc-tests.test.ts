@@ -56,31 +56,66 @@ export class PiCalcTests {
     }
 
     static startTests(gui: Scene, te: TestEnvironment){
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiChannelCallback1(gui, te)}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiChannelCallback2(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequential1(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequential2(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialND(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialNDStatistic(gui);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiChannelCallback1(gui, te)}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiChannelCallback2(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequential1(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequential2(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialND(gui, te);}, [], this);
+        // // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialNDStatistic(gui);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum(gui, te);}, [], this);
+        //
+        // // we only want chanIns in Sum (to improve performance) so we skip this test
+        // // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum2(gui, te);}, [], this);
+        //
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialParallel(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication1(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication2(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiTerm(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiTermRecursion(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRename(gui, te);}, [], this);
+        //
+        // // we only want chanIns in Sum (to improve performance) so we skip this test
+        // // we can not rename chanIns, so this test wont work
+        // // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameSum(gui, te);}, [], this);
+        //
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameConc(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiScopeRename(gui, te);}, [], this);
+        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiShieldTest(gui, te);}, [], this);
 
-        // we only want chanIns in Sum (to improve performance) so we skip this test
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum2(gui, te);}, [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 1, 0, 0, 10000, te)},
+            [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 0.9, 0, 0, 10000, te)},
+            [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 0.8, 0, 0, 10000, te)},
+            [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 0.75, 0, 0, 10000, te)},
+            [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 0.7, 0, 0, 10000, te)},
+            [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 0.65, 0, 0, 10000, te)},
+            [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 0.6, 0, 0, 10000, te)},
+            [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 0.55, 0, 0, 10000, te)},
+            [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 0.51, 0, 0, 10000, te)},
+            [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 0.502, 0, 0, 10000, te)},
+            [], this);
+        gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
+            0, 0.50, 0, 0, 10000, te)},
+            [], this);
 
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialParallel(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication1(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication2(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiTerm(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiTermRecursion(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRename(gui, te);}, [], this);
-
-        // we only want chanIns in Sum (to improve performance) so we skip this test
-        // we can not rename chanIns, so this test wont work
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameSum(gui, te);}, [], this);
-
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameConc(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiScopeRename(gui, te);}, [], this);
-        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiShieldTest(gui, te);}, [], this);
         te.start();
     }
 
@@ -470,5 +505,66 @@ export class PiCalcTests {
         );
 
         system.start();
+    }
+
+
+    /**
+     * Runs a statistics test for randomness manipulation.
+     * @param scene - the scene, duh
+     * @param otherSuccessAmount - amount success symbols (+1); could represent shields on the ship
+     * @param failBaseResolvingChance - chance for not resolving fail symbol; could represent ship's evasion chance
+     * @param otherFailAmount - amount of additional fail symbols; could represent ship's engines
+     * @param otherFailResolvingChance - resolving chance for additional fail symbols
+     * @param tries - The amount of tries for this experiment,
+     * @param testEnvironment
+     */
+    static runStatisticsRandomnessManipulationStart(scene: Phaser.Scene, otherSuccessAmount: number,
+                                               failBaseResolvingChance: number, otherFailAmount: number,
+                                               otherFailResolvingChance: number, tries: number, testEnvironment: TestEnvironment): void{
+        let test = new TestBase(testEnvironment, 'PiManipulationStatistic', 0);
+        let amountSuccess: number = 0;
+        let amountFail: number = 0;
+        this.runStatisticsRandomnessManipulation(scene, otherSuccessAmount, failBaseResolvingChance,
+            otherFailAmount, otherFailResolvingChance, tries, amountSuccess, amountFail, test);
+    }
+
+    static runStatisticsRandomnessManipulation(scene: Phaser.Scene, otherSuccessAmount: number,
+                                               failBaseResolvingChance: number, otherFailAmount: number,
+                                               otherFailResolvingChance: number, tries: number,
+                                               amountSuccess: number, amountFail: number, test: TestBase): void{
+
+        if (amountFail + amountSuccess >= tries){
+            console.log('Hit-Chance: '+amountSuccess/tries);
+            console.log('Hits: '+amountSuccess + ' / ' + tries);
+            console.log('Fails: '+amountFail + ' / ' + tries);
+            console.log('Base-Fail-Chance: '+failBaseResolvingChance);
+            test.success();
+            return;
+        }
+
+        let sys: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        sys.setOnDeadlockCallback(()=>{
+            sys.stop();
+            this.runStatisticsRandomnessManipulation(scene, otherSuccessAmount,
+                failBaseResolvingChance, otherFailAmount, otherFailResolvingChance, tries, amountSuccess, amountFail, test);
+        });
+        sys.pushSymbol(sys.add.channelOut('shield', '').nullProcess()); // one time shot
+
+        sys.pushSymbol(sys.add.channelInCB('shield', '',
+            ()=>{amountSuccess++;}).nullProcess());              // shield
+
+        sys.pushSymbol(sys.add.channelInCB('shield', '',
+            ()=>{amountFail++}, null, failBaseResolvingChance).nullProcess()); // Evasion
+
+        for (let i = 0; i < otherSuccessAmount; i++) {
+            sys.pushSymbol(sys.add.channelInCB('shield', '',
+                ()=>{amountSuccess++}).nullProcess());              // additional shield
+        }
+
+        for (let i = 0; i < otherFailAmount; i++) {
+            sys.pushSymbol(sys.add.channelInCB('shield', '',
+                ()=>{amountFail++}, null, otherFailResolvingChance).nullProcess()); // additional Evasion
+        }
+        sys.start();
     }
 }
