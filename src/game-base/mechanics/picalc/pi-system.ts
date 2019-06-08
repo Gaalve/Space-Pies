@@ -284,7 +284,7 @@ export class PiSystem {
         if (!this.isResolvePairActive(pair)) return false;
         for (let idx in this.potentiallyResolving){
             let other = this.potentiallyResolving[idx];
-            if (pair != other && this.isResolvePairActive(other)){
+            if (pair != other && this.isResolvePairActive(other) && other.resolvingChance > pair.resolvingChance){
                 if (other.contains(pair.left) || other.contains(pair.right)) return true;
             }
         }
