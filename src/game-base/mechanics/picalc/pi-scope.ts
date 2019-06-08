@@ -51,8 +51,7 @@ export class PiScope extends PiSymbol{
         return this.symbols[this.symbols.length - 1];
     }
 
-    copy(): PiSymbol { //TODO
-        // return undefined;
+    copy(): PiSymbol {
         return new PiScope(this.system, this.scopedName, this.symbolStart.copy(), false);
     }
 
@@ -69,9 +68,6 @@ export class PiScope extends PiSymbol{
         if(this.symbolEnd instanceof PiAction){
             seq += this.symbolEnd._getNext().getSymbolSequence();
         }
-        // else if(this.symbolEnd instanceof PiScope){
-        //     seq += this.symbolEnd.getSymbolSequence();
-        // }
         return seq;
     }
 
@@ -103,5 +99,9 @@ export class PiScope extends PiSymbol{
             this.symbols[idx].alphaRename(this.scopedName, this.reservedName, this);
         }
         this.system.pushSymbol(this.symbolStart);
+    }
+
+    isNameInSequence(name: string): boolean {
+        return this.symbolStart.isNameInSequence(name);
     }
 }

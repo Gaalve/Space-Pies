@@ -7,11 +7,15 @@ export class PiResolvingPair {
     public leftAction: PiAction;
     public readonly right: PiResolvable;
     public rightAction: PiAction;
+
+    public readonly resolvingChance;
+
     public constructor(left: PiResolvable, leftAction: PiAction, right: PiResolvable, rightAction: PiAction){
         this.left = left;
         this.leftAction = leftAction;
         this.right = right;
         this.rightAction = rightAction;
+        this.resolvingChance = leftAction.resolvingChance * rightAction.resolvingChance;
     }
 
     public getLeftResolvedSymbol(): PiSymbol{
@@ -22,5 +26,9 @@ export class PiResolvingPair {
     public getRightResolvedSymbol(): PiSymbol{
         this.rightAction = this.right.getAction(this.rightAction.getFullName());
         return this.rightAction.resolve(this.leftAction);
+    }
+
+    public contains(resolvable: PiResolvable){
+        return this.left == resolvable || this.rightAction == resolvable;
     }
 }

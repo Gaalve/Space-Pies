@@ -12,7 +12,7 @@ import {PiScope} from "./pi-scope";
 
 export  class PiSystemAddAction{
     private readonly system: PiSystem;
-    private startAction: PiAction;
+    private readonly startAction: PiAction;
     private action: PiAction;
 
     constructor(system: PiSystem, action: PiAction){
@@ -27,29 +27,37 @@ export  class PiSystemAddAction{
         return this;
     }
 
-    public channelIn(name: string, input: string, attachment?: string): this{
+    public channelIn(name: string, input: string, attachment?: string, resolvingChance: number = 1): this{
         let chan = new PiChannelIn(this.system, name, input);
         chan.attachment = attachment;
+        chan.resolvingChance = resolvingChance;
         return this.nextAction(chan);
     }
 
-    public channelOut(name: string, output: string, attachment?: string): this{
+    public channelOut(name: string, output: string, attachment?: string, resolvingChance: number = 1): this{
         let chan = new PiChannelOut(this.system, name, output);
         chan.attachment = attachment;
+        chan.resolvingChance = resolvingChance;
         return this.nextAction(chan);
     }
 
-    public channelInCB(name: string, input: string, callback: (resolvedName?: string, attachmentOfResolved?: string) => any, attachment?: string): this{
+    public channelInCB(name: string, input: string,
+                       callback: (resolvedName?: string, attachmentOfResolved?: string) => any, attachment?: string,
+                       resolvingChance: number = 1): this{
         let pi = new PiChannelIn(this.system, name, input);
         pi.setCallback(callback);
         pi.attachment = attachment;
+        pi.resolvingChance = resolvingChance;
         return this.nextAction(pi);
     }
 
-    public channelOutCB(name: string, output: string, callback: (resolvedName?: string, attachmentOfResolved?: string) => any, attachment?: string): this{
+    public channelOutCB(name: string, output: string,
+                        callback: (resolvedName?: string, attachmentOfResolved?: string) => any,
+                        attachment?: string, resolvingChance: number = 1): this{
         let pi = new PiChannelOut(this.system, name, output);
         pi.setCallback(callback);
         pi.attachment = attachment;
+        pi.resolvingChance = resolvingChance;
         return this.nextAction(pi);
     }
 
@@ -85,22 +93,9 @@ export  class PiSystemAddAction{
 
     public scope(scopedName: string, symbol: PiSymbol): PiAction{
         let scope = new PiScope(this.system, scopedName, symbol, false);
-        let last = scope.getLastSymbol();
         this.action.setNextSymbol(scope);
         return this.startAction;
     }
-
-
-    // public scopeAction(scopedName: string, symbol: PiSymbol): this{
-    //     let scope = new PiScope(this.system, scopedName, symbol, true);
-    //     let last = scope.getLastSymbol();
-    //     this.action.setNextSymbol(scope);
-    //     if(last instanceof PiAction){
-    //         this.action = last;
-    //         return this;
-    //     }
-    //     else throw new Error("Scope: Last symbol is not an action!");
-    // }
 
     public next(symbol: PiSymbol): PiAction{
         this.action.setNextSymbol(symbol);
