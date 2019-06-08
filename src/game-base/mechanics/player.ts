@@ -63,11 +63,11 @@ export class Player {
 
         //TODO: remove when Triebwerke ready
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier,
-            '', "miss", 0.7).nullProcess()));
+            '', "miss", 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier,
-            '', "miss", 0.7).nullProcess()));
+            '', "miss", 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier,
-            '', "miss", 0.7).nullProcess()));
+            '', "miss", 0.4).nullProcess()));
 
         // z1 starts with 1 shield
         // this.health.addToHz(piSystem, 'radap', 'z1');
