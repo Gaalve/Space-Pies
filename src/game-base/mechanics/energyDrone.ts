@@ -1,6 +1,7 @@
 import {Player} from "./player";
 import {HealthbarSD} from "./health/healthbarSD";
 import {Explosion} from "./animations/explosion";
+import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 
 
 export class EnergyDrone extends Phaser.GameObjects.Sprite{
@@ -11,7 +12,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
     public health : HealthbarSD;
     public explosion: Explosion;
 
-    public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
+    public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number, pem: Phaser.GameObjects.Particles.ParticleEmitterManager){
         super(scene, x, y, "ssr_solar_drone");
         if(player.getNameIdentifier() == "P2"){
             this.setTexture("ssb_solar_drone");
@@ -47,7 +48,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
         this.player = player;
         this.index = index;
-        this.explosion = new Explosion(player.pem);
+        this.explosion = new Explosion(pem);
         if(index > 0) {
             this.health = new HealthbarSD(scene, this.x, this.y, player.getNameIdentifier().charAt(1), index);
         }

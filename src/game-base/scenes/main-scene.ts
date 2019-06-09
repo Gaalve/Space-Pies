@@ -444,12 +444,16 @@ export class MainScene extends Phaser.Scene {
                                                 channelOut("newShield" + p + "4","").
                                                 next(drone),
                                               this.system.add.channelIn("dessol" + p + "1", "solar" + p + "1").
+                                                  channelOut("desslock" + p + "1", "nosolar1").
                                                 next(drone),
                                               this.system.add.channelIn("dessol" + p + "2", "solar" + p + "2").
+                                                channelOut("desslock" + p + "2", "nosolar2").
                                                 next(drone),
                                               this.system.add.channelIn("dessol" + p + "3", "solar" + p + "3").
+                                                channelOut("desslock" + p + "3", "nosolar3").
                                                 next(drone),
                                               this.system.add.channelIn("dessol" + p + "4", "solar" + p + "4").
+                                                channelOut("desslock" + p + "4", "nosolar4").
                                                 next(drone)
                                             ]);
 
@@ -492,7 +496,16 @@ export class MainScene extends Phaser.Scene {
                                               this.system.add.channelIn("newslock" + p + "3", "nosolar3").
                                                 next(slock),
                                               this.system.add.channelIn("newslock" + p + "4", "nosolar4").
-                                                next(slock)]);
+                                                next(slock),
+                                              this.system.add.channelIn("desslock" + p + "1", "solar" + p + "1").
+                                                  next(slock),
+                                              this.system.add.channelIn("desslock" + p + "2", "solar" + p + "2").
+                                                next(slock),
+                                              this.system.add.channelIn("desslock" + p + "3", "solar" + p + "3").
+                                                next(slock),
+                                              this.system.add.channelIn("desslock" + p + "4", "solar" + p + "4").
+                                                next(slock),
+        ]);
         slock.symbol = sum;
         this.system.pushSymbol(slock);
     }
