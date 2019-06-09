@@ -37,7 +37,7 @@ export class Player {
 
 
 
-
+    public pem: Phaser.GameObjects.Particles.ParticleEmitterManager;
     public explosion: Explosion;
     public laserImpact: LaserImpact;
     public projectileImpact: ProjectileImpact;
@@ -58,6 +58,7 @@ export class Player {
         this.activatedSolarDrones = 0;
         this.smallestIndexSolDrone = 0;
         this.health = new Health(scene, this, piSystem);
+        this.pem = pem;
         this.explosion = new Explosion(pem);
         this.laserImpact = new LaserImpact(pem);
         this.projectileImpact = new ProjectileImpact(pem);
@@ -158,8 +159,8 @@ export class Player {
     createSolarDrone(index : number) : void{
         this.activatedSolarDrones += 1;
         if (index != 0) {
-            this.solarDrones[index].health.addBar(HealthType.ArmorBar);
-            this.solarDrones[index].health.addBar(HealthType.ShieldBar);
+            this.solarDrones[index].health.addBar(HealthType.ArmorBarSmall);
+            this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
             this.solarDrones[index].setVisible(true);
             this.setSmallestIndexSD();
         }

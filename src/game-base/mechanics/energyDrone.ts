@@ -1,13 +1,15 @@
 import {Player} from "./player";
 import {HealthbarSD} from "./health/healthbarSD";
+import {Explosion} from "./animations/explosion";
 
 
 export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
     private player : Player;
-    private index : number;
+    private readonly index : number;
     private piTerm : string;
     public health : HealthbarSD;
+    public explosion: Explosion;
 
     public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
         super(scene, x, y, "ssr_solar_drone");
@@ -45,6 +47,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
         this.player = player;
         this.index = index;
+        this.explosion = new Explosion(player.pem);
         if(index > 0) {
             this.health = new HealthbarSD(scene, this.x, this.y, player.getNameIdentifier().charAt(1), index);
         }
@@ -54,13 +57,6 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
         this.buildPiTerm();
 
     }
-
-    getPlayer() : Player{
-        return this.player;
-    }
-
-
-
 
     /**
      get number of solar drone (0: ship, 1: upper weapondrone, 2: lower weapondrone)
@@ -78,14 +74,14 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
         }
     }
 
-    getPiTerm() : string{
-        return this.piTerm
-    }
-
-    toString() : string{
+    public toString() : string{
         return "lock(*)." + this.piTerm + "<*>.0";
     }
 
+    public explode():void{
+        this.explosion.explosionAt(this.x,this.y);
+        this.player.scene.time.delayedCall(300,()=>{this.setVisible(false)},[],this);
+    }
 
 
 }

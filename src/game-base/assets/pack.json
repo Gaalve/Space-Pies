@@ -28,6 +28,11 @@
       },
       {
         "type": "image",
+        "key": "armor_shield_small",
+        "url": "assets/sprites/armor_shield_small.png"
+      },
+      {
+        "type": "image",
         "key": "hitzone_shield",
         "url": "assets/sprites/hitzone_shield.png"
       },
@@ -35,6 +40,11 @@
         "type": "image",
         "key": "laser_shield",
         "url": "assets/sprites/laser_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "laser_shield_small",
+        "url": "assets/sprites/laser_shield_small.png"
       },
       {
         "type": "image",

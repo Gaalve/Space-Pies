@@ -1,17 +1,16 @@
 import {HealthbarSprites} from "./healthbar-sprites";
-import Sprite = Phaser.GameObjects.Sprite;
 import {HealthType} from "./health-type";
 import Text = Phaser.GameObjects.Text;
 
 export class HealthbarSD {
     private readonly scene: Phaser.Scene;
-    private bars: HealthbarSprites[];
+    private readonly bars: HealthbarSprites[];
     private readonly direction: 1|-1;
     private readonly offset: number = 14;
     private readonly x: number;
     private readonly y: number;
     private readonly pid: string;
-    private term: Text;
+    private readonly term: Text;
     private readonly index : number;
 
     public constructor(scene: Phaser.Scene, x: number, y: number, pid: string, index: number){
@@ -27,7 +26,7 @@ export class HealthbarSD {
             this.direction = -1;
         }
 
-        this.term = scene.add.text(this.x, this.y-75, "", {
+        this.term = scene.add.text(this.x, this.y-63, "", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 3, stroke: '#000'
         });
         this.term.setOrigin(0.5);
@@ -38,7 +37,7 @@ export class HealthbarSD {
     public addBar(type: HealthType): void{
         if(this.index > 0) {
             this.bars.push(new HealthbarSprites(this.scene, type,
-                this.x + this.bars.length * this.offset * this.direction, this.y - 50, this.pid.toLowerCase()));
+                this.x + this.bars.length * this.offset * this.direction, this.y - 40, this.pid.toLowerCase()));
             this.updateText();
             for(let b of this.bars){
                 b.sprite.setDepth(-2);
@@ -78,7 +77,7 @@ export class HealthbarSD {
             }
         }
         if(this.bars.length > 0){
-            str += "desSolar" + this.pid + "< >";
+            str += "desSD" + this.pid + "< >";
             str += ".0";
         }
         return str;
@@ -89,11 +88,7 @@ export class HealthbarSD {
         {
 
             bleedingSprite.destroy();
-        }
+        };
         return destroy;
-    }
-
-    public getBars() : number{
-        return this.bars.length;
     }
 }

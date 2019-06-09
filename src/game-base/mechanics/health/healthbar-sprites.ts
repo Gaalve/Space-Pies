@@ -28,6 +28,10 @@ export class HealthbarSprites {
                 return "nano_shield";
             case HealthType.RocketBar:
                 return "rocket_shield";
+            case HealthType.ArmorBarSmall:
+                return "armor_shield_small";
+            case HealthType.ShieldBarSmall:
+                return "laser_shield_small";
         }
         return "";
     }
@@ -48,6 +52,10 @@ export class HealthbarSprites {
                 return "n";
             case HealthType.RocketBar:
                 return "r";
+            case HealthType.ArmorBarSmall:
+                return "a";
+            case HealthType.ShieldBarSmall:
+                return "s";
         }
         return "";
     }
