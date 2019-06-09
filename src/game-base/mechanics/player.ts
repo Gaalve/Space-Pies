@@ -3,13 +3,15 @@ import {PiSystem} from "./picalc/pi-system";
 import {Ship} from "./ship";
 import {Health} from "./health/health";
 import {EnergyDrone} from "./energyDrone";
-import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {Explosion} from "./animations/explosion";
 import {LaserImpact} from "./animations/laser-impact";
 import {ProjectileImpact} from "./animations/projectile-impact";
 import {LaserTrail} from "./animations/laser-trail";
 import {RocketTrail} from "./animations/rocket-trail";
 import {BulletTrail} from "./animations/bullet-trail";
+import {HealthType} from "./health/health-type";
+import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
+
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
@@ -20,6 +22,7 @@ export class Player {
     public ship : Ship;
     private activatedDrones : number;
     private activatedSolarDrones : number;
+    private smallestIndexSolDrone : number;
     public isDead:boolean;
 
     private health : Health;
@@ -53,6 +56,7 @@ export class Player {
         this.activatedDrones = 0;
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0), new EnergyDrone(scene, x, y, this, 1),new EnergyDrone(scene, x, y, this, 2),new EnergyDrone(scene, x, y, this, 3),new EnergyDrone(scene, x, y, this, 4)];
         this.activatedSolarDrones = 0;
+        this.smallestIndexSolDrone = 0;
         this.health = new Health(scene, this, piSystem);
         this.explosion = new Explosion(pem);
         this.laserImpact = new LaserImpact(pem);
@@ -102,7 +106,7 @@ export class Player {
         // this.health.addToHz(piSystem, 'rarmor', 'z4');
         // this.health.addToHz(piSystem, 'rshield', 'z4');
 
-        this.energy = 55;
+        this.energy = 300;
     }
 
     public update(delta: number): void{
@@ -153,8 +157,11 @@ export class Player {
 
     createSolarDrone(index : number) : void{
         this.activatedSolarDrones += 1;
-        if(index != 0) {
+        if (index != 0) {
+            this.solarDrones[index].health.addBar(HealthType.ArmorBar);
+            this.solarDrones[index].health.addBar(HealthType.ShieldBar);
             this.solarDrones[index].setVisible(true);
+            this.setSmallestIndexSD();
         }
     }
 
@@ -235,5 +242,19 @@ export class Player {
 
     getHealth(): Health{
         return this.health;
+    }
+
+    getSmallestIndexSD(): number{
+        return this.smallestIndexSolDrone;
+    }
+    setSmallestIndexSD(): void{
+        for(let sd of this.solarDrones){
+            if(!sd.visible && sd.getIndex()!= 0){
+                this.smallestIndexSolDrone = sd.getIndex();
+                break;
+            }else{
+                this.smallestIndexSolDrone = -1;
+            }
+        }
     }
 }

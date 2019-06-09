@@ -1,4 +1,5 @@
 import {Player} from "./player";
+import {HealthbarSD} from "./health/healthbarSD";
 
 
 export class EnergyDrone extends Phaser.GameObjects.Sprite{
@@ -6,7 +7,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
     private player : Player;
     private index : number;
     private piTerm : string;
-    public onScreenText : Phaser.GameObjects.Text;
+    public health : HealthbarSD;
 
     public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
         super(scene, x, y, "ssr_solar_drone");
@@ -44,9 +45,11 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
         this.player = player;
         this.index = index;
+        if(index > 0) {
+            this.health = new HealthbarSD(scene, this.x, this.y, player.getNameIdentifier().charAt(1), index);
+        }
         this.setVisible(false);
         scene.add.existing(this);
-
 
         this.buildPiTerm();
 
