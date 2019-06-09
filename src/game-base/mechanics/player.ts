@@ -21,7 +21,7 @@ export class Player {
     private system : PiSystem;
     public ship : Ship;
     private activatedDrones : number;
-    private activatedSolarDrones : number;
+    public activatedSolarDrones : number;
     private smallestIndexSolDrone : number;
     public isDead:boolean;
 

@@ -222,7 +222,12 @@ export class MainScene extends Phaser.Scene {
         for(let i = 1; i < 3; i++){
             this.buildEnergyDrones(i);
             this.buildSLocks(i);
+            for(let j = 1; j < 5; j++){
+
+                this.createSolarShields(i,j);
+            }
         }
+
         //extra functions to resolve existing channels e0 - e4 and nosolar0 - nosolar4 after energy phase
         for(let i = 0; i < 5; i++) {
             this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("e" + i.toString(), "").nullProcess()));
@@ -230,8 +235,8 @@ export class MainScene extends Phaser.Scene {
         }
 
         //create 1 energy drone for each player (gain 40 energy per turn)
-        this.system.pushSymbol(this.system.add.channelOut("newsolar10", "solar1").nullProcess());
-        this.system.pushSymbol(this.system.add.channelOut("newsolar20", "solar2").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("newsolar10", "solar10").nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut("newsolar20", "solar20").nullProcess());
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("wait", "").nullProcess()));
 
         this.system.start();
@@ -396,6 +401,7 @@ export class MainScene extends Phaser.Scene {
     /**
      * builds the energy drones
      * @param player
+     * @param sd
      */
     buildEnergyDrones(player : number) : void{
         let p = player.toString();
@@ -411,28 +417,41 @@ export class MainScene extends Phaser.Scene {
                                               this.system.add.channelInCB("newsolar" + p + "0", "e0", () =>{
                                                   this.players[player - 1].createSolarDrone(0);
                                                   }).
-                                                channelOut("newslock" + p + "0", "solar" + p).
+                                                channelOut("newslock" + p + "0", "solar" + p + "0").
                                                 next(drone),
                                               this.system.add.channelInCB("newsolar" + p + "1", "e1", () =>{
                                                   this.players[player - 1].createSolarDrone(1);
                                                   }).
-                                                channelOut("newslock" + p + "1", "solar" + p).
+                                                channelOut("newslock" + p + "1", "solar" + p + "1").
+                                                channelOut("newShield" + p + "1","").
                                                 next(drone),
                                               this.system.add.channelInCB("newsolar" + p + "2", "e2", () =>{
                                                   this.players[player - 1].createSolarDrone(2);
                                                   }).
-                                                channelOut("newslock" + p + "2", "solar" + p).
+                                                channelOut("newslock" + p + "2", "solar" + p + "2").
+                                                channelOut("newShield" + p + "2","").
                                                 next(drone),
                                               this.system.add.channelInCB("newsolar" + p + "3", "e3", () =>{
                                                   this.players[player - 1].createSolarDrone(3);
                                                   }).
-                                                channelOut("newslock" + p + "3", "solar" + p).
+                                                channelOut("newslock" + p + "3", "solar" + p + "3").
+                                                channelOut("newShield" + p + "3","").
                                                 next(drone),
                                               this.system.add.channelInCB("newsolar" + p + "4", "e4", () =>{
                                                   this.players[player - 1].createSolarDrone(4);
                                                   }).
-                                                channelOut("newslock" + p + "4", "solar" + p).
-                                                next(drone)]);
+                                                channelOut("newslock" + p + "4", "solar" + p + "4").
+                                                channelOut("newShield" + p + "4","").
+                                                next(drone),
+                                              this.system.add.channelIn("dessol" + p + "1", "solar" + p + "1").
+                                                next(drone),
+                                              this.system.add.channelIn("dessol" + p + "2", "solar" + p + "2").
+                                                next(drone),
+                                              this.system.add.channelIn("dessol" + p + "3", "solar" + p + "3").
+                                                next(drone),
+                                              this.system.add.channelIn("dessol" + p + "4", "solar" + p + "4").
+                                                next(drone)
+                                            ]);
 
         drone.symbol = sum;
         this.system.pushSymbol(drone);
@@ -476,6 +495,21 @@ export class MainScene extends Phaser.Scene {
                                                 next(slock)]);
         slock.symbol = sum;
         this.system.pushSymbol(slock);
+    }
+
+    private createSolarShields(player: number, sd: number){
+        let p = player.toString();
+        let d = sd.toString();
+
+        let shield = this.system.add.term("SolarShield"+p+d, undefined);
+        let term = this.system.add.channelIn("newShield"+p+d,"")
+            .channelInCB("shield"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()})
+            .channelInCB("armor"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()})
+            .channelOutCB("dessol"+p+d,"e"+d, ()=>{this.players[player-1].getSolarDrones()[sd].explode()})
+            .next(shield);
+
+        shield.symbol = term;
+        this.system.pushSymbol(shield);
     }
 
     private createShop1(): void
