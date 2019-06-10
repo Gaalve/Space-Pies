@@ -22,17 +22,9 @@ export class Bullet extends Sprite{
         this.setDepth(10); //TODO
         this.hit = hit;
         this.isFirst = isFirstPlayer;
-        let speed = 5;
-        if(isFirstPlayer){
-            this.speedX = speed;
-            this.flipX = true;
-            this.x += 15;
-        }
-        else {
-            this.speedX = -speed;
-            this.x -= 15;
-        }
-        this.speedY = (toY - y) * (speed / Math.abs(x - toX));
+        let speed = 4;
+
+        this.setAngle(Phaser.Math.Angle.Between(x, y, toX, toY) * Phaser.Math.RAD_TO_DEG - 180);
 
         this.speedX = Math.cos(Phaser.Math.Angle.Between(x, y, toX, toY)) * speed;
         this.speedY = Math.sin(Phaser.Math.Angle.Between(x, y, toX, toY)) * speed;
