@@ -20,7 +20,7 @@ export class HealthbarSD {
         this.bars = [];
         this.pid = pid.toLowerCase();
         this.index = index;
-        if(pid == "1"){
+        if(pid == "P1"){
             this.direction = 1;
         }else{
             this.direction = -1;
@@ -77,7 +77,7 @@ export class HealthbarSD {
             }
         }
         if(this.bars.length > 0){
-            str += "desSD" + this.pid + "< >";
+            str += "dessol" + this.pid + "< >";
             str += ".0";
         }
         return str;

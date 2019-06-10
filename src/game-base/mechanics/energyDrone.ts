@@ -50,7 +50,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
         this.index = index;
         this.explosion = new Explosion(pem);
         if(index > 0) {
-            this.health = new HealthbarSD(scene, this.x, this.y, player.getNameIdentifier().charAt(1), index);
+            this.health = new HealthbarSD(scene, this.x, this.y, player.getNameIdentifier(), index);
         }
         this.setVisible(false);
         scene.add.existing(this);
@@ -81,9 +81,8 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
     public explode():void{
         this.player.activatedSolarDrones--;
-        this.player.setSmallestIndexSD();
         this.explosion.explosionAt(this.x,this.y);
-        this.player.scene.time.delayedCall(300,()=>{this.setVisible(false)},[],this);
+        this.player.scene.time.delayedCall(300,()=>{this.setVisible(false); this.player.setSmallestIndexSD();},[],this);
     }
 
 

@@ -221,22 +221,32 @@ export class MainScene extends Phaser.Scene {
         //Creating Energy Drones#######################################################
         for(let i = 1; i < 3; i++){
             this.buildEnergyDrones(i);
-            this.buildSLocks(i);
             for(let j = 1; j < 5; j++){
-
                 this.createSolarShields(i,j);
+                this.createRepsSolarDrones(i,j);
             }
         }
+        this.system.pushSymbol(
+            this.system.add.replication(
+                this.system.add.channelInCB("solar10","", ()=>{
+                    this.players[0].gainEnergy(40)})
+                    .nullProcess()));
+        this.system.pushSymbol(
+            this.system.add.replication(
+                this.system.add.channelInCB("solar20","", ()=>{
+                    this.players[1].gainEnergy(40)})
+                    .nullProcess()));
 
         //extra functions to resolve existing channels e0 - e4 and nosolar0 - nosolar4 after energy phase
         for(let i = 0; i < 5; i++) {
             this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("e" + i.toString(), "").nullProcess()));
-            this.system.pushSymbol(this.system.add.replication(this.system.add.channelOut("nosolar" + i.toString(), "0").nullProcess()));
         }
 
         //create 1 energy drone for each player (gain 40 energy per turn)
         this.system.pushSymbol(this.system.add.channelOut("newsolar10", "solar10").nullProcess());
         this.system.pushSymbol(this.system.add.channelOut("newsolar20", "solar20").nullProcess());
+
+        //extra function for game sync
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("wait", "").nullProcess()));
 
         this.system.start();
@@ -407,7 +417,7 @@ export class MainScene extends Phaser.Scene {
         let p = player.toString();
 
         let drone = this.system.add.term("Drone" + p, undefined);
-        let sum = this.system.add.sum([this.system.add.channelIn("energy" + p, "").
+        let sum = this.system.add.sum([this.system.add.channelIn("startephase" + p, "").
                                                 channelOut("e0", "1").
                                                 channelOut("e1", "1").
                                                 channelOut("e2", "1").
@@ -417,43 +427,34 @@ export class MainScene extends Phaser.Scene {
                                               this.system.add.channelInCB("newsolar" + p + "0", "e0", () =>{
                                                   this.players[player - 1].createSolarDrone(0);
                                                   }).
-                                                channelOut("newslock" + p + "0", "solar" + p + "0").
                                                 next(drone),
                                               this.system.add.channelInCB("newsolar" + p + "1", "e1", () =>{
                                                   this.players[player - 1].createSolarDrone(1);
                                                   }).
-                                                channelOut("newslock" + p + "1", "solar" + p + "1").
                                                 channelOut("newShield" + p + "1","").
                                                 next(drone),
                                               this.system.add.channelInCB("newsolar" + p + "2", "e2", () =>{
                                                   this.players[player - 1].createSolarDrone(2);
                                                   }).
-                                                channelOut("newslock" + p + "2", "solar" + p + "2").
                                                 channelOut("newShield" + p + "2","").
                                                 next(drone),
                                               this.system.add.channelInCB("newsolar" + p + "3", "e3", () =>{
                                                   this.players[player - 1].createSolarDrone(3);
                                                   }).
-                                                channelOut("newslock" + p + "3", "solar" + p + "3").
                                                 channelOut("newShield" + p + "3","").
                                                 next(drone),
                                               this.system.add.channelInCB("newsolar" + p + "4", "e4", () =>{
                                                   this.players[player - 1].createSolarDrone(4);
                                                   }).
-                                                channelOut("newslock" + p + "4", "solar" + p + "4").
                                                 channelOut("newShield" + p + "4","").
                                                 next(drone),
                                               this.system.add.channelIn("dessol" + p + "1", "solar" + p + "1").
-                                                  channelOut("desslock" + p + "1", "nosolar1").
                                                 next(drone),
                                               this.system.add.channelIn("dessol" + p + "2", "solar" + p + "2").
-                                                channelOut("desslock" + p + "2", "nosolar2").
                                                 next(drone),
                                               this.system.add.channelIn("dessol" + p + "3", "solar" + p + "3").
-                                                channelOut("desslock" + p + "3", "nosolar3").
                                                 next(drone),
                                               this.system.add.channelIn("dessol" + p + "4", "solar" + p + "4").
-                                                channelOut("desslock" + p + "4", "nosolar4").
                                                 next(drone)
                                             ]);
 
@@ -461,53 +462,14 @@ export class MainScene extends Phaser.Scene {
         this.system.pushSymbol(drone);
     }
 
-    /**
-     * builds the necessary pi calc terms to regain energy
-     * @param player
-     */
-    buildSLocks(player : number) : void{
+    private createRepsSolarDrones(player : number, sd : number){
         let p = player.toString();
-
-        let slock = this.system.add.term("SLock" + p, undefined);
-        let sum = this.system.add.sum([this.system.add.channelIn("startephase" + p, "").
-                                                channelOut("energy" + p, "").
-                                                channelInCB("nosolar0", "", (x) => {
-                                                    this.players[player - 1].gainEnergy(x, 40);
-                                                    }).
-                                                channelInCB("nosolar1", "", (x) => {
-                                                    this.players[player - 1].gainEnergy(x, 15);
-                                                    }).
-                                                channelInCB("nosolar2", "", (x) => {
-                                                    this.players[player - 1].gainEnergy(x, 15);
-                                                    }).
-                                                channelInCB("nosolar3", "", (x) => {
-                                                    this.players[player - 1].gainEnergy(x, 15);
-                                                    }).
-                                                channelInCB("nosolar4", "", (x) => {
-                                                    this.players[player - 1].gainEnergy(x, 15);
-                                                    }).
-                                                    next(slock),
-                                              this.system.add.channelIn("newslock" + p + "0", "nosolar0").
-                                                next(slock),
-                                              this.system.add.channelIn("newslock" + p + "1", "nosolar1").
-                                                next(slock),
-                                              this.system.add.channelIn("newslock" + p + "2", "nosolar2").
-                                                next(slock),
-                                              this.system.add.channelIn("newslock" + p + "3", "nosolar3").
-                                                next(slock),
-                                              this.system.add.channelIn("newslock" + p + "4", "nosolar4").
-                                                next(slock),
-                                              this.system.add.channelIn("desslock" + p + "1", "solar" + p + "1").
-                                                  next(slock),
-                                              this.system.add.channelIn("desslock" + p + "2", "solar" + p + "2").
-                                                next(slock),
-                                              this.system.add.channelIn("desslock" + p + "3", "solar" + p + "3").
-                                                next(slock),
-                                              this.system.add.channelIn("desslock" + p + "4", "solar" + p + "4").
-                                                next(slock),
-        ]);
-        slock.symbol = sum;
-        this.system.pushSymbol(slock);
+        let d = sd.toString();
+        this.system.pushSymbol(
+            this.system.add.replication(
+                this.system.add.channelInCB("solar" + p + d,"", ()=>{
+                    this.players[player-1].gainEnergy(15)})
+                    .nullProcess()));
     }
 
     private createSolarShields(player: number, sd: number){
@@ -516,8 +478,8 @@ export class MainScene extends Phaser.Scene {
 
         let shield = this.system.add.term("SolarShield"+p+d, undefined);
         let term = this.system.add.channelIn("newShield"+p+d,"")
-            .channelInCB("shield"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()})
-            .channelInCB("armor"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()})
+            .channelInCB("shieldp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()})
+            .channelInCB("armorp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()})
             .channelOutCB("dessol"+p+d,"e"+d, ()=>{this.players[player-1].getSolarDrones()[sd].explode()})
             .next(shield);
 
@@ -575,7 +537,7 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("buy", "s");
                 this.updateShop1(true);
 
-                system.pushSymbol(system.add.channelOut("newsolar"+ player.getNameIdentifier().charAt(1)+player.getNrSolarDrones(), "solar"+player.getNameIdentifier().charAt(1)).nullProcess())
+                system.pushSymbol(system.add.channelOut("newsolar"+ player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD(), "solar"+player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD()).nullProcess())
 
         });
         this.solar.setAlt(this, 1050, 1080-100, "ssb_solar_drone");
