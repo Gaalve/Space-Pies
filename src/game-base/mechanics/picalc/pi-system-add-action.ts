@@ -27,14 +27,14 @@ export  class PiSystemAddAction{
         return this;
     }
 
-    public channelIn(name: string, input: string, attachment?: string, resolvingChance: number = 1): this{
+    public channelIn(name: string, input: string, attachment?: any, resolvingChance: number = 1): this{
         let chan = new PiChannelIn(this.system, name, input);
         chan.attachment = attachment;
         chan.resolvingChance = resolvingChance;
         return this.nextAction(chan);
     }
 
-    public channelOut(name: string, output: string, attachment?: string, resolvingChance: number = 1): this{
+    public channelOut(name: string, output: string, attachment?: any, resolvingChance: number = 1): this{
         let chan = new PiChannelOut(this.system, name, output);
         chan.attachment = attachment;
         chan.resolvingChance = resolvingChance;
@@ -42,7 +42,7 @@ export  class PiSystemAddAction{
     }
 
     public channelInCB(name: string, input: string,
-                       callback: (resolvedName?: string, attachmentOfResolved?: string) => any, attachment?: string,
+                       callback: (resolvedName?: string, attachmentOfResolved?: any) => any, attachment?: any,
                        resolvingChance: number = 1): this{
         let pi = new PiChannelIn(this.system, name, input);
         pi.setCallback(callback);
@@ -52,8 +52,8 @@ export  class PiSystemAddAction{
     }
 
     public channelOutCB(name: string, output: string,
-                        callback: (resolvedName?: string, attachmentOfResolved?: string) => any,
-                        attachment?: string, resolvingChance: number = 1): this{
+                        callback: (resolvedName?: string, attachmentOfResolved?: any) => any,
+                        attachment?: any, resolvingChance: number = 1): this{
         let pi = new PiChannelOut(this.system, name, output);
         pi.setCallback(callback);
         pi.attachment = attachment;

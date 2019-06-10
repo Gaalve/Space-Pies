@@ -10,6 +10,7 @@ import {ProjectileImpact} from "./animations/projectile-impact";
 import {LaserTrail} from "./animations/laser-trail";
 import {RocketTrail} from "./animations/rocket-trail";
 import {BulletTrail} from "./animations/bullet-trail";
+import {BulletInfo} from "./weapon/bulletInfo";
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
@@ -63,11 +64,11 @@ export class Player {
 
         //TODO: remove when Triebwerke ready
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier,
-            '', "miss", 0.4).nullProcess()));
+            '', new BulletInfo(true, x, y), 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier,
-            '', "miss", 0.4).nullProcess()));
+            '', new BulletInfo(true, x, y), 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier,
-            '', "miss", 0.4).nullProcess()));
+            '', new BulletInfo(true, x, y), 0.4).nullProcess()));
 
         // z1 starts with 1 shield
         // this.health.addToHz(piSystem, 'radap', 'z1');

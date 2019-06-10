@@ -38,7 +38,6 @@ export class LaserImpact {
             lifespan: {min: 1800*lifeScale, max: 2000*lifeScale}, on: false});
     }
     private setImpactConfig2(impactAngle: number, lifeScale: number = 1, speedScale: number = 1): void{
-        console.log(impactAngle);
         this.laserSpark.fromJSON({
             angle: {min: impactAngle + 1, max: impactAngle + 13},
             speed: {min: 50*speedScale, max: 200*speedScale},
