@@ -82,6 +82,9 @@ export class PiCalcTests {
         gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiScopeRename(gui, te);}, [], this);
         gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiShieldTest(gui, te);}, [], this);
 
+        gui.time.delayedCall(1,() =>{PiCalcTests.runRenamingInChannelReplicationTest(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runRenamingProcessTest(gui, te);}, [], this);
+
 
         // for (let i = 0.0; i < 20.0; i++) {
         //     gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
@@ -540,5 +543,44 @@ export class PiCalcTests {
                 ()=>{amountFail++}, null, otherFailResolvingChance).nullProcess()); // additional Evasion
         }
         sys.start();
+    }
+
+    static runRenamingInChannelReplicationTest(scene: Scene, testEnvironment: TestEnvironment): void{
+        let test = new TestBase(testEnvironment, 'PiReplicationInRename', 0);
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.setOnDeadlockCallback(()=>{test.fail()});
+        system.pushSymbol(
+            system.add.channelOut('x', 'suc').nullProcess()
+        );
+
+        system.pushSymbol(
+            system.add.replication(
+                system.add.channelInCB('x', 'huh',
+                    (rn) => { if(rn == 'suc') test.success(); console.log('rn:= '+rn)}).nullProcess()
+            )
+        );
+
+        system.start();
+    }
+
+    static runRenamingProcessTest(scene: Scene, testEnvironment: TestEnvironment): void{
+        let test = new TestBase(testEnvironment, 'PiRenamingProcess', 0);
+        let system: PiSystem = new PiSystem(scene, 1, 1, 1, false);
+        system.setOnDeadlockCallback(()=>{test.fail()});
+        system.pushSymbol(
+            system.add.channelOut('x', 'suc').nullProcess()
+        );
+
+        system.pushSymbol(
+            system.add.replication(
+                system.add.channelIn('x', 'huh').process('P', (pv) => {
+                    if(pv.length == 1){
+                        if (pv[0][0] == 'huh' && pv[0][1] == 'suc') test.success();
+                    }
+                })
+            )
+        );
+
+        system.start();
     }
 }

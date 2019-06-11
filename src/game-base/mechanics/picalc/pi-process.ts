@@ -9,6 +9,7 @@ export class PiProcess extends PiSymbol{
     public constructor(system: PiSystem, name: string = '0', callback: (passedValues: [string, string][])=>any = ()=>{}){
         super(system, name.toUpperCase());
         this.callback = callback;
+        this.renames = [];
     }
 
     public trigger(): void {
