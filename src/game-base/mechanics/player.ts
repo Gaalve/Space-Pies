@@ -176,9 +176,10 @@ export class Player {
         this.energy -= cost;
     }
 
-    gainEnergy(amount: number) : void
+    gainEnergy(amount: string) : void
     {
-            this.energy += amount;
+        let toAdd = +amount;
+        this.energy += toAdd;
     }
 
     getEnergyCost(type: string): number

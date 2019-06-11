@@ -221,21 +221,13 @@ export class MainScene extends Phaser.Scene {
         //Creating Energy Drones#######################################################
         for(let i = 1; i < 3; i++){
             this.buildEnergyDrones(i);
-            for(let j = 1; j < 5; j++){
-                this.createSolarShields(i,j);
+            for(let j = 0; j < 5; j++){
+                if(j > 0) {
+                    this.createSolarShields(i, j);
+                }
                 this.createRepsSolarDrones(i,j);
             }
         }
-        this.system.pushSymbol(
-            this.system.add.replication(
-                this.system.add.channelInCB("solar10","", ()=>{
-                    this.players[0].gainEnergy(40)})
-                    .nullProcess()));
-        this.system.pushSymbol(
-            this.system.add.replication(
-                this.system.add.channelInCB("solar20","", ()=>{
-                    this.players[1].gainEnergy(40)})
-                    .nullProcess()));
 
         //extra functions to resolve existing channels e0 - e4 and nosolar0 - nosolar4 after energy phase
         for(let i = 0; i < 5; i++) {
@@ -418,11 +410,11 @@ export class MainScene extends Phaser.Scene {
 
         let drone = this.system.add.term("Drone" + p, undefined);
         let sum = this.system.add.sum([this.system.add.channelIn("startephase" + p, "").
-                                                channelOut("e0", "1").
-                                                channelOut("e1", "1").
-                                                channelOut("e2", "1").
-                                                channelOut("e3", "1").
-                                                channelOut("e4", "1").
+                                                channelOut("e0", "40").
+                                                channelOut("e1", "15").
+                                                channelOut("e2", "15").
+                                                channelOut("e3", "15").
+                                                channelOut("e4", "15").
                                                 next(drone),
                                               this.system.add.channelInCB("newsolar" + p + "0", "e0", () =>{
                                                   this.players[player - 1].createSolarDrone(0);
@@ -465,11 +457,20 @@ export class MainScene extends Phaser.Scene {
     private createRepsSolarDrones(player : number, sd : number){
         let p = player.toString();
         let d = sd.toString();
-        this.system.pushSymbol(
+
+        let rep = this.system.add.term("Solar"+p+d, undefined);
+        let solar = this.system.add.channelInCB("solar" + p + d, "",(x)=>{
+            this.players[player-1].gainEnergy(x);
+        }).next(rep);
+
+        rep.symbol = solar;
+        this.system.pushSymbol(rep);
+
+        /*this.system.pushSymbol(
             this.system.add.replication(
-                this.system.add.channelInCB("solar" + p + d,"", ()=>{
-                    this.players[player-1].gainEnergy(15)})
-                    .nullProcess()));
+                this.system.add.channelInCB("solar" + p + d,"amount", (amount)=>{
+                    this.players[player-1].gainEnergy(amount)})
+                    .nullProcess()));*/
     }
 
     private createSolarShields(player: number, sd: number){
