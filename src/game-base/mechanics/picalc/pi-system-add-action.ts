@@ -76,7 +76,7 @@ export  class PiSystemAddAction{
         return this.startAction;
     }
 
-    public process(name: string, callback: Function): PiAction{
+    public process(name: string, callback: (passedValues: [string, string][])=>any): PiAction{
         this.action.setNextSymbol(new PiProcess(this.system, name, callback));
         return this.startAction;
     }

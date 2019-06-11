@@ -3,15 +3,16 @@ import {PiSystem} from "./pi-system";
 import {PiScope} from "./pi-scope";
 
 export class PiProcess extends PiSymbol{
-    private callback: Function;
+    private readonly callback: (passedValues: [string, string][])=>any;
+    private renames: [string, string][];
 
-    public constructor(system: PiSystem, name: string = '0', callback: Function = ()=>{}){
+    public constructor(system: PiSystem, name: string = '0', callback: (passedValues: [string, string][])=>any = ()=>{}){
         super(system, name.toUpperCase());
         this.callback = callback;
     }
 
     public trigger(): void {
-        this.callback();
+        this.callback(this.renames);
     }
 
     public getFullName(): string {
@@ -31,7 +32,7 @@ export class PiProcess extends PiSymbol{
     }
 
     rename(argName: string, argValue: string): void {
-        //TODO
+        this.renames.push([argName, argValue]);
     }
 
     isNameInSequence(name: string): boolean {

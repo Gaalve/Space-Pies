@@ -52,7 +52,7 @@ export  class PiSystemAdd{
         return new PiSystemAddAction(this.system, pi)
     }
 
-    public process(name: string, callback: Function): PiProcess{
+    public process(name: string, callback: (passedValues: [string, string][])=>any): PiProcess{
         return new PiProcess(this.system, name, callback);
     }
 
