@@ -57,4 +57,11 @@ export class PiConcurrent extends PiSymbol{
         }
     }
 
+    isNameInSequence(name: string): boolean {
+        for(let idx in this.symbols){
+            if (this.symbols[idx].isNameInSequence(name)) return true;
+        }
+        return false;
+    }
+
 }

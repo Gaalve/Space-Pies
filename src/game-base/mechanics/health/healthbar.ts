@@ -74,7 +74,12 @@ export class Healthbar {
                 str += '( ).';
             }
         }
-        str += this.lastPiSymbolString;
+        if(this.bars.length > 0){
+            str += this.lastPiSymbolString;
+            str += ".0";
+        }else{
+            this.symbol.destroy()
+        }
         return str;
     }
 
@@ -85,5 +90,15 @@ export class Healthbar {
             bleedingSprite.destroy();
         }
         return destroy;
+    }
+
+    public removeBar() : void{
+        let sprite = this.bars.pop().sprite;
+        this.scene.time.delayedCall(500,()=>{sprite.destroy()}, [],this);
+        this.scene.time.delayedCall(500,()=>{this.updateText()}, [],this);
+    }
+
+    public getBars() : number{
+        return this.bars.length;
     }
 }

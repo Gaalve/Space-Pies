@@ -5,6 +5,7 @@ import {PiResolvable} from "./pi-resolvable";
 import {PiScope} from "./pi-scope";
 
 export abstract class PiAction extends PiResolvable{
+
     protected next: PiSymbol;
     protected inOutPut: string;
     protected isInput: boolean;
@@ -16,6 +17,7 @@ export abstract class PiAction extends PiResolvable{
 
     public attachment: string;
     public attachmentOfResolved: string;
+    public resolvingChance: number;
 
     protected constructor(system: PiSystem, name: string, inOutPut: string, isInput: boolean){
         super(system, name.toLowerCase());
@@ -25,25 +27,12 @@ export abstract class PiAction extends PiResolvable{
         this.isNameScoped = false;
         this.isOutputScoped = false;
         this.callback = ()=>{};
+        this.resolvingChance = 1;
     }
-
-
-    public abstract getSymbolSequence(): string;
-
 
     public setNextSymbol(symbol: PiSymbol): void{
         this.next = symbol;
     }
-
-    /**
-     * Renames the channel name and/or output name to argValue, if they equal argName.
-     * Forwards parameters to next symbol.
-     * @param argName the name that received the name (argValue)
-     * @param argValue the bound name
-     *
-     * Recap: only free names can be bound, see ./src/game-base/docs/Pi-Kalkül-Doc.pdf, Section: Freie und Gebundene Namen.
-     */
-
 
     public abstract canResolve(other: PiAction): boolean;
 
@@ -59,6 +48,14 @@ export abstract class PiAction extends PiResolvable{
         return this.next;
     }
 
+    /**
+     * Renames the channel name and/or output name to argValue, if they equal argName.
+     * Forwards parameters to next symbol.
+     * @param argName the name that received the name (argValue)
+     * @param argValue the bound name
+     *
+     * Recap: only free names can be bound, see ./src/game-base/docs/Pi-Kalkül-Doc.pdf, Section: Freie und Gebundene Namen.
+     */
     public rename(argName: string, argValue: string): void{
         if(this.name == argName && !this.isNameScoped) this.name = argValue;
         if(!this.isInput && this.inOutPut == argName && !this.isOutputScoped) this.inOutPut = argValue;
@@ -96,4 +93,10 @@ export abstract class PiAction extends PiResolvable{
         super.trigger();
         this.callback(undefined, this.attachmentOfResolved);
     }
+
+    isNameInSequence(name: string): boolean {
+        if (this.name == name) return true;
+        return this.next.isNameInSequence(name);
+    }
+
 }

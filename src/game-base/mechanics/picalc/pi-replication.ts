@@ -10,6 +10,10 @@ export class PiReplication extends PiResolvable{
         this.action = action;
     }
 
+    isNameInSequence(name: string): boolean {
+        return this.action.isNameInSequence(name);
+    }
+
     public getSymbolSequence(): string{
         return '!('+ this.action.getSymbolSequence() + ")";
     }

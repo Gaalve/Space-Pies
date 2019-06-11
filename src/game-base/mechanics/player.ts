@@ -15,11 +15,12 @@ export class Player {
     private firstPlayer: boolean;
     private drones : [Drone, Drone, Drone];
     private solarDrones: [EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone];
-    private scene : Phaser.Scene;
+    public scene : Phaser.Scene;
     private system : PiSystem;
     public ship : Ship;
     private activatedDrones : number;
     private activatedSolarDrones : number;
+    public isDead:boolean;
 
     private health : Health;
     private energy : number;
@@ -29,6 +30,7 @@ export class Player {
     private weaponCost : number = 25; // cost for laser/projectile weapon
     private rocketCost : number = 40;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
+    private adaptCost: number = 20; // cost for adaptive shield
 
 
 
@@ -41,6 +43,7 @@ export class Player {
     public bulletTrail: BulletTrail;
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager){
+        this.isDead=false;
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
@@ -59,12 +62,15 @@ export class Player {
         this.bulletTrail = new BulletTrail(pem);
 
         //TODO: remove when Triebwerke ready
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '', "miss").nullProcess()));
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '', "miss").nullProcess()));
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '', "miss").nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier,
+            '', "miss", 0.4).nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier,
+            '', "miss", 0.4).nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier,
+            '', "miss", 0.4).nullProcess()));
 
         // z1 starts with 1 shield
-        // this.health.addToHz(piSystem, 'rshield', 'z1');
+        // this.health.addToHz(piSystem, 'radap', 'z1');
         // this.health.addToHz(piSystem, 'rshield', 'z1');
         // this.health.addToHz(piSystem, 'rarmor', 'z1');
         // this.health.addToHz(piSystem, 'rshield', 'z1');
@@ -174,6 +180,12 @@ export class Player {
         case("shield"):{
                return this.shieldCost;
            }
+        case("armor"):{
+            return this.shieldCost;
+        }
+        case("rocket"):{
+            return this.shieldCost;
+        }
         case("nano"):{
             return this.nanoCost;
         }
@@ -183,11 +195,14 @@ export class Player {
         case("weapon"):{
             return this.weaponCost;
         }
-        case("rocket"):{
+        case("rocketl"):{
             return this.rocketCost;
         }
         case("solar"):{
             return this.solarCost;
+        }
+        case("adap"):{
+            return this.adaptCost;
         }
         default: return 0;
 
@@ -218,20 +233,7 @@ export class Player {
         this.energy = 55;
     }
 
-    destroyAllDrones() : void {
-        this.activatedDrones = 0;
-        this.activatedSolarDrones = 0;
-
-        for (let i = 0; i < this.drones.length; i++){
-            this.drones[i].setVisible(false);
-            this.drones[i].removeWeapons();
-            this.drones[i].resetPiTerm();
-            this.drones[i].refreshOnScreenText();
-        }
-
-        for (let i = 0; i < this.solarDrones.length; i++){
-            this.solarDrones[i].setVisible(false);
-        }
+    getHealth(): Health{
+        return this.health;
     }
-
 }
