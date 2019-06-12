@@ -2,6 +2,7 @@ import {Player} from "./player";
 import {HealthbarSD} from "./health/healthbarSD";
 import {Explosion} from "./animations/explosion";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
+import {BulletInfo} from "./weapon/bulletInfo";
 
 
 export class EnergyDrone extends Phaser.GameObjects.Sprite{
@@ -56,6 +57,10 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
         scene.add.existing(this);
 
         this.buildPiTerm();
+        this.createRepsSolarDrones(this.player.getNameIdentifier().charAt(1), this.index);
+        if(this.index != 0){
+            this.createSolarShields(this.player.getNameIdentifier().charAt(1), this.index);
+        }
 
     }
 
@@ -85,5 +90,34 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
         this.player.scene.time.delayedCall(300,()=>{this.setVisible(false); this.player.setSmallestIndexSD();},[],this);
     }
 
+    private createRepsSolarDrones(p : string, sd : number){
+        let d = sd.toString();
+        let system = this.player.getSystem();
+
+        system.pushSymbol(
+            system.add.replication(
+                system.add.channelInCB("solar" + p + d,"amount", (amount)=>{
+                    this.player.gainEnergy(amount)})
+                    .nullProcess()));
+    }
+
+    private createSolarShields(p: string, sd: number){
+        let d = sd.toString();
+        let x = this.x;
+        let y = this.y;
+        let system = this.player.getSystem();
+
+        let shield = system.add.term("SolarShield"+p+d, undefined);
+        let term = system.add.channelIn("newShield"+p+d,"")
+            .channelInCB("shieldp"+p,"",()=>{this.player.getSolarDrones()[sd].health.destroyBar()},
+                new BulletInfo(false, x,y), 0.6)
+            .channelInCB("armorp"+p,"",()=>{this.player.getSolarDrones()[sd].health.destroyBar()},
+                new BulletInfo(false, x,y),0.6)
+            .channelOutCB("dessol"+p+d,"e"+d, ()=>{this.player.getSolarDrones()[sd].explode()})
+            .next(shield);
+
+        shield.symbol = term;
+        system.pushSymbol(shield);
+    }
 
 }

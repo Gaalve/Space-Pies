@@ -75,7 +75,7 @@ export class MainScene extends Phaser.Scene {
     private energyShopS: Phaser.GameObjects.Image[];
     private energyTextS: Phaser.GameObjects.Text[];
 
-    private battleTime: BattleTimeBar;
+    public battleTime: BattleTimeBar;
 
 
 
@@ -110,7 +110,8 @@ export class MainScene extends Phaser.Scene {
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
-        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem), new Player(this, 1620, 540, "P2", false, this.system, this.pem)];
+        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
+                        new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
         this.turn = new Turn(this, this.players);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
@@ -179,50 +180,20 @@ export class MainScene extends Phaser.Scene {
         this.createChooseType();
         this.createChooseMod();
 
-
-        //Weapons in Pi Calculus
-        for(let i = 1; i<3; i++){
-            for(let j = 0; j < 3; j++){
-                this.buildWeaponsPi(i,j);
-            }
-        }
         //extra functions to resolve existing channels w1, w2, w3 after attack phase
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w1", "").nullProcess()));
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w2", "").nullProcess()));
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w3", "").nullProcess()));
 
-        //locks for attack phase in Pi Calc
-        for(let i = 1; i < 3; i++){
-            this.buildLocksPi(i);
-        }
         //extra functions to resolve existing channels nolock1, nolock2, nolock3 after attack phase
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock1", "").nullProcess()));
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock2", "").nullProcess()));
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nolock3", "").nullProcess()));
 
-        //create 1 weapon for each player on ship
-        this.system.pushSymbol(this.system.add.channelOut("wmod10","").channelOut("wext100", "shieldp2").nullProcess());
-        this.system.pushSymbol(this.system.add.channelOut("wmod20", "").channelOut("wext200", "shieldp1").nullProcess());
-
-        //Creating Energy Drones#######################################################
-        for(let i = 1; i < 3; i++){
-            this.buildEnergyDrones(i);
-            for(let j = 0; j < 5; j++){
-                if(j > 0) {
-                    this.createSolarShields(i, j);
-                }
-                this.createRepsSolarDrones(i,j);
-            }
-        }
-
         //extra functions to resolve existing channels e0 - e4 and nosolar0 - nosolar4 after energy phase
         for(let i = 0; i < 5; i++) {
             this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("e" + i.toString(), "").nullProcess()));
         }
-
-        //create 1 energy drone for each player (gain 40 energy per turn)
-        this.system.pushSymbol(this.system.add.channelOut("newsolar10", "solar10").nullProcess());
-        this.system.pushSymbol(this.system.add.channelOut("newsolar20", "solar20").nullProcess());
 
         //extra function for game sync
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("wait", "").nullProcess()));
@@ -284,198 +255,6 @@ export class MainScene extends Phaser.Scene {
         this.players[0].update(delta);
         this.players[1].update(delta);
 
-    }
-
-    /**
-     * builds all weaponmods and weapons in pi calculus
-     * @param player
-     * @param drone
-     */
-    buildWeaponsPi(player : number, drone : number) : void{
-        let p = player.toString();
-        let d = drone.toString();
-        let weapon = this.system.add.term("Weapon" + p + d, undefined);
-
-        let droneRef: Drone = this.players[player - 1].getDrones()[drone];
-        let sum = this.system.add.sum([this.system.add.channelIn("lock" + p + d,"").
-                                                channelOutCB("w1","", (_, at) => {
-                                                    droneRef.getWeapons()[0].createBullet(at)}).        //function for weapon animation
-                                                channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
-                                                channelOut("wait","").channelOut("wait","").
-                                                channelOutCB("w2", "", (_, at) => {
-                                                    droneRef.getWeapons()[1].createBullet(at)}).
-                                                channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
-                                                channelOut("wait","").channelOut("wait","").
-                                                channelOutCB("w3", "", (_, at) => {
-                                                    droneRef.getWeapons()[2].createBullet(at)}).
-                                                next(weapon),
-                                              this.system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {
-                                                    this.players[player - 1].getDrones()[drone].addWeapon(wClass);
-                                                    }).
-                                                next(weapon),
-                                              this.system.add.channelInCB("wext" + p + d + "1", "w2", (wClass) => {
-                                                    this.players[player - 1].getDrones()[drone].addWeapon(wClass);
-                                                    }).
-                                                next(weapon),
-                                              this.system.add.channelInCB("wext" + p + d + "2", "w3", (wClass) => {
-                                                    this.players[player - 1].getDrones()[drone].addWeapon(wClass);
-                                                    }).
-                                                next(weapon)]);
-        weapon.symbol = sum;
-
-        this.system.pushSymbol(this.system.add.channelInCB("wmod" + p + d, "", () => {
-                                                    this.players[player - 1].createDrone(drone);
-                                                    }).
-                                                channelOut("newlock" + p + d, "lock" + p + d).
-                                                next(weapon));
-    }
-
-    /**
-     * builds the necessary locks for all weaponmods
-     * @param player - number of player
-     */
-
-    buildLocksPi(player : number) : void{
-        let p = player.toString();
-        let bt = this.battleTime;
-
-        let rlock = this.system.add.term("RLock" + p, undefined);
-
-        let sum = this.system.add.sum([this.system.add.channelIn("unlock" + p, "")
-                                                    .channelOutCB("nolock1", "", ()=>{bt.setVisible(true); bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB("nolock2", "", ()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB("nolock3", "", ()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB('wait','',()=>{bt.setTime()}).channelOutCB('wait','',()=>{bt.setTime()})
-                                                    .channelOutCB("attackp" + p + "end", "",()=>{bt.setVisible(false); bt.resetTime()}).next(rlock),
-                                              this.system.add.channelIn("newlock" + p + "0", "nolock1").
-                                                next(rlock),
-                                              this.system.add.channelIn("newlock" + p + "1", "nolock2").
-                                                next(rlock),
-                                              this.system.add.channelIn("newlock" + p + "2", "nolock3").
-                                                next(rlock)]);
-        rlock.symbol = sum;
-        this.system.pushSymbol(rlock);
-    }
-
-    /**
-     * builds the energy drones
-     * @param player
-     * @param sd
-     */
-    buildEnergyDrones(player : number) : void{
-        let p = player.toString();
-
-        let drone = this.system.add.term("Drone" + p, undefined);
-        let sum = this.system.add.sum([this.system.add.channelIn("startephase" + p, "").
-                                                channelOut("e0", "40").
-                                                channelOut("e1", "15").
-                                                channelOut("e2", "15").
-                                                channelOut("e3", "15").
-                                                channelOut("e4", "15").
-                                                next(drone),
-                                              this.system.add.channelInCB("newsolar" + p + "0", "e0", () =>{
-                                                  this.players[player - 1].createSolarDrone(0);
-                                                  }).
-                                                next(drone),
-                                              this.system.add.channelInCB("newsolar" + p + "1", "e1", () =>{
-                                                  this.players[player - 1].createSolarDrone(1);
-                                                  }).
-                                                channelOut("newShield" + p + "1","").
-                                                next(drone),
-                                              this.system.add.channelInCB("newsolar" + p + "2", "e2", () =>{
-                                                  this.players[player - 1].createSolarDrone(2);
-                                                  }).
-                                                channelOut("newShield" + p + "2","").
-                                                next(drone),
-                                              this.system.add.channelInCB("newsolar" + p + "3", "e3", () =>{
-                                                  this.players[player - 1].createSolarDrone(3);
-                                                  }).
-                                                channelOut("newShield" + p + "3","").
-                                                next(drone),
-                                              this.system.add.channelInCB("newsolar" + p + "4", "e4", () =>{
-                                                  this.players[player - 1].createSolarDrone(4);
-                                                  }).
-                                                channelOut("newShield" + p + "4","").
-                                                next(drone),
-                                              this.system.add.channelIn("dessol" + p + "1", "solar" + p + "1").
-                                                next(drone),
-                                              this.system.add.channelIn("dessol" + p + "2", "solar" + p + "2").
-                                                next(drone),
-                                              this.system.add.channelIn("dessol" + p + "3", "solar" + p + "3").
-                                                next(drone),
-                                              this.system.add.channelIn("dessol" + p + "4", "solar" + p + "4").
-                                                next(drone)
-                                            ]);
-
-        drone.symbol = sum;
-        this.system.pushSymbol(drone);
-    }
-
-    private createRepsSolarDrones(player : number, sd : number){
-        let p = player.toString();
-        let d = sd.toString();
-
-        /*let rep = this.system.add.term("Solar"+p+d, undefined);
-        let solar = this.system.add.channelInCB("solar" + p + d, "",(x)=>{
-            this.players[player-1].gainEnergy(x);
-        }).next(rep);
-
-        rep.symbol = solar;
-        this.system.pushSymbol(rep);*/
-
-        this.system.pushSymbol(
-            this.system.add.replication(
-                this.system.add.channelInCB("solar" + p + d,"amount", (amount)=>{
-                    this.players[player-1].gainEnergy(amount)})
-                    .nullProcess()));
-    }
-
-    private createSolarShields(player: number, sd: number){
-        let p = player.toString();
-        let d = sd.toString();
-        let x = this.players[player-1].getSolarDrones()[sd].x;
-        let y = this.players[player-1].getSolarDrones()[sd].y;
-
-        let shield = this.system.add.term("SolarShield"+p+d, undefined);
-        let term = this.system.add.channelIn("newShield"+p+d,"")
-            .channelInCB("shieldp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},
-                new BulletInfo(false, x,y), 0.6)
-            .channelInCB("armorp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},
-                new BulletInfo(false, x,y),0.6)
-            .channelOutCB("dessol"+p+d,"e"+d, ()=>{this.players[player-1].getSolarDrones()[sd].explode()})
-            .next(shield);
-
-        shield.symbol = term;
-        this.system.pushSymbol(shield);
     }
 
     private createShop1(): void
