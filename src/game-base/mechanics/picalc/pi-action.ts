@@ -13,9 +13,9 @@ export abstract class PiAction extends PiResolvable{
     protected isNameScoped: boolean;
     protected isOutputScoped: boolean;
 
-    protected callback: (resolvedName?: string, attachmentOfResolved?: string) => any;
+    protected callback: (resolvedName?: string, attachmentOfResolved?: any) => any;
 
-    public attachment: string;
+    public attachment: any;
     public attachmentOfResolved: string;
     public resolvingChance: number;
 

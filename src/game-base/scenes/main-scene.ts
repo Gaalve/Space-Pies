@@ -111,7 +111,7 @@ export class MainScene extends Phaser.Scene {
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
-        this.players = [new Player(this, 280, 540, "P1", true, this.system, this.pem), new Player(this, 1650, 540, "P2", false, this.system, this.pem)];
+        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem), new Player(this, 1620, 540, "P2", false, this.system, this.pem)];
         this.turn = new Turn(this, this.players);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
@@ -313,15 +313,15 @@ export class MainScene extends Phaser.Scene {
         let droneRef: Drone = this.players[player - 1].getDrones()[drone];
         let sum = this.system.add.sum([this.system.add.channelIn("lock" + p + d,"").
                                                 channelOutCB("w1","", (_, at) => {
-                                                    droneRef.getWeapons()[0].createBullet(at == 'miss')}).        //function for weapon animation
+                                                    droneRef.getWeapons()[0].createBullet(at)}).        //function for weapon animation
                                                 channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
                                                 channelOut("wait","").channelOut("wait","").
                                                 channelOutCB("w2", "", (_, at) => {
-                                                    droneRef.getWeapons()[1].createBullet(at == 'miss')}).
+                                                    droneRef.getWeapons()[1].createBullet(at)}).
                                                 channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
                                                 channelOut("wait","").channelOut("wait","").
                                                 channelOutCB("w3", "", (_, at) => {
-                                                    droneRef.getWeapons()[2].createBullet(at == 'miss')}).
+                                                    droneRef.getWeapons()[2].createBullet(at)}).
                                                 next(weapon),
                                               this.system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {
                                                     this.players[player - 1].getDrones()[drone].addWeapon(wClass);
