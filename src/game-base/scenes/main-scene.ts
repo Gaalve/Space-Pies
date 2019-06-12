@@ -482,10 +482,8 @@ export class MainScene extends Phaser.Scene {
 
         let shield = this.system.add.term("SolarShield"+p+d, undefined);
         let term = this.system.add.channelIn("newShield"+p+d,"")
-            .channelInCB("shieldp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},
-                new BulletInfo(false, x,y))
-            .channelInCB("armorp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},
-                new BulletInfo(false, x,y))
+            .channelInCB("shieldp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},undefined, 0.6)
+            .channelInCB("armorp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},undefined,0.6)
             .channelOutCB("dessol"+p+d,"e"+d, ()=>{this.players[player-1].getSolarDrones()[sd].explode()})
             .next(shield);
 

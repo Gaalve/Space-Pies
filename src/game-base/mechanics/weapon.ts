@@ -162,6 +162,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     	if(info){
     		toX = info.toX;
     		toY = info.toY;
+			hit = !info.miss;
 		}
     	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this.weaponType, hit, this.player, toX, toY);
 		this.notification = new HitMissNotification(this.scene, this.x, this.y, hit, this.isFirst);
