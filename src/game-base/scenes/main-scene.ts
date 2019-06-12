@@ -9,6 +9,7 @@ import {PiSymbol} from "../mechanics/picalc/pi-symbol";
 import {Drone} from "../mechanics/drone";
 import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
+import {BulletInfo} from "../mechanics/weapon/bulletInfo";
 
 export class MainScene extends Phaser.Scene {
 
@@ -458,29 +459,33 @@ export class MainScene extends Phaser.Scene {
         let p = player.toString();
         let d = sd.toString();
 
-        let rep = this.system.add.term("Solar"+p+d, undefined);
+        /*let rep = this.system.add.term("Solar"+p+d, undefined);
         let solar = this.system.add.channelInCB("solar" + p + d, "",(x)=>{
             this.players[player-1].gainEnergy(x);
         }).next(rep);
 
         rep.symbol = solar;
-        this.system.pushSymbol(rep);
+        this.system.pushSymbol(rep);*/
 
-        /*this.system.pushSymbol(
+        this.system.pushSymbol(
             this.system.add.replication(
                 this.system.add.channelInCB("solar" + p + d,"amount", (amount)=>{
                     this.players[player-1].gainEnergy(amount)})
-                    .nullProcess()));*/
+                    .nullProcess()));
     }
 
     private createSolarShields(player: number, sd: number){
         let p = player.toString();
         let d = sd.toString();
+        let x = this.players[player-1].getSolarDrones()[sd].x;
+        let y = this.players[player-1].getSolarDrones()[sd].y;
 
         let shield = this.system.add.term("SolarShield"+p+d, undefined);
         let term = this.system.add.channelIn("newShield"+p+d,"")
-            .channelInCB("shieldp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()})
-            .channelInCB("armorp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()})
+            .channelInCB("shieldp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},
+                new BulletInfo(false, x,y))
+            .channelInCB("armorp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},
+                new BulletInfo(false, x,y))
             .channelOutCB("dessol"+p+d,"e"+d, ()=>{this.players[player-1].getSolarDrones()[sd].explode()})
             .next(shield);
 
