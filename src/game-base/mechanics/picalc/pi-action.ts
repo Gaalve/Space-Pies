@@ -16,7 +16,7 @@ export abstract class PiAction extends PiResolvable{
     protected callback: (resolvedName?: string, attachmentOfResolved?: any) => any;
 
     public attachment: any;
-    public attachmentOfResolved: string;
+    public attachmentOfResolved: any;
     public resolvingChance: number;
 
     protected constructor(system: PiSystem, name: string, inOutPut: string, isInput: boolean){

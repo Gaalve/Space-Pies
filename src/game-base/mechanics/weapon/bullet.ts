@@ -29,7 +29,6 @@ export class Bullet extends Sprite{
         this.speedX = Math.cos(Phaser.Math.Angle.Between(x, y, toX, toY)) * speed;
         this.speedY = Math.sin(Phaser.Math.Angle.Between(x, y, toX, toY)) * speed;
 
-        console.log("Bullet: x: " + x+ " y: " + y+ " toY: "+ toY + " toX: " + toX + " sX: " + this.speedX + " sY: " + this.speedY + " a: "+Phaser.Math.Angle.Between(x, y, toX, toY));
     }
 
     private static getBulletTex(type: WeaponType) : string{

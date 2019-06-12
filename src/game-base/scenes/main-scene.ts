@@ -4,8 +4,6 @@ import {Button} from "../mechanics/button";
 
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import {PiTerm} from "../mechanics/picalc/pi-term";
-import {PiSymbol} from "../mechanics/picalc/pi-symbol";
 import {Drone} from "../mechanics/drone";
 import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
@@ -108,7 +106,7 @@ export class MainScene extends Phaser.Scene {
 
     create(): void {
         this.battleTime = new BattleTimeBar(this);
-        this.system = new PiSystem(this, 10,10,10,true);
+        this.system = new PiSystem(this, 10,10,10,false);
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
@@ -119,7 +117,6 @@ export class MainScene extends Phaser.Scene {
             if(this.turn.getCurrentRound() != 1){
                 this.switchTextures(this.turn.getCurrentPlayer());
             }
-            //this.updateShopW(false);
             this.changeShopColor(this.turn.getCurrentPlayer());
             this.displayShop(this.shop1, this.shop1Text);
             this.updateShop1(false);
@@ -134,7 +131,6 @@ export class MainScene extends Phaser.Scene {
             this.closeShop(this.shop1, this.shop1Text, true);
             this.shop1Active = false;
         }));
-        //this.system.pushSymbol(this.system.add.channelOut("closeshop", "").nullProcess());
         system.pushSymbol(closeShop);
         system.pushSymbol(startShop);
         this.data.set('P1', this.players[0]);
@@ -144,22 +140,13 @@ export class MainScene extends Phaser.Scene {
         this.shop_bg_back.setAlpha(0.6);
         this.add.existing(this.shop_bg_back);
         this.add.existing(this.shop_bg_out);
-        // this.shop_bg = this.add.graphics();
-        // this.shop_bg.fillStyle(0x000, 0.6);
-        // this.shop_bg.lineStyle(5, 0xAA2222);
-        // this.shop_bg.fillRoundedRect(260, 1080-220, 1400, 250, 32);
-        // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
-        //this.shop_bg = this.add.rectangle(1920/2, 1080 - 100, 1400, 250, 0x000, 0.6).setVisible(false).setStrokeStyle(5,0xffff);
-        //this.energy_bg = this.add.rectangle(130, 1080- 100, 200, 200, 0x000, 0.6).setVisible(true);
         this.energy = this.add.image(1920/2-50, 800, "energy_icon");
         this.energyT = this.add.text(1920/2-15, 770, "= "+this.turn.getCurrentPlayer().getEnergy(), {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
-        //this.add.rectangle(1920-130, 1080- 100, 200, 200, 0x000, 0.6).setVisible(true);
 
         this.shop = new Button(this, 1920/2, 500, "button_shadow",
             "button_bg", "button_fg", "button_shop",
             ()=>{
-                //this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess());
                 this.displayShop(this.shop1, this.shop1Text);
                 this.shop.removeInteractive();
                 this.shop.setInvisible();
@@ -194,8 +181,6 @@ export class MainScene extends Phaser.Scene {
 
 
         //Weapons in Pi Calculus
-        //Creating Weapons and Weaponmods###############################################
-        //Weapons in Pi Calc
         for(let i = 1; i<3; i++){
             for(let j = 0; j < 3; j++){
                 this.buildWeaponsPi(i,j);
@@ -482,8 +467,10 @@ export class MainScene extends Phaser.Scene {
 
         let shield = this.system.add.term("SolarShield"+p+d, undefined);
         let term = this.system.add.channelIn("newShield"+p+d,"")
-            .channelInCB("shieldp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},undefined, 0.6)
-            .channelInCB("armorp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},undefined,0.6)
+            .channelInCB("shieldp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},
+                new BulletInfo(false, x,y), 0.6)
+            .channelInCB("armorp"+p,"",()=>{this.players[player-1].getSolarDrones()[sd].health.destroyBar()},
+                new BulletInfo(false, x,y),0.6)
             .channelOutCB("dessol"+p+d,"e"+d, ()=>{this.players[player-1].getSolarDrones()[sd].explode()})
             .next(shield);
 
