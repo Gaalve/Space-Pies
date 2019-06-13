@@ -10,6 +10,7 @@ import {ProjectileImpact} from "./animations/projectile-impact";
 import {LaserTrail} from "./animations/laser-trail";
 import {RocketTrail} from "./animations/rocket-trail";
 import {BulletTrail} from "./animations/bullet-trail";
+import {collectEnergy_ship} from "./animations/collectEnergy_ship";
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
@@ -40,6 +41,7 @@ export class Player {
     public laserTrail: LaserTrail;
     public rocketTrail: RocketTrail;
     public bulletTrail: BulletTrail;
+    public collectE: collectEnergy_ship;
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager){
         this.nameIdentifier = nameIdentifier;
@@ -58,6 +60,7 @@ export class Player {
         this.laserTrail = new LaserTrail(pem);
         this.rocketTrail = new RocketTrail(pem);
         this.bulletTrail = new BulletTrail(pem);
+        this.collectE = new collectEnergy_ship(pem);
 
         //TODO: remove when Triebwerke ready
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '', "miss").nullProcess()));
@@ -155,7 +158,9 @@ export class Player {
 
     getEnergy() : number
     {
+        this.collectE.collect(this.ship.posX,this.ship.posY);
         return this.energy;
+
     }
 
     payEnergy(cost: number) : void
@@ -227,4 +232,5 @@ export class Player {
     {
         this.energy = 55;
     }
+
 }

@@ -10,8 +10,8 @@ export class Ship{
 
     private scene: Scene;
     private player: Player;
-    private posX : number;
-    private posY : number;
+    public posX : number;
+    public posY : number;
     private isRed: boolean;
     private modularShip: BaseShip;
     private debris: Debris[];
