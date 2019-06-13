@@ -86,6 +86,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
     public explode():void{
         this.player.activatedSolarDrones--;
+        this.player.raiseEnergyCost("solar",-20);
         this.explosion.explosionAt(this.x,this.y);
         this.player.scene.time.delayedCall(300,()=>{this.setVisible(false); this.player.setSmallestIndexSD();},[],this);
     }
