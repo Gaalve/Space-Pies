@@ -8,6 +8,7 @@ import {Drone} from "../mechanics/drone";
 import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
 import {BulletInfo} from "../mechanics/weapon/bulletInfo";
+import {PiAnimSystem} from "../mechanics/pianim/pi-anim-system";
 
 export class MainScene extends Phaser.Scene {
 
@@ -100,11 +101,10 @@ export class MainScene extends Phaser.Scene {
         );
 
         this.load.spritesheet('bleedingbar', 'assets/sprites/bleedingbar.png', { frameWidth: 19, frameHeight: 42, spacing: 5, startFrame: 0, endFrame: 42, margin: 0});
-
-
     }
 
-    create(): void {
+    create(data?: PiAnimSystem): void {
+        if (!data) throw new Error("No Pi Anim System");
         this.battleTime = new BattleTimeBar(this);
         this.system = new PiSystem(this, 10,10,10,false);
         this.data.set("system", this.system);
