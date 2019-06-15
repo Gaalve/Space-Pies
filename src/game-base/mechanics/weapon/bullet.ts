@@ -13,7 +13,8 @@ export class Bullet extends Sprite{
     private player: Player;
     private weaponType: WeaponType;
 
-    constructor(scene: Phaser.Scene, x: number, y: number, isFirstPlayer: boolean, type: WeaponType, hit: boolean, player: Player) {
+    constructor(scene: Phaser.Scene, x: number, y: number, isFirstPlayer: boolean, type: WeaponType, hit: boolean,
+                player: Player, toX: number, toY: number) {
         super(scene, x, y, Bullet.getBulletTex(type));
         this.weaponType = type;
         this.player = player;
@@ -21,17 +22,13 @@ export class Bullet extends Sprite{
         this.setDepth(10); //TODO
         this.hit = hit;
         this.isFirst = isFirstPlayer;
-        let speed = 5;
-        if(isFirstPlayer){
-            this.speedX = speed;
-            this.flipX = true;
-            this.x += 15;
-        }
-        else {
-            this.speedX = -speed;
-            this.x -= 15;
-        }
-        this.speedY = (540 - y) * (speed / 1100)
+        let speed = 4;
+
+        this.setAngle(Phaser.Math.Angle.Between(x, y, toX, toY) * Phaser.Math.RAD_TO_DEG - 180);
+
+        this.speedX = Math.cos(Phaser.Math.Angle.Between(x, y, toX, toY)) * speed;
+        this.speedY = Math.sin(Phaser.Math.Angle.Between(x, y, toX, toY)) * speed;
+
     }
 
     private static getBulletTex(type: WeaponType) : string{
