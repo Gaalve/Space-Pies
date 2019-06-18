@@ -38,14 +38,15 @@ export class Turn {
             this.system.add.replication(
                 this.system.add.channelIn('player1', '').
                 channelOutCB('shopp1', '', () => this.setShopTurn()).
-                channelIn('shopp1end', '').channelOut("startephase1", "")
-                    .channelOutCB('unlock1', '', () => this.setAttackTurn()).
+                channelIn('shopp1end', '').
+                channelOut("startephase1", "").
+                channelOut('anomalyunlock1', '').
+                channelOutCB('unlock1', '', () => this.setAttackTurn()).
                 channelIn('attackp1end', '').
-                    channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('player2', '', () => this.endAttackTurn()).nullProcess()
             )
         );

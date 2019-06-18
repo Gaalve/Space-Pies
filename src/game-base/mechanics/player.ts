@@ -13,7 +13,9 @@ import {HealthType} from "./health/health-type";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {BulletInfo} from "./weapon/bulletInfo";
 import {BattleTimeBar} from "./battleTimeBar";
-import get = Reflect.get;
+import {Anomaly} from "./anomalies/anomaly";
+import {SunEruption} from "./anomalies/sun-eruption";
+import {PiSystemAddAction} from "./picalc/pi-system-add-action";
 
 export class Player {
     private nameIdentifier: string;
@@ -48,6 +50,10 @@ export class Player {
     public rocketTrail: RocketTrail;
     public bulletTrail: BulletTrail;
 
+    private anomalies: string[];
+    private currentAnomaly: Anomaly;
+    probChannelAnomaly: PiSystemAddAction;
+
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
         this.isDead=false;
         this.nameIdentifier = nameIdentifier;
@@ -68,6 +74,9 @@ export class Player {
         this.laserTrail = new LaserTrail(pem);
         this.rocketTrail = new RocketTrail(pem);
         this.bulletTrail = new BulletTrail(pem);
+
+        this.anomalies = ["eruption"];
+
 
         //TODO: remove when Triebwerke ready
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier,
@@ -114,6 +123,7 @@ export class Player {
 
         let p = this.getNameIdentifier().charAt(1);
         this.buildLocksPi(p, bt);
+        this.buildAnomalyPi(p);
         this.buildEnergyDrones(p);
         this.createFirstWeapon(p);
         this.createFirstSolarDrone(p);
@@ -124,6 +134,8 @@ export class Player {
         this.drones[0].update(delta);
         this.drones[1].update(delta);
         this.drones[2].update(delta);
+
+        //if(this.currentAnomaly != undefined) this.currentAnomaly.update();
     }
 
     getNameIdentifier(): string{
@@ -173,6 +185,14 @@ export class Player {
             this.solarDrones[index].setVisible(true);
             this.setSmallestIndexSD();
         }
+    }
+
+    createAnomaly(index :number) : void{
+
+        if(this.anomalies[index] == "eruption"){
+            this.currentAnomaly = new SunEruption(this.scene, this);
+        }
+        else{}
     }
 
     getEnergy() : number
@@ -318,6 +338,27 @@ export class Player {
             next(rlock)]);
         rlock.symbol = sum;
         this.system.pushSymbol(rlock);
+    }
+
+    private buildAnomalyPi(p : string){
+
+        this.probChannelAnomaly = this.system.add.channelInCB('anomalylock'+p, '',() => {
+            this.probChannelAnomaly.action.resolvingChance -= 0.1;
+        },'', 0.0);
+
+        this.system.pushSymbol(
+            this.system.add.channelIn('lockBlock','').replication(this.probChannelAnomaly.nullProcess())
+        );
+        this.system.pushSymbol(
+            this.system.add.channelIn('firstanomaly'+p, '').nullProcess()
+        );
+        this.system.pushSymbol(
+            this.system.add.channelIn('anomalyunlock'+p,'')./*channelIn('anomalyunlock'+p,'').
+            channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
+            channelOut('lockBlock', "").channelIn('anomalyunlock'+p,'').*/
+            channelOutCB('firstanomaly'+p,'', () => {this.createAnomaly(0);}).nullProcess()
+        );
+
     }
 
     private createFirstWeapon(p : string): void{
