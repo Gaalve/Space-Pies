@@ -51,8 +51,7 @@ export class Player {
     public bulletTrail: BulletTrail;
 
     private anomalies: string[];
-    private currentAnomaly: Anomaly;
-    probChannelAnomaly: PiSystemAddAction;
+    public currentAnomaly: Anomaly;
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
         this.isDead=false;
@@ -79,12 +78,12 @@ export class Player {
 
 
         //TODO: remove when Triebwerke ready
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier,
-            '', new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier,
-            '', new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier,
-            '', new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
+            new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '',
+            new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
+        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '',
+            new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
 
         // z1 starts with 1 shield
         // this.health.addToHz(piSystem, 'radap', 'z1');
@@ -123,7 +122,7 @@ export class Player {
 
         let p = this.getNameIdentifier().charAt(1);
         this.buildLocksPi(p, bt);
-        this.buildAnomalyPi(p);
+        this.buildAnomalyPi(p, bt);
         this.buildEnergyDrones(p);
         this.createFirstWeapon(p);
         this.createFirstSolarDrone(p);
@@ -135,7 +134,7 @@ export class Player {
         this.drones[1].update(delta);
         this.drones[2].update(delta);
 
-        //if(this.currentAnomaly != undefined) this.currentAnomaly.update();
+        if(this.currentAnomaly != undefined) this.currentAnomaly.update();
     }
 
     getNameIdentifier(): string{
@@ -340,23 +339,28 @@ export class Player {
         this.system.pushSymbol(rlock);
     }
 
-    private buildAnomalyPi(p : string){
+    private buildAnomalyPi(p : string, bt: BattleTimeBar){
 
-        this.probChannelAnomaly = this.system.add.channelInCB('anomalylock'+p, '',() => {
-            this.probChannelAnomaly.action.resolvingChance -= 0.1;
-        },'', 0.0);
-
+        this.system.pushSymbol(this.system.add.channelIn('locklockend'+p,'').replication(
+            this.system.add.channelIn('anomalyunlock'+p, '').nullProcess())
+        );
         this.system.pushSymbol(
-            this.system.add.channelIn('lockBlock','').replication(this.probChannelAnomaly.nullProcess())
+            this.system.add.channelIn('locklock1'+p,'').
+            channelIn('anomalylock'+p, '','', 0.5).
+            channelIn('anomalylock'+p, '','', 0.4).
+            channelIn('anomalylock'+p, '','', 0.3).
+            channelIn('anomalylock'+p, '','', 0.2).
+            channelIn('anomalylock'+p, '','', 0.1).nullProcess()
         );
         this.system.pushSymbol(
             this.system.add.channelIn('firstanomaly'+p, '').nullProcess()
         );
         this.system.pushSymbol(
-            this.system.add.channelIn('anomalyunlock'+p,'')./*channelIn('anomalyunlock'+p,'').
+            this.system.add.channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
             channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
-            channelOut('lockBlock', "").channelIn('anomalyunlock'+p,'').*/
-            channelOutCB('firstanomaly'+p,'', () => {this.createAnomaly(0);}).nullProcess()
+            channelOut('locklock1'+p, "").channelIn('anomalyunlock'+p,'').
+            channelOutCB('firstanomaly'+p,'', () => {this.createAnomaly(0);}).
+            channelOutCB('locklockend'+p, '', () => {this.currentAnomaly = undefined}).nullProcess()
         );
 
     }

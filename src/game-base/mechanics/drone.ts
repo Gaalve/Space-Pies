@@ -169,15 +169,42 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		let droneRef: Drone = this;
 		let sum = system.add.sum([system.add.channelIn("lock" + p + d,"").
 		channelOutCB("w1","", (_, at) => {
-			droneRef.getWeapons()[0].createBullet(at)}).        //function for weapon animation
+			if(this.player.currentAnomaly != undefined && this.player.currentAnomaly.anomalyType == "eruption" && at == true){
+				system.pushSymbol(system.add.channelOutCB(droneRef.getWeapons()[0].getWeapon()
+					+this.player.getNameIdentifier(), '',(_, at) => {droneRef.getWeapons()[0].createBullet(at);})
+					.nullProcess());
+				console.log("hello");
+			}
+			else{
+				droneRef.getWeapons()[0].createBullet(at)
+			}
+		}).        //function for weapon animation
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
 		channelOutCB("w2", "", (_, at) => {
-			droneRef.getWeapons()[1].createBullet(at)}).
+			if(this.player.currentAnomaly != undefined && this.player.currentAnomaly.anomalyType == "eruption" && at == true){
+				system.pushSymbol(system.add.channelOutCB(droneRef.getWeapons()[1].getWeapon()
+					+this.player.getNameIdentifier(), '',(_, at) => {droneRef.getWeapons()[1].createBullet(at);})
+					.nullProcess());
+				console.log("hello");
+			}
+			else{
+				droneRef.getWeapons()[1].createBullet(at)
+			}
+		}).
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
 		channelOutCB("w3", "", (_, at) => {
-			droneRef.getWeapons()[2].createBullet(at)}).
+			if(this.player.currentAnomaly != undefined && this.player.currentAnomaly.anomalyType == "eruption" && at == true){
+				system.pushSymbol(system.add.channelOutCB(droneRef.getWeapons()[2].getWeapon()
+					+this.player.getNameIdentifier(), '',(_, at) => {droneRef.getWeapons()[2].createBullet(at);})
+					.nullProcess());
+				console.log("hello");
+			}
+			else{
+				droneRef.getWeapons()[2].createBullet(at)
+			}
+		}).
 		next(weapon),
 			system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {
 				this.addWeapon(wClass);

@@ -41,6 +41,10 @@ export class Turn {
                 channelIn('shopp1end', '').
                 channelOut("startephase1", "").
                 channelOut('anomalyunlock1', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('unlock1', '', () => this.setAttackTurn()).
                 channelIn('attackp1end', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -63,6 +67,11 @@ export class Turn {
                 channelOutCB('shopp1', '', () => this.setShopTurn()).
                 channelIn('shopp2end', '').
                 channelOut("startephase2", "").
+                channelOut('anomalyunlock2', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('unlock2', '', () => this.setAttackTurn()).
                 channelIn('attackp2end', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
