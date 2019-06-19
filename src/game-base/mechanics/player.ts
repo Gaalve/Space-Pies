@@ -122,7 +122,7 @@ export class Player {
 
         let p = this.getNameIdentifier().charAt(1);
         this.buildLocksPi(p, bt);
-        this.buildAnomalyPi(p, bt);
+        this.buildAnomalyPi(p);
         this.buildEnergyDrones(p);
         this.createFirstWeapon(p);
         this.createFirstSolarDrone(p);
@@ -339,28 +339,22 @@ export class Player {
         this.system.pushSymbol(rlock);
     }
 
-    private buildAnomalyPi(p : string, bt: BattleTimeBar){
+    private buildAnomalyPi(p : string){
 
-        this.system.pushSymbol(this.system.add.channelIn('locklockend'+p,'').replication(
-            this.system.add.channelIn('anomalyunlock'+p, '').nullProcess())
+        this.system.pushSymbol(this.system.add.channelIn('locklock'+p,'').replication(
+            this.system.add.channelIn('anomalyunlock'+p, '', '', 0.5).nullProcess())
         );
         this.system.pushSymbol(
-            this.system.add.channelIn('locklock1'+p,'').
-            channelIn('anomalylock'+p, '','', 0.5).
-            channelIn('anomalylock'+p, '','', 0.4).
-            channelIn('anomalylock'+p, '','', 0.3).
-            channelIn('anomalylock'+p, '','', 0.2).
-            channelIn('anomalylock'+p, '','', 0.1).nullProcess()
+            this.system.add.channelInCB('firstanomaly'+p, '', () => {this.createAnomaly(0);}).nullProcess()
         );
         this.system.pushSymbol(
-            this.system.add.channelIn('firstanomaly'+p, '').nullProcess()
+            this.system.add.channelInCB('destroy'+p, '', () => {this.currentAnomaly = undefined}).nullProcess()
         );
         this.system.pushSymbol(
             this.system.add.channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
             channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
-            channelOut('locklock1'+p, "").channelIn('anomalyunlock'+p,'').
-            channelOutCB('firstanomaly'+p,'', () => {this.createAnomaly(0);}).
-            channelOutCB('locklockend'+p, '', () => {this.currentAnomaly = undefined}).nullProcess()
+            channelOut('locklock'+p, "").channelIn('anomalyunlock'+p,'').
+            channelOut('firstanomaly'+p,'').nullProcess()
         );
 
     }

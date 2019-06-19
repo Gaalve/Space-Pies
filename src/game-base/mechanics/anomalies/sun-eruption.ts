@@ -13,6 +13,6 @@ export class SunEruption extends Anomaly {
     }
 
     public update(): void {
-        this.y += 20;
+        this.y += 100;
     }
 }
