@@ -49,8 +49,9 @@ export class FadeScene extends Phaser.Scene {
             if(this.next) return;
             this.next = true;
             this.sprite.setAlpha(1);
-            this.scene.remove(this.shutdown);
+            this.scene.stop(this.shutdown);
             this.scene.launch(this.start);
+            //this.scene.moveBelow(this.scene.key, this.start);
         }
     }
 }

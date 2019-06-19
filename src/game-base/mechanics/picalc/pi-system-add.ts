@@ -18,33 +18,41 @@ export  class PiSystemAdd{
         this.system = system;
     }
 
-    public channelIn(name: string, input: string, attachment?: string): PiSystemAddAction{
+    public channelIn(name: string, input: string, attachment?: any, resolvingChance: number = 1): PiSystemAddAction{
         let chan = new PiChannelIn(this.system, name, input);
         chan.attachment = attachment;
+        chan.resolvingChance = resolvingChance;
         return new PiSystemAddAction(this.system, chan)
     }
 
-    public channelOut(name: string, output: string, attachment?: string): PiSystemAddAction{
+    public channelOut(name: string, output: string, attachment?: any, resolvingChance: number = 1): PiSystemAddAction{
         let chan = new PiChannelOut(this.system, name, output);
         chan.attachment = attachment;
+        chan.resolvingChance = resolvingChance;
         return new PiSystemAddAction(this.system, chan);
     }
 
-    public channelInCB(name: string, input: string, callback: (resolvedName?: string, attachmentOfResolved?: string) => any, attachment?: string): PiSystemAddAction{
+    public channelInCB(name: string, input: string,
+                       callback: (resolvedName?: string, attachmentOfResolved?: any) => any, attachment?: any,
+                       resolvingChance: number = 1): PiSystemAddAction{
         let pi = new PiChannelIn(this.system, name, input);
         pi.setCallback(callback);
         pi.attachment = attachment;
+        pi.resolvingChance = resolvingChance;
         return new PiSystemAddAction(this.system, pi)
     }
 
-    public channelOutCB(name: string, output: string, callback: (resolvedName?: string, attachmentOfResolved?: string) => any, attachment?: string): PiSystemAddAction{
+    public channelOutCB(name: string, output: string,
+                        callback: (resolvedName?: string, attachmentOfResolved?: any) => any, attachment?: any,
+                        resolvingChance: number = 1): PiSystemAddAction{
         let pi = new PiChannelOut(this.system, name, output);
         pi.setCallback(callback);
         pi.attachment = attachment;
+        pi.resolvingChance = resolvingChance;
         return new PiSystemAddAction(this.system, pi)
     }
 
-    public process(name: string, callback: Function): PiProcess{
+    public process(name: string, callback: (passedValues: [string, string][])=>any): PiProcess{
         return new PiProcess(this.system, name, callback);
     }
 
@@ -65,15 +73,7 @@ export  class PiSystemAdd{
     }
 
     public scope(scopedName: string, symbol: PiSymbol): PiSymbol{
-        let scope = new PiScope(this.system, scopedName, symbol, false);
-        let last = scope.getLastSymbol();
-        return scope;
+        return new PiScope(this.system, scopedName, symbol, false);
     }
 
-    // public scopeAction(scopedName: string, symbol: PiSymbol): PiSystemAddAction{
-    //     let scope = new PiScope(this.system, scopedName, symbol, true);
-    //     let last = scope.getLastSymbol();
-    //     if(last instanceof PiAction) return new PiSystemAddAction(this.system, last);
-    //     else throw new Error("Scope: Last Symbol is not an action!");
-    // }
 }
