@@ -1087,7 +1087,7 @@ export class MainScene extends Phaser.Scene {
         let shieldCost = player.getEnergyCost("shield");
         let rocketCost = player.getEnergyCost("rocket");
         let nanoCost = player.getEnergyCost("nano");
-        let adaptCost = player.getEnergyCost("adapt");
+        let adaptCost = player.getEnergyCost("adap");
         this.updateEnergyCostTextS();
         if(energy < armorCost){
 
@@ -1192,33 +1192,33 @@ export class MainScene extends Phaser.Scene {
 
     updateShopZ(): void{
         let player = this.turn.getCurrentPlayer();
-        let zone1 = player.getHealth().zone1Bar.getBars();
-        let zone2 = player.getHealth().zone2Bar.getBars();
-        let zone3 = player.getHealth().zone3Bar.getBars();
-        let zone4 = player.getHealth().zone4Bar.getBars();
+        let zone1 = player.getHealth().zone1Bar.bars.length;
+        let zone2 = player.getHealth().zone2Bar.bars.length;
+        let zone3 = player.getHealth().zone3Bar.bars.length;
+        let zone4 = player.getHealth().zone4Bar.bars.length;
 
-        if(zone1 == 0){
+        if(zone1 <= 0){
             this.zone1.changeButton(this, false, false, player);
             this.zone1.removeInteractive();
             this.children.remove(this.shopZText[0]);
             this.shopZText[0] = this.add.text(410, 1080-50, "destroyed", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
-        if(zone2 == 0){
+        if(zone2 <= 0){
             this.zone2.changeButton(this, false, false, player);
             this.zone2.removeInteractive();
             this.children.remove(this.shopZText[1]);
             this.shopZText[1] = this.add.text(660, 1080-50, "destroyed", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
-        if(zone3 == 0){
+        if(zone3 <= 0){
             this.zone3.changeButton(this, false, false, player);
             this.zone3.removeInteractive();
             this.children.remove(this.shopZText[2]);
             this.shopZText[2] = this.add.text(910, 1080-50, "destroyed", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
-        if(zone4 == 0){
+        if(zone4 <= 0){
             this.zone4.changeButton(this, false, false, player);
             this.zone4.removeInteractive();
             this.children.remove(this.shopZText[3]);

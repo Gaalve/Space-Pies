@@ -6,7 +6,7 @@ import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
-    private bars: HealthbarSprites[];
+    public bars: HealthbarSprites[];
     private readonly direction: 1|-1;
     private readonly offset: number = 14;
     private readonly y: number;
