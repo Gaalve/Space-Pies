@@ -9,10 +9,13 @@ import {ProjectileImpact} from "./animations/projectile-impact";
 import {LaserTrail} from "./animations/laser-trail";
 import {RocketTrail} from "./animations/rocket-trail";
 import {BulletTrail} from "./animations/bullet-trail";
+import {collectEnergy_ship} from "./animations/collectEnergy_ship";
 import {HealthType} from "./health/health-type";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {BulletInfo} from "./weapon/bulletInfo";
 import {BattleTimeBar} from "./battleTimeBar";
+import get = Reflect.get;
+import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 import {Anomaly} from "./anomalies/anomaly";
 import {SunEruption} from "./anomalies/sun-eruption";
 import {PiSystemAddAction} from "./picalc/pi-system-add-action";
@@ -49,6 +52,8 @@ export class Player {
     public laserTrail: LaserTrail;
     public rocketTrail: RocketTrail;
     public bulletTrail: BulletTrail;
+    public collectE: collectEnergy_ship;
+
 
     private anomalies: string[];
     public currentAnomaly: Anomaly;
@@ -73,6 +78,7 @@ export class Player {
         this.laserTrail = new LaserTrail(pem);
         this.rocketTrail = new RocketTrail(pem);
         this.bulletTrail = new BulletTrail(pem);
+        this.collectE = new collectEnergy_ship(pem);
 
         this.anomalies = ["eruption"];
 
@@ -208,6 +214,16 @@ export class Player {
     {
         let toAdd = +amount;
         this.energy += toAdd;
+    }
+
+    public CollectEnergyAnimation():void{
+        this.collectE.collect(this.ship.posX,this.ship.posY);
+        for (let i=1;i<5;i++) {
+            if(this.solarDrones[i].visible){
+                this.solarDrones[i].collectED.collect(this.solarDrones[i].x,this.solarDrones[i].y,this.ship.posX,this.ship.posY);
+                this.scene.time.delayedCall(500, ()=>{this.solarDrones[i].collectED.stopCollect();}, [], this);
+            }
+        }
     }
 
     getEnergyCost(type: string): number
