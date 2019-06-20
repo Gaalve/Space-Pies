@@ -15,6 +15,7 @@ import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterMana
 import {BulletInfo} from "./weapon/bulletInfo";
 import {BattleTimeBar} from "./battleTimeBar";
 import get = Reflect.get;
+import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 
 export class Player {
     private nameIdentifier: string;
@@ -49,6 +50,7 @@ export class Player {
     public rocketTrail: RocketTrail;
     public bulletTrail: BulletTrail;
     public collectE: collectEnergy_ship;
+
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
         this.isDead=false;
@@ -180,7 +182,6 @@ export class Player {
 
     getEnergy() : number
     {
-        this.collectE.collect(this.ship.posX,this.ship.posY);
         return this.energy;
     }
 
@@ -191,9 +192,18 @@ export class Player {
 
     gainEnergy(amount: string) : void
     {
-        this.collectE.collect(this.ship.posX,this.ship.posY);
         let toAdd = +amount;
         this.energy += toAdd;
+    }
+
+    public CollectEnergyAnimation():void{
+        this.collectE.collect(this.ship.posX,this.ship.posY);
+        for (let i=1;i<5;i++) {
+            if(this.solarDrones[i].visible){
+                this.solarDrones[i].collectED.collect(this.solarDrones[i].x,this.solarDrones[i].y,this.ship.posX,this.ship.posY);
+                this.scene.time.delayedCall(500, ()=>{this.solarDrones[i].collectED.stopCollect();}, [], this);
+            }
+        }
     }
 
     getEnergyCost(type: string): number
