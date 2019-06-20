@@ -38,15 +38,16 @@ export class Turn {
             this.system.add.replication(
                 this.system.add.channelIn('player1', '').
                 channelOutCB('shopp1', '', () => this.setShopTurn()).
-                channelIn('shopp1end', '').channelOut("startephase1", "")
-                    .channelOutCB('unlock1', '', () => this.setAttackTurn()).
+                channelIn('shopp1end', '').
+                channelOut("startephase1", "").
+                channelOut('anomalyunlock1', '').
+                channelOutCB('unlock1', '', () => this.setAttackTurn()).
                 channelIn('attackp1end', '').
-                    channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-
-                channelOutCB('player2', '', () => this.endAttackTurn()).nullProcess()
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOutCB('player2', '', () => {this.endAttackTurn()}).nullProcess()
             )
         );
 
@@ -62,13 +63,14 @@ export class Turn {
                 channelOutCB('shopp1', '', () => this.setShopTurn()).
                 channelIn('shopp2end', '').
                 channelOut("startephase2", "").
+                channelOut('anomalyunlock2', '').
                 channelOutCB('unlock2', '', () => this.setAttackTurn()).
                 channelIn('attackp2end', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOutCB('player1', '', () => this.endAttackTurn()).nullProcess()
+                channelOutCB('player1', '', () => {this.endAttackTurn();}).nullProcess()
             )
         );
 

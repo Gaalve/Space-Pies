@@ -13,7 +13,7 @@ import {PiScope} from "./pi-scope";
 export  class PiSystemAddAction{
     private readonly system: PiSystem;
     private readonly startAction: PiAction;
-    private action: PiAction;
+    public action: PiAction;
 
     constructor(system: PiSystem, action: PiAction){
         this.system = system;
