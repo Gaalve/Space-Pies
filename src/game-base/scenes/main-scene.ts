@@ -105,6 +105,25 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
+        this.anims.create({
+            key: 'snooze',
+            frames:
+                [{ key: 'shield/00', frame: null },
+                { key: 'shield/01' , frame: null},
+                { key: 'shield/02', frame: null },
+                { key: 'shield/03', frame: null },
+                { key: 'shield/04' , frame: null},
+                { key: 'shield/05', frame: null },
+                { key: 'shield/06' , frame: null},
+                { key: 'shield/07', frame: null },
+                { key: 'shield/08' , frame: null}, { key: 'shield/09' , frame: null},
+                { key: 'shield/10', frame: null, duration: 50 },
+            ],
+            frameRate: 8,
+            repeat: -1
+        });
+
+
         this.battleTime = new BattleTimeBar(this);
         this.system = new PiSystem(this, 10,10,10,false);
         this.data.set("system", this.system);
@@ -460,6 +479,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "sym_zone",
             () => {
                 let type = this.data.get("type");
+                this.regShield(type);
                 let createArmor = (this.system.add.channelOut("r"+type+"p"+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'z1','*' ).nullProcess());
                 this.system.pushSymbol(createArmor);
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost(type));
@@ -477,6 +497,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "sym_zone",
             () => {
                 let type = this.data.get("type");
+                this.regShield(type);
                 let createArmor = (this.system.add.channelOut("r"+type+"p"+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'z2','*' ).nullProcess());
                 this.system.pushSymbol(createArmor);
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost(type));
@@ -493,6 +514,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "sym_zone",
             () => {
                 let type = this.data.get("type");
+                this.regShield(type);
                 let createArmor = (this.system.add.channelOut("r"+type+"p"+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'z3','*' ).nullProcess());
                 this.system.pushSymbol(createArmor);
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost(type));
@@ -508,6 +530,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "sym_zone",
             () => {
                 let type = this.data.get("type");
+                this.regShield(type);
                 let createArmor = (this.system.add.channelOut("r"+type+"p"+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'z4','*' ).nullProcess());
                 this.system.pushSymbol(createArmor);
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost(type));
@@ -1328,6 +1351,46 @@ export class MainScene extends Phaser.Scene {
 
         }
     }
+    regShield(type):void{
+
+        let test=this.add.sprite(this.turn.getCurrentPlayer().ship.posX, this.turn.getCurrentPlayer().ship.posY, 'shield/00').play('snooze');
+        test.alpha=0;
+        switch(type){
+            case("armor"):test.setTint(0x999999,0x999999,0x999999,0x999999);break;
+            case("shield"):test.setTint(0x053C8C,0x053C8C,0x053C8C,0x053C8C);break;
+            case("rocket"):test.setTint(0x700000,0x700000,0x700000,0x700000);break;
+            case("nano"):test.setTint(0x1B1B1B,0x1B1B1B,0x1B1B1B,0x1B1B1B);break;
+            case("adap"):test.setTint(0xF0FF00,0x700000,0x999999,0x053C8C);break;
+        }
+
+
+        //test.tint=0xF16F6F;
+        test.depth=100;
+        test.setScale(0.5,0.5);
+
+        let timeline = this.tweens.timeline(test);
+
+
+
+        timeline.add({
+            targets: test,
+            scaleX: 2,
+            scaleY: 2,
+            alpha:1,
+            ease: 'Sine.easeInOut',
+            duration: 800,
+        });
+        timeline.add({
+            targets: test,
+            alpha:0,
+            ease: 'Sine.easeInOut',
+            duration: 400,
+        });
+        timeline.play();
+
+    }
+
+
 
     updateEnergyCostTextS(): void{
         let type = "";
@@ -1378,6 +1441,8 @@ export class MainScene extends Phaser.Scene {
         }
 
     }
+
+
 
 
 }

@@ -462,8 +462,13 @@
       },
       {
         "type": "image",
-        "key": "debris/debris_1",
-        "url": "assets/sprites/debris/debris_1.png"
+        "key": "debris/debris_0",
+        "url": "assets/sprites/debris/debris_0.png"
+      },
+      {
+        "type": "image",
+        "key": "shield_animation",
+        "url": "assets/sprites/shield_animation.png"
       },
       {
         "type": "image",
@@ -572,6 +577,61 @@
         "type": "image",
         "key": "sun_erupt",
         "url": "assets/sprites/sun_erupt.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/00",
+        "url": "assets/sprites/shield/00.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/10",
+        "url": "assets/sprites/shield/10.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/09",
+        "url": "assets/sprites/shield/09.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/08",
+        "url": "assets/sprites/shield/08.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/07",
+        "url": "assets/sprites/shield/07.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/06",
+        "url": "assets/sprites/shield/06.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/05",
+        "url": "assets/sprites/shield/05.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/04",
+        "url": "assets/sprites/shield/04.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/03",
+        "url": "assets/sprites/shield/03.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/02",
+        "url": "assets/sprites/shield/02.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/01",
+        "url": "assets/sprites/shield/01.png"
       }
     ]
   }
