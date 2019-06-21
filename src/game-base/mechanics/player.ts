@@ -64,7 +64,7 @@ export class Player {
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,pem), new EnergyDrone(scene, x, y, this, 1,pem),new EnergyDrone(scene, x, y, this, 2,pem),new EnergyDrone(scene, x, y, this, 3,pem),new EnergyDrone(scene, x, y, this, 4,pem)];
         this.activatedSolarDrones = 0;
         this.smallestIndexSolDrone = 1;
-        this.health = new Health(scene, this, piSystem);
+        this.health = new Health(scene, this, piSystem, piAnim);
         this.pem = pem;
         this.explosion = new Explosion(pem);
         this.laserImpact = new LaserImpact(pem);
