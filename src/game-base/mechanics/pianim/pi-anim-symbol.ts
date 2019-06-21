@@ -35,8 +35,12 @@ export class PiAnimSymbol {
         this.symbol = scene.add.text(this.x, this.y, this.name + this.suffix, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 3, stroke: '#000'
         });
+        this.colorInactive = new Color(255, 255, 255);
+        this.colorActive = new Color(100, 255, 100);
+        this.colorResolve = new Color(255, 100, 100);
+        this.colorCur = new Color(255, 255, 255);
 
-        this.symbol.setOrigin(orX, orY);
+        this.symbol.setOrigin(0, orY);
     }
 
     public update(delta: number): void{

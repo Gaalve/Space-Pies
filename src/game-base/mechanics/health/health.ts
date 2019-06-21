@@ -22,15 +22,15 @@ export class Health {
         const pid = player.getNameIdentifier();
 
         this.shipBar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, false, 120,
-            "CoreExplosion"+pid, pid);
+            "CoreExplosion"+pid, pid, piAnmimSys);
         this.zone1Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 170,
-            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid, piAnmimSys);
         this.zone2Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 220,
-            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid, piAnmimSys);
         this.zone3Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 270,
-            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid, piAnmimSys);
         this.zone4Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 320,
-            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
+            HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid, piAnmimSys);
 
 
         pi.pushSymbol(

@@ -3,6 +3,8 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {HealthType} from "./health-type";
 import Text = Phaser.GameObjects.Text;
 import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
+import {PiAnimSystem} from "../pianim/pi-anim-system";
+import {PiAnimSequence} from "../pianim/pi-anim-sequence";
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
@@ -14,11 +16,14 @@ export class Healthbar {
     private readonly symbol: Sprite;
     private readonly lastPiSymbolString: string;
     private readonly pid: string;
+    private readonly piAnimSys: PiAnimSystem;
+    private piAnimSequence: PiAnimSequence;
 
     // private term: Text;
 
-    public constructor(scene: Phaser.Scene, direction: 1|-1, isHitZone: boolean, y: number, lastPiSymbolString: string, pid: string){
+    public constructor(scene: Phaser.Scene, direction: 1|-1, isHitZone: boolean, y: number, lastPiSymbolString: string, pid: string, piAnimSys: PiAnimSystem){
         this.scene = scene;
+        this.piAnimSys = piAnimSys;
         this.y = y;
         this.bars = [];
         this.direction = direction;
@@ -28,6 +33,8 @@ export class Healthbar {
         this.scene.add.existing(this.symbol);
         this.lastPiSymbolString = lastPiSymbolString;
         this.pid = pid.toLowerCase();
+        this.piAnimSequence = this.piAnimSys.addSequence(this.position - 10 * this.direction,
+            this.y, this.lastPiSymbolString);
 
         // this.term = scene.add.text(this.position - 10 * this.direction, this.y, "", {
         //     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 3, stroke: '#000'
@@ -60,7 +67,29 @@ export class Healthbar {
     }
 
     private updateText(): void{
-        // this.term.setText(this.toString());
+        // this.term.setText(this.toString());3
+        if(this.bars.length > 0)
+            this.piAnimSequence.clearSequence(this.position - 10 * this.direction,
+                this.y, this.bars[this.bars.length - 1].toString() + '( )');
+        for (let i = this.bars.length - 2; i >= 0; i--) {
+            if (i >= 2 && i < this.bars.length - 3) {
+                if(i == 2)
+                    this.piAnimSequence.addSymbol('[...]');
+                    // str += '[...].'
+            } else{
+                // str += this.bars[i].toString();
+                // str += '( ).';
+                this.piAnimSequence.addSymbol(this.bars[i].toString() + '( )');
+            }
+        }
+        if(this.bars.length > 0){
+            this.piAnimSequence.addSymbol(this.lastPiSymbolString);
+            this.piAnimSequence.addSymbol('0');
+            // str += this.lastPiSymbolString;
+            // str += ".0";
+        }else{
+            this.symbol.destroy()
+        }
     }
 
     public toString(): string{
