@@ -75,6 +75,8 @@ export class MainScene extends Phaser.Scene {
     private energyShopS: Phaser.GameObjects.Image[];
     private energyTextS: Phaser.GameObjects.Text[];
 
+
+
     public battleTime: BattleTimeBar;
 
 
@@ -105,6 +107,25 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
+        this.anims.create({
+            key: 'snooze',
+            frames:
+                [{ key: 'shield/00', frame: null },
+                { key: 'shield/01' , frame: null},
+                { key: 'shield/02', frame: null },
+                { key: 'shield/03', frame: null },
+                { key: 'shield/04' , frame: null},
+                { key: 'shield/05', frame: null },
+                { key: 'shield/06' , frame: null},
+                { key: 'shield/07', frame: null },
+                { key: 'shield/08' , frame: null}, { key: 'shield/09' , frame: null},
+                { key: 'shield/10', frame: null, duration: 50 },
+            ],
+            frameRate: 8,
+            repeat: -1
+        });
+
+
         this.battleTime = new BattleTimeBar(this);
         this.system = new PiSystem(this, 10,10,10,false);
         this.data.set("system", this.system);
@@ -460,6 +481,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "sym_zone",
             () => {
                 let type = this.data.get("type");
+                this.regShield(type);
                 let createArmor = (this.system.add.channelOut("r"+type+"p"+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'z1','*' ).nullProcess());
                 this.system.pushSymbol(createArmor);
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost(type));
@@ -477,6 +499,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "sym_zone",
             () => {
                 let type = this.data.get("type");
+                this.regShield(type);
                 let createArmor = (this.system.add.channelOut("r"+type+"p"+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'z2','*' ).nullProcess());
                 this.system.pushSymbol(createArmor);
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost(type));
@@ -493,6 +516,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "sym_zone",
             () => {
                 let type = this.data.get("type");
+                this.regShield(type);
                 let createArmor = (this.system.add.channelOut("r"+type+"p"+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'z3','*' ).nullProcess());
                 this.system.pushSymbol(createArmor);
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost(type));
@@ -508,6 +532,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "sym_zone",
             () => {
                 let type = this.data.get("type");
+                this.regShield(type);
                 let createArmor = (this.system.add.channelOut("r"+type+"p"+this.turn.getCurrentPlayer().getNameIdentifier().charAt(1)+'z4','*' ).nullProcess());
                 this.system.pushSymbol(createArmor);
                 this.turn.getCurrentPlayer().payEnergy(player.getEnergyCost(type));
@@ -1064,7 +1089,7 @@ export class MainScene extends Phaser.Scene {
         let shieldCost = player.getEnergyCost("shield");
         let rocketCost = player.getEnergyCost("rocket");
         let nanoCost = player.getEnergyCost("nano");
-        let adaptCost = player.getEnergyCost("adapt");
+        let adaptCost = player.getEnergyCost("adap");
         this.updateEnergyCostTextS();
         if(energy < armorCost){
 
@@ -1169,37 +1194,69 @@ export class MainScene extends Phaser.Scene {
 
     updateShopZ(): void{
         let player = this.turn.getCurrentPlayer();
-        let zone1 = player.getHealth().zone1Bar.getBars();
-        let zone2 = player.getHealth().zone2Bar.getBars();
-        let zone3 = player.getHealth().zone3Bar.getBars();
-        let zone4 = player.getHealth().zone4Bar.getBars();
+        let zone1 = player.getHealth().zone1Bar.activeBars;
+        let zone2 = player.getHealth().zone2Bar.activeBars;
+        let zone3 = player.getHealth().zone3Bar.activeBars;
+        let zone4 = player.getHealth().zone4Bar.activeBars;
 
         if(zone1 == 0){
+            player.setDestroyedZone("z1");
             this.zone1.changeButton(this, false, false, player);
             this.zone1.removeInteractive();
             this.children.remove(this.shopZText[0]);
             this.shopZText[0] = this.add.text(410, 1080-50, "destroyed", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
+        else if(zone1 > 0){
+            this.zone1.changeButton(this, false, true, player);
+            this.zone1.restoreInteractive();
+            this.children.remove(this.shopZText[0]);
+            this.shopZText[0] = this.add.text(410, 1080-50, "Hitzone1", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
         if(zone2 == 0){
+            player.setDestroyedZone("z2");
             this.zone2.changeButton(this, false, false, player);
             this.zone2.removeInteractive();
             this.children.remove(this.shopZText[1]);
             this.shopZText[1] = this.add.text(660, 1080-50, "destroyed", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
+        else if(zone2 > 0){
+            this.zone2.changeButton(this, false, true, player);
+            this.zone2.restoreInteractive();
+            this.children.remove(this.shopZText[1]);
+            this.shopZText[1] = this.add.text(660, 1080-50, "Hitzone2", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
         if(zone3 == 0){
+            player.setDestroyedZone("z3");
             this.zone3.changeButton(this, false, false, player);
             this.zone3.removeInteractive();
             this.children.remove(this.shopZText[2]);
             this.shopZText[2] = this.add.text(910, 1080-50, "destroyed", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
+        else if(zone3 > 0){
+            this.zone3.changeButton(this, false, true, player);
+            this.zone3.restoreInteractive();
+            this.children.remove(this.shopZText[2]);
+            this.shopZText[2] = this.add.text(910, 1080-50, "Hitzone3", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
         if(zone4 == 0){
+            player.setDestroyedZone("z4");
             this.zone4.changeButton(this, false, false, player);
             this.zone4.removeInteractive();
             this.children.remove(this.shopZText[3]);
             this.shopZText[3] = this.add.text(1160, 1080-50, "destroyed", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
+        else if(zone4 > 0){
+            this.zone4.changeButton(this, false, true, player);
+            this.zone4.restoreInteractive();
+            this.children.remove(this.shopZText[3]);
+            this.shopZText[3] = this.add.text(1160, 1080-50, "Hitzone4", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
 
@@ -1328,6 +1385,46 @@ export class MainScene extends Phaser.Scene {
 
         }
     }
+    regShield(type):void{
+
+        let test=this.add.sprite(this.turn.getCurrentPlayer().ship.posX, this.turn.getCurrentPlayer().ship.posY, 'shield/00').play('snooze');
+        test.alpha=0;
+        switch(type){
+            case("armor"):test.setTint(0x999999,0x999999,0x999999,0x999999);break;
+            case("shield"):test.setTint(0x053C8C,0x053C8C,0x053C8C,0x053C8C);break;
+            case("rocket"):test.setTint(0x700000,0x700000,0x700000,0x700000);break;
+            case("nano"):test.setTint(0x1B1B1B,0x1B1B1B,0x1B1B1B,0x1B1B1B);break;
+            case("adap"):test.setTint(0xF0FF00,0x700000,0x999999,0x053C8C);break;
+        }
+
+
+        //test.tint=0xF16F6F;
+        test.depth=100;
+        test.setScale(0.5,0.5);
+
+        let timeline = this.tweens.timeline(test);
+
+
+
+        timeline.add({
+            targets: test,
+            scaleX: 2,
+            scaleY: 2,
+            alpha:1,
+            ease: 'Sine.easeInOut',
+            duration: 800,
+        });
+        timeline.add({
+            targets: test,
+            alpha:0,
+            ease: 'Sine.easeInOut',
+            duration: 400,
+        });
+        timeline.play();
+
+    }
+
+
 
     updateEnergyCostTextS(): void{
         let type = "";
@@ -1378,6 +1475,8 @@ export class MainScene extends Phaser.Scene {
         }
 
     }
+
+
 
 
 }

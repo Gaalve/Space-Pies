@@ -3,6 +3,7 @@ import {HealthbarSD} from "./health/healthbarSD";
 import {Explosion} from "./animations/explosion";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {BulletInfo} from "./weapon/bulletInfo";
+import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 
 
 export class EnergyDrone extends Phaser.GameObjects.Sprite{
@@ -12,6 +13,9 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
     private piTerm : string;
     public health : HealthbarSD;
     public explosion: Explosion;
+    public collectED:collectEnergy_Drones;
+
+
 
     public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number, pem: Phaser.GameObjects.Particles.ParticleEmitterManager){
         super(scene, x, y, "ssr_solar_drone");
@@ -50,6 +54,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
         this.player = player;
         this.index = index;
         this.explosion = new Explosion(pem);
+        this.collectED=new collectEnergy_Drones(pem);
         if(index > 0) {
             this.health = new HealthbarSD(scene, this.x, this.y, player.getNameIdentifier(), index);
         }
@@ -120,5 +125,6 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
         shield.symbol = term;
         system.pushSymbol(shield);
     }
+
 
 }

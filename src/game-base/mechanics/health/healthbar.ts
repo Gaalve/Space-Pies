@@ -6,7 +6,8 @@ import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
-    private bars: HealthbarSprites[];
+    public bars: HealthbarSprites[];
+    public activeBars: number = 0;
     private readonly direction: 1|-1;
     private readonly offset: number = 14;
     private readonly y: number;
@@ -42,6 +43,7 @@ export class Healthbar {
             this.position + this.bars.length * this.offset * this.direction,
             this.y, this.pid.toLowerCase()));
         this.updateText();
+        this.activeBars++;
     }
 
     public destroyBar(): void{
@@ -57,6 +59,7 @@ export class Healthbar {
         bleedingSprite.anims.play("bleeding");
         sprite.destroy();
         this.updateText();
+        this.activeBars--;
     }
 
     private updateText(): void{
@@ -96,6 +99,7 @@ export class Healthbar {
         let sprite = this.bars.pop().sprite;
         this.scene.time.delayedCall(500,()=>{sprite.destroy()}, [],this);
         this.scene.time.delayedCall(500,()=>{this.updateText()}, [],this);
+        this.activeBars--;
     }
 
     public getBars() : number{
