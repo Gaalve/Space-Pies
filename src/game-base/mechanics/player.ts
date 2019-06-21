@@ -205,6 +205,15 @@ export class Player {
         return this.energy;
     }
 
+    getRegenRate(): number
+    {
+        let rate = 50;
+        if(this.activatedSolarDrones-1 >= 0){
+            rate += (this.activatedSolarDrones-1)*25;
+        }
+        return rate;
+    }
+
     payEnergy(cost: number) : void
     {
         this.energy -= cost;

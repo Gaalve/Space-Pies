@@ -45,7 +45,7 @@ export class PauseScene extends Phaser.Scene {
         });
 
         this.buttonResume = new Button(this, 100, 100, "button_shadow",
-            "button_bg", "button_fg", "button_resume",
+            "button_bg", "button_fg", "button_resume", 0.95,
             ()=>{
             this.scene.resume("MainScene");
             this.scene.sleep();}
@@ -58,7 +58,7 @@ export class PauseScene extends Phaser.Scene {
 
 
         this.buttonReset = new Button(this, 100, 100, "button_shadow",
-            "button_bg", "button_fg", "button_skip",
+            "button_bg", "button_fg", "button_skip",0.95,
             ()=>{
             this.scene.get('MainScene').scene.restart();
             this.P2.resetEnergy();
@@ -79,7 +79,7 @@ export class PauseScene extends Phaser.Scene {
 
 
         this.buttonDebug = new Button(this, 100, 100, "button_shadow",
-            "button_bg", "button_fg","button_options",
+            "button_bg", "button_fg","button_options",0.95,
             ()=>{
             this.P1.getSystem().changeDebugLogger();
             debugState.setText("State: " + this.P1.getSystem().getDebugLogState());
