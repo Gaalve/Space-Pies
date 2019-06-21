@@ -32,6 +32,11 @@ export class Player {
     public activatedSolarDrones : number;
     private smallestIndexSolDrone : number;
     public isDead:boolean;
+    public z1Destroyed: boolean = false;
+    public z2Destroyed: boolean = false;
+    public z3Destroyed: boolean = false;
+    public z4Destroyed: boolean = false;
+
 
     private health : Health;
     private energy : number;
@@ -167,6 +172,18 @@ export class Player {
 
     getSystem() : PiSystem{
         return this.system;
+    }
+
+
+
+    setDestroyedZone(zone: string){
+        switch (zone) {
+            case("z1"):{ this.z1Destroyed = true; break;}
+            case("z2"):{ this.z2Destroyed = true; break;}
+            case("z3"):{ this.z3Destroyed = true; break;}
+            case("z4"):{ this.z4Destroyed = true; break;}
+
+        }
     }
 
     /**
