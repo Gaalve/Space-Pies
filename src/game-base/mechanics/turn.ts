@@ -44,13 +44,13 @@ export class Turn {
                 this.system.add.channelIn('player1', '').
                 channelOutCB('shopp1', '', () => this.setShopTurn()).
                 channelIn('shopp1end', '').
+                channelOut('anomalyunlock1', '').
                 channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut("startephase1", "").
-                channelOut('anomalyunlock1', '').
                 channelOutCB('unlock1', '', () => this.setAttackTurn()).
                 channelIn('attackp1end', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -78,13 +78,13 @@ export class Turn {
                 this.system.add.channelIn('player2', '').
                 channelOutCB('shopp1', '', () => this.setShopTurn()).
                 channelIn('shopp2end', '').
+                channelOut('anomalyunlock2', '').
                 channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut("startephase2", "").
-                channelOut('anomalyunlock2', '').
                 channelOutCB('unlock2', '', () => this.setAttackTurn()).
                 channelIn('attackp2end', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
