@@ -32,16 +32,21 @@ export class Player {
     public activatedSolarDrones : number;
     private smallestIndexSolDrone : number;
     public isDead:boolean;
+    public z1Destroyed: boolean = false;
+    public z2Destroyed: boolean = false;
+    public z3Destroyed: boolean = false;
+    public z4Destroyed: boolean = false;
+
 
     private health : Health;
     private energy : number;
     private shieldCost : number = 10; // cost for armor/shield/rocket shield
-    private nanoCost : number = 5;  // cost for nano shield
+    private nanoCost : number = 6;  // cost for nano shield
     private wModCost : number = 10;  // cost for wMod
     private weaponCost : number = 25; // cost for laser/projectile weapon
     private rocketCost : number = 40;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
-    private adaptCost: number = 20; // cost for adaptive shield
+    private adaptCost: number = 16; // cost for adaptive shield
 
 
 
@@ -167,6 +172,18 @@ export class Player {
 
     getSystem() : PiSystem{
         return this.system;
+    }
+
+
+
+    setDestroyedZone(zone: string){
+        switch (zone) {
+            case("z1"):{ this.z1Destroyed = true; break;}
+            case("z2"):{ this.z2Destroyed = true; break;}
+            case("z3"):{ this.z3Destroyed = true; break;}
+            case("z4"):{ this.z4Destroyed = true; break;}
+
+        }
     }
 
     /**
@@ -403,11 +420,11 @@ export class Player {
 
         let drone = this.system.add.term("Drone" + p, undefined);
         let sum = this.system.add.sum([this.system.add.channelIn("startephase" + p, "").
-        channelOut("e0", "40").
-        channelOut("e1", "15").
-        channelOut("e2", "15").
-        channelOut("e3", "15").
-        channelOut("e4", "15").
+        channelOut("e0", "50").
+        channelOut("e1", "25").
+        channelOut("e2", "25").
+        channelOut("e3", "25").
+        channelOut("e4", "25").
         next(drone),
             this.system.add.channelInCB("newsolar" + p + "0", "e0", () =>{
                 this.createSolarDrone(0);

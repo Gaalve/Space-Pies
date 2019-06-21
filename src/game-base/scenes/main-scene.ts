@@ -1099,7 +1099,7 @@ export class MainScene extends Phaser.Scene {
         let shieldCost = player.getEnergyCost("shield");
         let rocketCost = player.getEnergyCost("rocket");
         let nanoCost = player.getEnergyCost("nano");
-        let adaptCost = player.getEnergyCost("adapt");
+        let adaptCost = player.getEnergyCost("adap");
         this.updateEnergyCostTextS();
         if(energy < armorCost){
 
@@ -1204,37 +1204,69 @@ export class MainScene extends Phaser.Scene {
 
     updateShopZ(): void{
         let player = this.turn.getCurrentPlayer();
-        let zone1 = player.getHealth().zone1Bar.getBars();
-        let zone2 = player.getHealth().zone2Bar.getBars();
-        let zone3 = player.getHealth().zone3Bar.getBars();
-        let zone4 = player.getHealth().zone4Bar.getBars();
+        let zone1 = player.getHealth().zone1Bar.activeBars;
+        let zone2 = player.getHealth().zone2Bar.activeBars;
+        let zone3 = player.getHealth().zone3Bar.activeBars;
+        let zone4 = player.getHealth().zone4Bar.activeBars;
 
         if(zone1 == 0){
+            player.setDestroyedZone("z1");
             this.zone1.changeButton(this, false, false, player);
             this.zone1.removeInteractive();
             this.children.remove(this.shopZText[0]);
             this.shopZText[0] = this.add.text(410, 1080-50, "destroyed", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
+        else if(zone1 > 0){
+            this.zone1.changeButton(this, false, true, player);
+            this.zone1.restoreInteractive();
+            this.children.remove(this.shopZText[0]);
+            this.shopZText[0] = this.add.text(410, 1080-50, "Hitzone1", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
         if(zone2 == 0){
+            player.setDestroyedZone("z2");
             this.zone2.changeButton(this, false, false, player);
             this.zone2.removeInteractive();
             this.children.remove(this.shopZText[1]);
             this.shopZText[1] = this.add.text(660, 1080-50, "destroyed", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
+        else if(zone2 > 0){
+            this.zone2.changeButton(this, false, true, player);
+            this.zone2.restoreInteractive();
+            this.children.remove(this.shopZText[1]);
+            this.shopZText[1] = this.add.text(660, 1080-50, "Hitzone2", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
         if(zone3 == 0){
+            player.setDestroyedZone("z3");
             this.zone3.changeButton(this, false, false, player);
             this.zone3.removeInteractive();
             this.children.remove(this.shopZText[2]);
             this.shopZText[2] = this.add.text(910, 1080-50, "destroyed", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
+        else if(zone3 > 0){
+            this.zone3.changeButton(this, false, true, player);
+            this.zone3.restoreInteractive();
+            this.children.remove(this.shopZText[2]);
+            this.shopZText[2] = this.add.text(910, 1080-50, "Hitzone3", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
         if(zone4 == 0){
+            player.setDestroyedZone("z4");
             this.zone4.changeButton(this, false, false, player);
             this.zone4.removeInteractive();
             this.children.remove(this.shopZText[3]);
             this.shopZText[3] = this.add.text(1160, 1080-50, "destroyed", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        }
+        else if(zone4 > 0){
+            this.zone4.changeButton(this, false, true, player);
+            this.zone4.restoreInteractive();
+            this.children.remove(this.shopZText[3]);
+            this.shopZText[3] = this.add.text(1160, 1080-50, "Hitzone4", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         }
 
