@@ -14,6 +14,7 @@ import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterMana
 import {BulletInfo} from "./weapon/bulletInfo";
 import {BattleTimeBar} from "./battleTimeBar";
 import get = Reflect.get;
+import {PiAnimSystem} from "./pianim/pi-anim-system";
 
 export class Player {
     private nameIdentifier: string;
@@ -48,7 +49,10 @@ export class Player {
     public rocketTrail: RocketTrail;
     public bulletTrail: BulletTrail;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
+    public constructor(scene: Phaser.Scene,
+                       x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean,
+                       piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar,
+                       piAnim: PiAnimSystem){
         this.isDead=false;
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;

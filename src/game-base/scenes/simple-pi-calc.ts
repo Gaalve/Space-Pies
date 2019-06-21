@@ -1,6 +1,6 @@
 import {PiAnimSystem} from "../mechanics/pianim/pi-anim-system";
 
-export class Background extends Phaser.Scene {
+export class SimplePiCalc extends Phaser.Scene {
 
     animSys: PiAnimSystem;
 
@@ -28,4 +28,6 @@ export class Background extends Phaser.Scene {
     update(time: number, delta: number): void {
         this.animSys.update(delta);
     }
+
+    //TODO: wait for sync?!?
 }

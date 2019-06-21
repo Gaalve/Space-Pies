@@ -110,8 +110,8 @@ export class MainScene extends Phaser.Scene {
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
-        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
-                        new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
+        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
+                        new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
         this.turn = new Turn(this, this.players);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{

@@ -15,7 +15,7 @@ export class Healthbar {
     private readonly lastPiSymbolString: string;
     private readonly pid: string;
 
-    private term: Text;
+    // private term: Text;
 
     public constructor(scene: Phaser.Scene, direction: 1|-1, isHitZone: boolean, y: number, lastPiSymbolString: string, pid: string){
         this.scene = scene;
@@ -29,12 +29,12 @@ export class Healthbar {
         this.lastPiSymbolString = lastPiSymbolString;
         this.pid = pid.toLowerCase();
 
-        this.term = scene.add.text(this.position - 10 * this.direction, this.y, "", {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 3, stroke: '#000'
-        });
-        this.term.setOrigin((-this.direction + 1)/2,0);
-        this.term.setDepth(2);
-        scene.add.existing(this.term);
+        // this.term = scene.add.text(this.position - 10 * this.direction, this.y, "", {
+        //     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 3, stroke: '#000'
+        // });
+        // this.term.setOrigin((-this.direction + 1)/2,0);
+        // this.term.setDepth(2);
+        // scene.add.existing(this.term);
     }
 
     public addBar(type: HealthType): void{
@@ -60,7 +60,7 @@ export class Healthbar {
     }
 
     private updateText(): void{
-        this.term.setText(this.toString());
+        // this.term.setText(this.toString());
     }
 
     public toString(): string{
