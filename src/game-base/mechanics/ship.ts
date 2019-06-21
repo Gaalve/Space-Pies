@@ -52,6 +52,14 @@ export class Ship{
         for (let i = 0; i < 30; i++){
             this.scene.time.delayedCall(500 * i, this.createDebris, [], this);
         }
+
+        for(let sd of this.player.getSolarDrones()){
+            if(sd.visible){
+                sd.explode();
+                sd.health.removeBar();
+                sd.health.removeBar();
+            }
+        }
         if(this.isRed) {
             this.exploedP1();
         }else this.exploedP2();

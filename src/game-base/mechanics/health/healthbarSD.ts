@@ -91,4 +91,10 @@ export class HealthbarSD {
         };
         return destroy;
     }
+
+    public removeBar() : void{
+        let sprite = this.bars.pop().sprite;
+        sprite.destroy();
+        this.updateText();
+    }
 }
