@@ -3,7 +3,7 @@ import {Player} from "../player";
 
 export class Anomaly extends Phaser.GameObjects.Sprite {
 
-    private player: Player;
+    protected player: Player;
     public scaleUp: number;
     public anomalyType: string;
 

@@ -213,6 +213,7 @@ export class MainScene extends Phaser.Scene {
         for(let i = 0; i < 5; i++) {
             this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("e" + i.toString(), "").nullProcess()));
         }
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nano5", "").nullProcess()));
 
         //extra function for game sync
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("wait", "").nullProcess()));

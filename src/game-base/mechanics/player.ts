@@ -19,12 +19,15 @@ import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 import {Anomaly} from "./anomalies/anomaly";
 import {SunEruption} from "./anomalies/sun-eruption";
 import {PiSystemAddAction} from "./picalc/pi-system-add-action";
+import {WormHole} from "./anomalies/worm-hole";
+import {NanoDrone} from "./nanoDrone";
+import {PiSystemAdd} from "./picalc/pi-system-add";
 
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
     private drones : [Drone, Drone, Drone];
-    private solarDrones: [EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone];
+    private solarDrones: [EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, NanoDrone];
     public scene : Phaser.Scene;
     private system : PiSystem;
     public ship : Ship;
@@ -67,7 +70,9 @@ export class Player {
         this.drones = [new Drone(scene, x, y, this, 0), new Drone(scene, x, y, this, 1), new Drone(scene, x, y, this,2 )];
         this.scene = scene;
         this.activatedDrones = 0;
-        this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,pem), new EnergyDrone(scene, x, y, this, 1,pem),new EnergyDrone(scene, x, y, this, 2,pem),new EnergyDrone(scene, x, y, this, 3,pem),new EnergyDrone(scene, x, y, this, 4,pem)];
+        this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,pem), new EnergyDrone(scene, x, y, this, 1,pem),
+            new EnergyDrone(scene, x, y, this, 2,pem),new EnergyDrone(scene, x, y, this, 3,pem),
+            new EnergyDrone(scene, x, y, this, 4,pem), new NanoDrone(scene, this, 5, pem)];
         this.activatedSolarDrones = 0;
         this.smallestIndexSolDrone = 1;
         this.health = new Health(scene, this, piSystem);
@@ -80,9 +85,8 @@ export class Player {
         this.bulletTrail = new BulletTrail(pem);
         this.collectE = new collectEnergy_ship(pem);
 
-        this.anomalies = ["eruption"];
-
-
+        this.anomalies = this.randomizeAnomalyAppearance();
+        
         //TODO: remove when Triebwerke ready
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
@@ -183,6 +187,7 @@ export class Player {
     }
 
     createSolarDrone(index : number) : void{
+
         this.activatedSolarDrones += 1;
         if (index != 0) {
             this.solarDrones[index].health.addBar(HealthType.ArmorBarSmall);
@@ -192,12 +197,32 @@ export class Player {
         }
     }
 
-    createAnomaly(index :number) : void{
+    randomizeAnomalyAppearance() : string[] {
+        if( Math.floor(Math.random()*100) % 2 == 0){
+            return ["eruption","nanodrone"];
+        }
+        else{
+            return ["nanodrone","eruption"];
+        }
+    }
 
-        if(this.anomalies[index] == "eruption"){
+    createNanoDrone() : void{
+        this.solarDrones[5].health.addBar(HealthType.ArmorBarSmall);
+        this.solarDrones[5].health.addBar(HealthType.ShieldBarSmall);
+    }
+
+    createAnomaly(p: string, action: string) : void{
+
+        if(action == "erupt"){
             this.currentAnomaly = new SunEruption(this.scene, this);
         }
-        else{}
+        if(action == "nano"){
+            this.currentAnomaly = new WormHole(this.scene, this, this.solarDrones[5]);
+        }
+    }
+
+    getAnomaly(index: number){
+        return this.anomalies[index];
     }
 
     getEnergy() : number
@@ -357,20 +382,57 @@ export class Player {
 
     private buildAnomalyPi(p : string){
 
-        this.system.pushSymbol(this.system.add.channelIn('locklock'+p,'').replication(
-            this.system.add.channelIn('anomalyunlock'+p, '', '', 0.5).nullProcess())
-        );
-        this.system.pushSymbol(
-            this.system.add.channelInCB('firstanomaly'+p, '', () => {this.createAnomaly(0);}).nullProcess()
-        );
-        this.system.pushSymbol(
-            this.system.add.channelInCB('destroy'+p, '', () => {this.currentAnomaly = undefined}).nullProcess()
-        );
+        let anomLock = this.system.add.term("AnomLock" + p, undefined);
+        let sum = this.system.add.sum([
+            this.system.add.channelIn('a'+p, '', '', 0.5). // chance of anomaly to appear
+            next(anomLock),
+            this.system.add.channelIn('locklock'+p,"a" + p).next(anomLock),
+            this.system.add.channelIn('unlocklock'+p,"anomalyunlock" + p).next(anomLock)
+        ]);
+        anomLock.symbol = sum;
+        this.system.pushSymbol(anomLock);
+
+        let anom = this.system.add.term("Anomalies"+p, undefined);
+        let term = this.system.add.sum([
+            this.system.add.channelInCB('eruption'+p, '', () => {this.createAnomaly(p, "erupt")}).
+            channelOut('shieldp'+p, '').
+            channelOut('shieldp'+p, '').
+            channelOut('shieldp'+p, '').
+            channelIn('anomalyunlock'+p,'').
+            channelIn('anomalyunlock'+p,'').
+            channelIn('anomalyunlock'+p,'').
+            channelOut('anlock'+p, "", ).
+            next(anom),
+            this.system.add.channelInCB('nanodrone'+p , '', () => {this.createAnomaly(p, "nano")}).
+            channelOut("newnano" + p, "solar" + p + "5").
+            channelIn('anomalyunlock'+p,'').
+            channelIn('anomalyunlock'+p,'').
+            channelIn('anomalyunlock'+p,'').
+            channelOut('anlock'+p, "", ).
+            next(anom)
+        ]);
+        anom.symbol = term;
+        this.system.pushSymbol(anom);
+
+        this.system.pushSymbol(this.system.add.channelOut('firstanomaly'+p, this.getAnomaly(0)+p).nullProcess());
+        this.system.pushSymbol(this.system.add.channelOut('secanomaly'+p, this.getAnomaly(1)+p).nullProcess());
+
         this.system.pushSymbol(
             this.system.add.channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
             channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
-            channelOut('locklock'+p, "").channelIn('anomalyunlock'+p,'').
-            channelOut('firstanomaly'+p,'').nullProcess()
+            channelOut('locklock'+p, "anomalyunlock" + p).
+            channelIn('anomalyunlock'+p,'').                // at least 5 rounds without anomaly at beginning
+            channelIn('firstanomaly'+p,'anomaction0'+p).
+            channelOut("anomaction0"+p,"").                 // start first anomaly
+            channelOut('unlocklock'+p, "a" + p).
+            channelIn('anlock'+p, "").
+            channelOut('locklock'+p, "anomalyunlock" + p).
+            channelIn('anomalyunlock'+p,'').
+            channelIn('secanomaly'+p,'anomaction1'+p).
+            channelOut("anomaction1"+p,"").                 // start second anomaly
+            channelOut('unlocklock'+p, "a" + p).
+            channelIn('anlock'+p, "").
+            channelOut('locklock'+p, "anomalyunlock" + p).nullProcess()
         );
 
     }
@@ -399,6 +461,7 @@ export class Player {
         channelOut("e2", "15").
         channelOut("e3", "15").
         channelOut("e4", "15").
+        channelOut("nano5", "50").
         next(drone),
             this.system.add.channelInCB("newsolar" + p + "0", "e0", () =>{
                 this.createSolarDrone(0);
@@ -424,6 +487,11 @@ export class Player {
             }).
             channelOut("newShield" + p + "4","").
             next(drone),
+            this.system.add.channelInCB("newnano" + p, "nano5", () => {
+                this.createNanoDrone();
+            }).
+            channelOut("newShield" + p + "5","").
+            next(drone),
             this.system.add.channelIn("dessol" + p + "1", "solar" + p + "1").
             next(drone),
             this.system.add.channelIn("dessol" + p + "2", "solar" + p + "2").
@@ -431,6 +499,8 @@ export class Player {
             this.system.add.channelIn("dessol" + p + "3", "solar" + p + "3").
             next(drone),
             this.system.add.channelIn("dessol" + p + "4", "solar" + p + "4").
+            next(drone),
+            this.system.add.channelIn("dessol" + p + "nano", "solar" + p + "5").
             next(drone)
         ]);
 
