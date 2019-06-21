@@ -53,17 +53,6 @@ export class Ship{
             this.scene.time.delayedCall(500 * i, this.createDebris, [], this);
         }
 
-        for(let sd of this.player.getSolarDrones()){
-            if(sd.visible){
-                sd.explode();
-                if(sd.health.bars.length == 1){
-                    sd.health.removeBar();
-                }else if(sd.health.bars.length == 2){
-                    sd.health.removeBar();
-                    sd.health.removeBar()
-                }
-            }
-        }
         if(this.isRed) {
             this.exploedP1();
         }else this.exploedP2();
@@ -120,6 +109,15 @@ export class Ship{
         this.scene.time.delayedCall(11000, this.explosion2At, [165, 0, 0.85, 2.4], this);
         this.scene.time.delayedCall(11500, ()=>{this.modularShip.toDestroyedPilot()}, [], this);
 
+        this.scene.time.delayedCall(12000, ()=>{
+            for(let sd of this.player.getSolarDrones()){
+                if(sd.visible){
+                    sd.explode();
+                    sd.health.removeBars();
+                }
+            }
+        },[], this);
+
         this.scene.time.delayedCall(14000, this.explosion2At, [20, 0, 0.85, 2.4], this);
         this.scene.time.delayedCall(14080, this.explosion2At, [150, 0, 0.85, 1.2], this);
         this.scene.time.delayedCall(14500, ()=>{this.modularShip.toDestroyedHull()}, [], this);
@@ -165,6 +163,15 @@ export class Ship{
 
         this.scene.time.delayedCall(11000, this.explosion2At, [-155, 0, 0.5, 1.8], this);
         this.scene.time.delayedCall(11400, ()=>{this.modularShip.toDestroyedPilot()}, [], this);
+
+        this.scene.time.delayedCall(12000, ()=>{
+            for(let sd of this.player.getSolarDrones()){
+                if(sd.visible){
+                    sd.explode();
+                    sd.health.removeBars();
+                }
+            }
+        },[], this);
 
         this.scene.time.delayedCall(14000, this.explosion2At, [-40, 0, 0.85, 2.4], this);
         this.scene.time.delayedCall(14500, ()=>{this.modularShip.toDestroyedHull()}, [], this);
