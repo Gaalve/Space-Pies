@@ -4,24 +4,28 @@ import {Explosion} from "./animations/explosion";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {BulletInfo} from "./weapon/bulletInfo";
 import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
+import {NanoDrone} from "./nanoDrone";
 
 
 export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
-    private player : Player;
-    private readonly index : number;
-    private piTerm : string;
+    protected player : Player;
+    protected readonly index : number;
+    protected piTerm : string;
     public health : HealthbarSD;
     public explosion: Explosion;
     public collectED:collectEnergy_Drones;
 
 
 
-    public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number, pem: Phaser.GameObjects.Particles.ParticleEmitterManager){
+    public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number, pem: Phaser.GameObjects.Particles.ParticleEmitterManager, type?: string){
         super(scene, x, y, "ssr_solar_drone");
         if(player.getNameIdentifier() == "P2"){
             this.setTexture("ssb_solar_drone");
         }
+
+        if(!type) type = "solar";
+
         //reposition external drones
         if(index == 1){
             if(player.getNameIdentifier() == "P1"){
@@ -50,6 +54,13 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
                 this.setPosition(x , y + 450);
             }
         }
+        else if(index == 5){
+            if(player.getNameIdentifier() == "P1"){
+                this.setPosition(x - 760, y + 280);
+            }else{
+                this.setPosition(x + 760, y + 280);
+            }
+        }
 
         this.player = player;
         this.index = index;
@@ -63,7 +74,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
         this.buildPiTerm();
         this.createRepsSolarDrones(this.player.getNameIdentifier().charAt(1), this.index);
-        if(this.index != 0){
+        if(this.index != 0 && type == "solar"){
             this.createSolarShields(this.player.getNameIdentifier().charAt(1), this.index);
         }
 

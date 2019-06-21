@@ -580,6 +580,11 @@
       },
       {
         "type": "image",
+        "key": "worm_hole",
+        "url": "assets/sprites/worm_hole.png"
+      },
+      {
+        "type": "image",
         "key": "shield/00",
         "url": "assets/sprites/shield/00.png"
       },
