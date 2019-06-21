@@ -56,8 +56,12 @@ export class Ship{
         for(let sd of this.player.getSolarDrones()){
             if(sd.visible){
                 sd.explode();
-                sd.health.removeBar();
-                sd.health.removeBar();
+                if(sd.health.bars.length == 1){
+                    sd.health.removeBar();
+                }else if(sd.health.bars.length == 2){
+                    sd.health.removeBar();
+                    sd.health.removeBar()
+                }
             }
         }
         if(this.isRed) {

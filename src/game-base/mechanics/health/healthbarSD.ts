@@ -4,7 +4,7 @@ import Text = Phaser.GameObjects.Text;
 
 export class HealthbarSD {
     private readonly scene: Phaser.Scene;
-    private readonly bars: HealthbarSprites[];
+    public readonly bars: HealthbarSprites[];
     private readonly direction: 1|-1;
     private readonly offset: number = 14;
     private readonly x: number;
