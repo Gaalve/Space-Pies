@@ -22,6 +22,17 @@ export class BotSolar extends BotAction{
         this.actCost = this.bot.getEnergyCost("solar");
     }
 
-    public activate(): void {
+    public activate(delay: number): void {
+        let system = this.bot.getSystem();
+        this.bot.scene.time.delayedCall(delay, ()=>{
+            system.pushSymbol(system.add.channelOut("","").nullProcess()) //TODO: channelname
+        }, [], this);
+
+        this.logAction(this.bot.steps);
+    }
+
+    public logAction(step: number): void {
+        let s = step.toString();
+        console.log(s + ". step: I built a solar drone.");
     }
 }

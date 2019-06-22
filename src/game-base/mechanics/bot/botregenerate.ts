@@ -12,6 +12,9 @@ export class BotRegenerate extends BotAction{
 
     }
 
-    public activate(): void {
+    public activate(step: number): void {
+    }
+
+    public logAction(): void {
     }
 }

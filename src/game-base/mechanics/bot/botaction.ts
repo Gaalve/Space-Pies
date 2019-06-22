@@ -6,13 +6,11 @@ export abstract class BotAction{
     public bot: Bot;
     public actCost: number;
     public executable: boolean;
-    public possibility: number;
 
     protected constructor(type: string, bot: Bot, cost: number){
         this.type = type;
         this.bot = bot;
         this.actCost = cost;
-        this.possibility = 0;
 
         if(bot.getEnergy() < cost){
             this.executable = false;
@@ -22,5 +20,6 @@ export abstract class BotAction{
     }
 
     public abstract checkExecutable(): void;
-    public abstract activate(): void;
+    public abstract activate(delay: number): void;
+    public abstract logAction(step: number): void;
 }

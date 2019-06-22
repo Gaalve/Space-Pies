@@ -18,12 +18,15 @@ export class Bot extends Player{
     public possibleActions: BotAction[];
     public actions: BotAction[];
 
+    public steps: number;
+
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
         super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt);
 
         this.weaponSlots = 2;
         this.active = false;
+        this.steps = 0;
 
         this.actions.splice(0, 0, new BotRegenerate("reg", this, 0));
         this.actions.splice(1, 0, new BotWext("wext", this, 0));
@@ -34,10 +37,12 @@ export class Bot extends Player{
 
     public start(): void{
         while(this.active) {
+            this.steps++;
+
             this.updateExecutable();
             this.clearPosActions();
             this.getPossibleActions();
-            this.chooseAction();
+            this.chooseAction(this.steps*2000);
         }
 
     }
@@ -60,57 +65,58 @@ export class Bot extends Player{
         }
     }
 
-    public chooseAction(): void{
+    public chooseAction(delay: number): void{
         let x = Phaser.Math.Between(1,100);
         switch(this.possibleActions.length){
             case(1):{
-                this.possibleActions[0].activate();
+                this.possibleActions[0].activate(delay);
                 break;
             }
             case(2):{
                 if(x <= 90){
-                    this.possibleActions[0].activate();
+                    this.possibleActions[0].activate(delay);
                 }else{
-                    this.possibleActions[1].activate();
+                    this.possibleActions[1].activate(delay);
                 }
                 break;
             }
             case(3):{
                 if(x <= 45){
-                    this.possibleActions[0].activate();
+                    this.possibleActions[0].activate(delay);
                 }else if(x > 45 && x <= 90){
-                    this.possibleActions[1].activate();
+                    this.possibleActions[1].activate(delay);
                 }else{
-                    this.possibleActions[2].activate();
+                    this.possibleActions[2].activate(delay);
                 }
                 break;
             }
             case(4):{
                 if(x <= 30){
-                    this.possibleActions[0].activate();
+                    this.possibleActions[0].activate(delay);
                 }else if(x > 30 && x <= 60) {
-                    this.possibleActions[1].activate();
+                    this.possibleActions[1].activate(delay);
                 }else if(x > 60 && x <= 90){
-                    this.possibleActions[2].activate();
+                    this.possibleActions[2].activate(delay);
                 }else{
-                    this.possibleActions[3].activate();
+                    this.possibleActions[3].activate(delay);
                 }
                 break;
             }
             case(5):{
                 if(x <= 22.5){
-                    this.possibleActions[0].activate();
+                    this.possibleActions[0].activate(delay);
                 }else if(x > 22.5 && x <= 45) {
-                    this.possibleActions[1].activate();
+                    this.possibleActions[1].activate(delay);
                 }else if(x > 45 && x <= 67.5){
-                    this.possibleActions[2].activate();
+                    this.possibleActions[2].activate(delay);
                 }else if(x > 67.5 && x <= 90){
-                    this.possibleActions[3].activate();
+                    this.possibleActions[3].activate(delay);
                 }else{
-                    this.possibleActions[4].activate();
+                    this.possibleActions[4].activate(delay);
                 }
                 break;
             }
+            default: this.actions[4].activate(delay);
         }
     }
 }
