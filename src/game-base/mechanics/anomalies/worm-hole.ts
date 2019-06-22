@@ -1,6 +1,5 @@
 import {Player} from "../player";
 import {Anomaly} from "./anomaly";
-import {MainScene} from "../../scenes/main-scene";
 import {NanoDrone} from "../nanoDrone";
 
 export class WormHole extends Anomaly {

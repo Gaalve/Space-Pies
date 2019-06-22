@@ -1,3 +1,4 @@
+import {Player} from "../player";
 import {Anomaly} from "./anomaly";
 
 

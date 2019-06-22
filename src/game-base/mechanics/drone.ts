@@ -74,16 +74,6 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		this.activatedWeapons = this.activatedWeapons + 1;
     }
 
-	/**
-	 remove all weapons from the drone (has to be done via pi calculus)
-	 */
-    removeWeapons() : void {
-    	for (let i = 0; i < this.weapons.length; i++){
-    		this.weapons[i].setVisible(false)
-		}
-    	this.activatedWeapons = 0;
-	}
-
     /**
     get number of installed weapons
      */
@@ -122,11 +112,6 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			this.piTerm = this.piTerm + "0";
 			this.simplePi = this.simplePi + "0";
 		}
-	}
-
-	resetPiTerm() : void {
-		this.piTerm = "";
-		this.simplePi = "";
 	}
 
 	toString() : string{
@@ -184,16 +169,19 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		let weapon = system.add.term("Weapon" + p + d, undefined);
 		let droneRef: Drone = this;
 		let sum = system.add.sum([system.add.channelIn("lock" + p + d,"").
+		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w1","", (_, at) => {
 			droneRef.getWeapons()[0].createBullet(at)
 		}).        //function for weapon animation
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
+		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w2", "", (_, at) => {
 			droneRef.getWeapons()[1].createBullet(at)
 		}).
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
+		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w3", "", (_, at) => {
 			droneRef.getWeapons()[2].createBullet(at)
 		}).
