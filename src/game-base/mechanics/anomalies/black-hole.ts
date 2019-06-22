@@ -1,6 +1,5 @@
 import {Player} from "../player";
 import {Anomaly} from "./anomaly";
-import destroy = Phaser.Loader.FileTypesManager.destroy;
 
 
 export class BlackHole extends Anomaly {

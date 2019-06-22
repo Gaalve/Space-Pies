@@ -92,8 +92,8 @@ export class Player {
         this.collectE = new collectEnergy_ship(pem);
 
         this.anomalies = this.randomizeAnomalyAppearance(blackholeAppears);
-        console.log(blackholeAppears)
-        for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
+        //console.log(blackholeAppears)
+        //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
         //this.anomalies = ["hole", "eruption", "nanodrone"];
 
         //TODO: remove when Triebwerke ready
