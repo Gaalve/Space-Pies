@@ -106,7 +106,7 @@ export class MainScene extends Phaser.Scene {
     create(data?: PiAnimSystem): void {
         if (!data) throw new Error("No Pi Anim System");
         this.battleTime = new BattleTimeBar(this);
-        this.system = new PiSystem(this, 10,10,10,false);
+        this.system = new PiSystem(this, 32,16,16,false);
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);

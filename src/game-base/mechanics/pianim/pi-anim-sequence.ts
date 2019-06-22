@@ -11,8 +11,12 @@ export class PiAnimSequence {
     alignment: PiAnimAlignment;
     posX: number;
 
+    toPosX: number;
+
     commandQueue: PiAnimCommands[];
     clearSequenceQueue: PiAnimSequence[];
+
+    hidden: boolean;
 
 
     public constructor(scene: Scene, x: number, y: number, name: string, alignemnt: PiAnimAlignment = PiAnimAlignment.LEFT){
@@ -21,9 +25,12 @@ export class PiAnimSequence {
         this.sequence[0].active();
         this.alignment = alignemnt;
         this.posX = x;
+        this.toPosX = x;
         this.commandQueue = [];
         this.clearSequenceQueue = [];
+        this.hidden = false;
         this.updatePositions();
+
     };
 
 
@@ -45,24 +52,45 @@ export class PiAnimSequence {
         this.updatePositions();
     };
 
-    public resetSequence(): void{
-        // this.curIdx = 0;
-        this.sequence.forEach(value => value.inactive());
-        this.sequence[0].active();
-    };
 
     public resolveSymbol(): void{
         this.sequence[0].resolve();
     };
 
+    private clamp(min: number, value: number, max: number): number{
+        return Math.max(min, Math.min(value, max));
+    }
+
     public update(delta: number): void{
         if (this.sequence.length == 0) return;
+
+        if (this.posX != this.toPosX){
+            console.log('posX '+this.posX +" toPosX "+this.toPosX);
+            const maxSpeed = 4;
+            this.posX += this.clamp(-maxSpeed,(this.toPosX - this.posX), maxSpeed);
+            this.updatePositions();
+        }
+
         let sym = this.sequence[0];
         sym.update(delta);
         if (sym.shouldDestroy()) {
+            sym.symbol.setScale(1);
+            let width = sym.symbol.getBounds().width;
             sym.destroy();
             this.sequence.splice(0, 1);
             this.sequence[0].active();
+            this.toPosX = this.posX;
+            switch (this.alignment) {
+                case PiAnimAlignment.LEFT:
+                    this.posX += width;
+                    break;
+                case PiAnimAlignment.CENTER:
+                    this.posX += width/2;
+                    break;
+                case PiAnimAlignment.RIGHT:
+                    break;
+            }
+            // console.log('posX '+this.posX+' toPosX '+this.toPosX+' width '+width);
             this.updatePositions();
             this.nextCommand();
         }
@@ -74,15 +102,15 @@ export class PiAnimSequence {
             case PiAnimCommands.NOTHING:
                 return;
             case PiAnimCommands.RESOLVE:
-                this.sequence[0].resolve();
+                this.resolveSymbol();
                 break;
             case PiAnimCommands.CLEAR:
                 this.sequence.forEach(value => value.destroy());
                 let other = this.clearSequenceQueue[0];
                 this.sequence = other.sequence;
-                this.posX = other.posX;
                 this.clearSequenceQueue.splice(0, 1);
                 this.sequence[0].active();
+                this.updatePositions();
                 this.show();
                 break;
         }
@@ -98,6 +126,7 @@ export class PiAnimSequence {
             lastSym.y
         ));
         this.updatePositions();
+        if (this.hidden) this.hide();
     }
 
     private updatePositions(): void{
@@ -124,10 +153,12 @@ export class PiAnimSequence {
     }
 
     private hide(): void{
+        this.hidden = true;
         this.sequence.forEach(v => v.hide());
     }
 
     private show(): void{
+        this.hidden = false;
         this.sequence.forEach(v => v.show());
     }
 

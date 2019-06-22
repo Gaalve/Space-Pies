@@ -15,7 +15,7 @@ export class PiAnimSymbol {
     symbol: Text;
 
     counter: number;
-    counterLimit: number = 100;
+    counterLimit: number;
 
     stage: 1 | 2 | 3;
     nextStage: 1 | 2 | 3;
@@ -38,11 +38,11 @@ export class PiAnimSymbol {
 
         this.stage = 1;
         this.counter = 0;
-        this.counterLimit = 100;
+        this.counterLimit = 500;
 
         this.colorInactive = new Color(255, 255, 255);
         this.colorActive = Color.HexStringToColor('#00aa44');
-        this.colorResolve = new Color(255, 100, 100);
+        this.colorResolve = Color.HexStringToColor('#aa0000');
         this.colorCur = new Color(255, 255, 255);
 
         this.symbol.setOrigin(0, 0.5);
@@ -80,7 +80,12 @@ export class PiAnimSymbol {
 
     public stage3Update(){ // Resolve
         this.colorCur = Color.ObjectToColor(Color.Interpolate.ColorWithColor(
-            this.colorActive, this.colorResolve, this.counterLimit, this.counter));
+            this.colorActive, this.colorResolve, this.counterLimit * 2 / 3, this.counter));
+        if (this.counter > this.counterLimit * 2 / 3){
+            let dist = this.counter - this.counterLimit * 2 / 3 ;
+            dist /= this.counterLimit * 1 / 3;
+            this.symbol.setScale(1 - dist);
+        }
     }
 
     public shouldDestroy(): boolean{

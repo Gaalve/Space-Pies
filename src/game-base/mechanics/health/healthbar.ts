@@ -47,7 +47,7 @@ export class Healthbar {
         this.bars.push(new HealthbarSprites(this.scene,type,
             this.position + this.bars.length * this.offset * this.direction,
             this.y, this.pid.toLowerCase()));
-        this.updateText();
+        this.updateTextViaNew();
     }
 
     public destroyBar(): void{
@@ -62,34 +62,49 @@ export class Healthbar {
         bleedingSprite.on('animationcomplete', this.destroy(bleedingSprite));
         bleedingSprite.anims.play("bleeding");
         sprite.destroy();
-        this.updateText();
+        this.updateTextViaResolve();
     }
 
-    private updateText(): void{
+    private updateTextViaResolve(): void{
         // this.term.setText(this.toString());3
-        if(this.bars.length > 0)
-            this.piAnimSequence.clearSequence(this.position - 10 * this.direction,
-                this.y + 14, this.bars[this.bars.length - 1].toString() + '( )',
-                this.direction == 1 ? PiAnimAlignment.LEFT : PiAnimAlignment.RIGHT);
+        if(this.bars.length == 0) return; // TODO
+        let other = this.piAnimSequence.resolveAndClearSequence(this.position - 10 * this.direction,
+            this.y + 14, this.bars[this.bars.length - 1].toString() + '( )',
+            this.direction == 1 ? PiAnimAlignment.LEFT : PiAnimAlignment.RIGHT);
+        for (let i = this.bars.length - 2; i >= 0; i--) {
+            if (i >= 2 && i < this.bars.length - 3) {
+                if(i == 2)
+                    other.addSymbol('[...]');
+                // str += '[...].'
+            } else{
+                // str += this.bars[i].toString();
+                // str += '( ).';
+                other.addSymbol(this.bars[i].toString() + '( )');
+            }
+        }
+        other.addSymbol(this.lastPiSymbolString);
+        other.addSymbol('0');
+    }
+
+    private updateTextViaNew(): void{
+        // this.term.setText(this.toString());3
+        if(this.bars.length == 0) return; // TODO
+        this.piAnimSequence.clearSequence(this.position - 10 * this.direction,
+            this.y + 14, this.bars[this.bars.length - 1].toString() + '( )',
+            this.direction == 1 ? PiAnimAlignment.LEFT : PiAnimAlignment.RIGHT);
         for (let i = this.bars.length - 2; i >= 0; i--) {
             if (i >= 2 && i < this.bars.length - 3) {
                 if(i == 2)
                     this.piAnimSequence.addSymbol('[...]');
-                    // str += '[...].'
+                // str += '[...].'
             } else{
                 // str += this.bars[i].toString();
                 // str += '( ).';
                 this.piAnimSequence.addSymbol(this.bars[i].toString() + '( )');
             }
         }
-        if(this.bars.length > 0){
-            this.piAnimSequence.addSymbol(this.lastPiSymbolString);
-            this.piAnimSequence.addSymbol('0');
-            // str += this.lastPiSymbolString;
-            // str += ".0";
-        }else{
-            this.symbol.destroy()
-        }
+        this.piAnimSequence.addSymbol(this.lastPiSymbolString);
+        this.piAnimSequence.addSymbol('0');
     }
 
     public toString(): string{
@@ -124,7 +139,7 @@ export class Healthbar {
     public removeBar() : void{
         let sprite = this.bars.pop().sprite;
         this.scene.time.delayedCall(500,()=>{sprite.destroy()}, [],this);
-        this.scene.time.delayedCall(500,()=>{this.updateText()}, [],this);
+        // this.scene.time.delayedCall(500,()=>{this.updateText()}, [],this);
     }
 
     public getBars() : number{
