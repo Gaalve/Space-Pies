@@ -1,29 +1,44 @@
 import {PiAnimSymbol} from "./pi-anim-symbol";
 import {PiAnimAlignment} from "./pi-anim-alignment";
+import {PiAnimCommands} from "./pi-anim-commands";
 import Scene = Phaser.Scene;
 
 export class PiAnimSequence {
 
     scene: Scene;
     sequence: PiAnimSymbol[];
-    curIdx: number;
+    // curIdx: number;
     alignment: PiAnimAlignment;
     posX: number;
+
+    commandQueue: PiAnimCommands[];
+    clearSequenceQueue: PiAnimSequence[];
+
 
     public constructor(scene: Scene, x: number, y: number, name: string, alignemnt: PiAnimAlignment = PiAnimAlignment.LEFT){
         this.scene = scene;
         this.sequence = [new PiAnimSymbol(scene, name, '', x, y)];
-        this.curIdx = 0;
         this.sequence[0].active();
         this.alignment = alignemnt;
         this.posX = x;
+        this.commandQueue = [];
+        this.clearSequenceQueue = [];
         this.updatePositions();
+    };
+
+
+    public resolveAndClearSequence(x: number, y: number, name: string, alignemnt: PiAnimAlignment = PiAnimAlignment.LEFT): PiAnimSequence{
+        let other = new PiAnimSequence(this.scene, x, y, name, alignemnt);
+        other.hide();
+        this.clearSequenceQueue.push(other);
+        this.sequence[0].resolve();
+        this.commandQueue.push(PiAnimCommands.CLEAR);
+        return other;
     };
 
     public clearSequence(x: number, y: number, name: string, alignemnt: PiAnimAlignment = PiAnimAlignment.LEFT): void{
         this.sequence.forEach(value => value.destroy());
         this.sequence = [new PiAnimSymbol(this.scene, name, '', x, y)];
-        this.curIdx = 0;
         this.sequence[0].active();
         this.alignment = alignemnt;
         this.posX = x;
@@ -31,23 +46,47 @@ export class PiAnimSequence {
     };
 
     public resetSequence(): void{
-        this.curIdx = 0;
+        // this.curIdx = 0;
         this.sequence.forEach(value => value.inactive());
         this.sequence[0].active();
     };
 
     public resolveSymbol(): void{
-        this.sequence[this.curIdx].resolve();
+        this.sequence[0].resolve();
     };
 
     public update(delta: number): void{
-        if (this.curIdx > this.sequence.length) return;
-        let sym = this.sequence[this.curIdx];
+        if (this.sequence.length == 0) return;
+        let sym = this.sequence[0];
         sym.update(delta);
         if (sym.shouldDestroy()) {
-            this.curIdx++;
-            this.sequence[this.curIdx].active();
+            sym.destroy();
+            this.sequence.splice(0, 1);
+            this.sequence[0].active();
+            this.updatePositions();
+            this.nextCommand();
         }
+    }
+
+    private nextCommand(){
+        if (this.commandQueue.length == 0) return;
+        switch (this.commandQueue[0]) {
+            case PiAnimCommands.NOTHING:
+                return;
+            case PiAnimCommands.RESOLVE:
+                this.sequence[0].resolve();
+                break;
+            case PiAnimCommands.CLEAR:
+                this.sequence.forEach(value => value.destroy());
+                let other = this.clearSequenceQueue[0];
+                this.sequence = other.sequence;
+                this.posX = other.posX;
+                this.clearSequenceQueue.splice(0, 1);
+                this.sequence[0].active();
+                this.show();
+                break;
+        }
+        this.commandQueue.splice(0, 1);
     }
 
     public addSymbol(name: string): void{
@@ -82,6 +121,14 @@ export class PiAnimSequence {
             sym.setXPosition(curX);
             curX = sym.getNextX();
         }
+    }
+
+    private hide(): void{
+        this.sequence.forEach(v => v.hide());
+    }
+
+    private show(): void{
+        this.sequence.forEach(v => v.show());
     }
 
 }

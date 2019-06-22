@@ -114,4 +114,12 @@ export class PiAnimSymbol {
         this.x = x;
         this.symbol.setPosition(this.x, this.y);
     }
+
+    public hide(): void{
+        this.symbol.setVisible(false);
+    }
+
+    public show(): void{
+        this.symbol.setVisible(true);
+    }
 }
