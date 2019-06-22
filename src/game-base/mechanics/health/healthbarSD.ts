@@ -4,7 +4,7 @@ import Text = Phaser.GameObjects.Text;
 
 export class HealthbarSD {
     private readonly scene: Phaser.Scene;
-    private readonly bars: HealthbarSprites[];
+    public bars: HealthbarSprites[];
     private readonly direction: 1|-1;
     private readonly offset: number = 14;
     private readonly x: number;
@@ -90,5 +90,12 @@ export class HealthbarSD {
             bleedingSprite.destroy();
         };
         return destroy;
+    }
+
+    public removeBars() : void{
+        for(let bar of this.bars){
+            bar.destroy();
+        }
+        this.term.destroy();
     }
 }

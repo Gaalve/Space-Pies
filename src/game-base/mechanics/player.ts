@@ -221,6 +221,8 @@ export class Player {
         this.activatedSolarDrones += 1;
         if (index != 0) {
             this.solarDrones[index].health.addBar(HealthType.ArmorBarSmall);
+            this.solarDrones[index].health.addBar(HealthType.ArmorBarSmall);
+            this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
             this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
             this.solarDrones[index].setVisible(true);
             this.setSmallestIndexSD();
@@ -367,7 +369,6 @@ export class Player {
     }
 
     getSmallestIndexSD(): string{
-        console.log(this.smallestIndexSolDrone);
         return this.smallestIndexSolDrone.toString();
     }
     setSmallestIndexSD(): void{
