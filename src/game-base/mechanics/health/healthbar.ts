@@ -1,10 +1,9 @@
 import {HealthbarSprites} from "./healthbar-sprites";
-import Sprite = Phaser.GameObjects.Sprite;
 import {HealthType} from "./health-type";
-import Text = Phaser.GameObjects.Text;
-import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
 import {PiAnimSystem} from "../pianim/pi-anim-system";
 import {PiAnimSequence} from "../pianim/pi-anim-sequence";
+import {PiAnimAlignment} from "../pianim/pi-anim-alignment";
+import Sprite = Phaser.GameObjects.Sprite;
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
@@ -34,7 +33,7 @@ export class Healthbar {
         this.lastPiSymbolString = lastPiSymbolString;
         this.pid = pid.toLowerCase();
         this.piAnimSequence = this.piAnimSys.addSequence(this.position - 10 * this.direction,
-            this.y, this.lastPiSymbolString);
+            this.y + 14, this.lastPiSymbolString, this.direction == 1 ? PiAnimAlignment.LEFT : PiAnimAlignment.RIGHT);
 
         // this.term = scene.add.text(this.position - 10 * this.direction, this.y, "", {
         //     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 3, stroke: '#000'
@@ -70,7 +69,8 @@ export class Healthbar {
         // this.term.setText(this.toString());3
         if(this.bars.length > 0)
             this.piAnimSequence.clearSequence(this.position - 10 * this.direction,
-                this.y, this.bars[this.bars.length - 1].toString() + '( )');
+                this.y + 14, this.bars[this.bars.length - 1].toString() + '( )',
+                this.direction == 1 ? PiAnimAlignment.LEFT : PiAnimAlignment.RIGHT);
         for (let i = this.bars.length - 2; i >= 0; i--) {
             if (i >= 2 && i < this.bars.length - 3) {
                 if(i == 2)

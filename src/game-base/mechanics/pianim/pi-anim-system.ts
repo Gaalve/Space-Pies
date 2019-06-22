@@ -1,5 +1,6 @@
 import {PiAnimSequence} from "./pi-anim-sequence";
 import Scene = Phaser.Scene;
+import {PiAnimAlignment} from "./pi-anim-alignment";
 
 export class PiAnimSystem {
     private readonly scene: Scene;
@@ -11,8 +12,8 @@ export class PiAnimSystem {
         this.sequences = [];
     }
 
-    public addSequence(x: number, y: number, name: string, orX?: number, orY?: number): PiAnimSequence{
-        let seq = new PiAnimSequence(this.scene, x, y, name, orY, orY);
+    public addSequence(x: number, y: number, name: string, alignment?: PiAnimAlignment): PiAnimSequence{
+        let seq = new PiAnimSequence(this.scene, x, y, name, alignment);
         this.sequences.push(seq);
         return seq;
     }

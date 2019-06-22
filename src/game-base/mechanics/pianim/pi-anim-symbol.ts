@@ -26,7 +26,7 @@ export class PiAnimSymbol {
     colorCur: Color;
 
     public constructor(scene: Scene, name: string, suffix: '' | '.', x: number,
-                       y: number, orX: number = 0.5, orY: number = 0.5){
+                       y: number){
         this.name = name;
         this.suffix = suffix;
         this.x = x;
@@ -35,12 +35,17 @@ export class PiAnimSymbol {
         this.symbol = scene.add.text(this.x, this.y, this.name + this.suffix, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 3, stroke: '#000'
         });
+
+        this.stage = 1;
+        this.counter = 0;
+        this.counterLimit = 100;
+
         this.colorInactive = new Color(255, 255, 255);
-        this.colorActive = new Color(100, 255, 100);
+        this.colorActive = Color.HexStringToColor('#00aa44');
         this.colorResolve = new Color(255, 100, 100);
         this.colorCur = new Color(255, 255, 255);
 
-        this.symbol.setOrigin(0, orY);
+        this.symbol.setOrigin(0, 0.5);
     }
 
     public update(delta: number): void{
@@ -54,6 +59,7 @@ export class PiAnimSymbol {
             case 2: this.stage2Update(); break;
             case 3: this.stage3Update(); break;
         }
+        // console.log('Stage: '+this.stage+' Counter: '+this.counter+'/'+this.counterLimit+' Color: '+this.colorCur.rgba);
         this.symbol.setTint(this.colorCur.color);
     }
 
@@ -102,5 +108,10 @@ export class PiAnimSymbol {
 
     public getNextX(): number{
         return this.symbol.getBounds().right;
+    }
+
+    public setXPosition(x: number): void{
+        this.x = x;
+        this.symbol.setPosition(this.x, this.y);
     }
 }
