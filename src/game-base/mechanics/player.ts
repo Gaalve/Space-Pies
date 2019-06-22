@@ -22,6 +22,7 @@ import {PiSystemAddAction} from "./picalc/pi-system-add-action";
 import {WormHole} from "./anomalies/worm-hole";
 import {NanoDrone} from "./nanoDrone";
 import {PiSystemAdd} from "./picalc/pi-system-add";
+import {BlackHole} from "./anomalies/black-hole";
 
 export class Player {
     private nameIdentifier: string;
@@ -66,7 +67,7 @@ export class Player {
     private anomalies: string[];
     public currentAnomaly: Anomaly;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar, blackholeAppears: string){
         this.isDead=false;
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
@@ -90,7 +91,10 @@ export class Player {
         this.bulletTrail = new BulletTrail(pem);
         this.collectE = new collectEnergy_ship(pem);
 
-        this.anomalies = this.randomizeAnomalyAppearance();
+        this.anomalies = this.randomizeAnomalyAppearance(blackholeAppears);
+        //console.log(blackholeAppears)
+        //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
+        //this.anomalies = ["hole", "eruption", "nanodrone"];
 
         //TODO: remove when Triebwerke ready
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
@@ -99,6 +103,10 @@ export class Player {
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '',
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn(
+            'shotblock'+this.getNameIdentifier().charAt(1), "","", 0).nullProcess())
+        );
+
 
         // z1 starts with 1 shield
         // this.health.addToHz(piSystem, 'radap', 'z1');
@@ -137,7 +145,7 @@ export class Player {
 
         let p = this.getNameIdentifier().charAt(1);
         this.buildLocksPi(p, bt);
-        this.buildAnomalyPi(p);
+        this.buildAnomalyPi(p, x, y, blackholeAppears.charAt(1) == p);
         this.buildEnergyDrones(p);
         this.createFirstWeapon(p);
         this.createFirstSolarDrone(p);
@@ -154,6 +162,11 @@ export class Player {
 
     getNameIdentifier(): string{
         return this.nameIdentifier;
+    }
+
+    getOpponentsIdentifier(): string{
+        if(this.getNameIdentifier().charAt(1) == '1') return "2";
+        else return "1";
     }
 
     isFirstPlayer(): boolean{
@@ -216,12 +229,32 @@ export class Player {
         }
     }
 
-    randomizeAnomalyAppearance() : string[] {
-        if( Math.floor(Math.random()*100) % 2 == 0){
-            return ["eruption","nanodrone"];
+    randomizeAnomalyAppearance(blackHoleAppears: string) : string[] {
+
+        let index = 0;
+        if(blackHoleAppears.charAt(0) == "1") {
+            if(Math.random() < 0.5){
+                return ["hole","eruption","nanodrone"];
+            }
+            else{
+                return ["hole","nanodrone","eruption"];
+            }
         }
-        else{
-            return ["nanodrone","eruption"];
+        if(blackHoleAppears.charAt(0) == "2") {
+            if(Math.random() < 0.5){
+                return ["eruption","hole","nanodrone"];
+            }
+            else{
+                return ["nanodrone","hole","eruption"];
+            }
+        }
+        if(blackHoleAppears.charAt(0) == "3") {
+            if(Math.random() < 0.5){
+                return ["eruption","nanodrone","hole"];
+            }
+            else{
+                return ["nanodrone","eruption","hole"];
+            }
         }
     }
 
@@ -230,13 +263,16 @@ export class Player {
         this.solarDrones[5].health.addBar(HealthType.ShieldBarSmall);
     }
 
-    createAnomaly(p: string, action: string) : void{
+    createAnomaly(action: string) : void{
 
         if(action == "erupt"){
             this.currentAnomaly = new SunEruption(this.scene, this);
         }
         if(action == "nano"){
             this.currentAnomaly = new WormHole(this.scene, this, this.solarDrones[5]);
+        }
+        if(action == "hole"){
+            this.currentAnomaly = new BlackHole(this.scene, this);
         }
     }
 
@@ -398,7 +434,7 @@ export class Player {
         this.system.pushSymbol(rlock);
     }
 
-    private buildAnomalyPi(p : string){
+    private buildAnomalyPi(p : string, x: number, y: number, blackHoleAppears: boolean){
 
         let anomLock = this.system.add.term("AnomLock" + p, undefined);
         let sum = this.system.add.sum([
@@ -410,23 +446,57 @@ export class Player {
         anomLock.symbol = sum;
         this.system.pushSymbol(anomLock);
 
+        let shotLock = this.system.add.term("Blocker" + p, undefined);
+        let shot = this.system.add.sum([
+            this.system.add.channelIn('shot'+p, '').
+            channelIn('shieldp'+p, '',
+                new BulletInfo(true, x, y + Math.random()*800 - 400)).next(shotLock),
+            this.system.add.channelIn('shotlock'+p, "shot"+p).next(shotLock),
+            this.system.add.channelIn('shotunlock'+p,"shotblock"+p).next(shotLock)
+        ]);
+        shotLock.symbol = shot;
+        this.system.pushSymbol(shotLock);
+
         let anom = this.system.add.term("Anomalies"+p, undefined);
         let term = this.system.add.sum([
-            this.system.add.channelInCB('eruption'+p, '', () => {this.createAnomaly(p, "erupt")}).
+            this.system.add.channelInCB('eruption'+p, '', () => {this.createAnomaly("erupt")}).
+            channelOut('unlocklock'+p, "a" + p).
             channelOut('shieldp'+p, '').
             channelOut('shieldp'+p, '').
             channelOut('shieldp'+p, '').
             channelIn('anomalyunlock'+p,'').
             channelIn('anomalyunlock'+p,'').
             channelIn('anomalyunlock'+p,'').
-            channelOut('anlock'+p, "", ).
+            channelOut('anlock'+p, "").
             next(anom),
-            this.system.add.channelInCB('nanodrone'+p , '', () => {this.createAnomaly(p, "nano")}).
+            this.system.add.channelInCB('nanodrone'+p , '', () => {this.createAnomaly("nano")}).
             channelOut("newnano" + p, "solar" + p + "5").
+            channelOut('unlocklock'+p, "a" + p).
             channelIn('anomalyunlock'+p,'').
             channelIn('anomalyunlock'+p,'').
             channelIn('anomalyunlock'+p,'').
-            channelOut('anlock'+p, "", ).
+            channelOut('anlock'+p, "").
+            next(anom),
+            this.system.add.channelIn('hole' + p, '').
+            //channelOut('bHLock' + this.getOpponentsIdentifier(), "").
+            channelOut('firstunlock'+p, "").
+            channelOutCB('secondunlock'+p, "",() => {
+                if (blackHoleAppears) this.createAnomaly("hole")
+            }).
+            channelOut('unlocklock'+p, "a" + p).
+            //channelOut('unlocklock'+this.getOpponentsIdentifier(), "a" + p).
+            channelOut('shotlock'+p,'shotblock'+p). // enable raising probability to block shot
+            channelInCB('anomalyunlock'+p,'', () => {
+                if (blackHoleAppears) this.currentAnomaly.scaleUp = -1;
+            }).
+            channelInCB('anomalyunlock'+p,'', () => {
+                if (blackHoleAppears) this.currentAnomaly.scaleUp = -2;
+            }).
+            channelInCB('anomalyunlock'+p,'', () => {
+                if (blackHoleAppears) this.currentAnomaly.scaleUp = -3;
+            }).
+            channelOut('shotunlock'+p,"shot"+p).  // disable raising probability to block shot
+            channelOut('anlock'+p, "").
             next(anom)
         ]);
         anom.symbol = term;
@@ -435,23 +505,57 @@ export class Player {
         this.system.pushSymbol(this.system.add.channelOut('firstanomaly'+p, this.getAnomaly(0)+p).nullProcess());
         this.system.pushSymbol(this.system.add.channelOut('secanomaly'+p, this.getAnomaly(1)+p).nullProcess());
 
-        this.system.pushSymbol(
-            this.system.add.channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
-            channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
-            channelOut('locklock'+p, "anomalyunlock" + p).
-            channelIn('anomalyunlock'+p,'').                // at least 5 rounds without anomaly at beginning
-            channelIn('firstanomaly'+p,'anomaction0'+p).
-            channelOut("anomaction0"+p,"").                 // start first anomaly
-            channelOut('unlocklock'+p, "a" + p).
-            channelIn('anlock'+p, "").
-            channelOut('locklock'+p, "anomalyunlock" + p).
-            channelIn('anomalyunlock'+p,'').
-            channelIn('secanomaly'+p,'anomaction1'+p).
-            channelOut("anomaction1"+p,"").                 // start second anomaly
-            channelOut('unlocklock'+p, "a" + p).
-            channelIn('anlock'+p, "").
-            channelOut('locklock'+p, "anomalyunlock" + p).nullProcess()
-        );
+        /*if (blackHoleAppears){*/
+
+            this.system.pushSymbol(this.system.add.channelOut('thirdanomaly'+p, this.getAnomaly(2)+p).nullProcess());
+
+            this.system.pushSymbol(
+                this.system.add./*channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
+                channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').*/
+                channelOut('locklock'+p, "anomalyunlock" + p).
+                channelIn('anomalyunlock'+p,'').                 // at least 5 rounds without anomaly at beginning
+                channelIn('firstanomaly'+p,'anomaction0'+p).
+                channelOut("anomaction0"+p,"").                 // start first anomaly
+                channelIn('anlock'+p, "").
+                channelOut('locklock'+p, "anomalyunlock" + p).
+                channelIn('anomalyunlock'+p,'').
+                channelIn('secanomaly'+p,'anomaction1'+p).
+                channelOut("anomaction1"+p,"").                 // start second anomaly
+                channelIn('anlock'+p, "").
+                channelOut('locklock'+p, "anomalyunlock" + p).
+                channelIn('anomalyunlock'+p,'').
+                channelIn('thirdanomaly'+p,'anomaction2'+p).
+                channelOut("anomaction2"+p,"").                 // start third anomaly
+                channelIn('anlock'+p, "").
+                channelOut('locklock'+p, "anomalyunlock" + p).nullProcess()
+            );
+            /*}
+          /*else{
+                this.system.pushSymbol(
+                    this.system.add.channelIn('bHLock' + p, '').
+                    channelOut('hole'+p, "").
+                    channelIn('bHLock'+this.getOpponentsIdentifier(), '').
+                    nullProcess()
+                );
+
+                this.system.pushSymbol(
+                    this.system.add.channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
+                    channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
+                    channelOut('locklock'+p, "anomalyunlock" + p).
+                    channelIn('anomalyunlock'+p,'').                // at least 5 rounds without anomaly at beginning
+                    channelIn('firstanomaly'+p,'anomaction0'+p).
+                    channelOut("anomaction0"+p,"").                 // start first anomaly
+                    channelOut('unlocklock'+p, "a" + p).
+                    channelIn('anlock'+p, "").
+                    channelOut('locklock'+p, "anomalyunlock" + p).
+                    channelIn('anomalyunlock'+p,'').
+                    channelIn('secanomaly'+p,'anomaction1'+p).
+                    channelOut("anomaction1"+p,"").                 // start second anomaly
+                    channelOut('unlocklock'+p, "a" + p).
+                    channelIn('anlock'+p, "").
+                    channelOut('locklock'+p, "anomalyunlock" + p).nullProcess()
+                );
+            }*/
 
     }
 

@@ -1,6 +1,5 @@
 import {Player} from "../player";
 import {Anomaly} from "./anomaly";
-import {MainScene} from "../../scenes/main-scene";
 import {NanoDrone} from "../nanoDrone";
 
 export class WormHole extends Anomaly {
@@ -16,11 +15,6 @@ export class WormHole extends Anomaly {
         this.scaleUp = 1;
         this.scaleX = 0.0;
         this.scaleY = 0.0;
-
-        let system = player.getSystem();
-
-        /*system.pushSymbol(system.add.channelOut("newnano" + this.player.getNameIdentifier().charAt(1),
-            "nano" + this.player.getNameIdentifier().charAt(1) + "5").nullProcess());*/
     }
 
     public update(): void {
