@@ -7,7 +7,8 @@ import Sprite = Phaser.GameObjects.Sprite;
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
-    private bars: HealthbarSprites[];
+    public bars: HealthbarSprites[];
+    public activeBars: number = 0;
     private readonly direction: 1|-1;
     private readonly offset: number = 14;
     private readonly y: number;
@@ -39,6 +40,7 @@ export class Healthbar {
         this.bars.push(new HealthbarSprites(this.scene,type,
             this.position + this.bars.length * this.offset * this.direction,
             this.y, this.pid.toLowerCase()));
+        this.activeBars++;
         this.updateTextViaNew();
     }
 
@@ -55,6 +57,7 @@ export class Healthbar {
         bleedingSprite.anims.play("bleeding");
         sprite.destroy();
         this.updateTextViaResolve();
+        this.activeBars--;
     }
 
     private updateTextViaResolve(): void{
@@ -119,6 +122,7 @@ export class Healthbar {
     public removeBar() : void{
         let sprite = this.bars.pop().sprite;
         this.scene.time.delayedCall(500,()=>{sprite.destroy()}, [],this);
+        this.activeBars--;
     }
 
     public getBars() : number{

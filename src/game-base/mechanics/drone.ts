@@ -1,6 +1,7 @@
 import {Player} from "./player";
 import {Weapon} from "./weapon";
 import {WeaponType} from "./weapon/weapon-type";
+import {BulletInfo} from "./weapon/bulletInfo";
 
 
 export class Drone extends Phaser.GameObjects.Sprite{
@@ -168,16 +169,22 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		let weapon = system.add.term("Weapon" + p + d, undefined);
 		let droneRef: Drone = this;
 		let sum = system.add.sum([system.add.channelIn("lock" + p + d,"").
+		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w1","", (_, at) => {
-			droneRef.getWeapons()[0].createBullet(at)}).        //function for weapon animation
+			droneRef.getWeapons()[0].createBullet(at)
+		}).        //function for weapon animation
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
+		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w2", "", (_, at) => {
-			droneRef.getWeapons()[1].createBullet(at)}).
+			droneRef.getWeapons()[1].createBullet(at)
+		}).
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
+		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w3", "", (_, at) => {
-			droneRef.getWeapons()[2].createBullet(at)}).
+			droneRef.getWeapons()[2].createBullet(at)
+		}).
 		next(weapon),
 			system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {
 				this.addWeapon(wClass);

@@ -88,6 +88,9 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		this.createPiTerm();
 	}
 
+	public getWeapon() : string {
+		return Weapon.getWeaponClass(this.weaponType);
+	}
 
 	private static getWeaponClass(type: WeaponType) : string{
 		switch (type) {
