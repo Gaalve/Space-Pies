@@ -572,7 +572,7 @@
         "type": "image",
         "key": "button_rocket",
         "url": "assets/sprites/button_rocket.png"
-      }, 
+      },
       {
         "type": "image",
         "key": "sun_erupt",
@@ -582,6 +582,11 @@
         "type": "image",
         "key": "worm_hole",
         "url": "assets/sprites/worm_hole.png"
+      },
+      {
+        "type": "image",
+        "key": "black_hole",
+        "url": "assets/sprites/black_hole.png"
       },
       {
         "type": "image",
