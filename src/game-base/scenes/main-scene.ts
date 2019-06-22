@@ -1206,6 +1206,7 @@ export class MainScene extends Phaser.Scene {
         let player = this.turn.getCurrentPlayer();
         let zone1 = player.getHealth().zone1Bar.activeBars;
         let zone2 = player.getHealth().zone2Bar.activeBars;
+
         let zone3 = player.getHealth().zone3Bar.activeBars;
         let zone4 = player.getHealth().zone4Bar.activeBars;
 
