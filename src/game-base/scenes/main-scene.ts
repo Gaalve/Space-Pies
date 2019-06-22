@@ -1,14 +1,19 @@
 import {Turn} from "../mechanics/turn";
 import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
-
+import {Animation} from "../mechanics/animation/Animation";
 import {PiSystem} from "../mechanics/picalc/pi-system";
-import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import {PiTerm} from "../mechanics/picalc/pi-term";
-import {PiSymbol} from "../mechanics/picalc/pi-symbol";
 import {Drone} from "../mechanics/drone";
-import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
+import {Weapon} from "../mechanics/weapon";
+import {ScenePiAnimation} from "./ScenePiAnimation";
+import {AnimationUtilities} from "../mechanics/animation/AnimationUtilites";
+import {HealthType} from "../mechanics/health/health-type";
+import {WeaponType} from "../mechanics/weapon/weapon-type";
+import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
+import Sprite = Phaser.GameObjects.Sprite;
+
+
 
 export class MainScene extends Phaser.Scene {
 
@@ -106,6 +111,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
+        this.scene.launch("AnimationScene");
         this.battleTime = new BattleTimeBar(this);
         this.system = new PiSystem(this, 10,10,10,true);
         this.data.set("system", this.system);
@@ -304,16 +310,51 @@ export class MainScene extends Phaser.Scene {
         let weapon = this.system.add.term("Weapon" + p + d, undefined);
 
         let droneRef: Drone = this.players[player - 1].getDrones()[drone];
-        let sum = this.system.add.sum([this.system.add.channelIn("lock" + p + d,"").
+        let sum = this.system.add.sum([this.system.add.channelInCB("lock" + p + d,"", (_, at) =>
+        {
+            this.animateLockReplication(droneRef);
+            this.animatePiCalc(droneRef);
+        }).
                                                 channelOutCB("w1","", (_, at) => {
+                                                    let weapon = droneRef.getWeapons()[0];
+                                                    var animationScene = <ScenePiAnimation> this.scene.get("AnimationScene");
+                                                    if (weapon.weaponType != WeaponType.NONE  && at != 'miss')
+                                                    {
+                                                        animationScene.shoot(weapon.weaponType);
+                                                        // animationScene.weapon1Shot = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        animationScene.weapon1Missed = true;
+                                                    }
                                                     droneRef.getWeapons()[0].createBullet(at == 'miss')}).        //function for weapon animation
                                                 channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
                                                 channelOut("wait","").channelOut("wait","").
                                                 channelOutCB("w2", "", (_, at) => {
+                                                    let weapon = droneRef.getWeapons()[1];
+                                                        let animationScene = <ScenePiAnimation> this.scene.get("AnimationScene");
+                                                    if (weapon.weaponType != WeaponType.NONE && at != 'miss')
+                                                    {
+                                                        // animationScene.weapon2Shot = true;
+                                                    }
+                                                    else {
+                                                        animationScene.weapon2Missed = true;
+                                                    }
                                                     droneRef.getWeapons()[1].createBullet(at == 'miss')}).
                                                 channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
                                                 channelOut("wait","").channelOut("wait","").
                                                 channelOutCB("w3", "", (_, at) => {
+                                                let weapon = droneRef.getWeapons()[1];
+                                                let animationScene = <ScenePiAnimation> this.scene.get("AnimationScene");
+                                                if (weapon.weaponType != WeaponType.NONE && at != 'miss')
+                                                {
+                                                    // animationScene.weapon3Shot= true;
+                                                }
+                                                else
+                                                {
+                                                    animationScene.weapon3Missed = true;
+                                                    animationScene.allWeaponsFired = true;
+                                                }
                                                     droneRef.getWeapons()[2].createBullet(at == 'miss')}).
                                                 next(weapon),
                                               this.system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {
@@ -335,6 +376,65 @@ export class MainScene extends Phaser.Scene {
                                                     }).
                                                 channelOut("newlock" + p + d, "lock" + p + d).
                                                 next(weapon));
+    }
+
+    private animateLockReplication(drone: Drone) {
+        let animationScene = <ScenePiAnimation> this.scene.get("AnimationScene");
+        let onScreenTextOut = animationScene.add.text(1920/2, 1080, AnimationUtilities.getLockReplicationText(), AnimationUtilities.getFontStyle());
+
+        let toX = 1920/2 - onScreenTextOut.width/2;
+        let toY = 1080 - 150;
+        let animationOut = new Animation("<lock>", animationScene, onScreenTextOut.x, onScreenTextOut.y, toX, toY, onScreenTextOut, 1000);
+
+        animationOut.move = true;
+        animationOut.scaleFont = true;
+        // animationOut.interpolate = true;
+        // animationOut.toColor = AnimationUtilities.getReplicationColor();
+
+        animationScene.addConcurrentAnimation(animationOut, false, false);
+    }
+
+    private animatePiCalc(drone: Drone) {
+        let animationScene = <ScenePiAnimation> this.scene.get("AnimationScene");
+        let onScreenTexts = AnimationUtilities.popAllSymbols(drone.onScreenText, this);
+        drone.onScreenText.setVisible(false);
+        let totalWidth = AnimationUtilities.calculateWidth(onScreenTexts)
+        let currentFontSize = parseInt(onScreenTexts[0].style.fontSize.substr(0,2));
+        let fontDelta = Math.abs(50 - currentFontSize);
+        let fontScaleFactor = 50 / currentFontSize;
+        totalWidth += (fontDelta * 2.8);
+        let toX = 0;
+        for (let i = 0 ; i < onScreenTexts.length; i++)
+        {
+            let textObject = onScreenTexts[i];
+            toX = i == 0 ? 1920/2 - (totalWidth) : toX += (onScreenTexts[i-1].displayWidth * fontScaleFactor);
+            let toY = 1080/1.3;
+            let id = textObject.text.indexOf("lock") >= 0 ? "(lock)" : "weapon";
+            if (textObject.text == "0")
+                id = "0";
+            let animation = new Animation(id, animationScene, textObject.x, textObject.y, toX, toY, textObject, 1000);
+            animation.rotate = true;
+            animation.move = true;
+            animation.scaleFont = true;
+            animation.interpolate = true;
+            if (i != 0 && i != onScreenTexts.length - 1)
+            {
+                if (i == 1)
+                    animation.weaponNumber = 1;
+                else if (i == 2)
+                    animation.weaponNumber = 2;
+                else if (i == 3)
+                    animation.weaponNumber = 3;
+                animation.weaponType = animation.id == "weapon" ? textObject.text.substr(0,2) : null;
+            }
+
+            animation.toColor = AnimationUtilities.getPlayerColor(drone.getPlayer());
+            animationScene.addConcurrentAnimation(animation, false, false);
+            // if (drone.getIndex() == 0) animationScene.addConcurrentAnimation(animation, true, false);
+            // if (drone.getIndex() == 1) animationScene.addToNewBatch(animation, true, false);
+            // if (drone.getIndex() == 2) animationScene.addToNewBatch(animation, true, false);
+        }
+
     }
 
     /**

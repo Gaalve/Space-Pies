@@ -6,23 +6,38 @@ import {HitMissNotification} from "./weapon/hit-miss-notification";
 
 
 export class Weapon extends Phaser.GameObjects.Sprite{
+	get weaponType(): WeaponType {
+		return this._weaponType;
+	}
+
+	set weaponType(value: WeaponType) {
+		this._weaponType = value;
+	}
+
+	get drone(): Drone {
+		return this._drone;
+	}
+
+	set drone(value: Drone) {
+		this._drone = value;
+	}
 
 	private wClass : string;					//projectile or laser
-	private drone : Drone;						//which drone the weapon belongs to
+	private _drone : Drone;						//which drone the weapon belongs to
     private wNr : number;
     private piTerm : string;
     private notification: HitMissNotification;
     private bullet: Bullet;
-    private weaponType: WeaponType;
+    private _weaponType: WeaponType;
 	private isFirst: boolean;
-	private player: Player;
+	private _player: Player;
     private simplePi : string;
 
 	public constructor(scene : Phaser.Scene, drone : Drone, type: WeaponType, player: Player, wNr: number) {
         super(scene, drone.x, drone.y, Weapon.getWeaponTex(player.isFirstPlayer(), type));
-        this.weaponType = type;
+        this._weaponType = type;
         this.isFirst = player.isFirstPlayer();
-        this.player = player;
+        this._player = player;
 		if (drone.getPlayer().getNameIdentifier() == "P1") {
             this.setX(drone.x + 70);
         }else{
@@ -32,7 +47,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
         scene.add.existing(this);
 		this.wClass = Weapon.getWeaponClass(type);
 		this.simplePi = this.wClass.charAt(0);
-		this.drone = drone;
+		this._drone = drone;
 		this.wNr = wNr;
 
 		if(wNr == 1){
@@ -43,7 +58,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		this.setDepth(0);
 
 		//reposition weapons on ship
-		if(this.drone.getIndex() == 0) {
+		if(this._drone.getIndex() == 0) {
 		    this.setDepth(4);
 			this.repositionWeapons();
 		}
@@ -55,7 +70,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	graphical Repositioning of Weapons on ships
 	 */
 	repositionWeapons() : void{
-		if(this.drone.getPlayer().isFirstPlayer()){
+		if(this._drone.getPlayer().isFirstPlayer()){
 			if(this.wNr == 1){
 				this.setX(this.x - 15);
 				this.setY(this.y + 180);
@@ -81,7 +96,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 
 	public setWeapon(type: WeaponType): void{
 		this.wClass = Weapon.getWeaponClass(type);
-		this.weaponType = type;
+		this._weaponType = type;
 		this.setTexture(Weapon.getWeaponTex(this.isFirst, type));
         this.simplePi = this.wClass.charAt(0);
 		this.createPiTerm();
@@ -119,7 +134,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	number of the opposing player
 	 */
     createPiTerm() : void{
-    	if(this.drone.getPlayer().getNameIdentifier() == "P1") {
+    	if(this._drone.getPlayer().getNameIdentifier() == "P1") {
 			this.piTerm = this.wClass + "p2";
 			this.simplePi = this.simplePi + "p2";
 		}else{
@@ -153,9 +168,9 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	}
 
 	public createBullet(miss: boolean): void{
-        if(this.weaponType == WeaponType.NONE) return;
+        if(this._weaponType == WeaponType.NONE) return;
     	this.removeBullet();
-    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this.weaponType, !miss, this.player); //TODO
+    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this._weaponType, !miss, this._player); //TODO
 		this.notification = new HitMissNotification(this.scene, this.x, this.y, !miss, this.isFirst);
 	}
 
@@ -169,5 +184,13 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		if(!this.notification) return;
 		this.notification.destroy();
 		this.notification = null;
+	}
+
+	get player(): Player {
+		return this._player;
+	}
+
+	set player(value: Player) {
+		this._player = value;
 	}
 }

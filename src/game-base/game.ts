@@ -8,6 +8,7 @@ import {Intro} from "./scenes/intro";
 import {FadeScene} from "./scenes/fade-scene";
 import {EndSceneP1} from "./scenes/end-sceneP1";
 import {StartScene} from "./scenes/start-scene";
+import {ScenePiAnimation} from "./scenes/ScenePiAnimation";
 
 
 
@@ -20,7 +21,7 @@ const config: GameConfig = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
 
-    scene: [Intro, Background, MainScene, StartScene,  GuiScene, PauseScene, FadeScene, EndSceneP1],
+    scene: [Intro, Background, MainScene, StartScene,  GuiScene, PauseScene, FadeScene, EndSceneP1, ScenePiAnimation],
     //scene: [Background, MainScene,  GuiScene, ShopSceneP1, ShopSceneP2, chooseSceneP1,ChooseTypeSceneP2, ChooseTypeSceneP1,chooseSceneP2, PauseScene, ChooseZoneSceneP1, ChooseZoneSceneP2],
 
     physics: {

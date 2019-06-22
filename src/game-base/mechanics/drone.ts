@@ -145,6 +145,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	 */
 	refreshOnScreenText() : void{
 		this.onScreenText.setText(this.simplePi);
+		this.onScreenText.setVisible(true);
 		//this.onScreenText.setDisplayOrigin(0.5);
 	}
 

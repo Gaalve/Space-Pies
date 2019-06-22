@@ -1,5 +1,7 @@
 import {Player} from "./player";
 import {PiSystem} from "../mechanics/picalc/pi-system";
+import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
+import Scene = Phaser.Scene;
 
 export class Turn {
     private refScene: Phaser.Scene;
@@ -46,7 +48,9 @@ export class Turn {
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
 
-                channelOutCB('player2', '', () => this.endAttackTurn()).nullProcess()
+                channelOutCB('player2', '', () => {
+
+                    this.endAttackTurn()}).nullProcess()
             )
         );
 
@@ -100,22 +104,6 @@ export class Turn {
     public Attackturn():void{
         if (!this.awaitInput) return;
         this.clickable = false;
-        // this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
-
-        //Waffen schießen lassen:
-        //TODO: DEBUG STUFF REMOVE
-        // this.currentPlayer.getSystem().pushSymbol(
-        //     this.currentPlayer.getSystem().add.channelOut(
-        //         'unlock'+this.currentPlayer.getNameIdentifier().charAt(1), '').nullProcess());
-        // this.currentPlayer.getSystem().pushSymbol(
-        //     this.currentPlayer.getSystem().add.channelIn(
-        //         'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
-       // this.refScene.data.set('turnAction', 'Battle Phase');
-       //  this.setAttackTurn()
-       // this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
-       //  this.endAttackTurn()
-        // this.system.pushSymbol(this.system.add.channelOut("startephase"+this.currentPlayer.getNameIdentifier().charAt(1), "").nullProcess())
-        //
     }
     public setShopTurn(){
         this.refScene.data.set('turnAction', 'Shopping Phase');
@@ -126,7 +114,12 @@ export class Turn {
     }
 
     public endAttackTurn() {
-            this.playerInput()
+        let animationScene = <ScenePiAnimation> this.refScene.scene.get("AnimationScene");
+        animationScene.destroyAll();
+        animationScene.reinitialize();
+        this.resetOnScreenTexts(this.players[0]);
+        this.resetOnScreenTexts(this.players[1])
+        this.playerInput()
             //this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
     }
 
@@ -140,5 +133,15 @@ export class Turn {
 
     getCurrentRound(): number{
         return this.currentRound;
+    }
+
+    private resetOnScreenTexts(player: Player) {
+        for (let drone of player.getDrones())
+            drone.refreshOnScreenText();
+        player.getHealth().zone1Bar.setTermVisible();
+        player.getHealth().zone2Bar.setTermVisible();
+        player.getHealth().zone3Bar.setTermVisible();
+        player.getHealth().zone4Bar.setTermVisible();
+        player.getHealth().shipBar.setTermVisible();
     }
 }
