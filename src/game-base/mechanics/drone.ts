@@ -10,7 +10,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private index : number;
 	private piTerm : string;
 	private simplePi : string;
-	public onScreenText : Phaser.GameObjects.Text;
+	// public onScreenText : Phaser.GameObjects.Text;
 	private activatedWeapons: integer;
 
 	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
@@ -44,7 +44,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 						new Weapon(scene, this, WeaponType.NONE, this.player,2)];
 
 		this.buildPiTerm();
-	    this.activateOnScreenText();
+	    // this.activateOnScreenText();
 	    this.buildWeaponPi(parseInt(player.getNameIdentifier().charAt(1)), index);
 
     }
@@ -120,32 +120,32 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	/**
 	first activation of displayed text for pi representation of drones
 	 */
-	activateOnScreenText() : void{
-		if(this.index != 0) {
-			this.onScreenText = this.scene.add.text(this.x - 30, this.y + 60, this.simplePi, {
-				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
-			});
-		}else {
-			if (this.player.getNameIdentifier() == "P1") {
-				this.onScreenText = this.scene.add.text(this.x - 270, this.y + 100, this.simplePi, {
-					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
-				});
-			} else {
-				this.onScreenText = this.scene.add.text(this.x + 235, this.y + 100, this.simplePi, {
-					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
-				});
-
-			}
-			this.onScreenText.setAngle(270);
-		}
-		this.onScreenText.setDisplayOrigin(0.5);
-	}
+	// activateOnScreenText() : void{
+	// 	if(this.index != 0) {
+	// 		this.onScreenText = this.scene.add.text(this.x - 30, this.y + 60, this.simplePi, {
+	// 			fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
+	// 		});
+	// 	}else {
+	// 		if (this.player.getNameIdentifier() == "P1") {
+	// 			this.onScreenText = this.scene.add.text(this.x - 270, this.y + 100, this.simplePi, {
+	// 				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
+	// 			});
+	// 		} else {
+	// 			this.onScreenText = this.scene.add.text(this.x + 235, this.y + 100, this.simplePi, {
+	// 				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
+	// 			});
+	//
+	// 		}
+	// 		this.onScreenText.setAngle(270);
+	// 	}
+	// 	this.onScreenText.setDisplayOrigin(0.5);
+	// }
 
 	/**
 	refreshes the displayed Pi Term, if any changes (add Weapons) where made
 	 */
 	refreshOnScreenText() : void{
-		this.onScreenText.setText(this.simplePi);
+		// this.onScreenText.setText(this.simplePi);
 		//this.onScreenText.setDisplayOrigin(0.5);
 	}
 

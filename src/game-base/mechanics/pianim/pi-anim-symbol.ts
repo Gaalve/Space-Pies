@@ -94,7 +94,7 @@ export class PiAnimSymbol {
     public resolve(): void{
         this.nextStage = 3;
     };
-    public active(): void{ //TODO: Maybe next stage?!?!
+    public active(): void{
         this.nextStage = 2;
     };
     public inactive(): void{

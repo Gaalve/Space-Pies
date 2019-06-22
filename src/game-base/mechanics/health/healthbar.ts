@@ -61,7 +61,7 @@ export class Healthbar {
         console.log("Res Bars: "+this.bars.length);
         if(this.bars.length == 0){
             this.piAnimSequence.resolveAll();
-            return; // TODO
+            return;
         }
         let other = this.piAnimSequence.resolveAndClearSequence(this.position - 10 * this.direction,
             this.y + 14, this.bars[this.bars.length - 1].toString() + '( )',
@@ -80,7 +80,7 @@ export class Healthbar {
 
     private updateTextViaNew(): void{
         console.log("New Bars: "+this.bars.length);
-        if(this.bars.length == 0) return; // TODO
+        if(this.bars.length == 0) return;
         this.piAnimSequence.clearSequence(this.position - 10 * this.direction,
             this.y + 14, this.bars[this.bars.length - 1].toString() + '( )',
             this.direction == 1 ? PiAnimAlignment.LEFT : PiAnimAlignment.RIGHT);
