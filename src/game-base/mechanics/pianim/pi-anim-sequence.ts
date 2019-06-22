@@ -7,7 +7,6 @@ export class PiAnimSequence {
 
     scene: Scene;
     sequence: PiAnimSymbol[];
-    // curIdx: number;
     alignment: PiAnimAlignment;
     posX: number;
 
@@ -33,6 +32,13 @@ export class PiAnimSequence {
 
     };
 
+    public resolveAll(): void{
+        this.sequence[0].resolve();
+        for (let i = 0; i < this.sequence.length - 1; i++) {
+            this.commandQueue.push(PiAnimCommands.RESOLVE);
+        }
+
+    };
 
     public resolveAndClearSequence(x: number, y: number, name: string, alignemnt: PiAnimAlignment = PiAnimAlignment.LEFT): PiAnimSequence{
         let other = new PiAnimSequence(this.scene, x, y, name, alignemnt);
@@ -78,6 +84,7 @@ export class PiAnimSequence {
             let width = sym.symbol.getBounds().width;
             sym.destroy();
             this.sequence.splice(0, 1);
+            if (this.sequence.length == 0) return;
             this.sequence[0].active();
             this.toPosX = this.posX;
             switch (this.alignment) {

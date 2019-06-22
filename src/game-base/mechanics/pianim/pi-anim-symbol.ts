@@ -1,7 +1,6 @@
 import Text = Phaser.GameObjects.Text;
 import Color = Phaser.Display.Color;
 import Scene = Phaser.Scene;
-import {PiSymbol} from "../picalc/pi-symbol";
 
 export class PiAnimSymbol {
 
@@ -38,7 +37,7 @@ export class PiAnimSymbol {
 
         this.stage = 1;
         this.counter = 0;
-        this.counterLimit = 500;
+        this.counterLimit = 200;
 
         this.colorInactive = new Color(255, 255, 255);
         this.colorActive = Color.HexStringToColor('#00aa44');

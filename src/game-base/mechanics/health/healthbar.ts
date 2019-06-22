@@ -18,8 +18,6 @@ export class Healthbar {
     private readonly piAnimSys: PiAnimSystem;
     private piAnimSequence: PiAnimSequence;
 
-    // private term: Text;
-
     public constructor(scene: Phaser.Scene, direction: 1|-1, isHitZone: boolean, y: number, lastPiSymbolString: string, pid: string, piAnimSys: PiAnimSystem){
         this.scene = scene;
         this.piAnimSys = piAnimSys;
@@ -35,12 +33,6 @@ export class Healthbar {
         this.piAnimSequence = this.piAnimSys.addSequence(this.position - 10 * this.direction,
             this.y + 14, this.lastPiSymbolString, this.direction == 1 ? PiAnimAlignment.LEFT : PiAnimAlignment.RIGHT);
 
-        // this.term = scene.add.text(this.position - 10 * this.direction, this.y, "", {
-        //     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 3, stroke: '#000'
-        // });
-        // this.term.setOrigin((-this.direction + 1)/2,0);
-        // this.term.setDepth(2);
-        // scene.add.existing(this.term);
     }
 
     public addBar(type: HealthType): void{
@@ -59,15 +51,18 @@ export class Healthbar {
             frames: bleedingSprite.anims.animationManager.generateFrameNumbers('bleedingbar', { start: 0, end: 40 }),
             frameRate: 100
         });
-        bleedingSprite.on('animationcomplete', this.destroy(bleedingSprite));
+        bleedingSprite.on('animationcomplete', bleedingSprite.destroy);
         bleedingSprite.anims.play("bleeding");
         sprite.destroy();
         this.updateTextViaResolve();
     }
 
     private updateTextViaResolve(): void{
-        // this.term.setText(this.toString());3
-        if(this.bars.length == 0) return; // TODO
+        console.log("Res Bars: "+this.bars.length);
+        if(this.bars.length == 0){
+            this.piAnimSequence.resolveAll();
+            return; // TODO
+        }
         let other = this.piAnimSequence.resolveAndClearSequence(this.position - 10 * this.direction,
             this.y + 14, this.bars[this.bars.length - 1].toString() + '( )',
             this.direction == 1 ? PiAnimAlignment.LEFT : PiAnimAlignment.RIGHT);
@@ -75,10 +70,7 @@ export class Healthbar {
             if (i >= 2 && i < this.bars.length - 3) {
                 if(i == 2)
                     other.addSymbol('[...]');
-                // str += '[...].'
             } else{
-                // str += this.bars[i].toString();
-                // str += '( ).';
                 other.addSymbol(this.bars[i].toString() + '( )');
             }
         }
@@ -87,7 +79,7 @@ export class Healthbar {
     }
 
     private updateTextViaNew(): void{
-        // this.term.setText(this.toString());3
+        console.log("New Bars: "+this.bars.length);
         if(this.bars.length == 0) return; // TODO
         this.piAnimSequence.clearSequence(this.position - 10 * this.direction,
             this.y + 14, this.bars[this.bars.length - 1].toString() + '( )',
@@ -96,10 +88,7 @@ export class Healthbar {
             if (i >= 2 && i < this.bars.length - 3) {
                 if(i == 2)
                     this.piAnimSequence.addSymbol('[...]');
-                // str += '[...].'
             } else{
-                // str += this.bars[i].toString();
-                // str += '( ).';
                 this.piAnimSequence.addSymbol(this.bars[i].toString() + '( )');
             }
         }
@@ -127,19 +116,9 @@ export class Healthbar {
         return str;
     }
 
-    private destroy(bleedingSprite: Phaser.GameObjects.Sprite) {
-        let destroy = function()
-        {
-
-            bleedingSprite.destroy();
-        }
-        return destroy;
-    }
-
     public removeBar() : void{
         let sprite = this.bars.pop().sprite;
         this.scene.time.delayedCall(500,()=>{sprite.destroy()}, [],this);
-        // this.scene.time.delayedCall(500,()=>{this.updateText()}, [],this);
     }
 
     public getBars() : number{
