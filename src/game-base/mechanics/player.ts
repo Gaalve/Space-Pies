@@ -19,6 +19,7 @@ import {SunEruption} from "./anomalies/sun-eruption";
 import {WormHole} from "./anomalies/worm-hole";
 import {NanoDrone} from "./nanoDrone";
 import {BlackHole} from "./anomalies/black-hole";
+import {BlackholeParticle} from "./animations/blackhole-particle";
 
 export class Player {
     private nameIdentifier: string;
@@ -58,6 +59,7 @@ export class Player {
     public rocketTrail: RocketTrail;
     public bulletTrail: BulletTrail;
     public collectE: collectEnergy_ship;
+    public blackholeParticles: BlackholeParticle;
 
 
     public currentAnomaly: Anomaly;
@@ -87,6 +89,7 @@ export class Player {
         this.rocketTrail = new RocketTrail(pem);
         this.bulletTrail = new BulletTrail(pem);
         this.collectE = new collectEnergy_ship(pem);
+        this.blackholeParticles = new BlackholeParticle(pem);
 
         //console.log(blackholeAppears)
         //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
@@ -412,6 +415,12 @@ export class Player {
             this.system.add.channelIn('anomaly'+p, '')
                 .channelIn('anomaly'+p, '', undefined, 0.2)
                 .channelOut('blackhole', '').nullProcess()
+        );
+
+        //TODO: REMOVE (DEBUG)
+
+        this.system.pushSymbol(
+            this.system.add.channelOut('blackhole', '').nullProcess()
         );
 
         // blackhole activate

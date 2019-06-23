@@ -7,10 +7,11 @@ export class BlackHole extends Anomaly {
     private size: number;
     private counter: number;
     private activated: boolean;
-    private maxCounter: number;
+    private readonly maxCounter: number;
+    private sinCounter: number;
 
     public constructor(scene : Phaser.Scene, player: Player) {
-        super(scene, player, 960, 500, "black_hole", "hole");
+        super(scene, player, 960, 540, "black_hole", "hole");
 
         this.scaleUp = 1;
         this.scaleX = 0.0;
@@ -19,10 +20,16 @@ export class BlackHole extends Anomaly {
         this.counter = 0;
         this.activated = false;
         this.maxCounter = 500;
+        this.sinCounter = 0;
     }
 
     public update(delta: number): void {
         this.counter += delta;
+        this.sinCounter += delta/1500;
+        this.sinCounter %= 2 * Math.PI;
+
+
+        this.player.blackholeParticles.at(this.scaleX, 2);
         if(this.counter < this.maxCounter){
             if (!this.activated){
                 this.setScale(this.counter / this.maxCounter);
@@ -37,6 +44,8 @@ export class BlackHole extends Anomaly {
             this.setScale(this.size / 10);
         }
 
+        this.setScale(this.scaleX + Math.sin(this.sinCounter)/15);
+        this.setAlpha(0.95 + Math.sin(-this.sinCounter)/20 );
     }
 
     public reduce(): void{

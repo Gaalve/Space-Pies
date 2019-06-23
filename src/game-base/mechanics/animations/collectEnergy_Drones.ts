@@ -18,10 +18,10 @@ export class collectEnergy_Drones {
             frame: "particle_1",
             moveToX:0,
             moveToY:0,
-            tint: 0x40FF00,
-            scale: 0.3,
+            tint: 0xffd42a,
+            scale: {start: 0.6, end: 0},
             quantity: 3,
-            alpha:0.5,
+            frequency:140,
             on: false,
             emitZone: { source: this.circle }
             //deathZone:{ type: 'onEnter', source: source }
@@ -31,8 +31,7 @@ export class collectEnergy_Drones {
     }
 
     public collect(sx:number,sy:number,ex:number,ey:number): void{
-        this.setCollectConfig(sx,sy,ex,ey)
-        //this.collectEmit.emitParticle(15);
+        this.setCollectConfig(sx,sy,ex,ey);
         this.collectEmit.start()
 
     }
@@ -47,8 +46,6 @@ export class collectEnergy_Drones {
         this.collectEmit.fromJSON({
                 moveToX: ex,
                 moveToY: ey,
-                frequency:140,
-
                 emitZone: { source: this.circle }
             }
 
