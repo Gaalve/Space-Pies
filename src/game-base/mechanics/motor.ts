@@ -163,12 +163,12 @@ export class Motor {
 
 
        }
-*/
+
     }
     public buildMotor(){
 
         }
-/*
+
        private buildProjectileMotor(){
 
        }
@@ -179,7 +179,12 @@ export class Motor {
    */
 
 
+
     }
+    public buildMotor(){
+
+    }
+
     getactiveMotorLaser(): number{
         return this.activeMotorsLaser;
     }
