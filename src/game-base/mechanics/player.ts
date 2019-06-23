@@ -23,6 +23,7 @@ import {WormHole} from "./anomalies/worm-hole";
 import {NanoDrone} from "./nanoDrone";
 import {PiSystemAdd} from "./picalc/pi-system-add";
 import {BlackHole} from "./anomalies/black-hole";
+import {Motor} from "./motor";
 
 export class Player {
     private nameIdentifier: string;
@@ -97,6 +98,8 @@ export class Player {
         //this.anomalies = ["hole", "eruption", "nanodrone"];
 
         //TODO: remove when Triebwerke ready
+      //  Motor.startMotor();
+
  /*       this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '',

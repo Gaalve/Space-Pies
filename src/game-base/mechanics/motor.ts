@@ -318,7 +318,8 @@ export class Motor {
 
     }
 */
-    public startMotor(){
+    public startMotor() {
+        console.log("test");
         //For Player 1
         this.system.pushSymbol(
             this.system.add.channelOut('buymotorlaser11', '').nullProcess()
