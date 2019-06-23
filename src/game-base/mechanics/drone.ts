@@ -1,7 +1,9 @@
 import {Player} from "./player";
 import {Weapon} from "./weapon";
 import {WeaponType} from "./weapon/weapon-type";
-import {BulletInfo} from "./weapon/bulletInfo";
+import {PiAnimSystem} from "./pianim/pi-anim-system";
+import {PiAnimSequence} from "./pianim/pi-anim-sequence";
+import {PiAnimAlignment} from "./pianim/pi-anim-alignment";
 
 
 export class Drone extends Phaser.GameObjects.Sprite{
@@ -14,8 +16,16 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	// public onScreenText : Phaser.GameObjects.Text;
 	private activatedWeapons: integer;
 
-	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
+	private animSys: PiAnimSystem;
+	private piSeq: PiAnimSequence;
+
+	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number, animSys: PiAnimSystem){
 		super(scene, x, y, "ssr_wmod");
+		this.animSys = animSys;
+		this.piSeq = animSys.addSequence(x, y+100, 'lock()', PiAnimAlignment.CENTER);
+		this.piSeq.addSymbol('0');
+		this.piSeq.hide();
+
 	    if(player.getNameIdentifier() == "P2"){
 	    	this.setTexture("ssb_wmod");
 		}
@@ -148,7 +158,30 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	refreshOnScreenText() : void{
 		// this.onScreenText.setText(this.simplePi);
 		//this.onScreenText.setDisplayOrigin(0.5);
+		this.updatePiAnimSeq();
 	}
+
+	private updatePiAnimSeq(): void{
+		this.piSeq.show();
+
+		this.piSeq.clearSequence(this.x, this.y + 80, 'lock'+this.player.getNameIdentifier().toLowerCase()+'()',
+			PiAnimAlignment.CENTER);
+		if (this.weapons[0].canShoot()) this.piSeq.addSymbol(this.weapons[0].getSimplePi()+'<>');
+		if (this.weapons[1].canShoot()) this.piSeq.addSymbol(this.weapons[1].getSimplePi()+'<>');
+		if (this.weapons[2].canShoot()) this.piSeq.addSymbol(this.weapons[2].getSimplePi()+'<>');
+		this.piSeq.addSymbol('Weapon'+this.player.getNameIdentifier()+'N'+(this.index + 1));
+	}
+
+	private resolveAndClearPiAnimSeq(): void{
+		let other = this.piSeq.resolveAllAndClearSequence(this.x, this.y + 80, 'lock'+this.player.getNameIdentifier().toLowerCase()+'()',
+			PiAnimAlignment.CENTER);
+		if (this.weapons[0].canShoot()) other.addSymbol(this.weapons[0].getSimplePi()+'<>');
+		if (this.weapons[1].canShoot()) other.addSymbol(this.weapons[1].getSimplePi()+'<>');
+		if (this.weapons[2].canShoot()) other.addSymbol(this.weapons[2].getSimplePi()+'<>');
+		other.addSymbol('Weapon'+this.player.getNameIdentifier()+'N'+(this.index + 1));
+	}
+
+
 
     public update(delta: number): void {
         this.weapons[0].update(delta);
@@ -168,22 +201,24 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 		let weapon = system.add.term("Weapon" + p + d, undefined);
 		let droneRef: Drone = this;
-		let sum = system.add.sum([system.add.channelIn("lock" + p + d,"").
+		let sum = system.add.sum([system.add.channelInCB("lock" + p + d,"", ()=>{
+			this.piSeq.resolveSymbol();
+		}).
 		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w1","", (_, at) => {
-			droneRef.getWeapons()[0].createBullet(at)
+			droneRef.getWeapons()[0].createBullet(at); if (this.weapons[0].canShoot()) this.piSeq.resolveSymbol();
 		}).        //function for weapon animation
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
 		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w2", "", (_, at) => {
-			droneRef.getWeapons()[1].createBullet(at)
+			droneRef.getWeapons()[1].createBullet(at); if (this.weapons[1].canShoot()) this.piSeq.resolveSymbol();
 		}).
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
 		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w3", "", (_, at) => {
-			droneRef.getWeapons()[2].createBullet(at)
+			droneRef.getWeapons()[2].createBullet(at); this.resolveAndClearPiAnimSeq();
 		}).
 		next(weapon),
 			system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {

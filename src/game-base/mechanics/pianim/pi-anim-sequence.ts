@@ -49,12 +49,22 @@ export class PiAnimSequence {
         return other;
     };
 
+    public resolveAllAndClearSequence(x: number, y: number, name: string, alignemnt: PiAnimAlignment = PiAnimAlignment.LEFT): PiAnimSequence{
+        let other = new PiAnimSequence(this.scene, x, y, name, alignemnt);
+        other.hide();
+        this.clearSequenceQueue.push(other);
+        this.resolveAll();
+        this.commandQueue.push(PiAnimCommands.CLEAR);
+        return other;
+    };
+
     public clearSequence(x: number, y: number, name: string, alignemnt: PiAnimAlignment = PiAnimAlignment.LEFT): void{
         this.sequence.forEach(value => value.destroy());
         this.sequence = [new PiAnimSymbol(this.scene, name, '', x, y)];
         this.sequence[0].active();
         this.alignment = alignemnt;
         this.posX = x;
+        this.toPosX = x;
         this.updatePositions();
     };
 
@@ -71,7 +81,7 @@ export class PiAnimSequence {
         if (this.sequence.length == 0) return;
 
         if (this.posX != this.toPosX){
-            console.log('posX '+this.posX +" toPosX "+this.toPosX);
+            // console.log('posX '+this.posX +" toPosX "+this.toPosX);
             const maxSpeed = 4;
             this.posX += this.clamp(-maxSpeed,(this.toPosX - this.posX), maxSpeed);
             this.updatePositions();
@@ -84,7 +94,10 @@ export class PiAnimSequence {
             let width = sym.symbol.getBounds().width;
             sym.destroy();
             this.sequence.splice(0, 1);
-            if (this.sequence.length == 0) return;
+            if (this.sequence.length == 0){
+                this.nextCommand();
+                return;
+            }
             this.sequence[0].active();
             this.toPosX = this.posX;
             switch (this.alignment) {
@@ -119,6 +132,7 @@ export class PiAnimSequence {
                 this.sequence[0].active();
                 this.updatePositions();
                 this.show();
+                console.log('New Sequence, length '+this.sequence.length + ' pos '+this.posX);
                 break;
         }
         this.commandQueue.splice(0, 1);
@@ -159,12 +173,12 @@ export class PiAnimSequence {
         }
     }
 
-    private hide(): void{
+    public hide(): void{
         this.hidden = true;
         this.sequence.forEach(v => v.hide());
     }
 
-    private show(): void{
+    public show(): void{
         this.hidden = false;
         this.sequence.forEach(v => v.show());
     }
