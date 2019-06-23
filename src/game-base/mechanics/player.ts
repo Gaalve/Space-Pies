@@ -47,6 +47,7 @@ export class Player {
     private rocketCost : number = 40;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
     private adaptCost: number = 16; // cost for adaptive shield
+    private motorCost: number = 5;
 
 
 
@@ -280,6 +281,9 @@ export class Player {
         }
         case("adap"):{
             return this.adaptCost;
+        }
+        case("motor"):{
+            return this.motorCost;
         }
         default: return 0;
 
