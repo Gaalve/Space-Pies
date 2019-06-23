@@ -467,11 +467,6 @@
       },
       {
         "type": "image",
-        "key": "shield_animation",
-        "url": "assets/sprites/shield_animation.png"
-      },
-      {
-        "type": "image",
         "key": "debris/debris_2",
         "url": "assets/sprites/debris/debris_2.png"
       },
