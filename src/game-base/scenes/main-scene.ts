@@ -9,6 +9,7 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
 import {BulletInfo} from "../mechanics/weapon/bulletInfo";
 import {PiAnimSystem} from "../mechanics/pianim/pi-anim-system";
+import {PiAnimSequence} from "../mechanics/pianim/pi-anim-sequence";
 
 export class MainScene extends Phaser.Scene {
 
@@ -79,6 +80,10 @@ export class MainScene extends Phaser.Scene {
     public battleTime: BattleTimeBar;
 
 
+    /** Round Pi Calc Animation **/
+    private roundBG: Sprite;
+    private roundFG: Sprite;
+
 
 
 
@@ -135,7 +140,7 @@ export class MainScene extends Phaser.Scene {
                         new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, blackHoleAppears, data)];
 
 
-        this.turn = new Turn(this, this.players);
+        this.turn = new Turn(this, this.players, data);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
             if(this.turn.getCurrentRound() != 1){
@@ -164,6 +169,18 @@ export class MainScene extends Phaser.Scene {
         this.shop_bg_back.setAlpha(0.6);
         this.add.existing(this.shop_bg_back);
         this.add.existing(this.shop_bg_out);
+
+
+        this.roundBG = new Sprite(this, 1920/2, 60, "shop_bg_back");
+        this.roundFG = new Sprite(this, 1920/2, 60, "shop_bg_out");
+
+        this.roundBG.setAlpha(0.6);
+        this.roundBG.setScale(0.62);
+        this.roundFG.setScale(0.62);
+
+        this.add.existing(this.roundBG);
+        this.add.existing(this.roundFG);
+
         this.energy = this.add.image(1920/2-50, 800, "energy_icon");
         this.energyT = this.add.text(1920/2-15, 770, "= "+this.turn.getCurrentPlayer().getEnergy(), {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
@@ -1467,13 +1484,14 @@ export class MainScene extends Phaser.Scene {
             // this.shop_bg.lineStyle(5, 0xAA2222);
             // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
             this.shop_bg_out.setTint(0xa02c2c);
+            this.roundFG.setTint(0xa02c2c);
 
         }
         else{
             // this.shop_bg.lineStyle(5, 0x2222AA);
             // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
             this.shop_bg_out.setTint(0x214478);
-
+            this.roundFG.setTint(0x214478);
         }
     }
 

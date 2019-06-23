@@ -91,6 +91,9 @@ export class PiAnimSymbol {
         return this.stage == 3 && this.counter == this.counterLimit;
     }
 
+    public isResolving(): boolean{
+        return this.stage == 3 || this.nextStage == 3;
+    };
     public resolve(): void{
         this.nextStage = 3;
     };

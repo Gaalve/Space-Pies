@@ -33,7 +33,7 @@ export class PiAnimSequence {
     };
 
     public resolveAll(): void{
-        this.sequence[0].resolve();
+        this.resolveSymbol();
         for (let i = 0; i < this.sequence.length - 1; i++) {
             this.commandQueue.push(PiAnimCommands.RESOLVE);
         }
@@ -44,7 +44,7 @@ export class PiAnimSequence {
         let other = new PiAnimSequence(this.scene, x, y, name, alignemnt);
         other.hide();
         this.clearSequenceQueue.push(other);
-        this.sequence[0].resolve();
+        this.resolveSymbol();
         this.commandQueue.push(PiAnimCommands.CLEAR);
         return other;
     };
@@ -53,6 +53,7 @@ export class PiAnimSequence {
         let other = new PiAnimSequence(this.scene, x, y, name, alignemnt);
         other.hide();
         this.clearSequenceQueue.push(other);
+        console.log('ResolveAllAndClear, Commands: '+this.commandQueue.length);
         this.resolveAll();
         this.commandQueue.push(PiAnimCommands.CLEAR);
         return other;
@@ -70,7 +71,8 @@ export class PiAnimSequence {
 
 
     public resolveSymbol(): void{
-        this.sequence[0].resolve();
+        if(this.commandQueue.length > 0 || this.sequence[0].isResolving()) this.commandQueue.push(PiAnimCommands.RESOLVE);
+        else this.sequence[0].resolve();
     };
 
     private clamp(min: number, value: number, max: number): number{
@@ -118,11 +120,13 @@ export class PiAnimSequence {
 
     private nextCommand(){
         if (this.commandQueue.length == 0) return;
-        switch (this.commandQueue[0]) {
+        let command = this.commandQueue[0];
+        this.commandQueue.splice(0, 1);
+        switch (command) {
             case PiAnimCommands.NOTHING:
                 return;
             case PiAnimCommands.RESOLVE:
-                this.resolveSymbol();
+                this.sequence[0].resolve();
                 break;
             case PiAnimCommands.CLEAR:
                 this.sequence.forEach(value => value.destroy());
@@ -133,9 +137,10 @@ export class PiAnimSequence {
                 this.updatePositions();
                 this.show();
                 console.log('New Sequence, length '+this.sequence.length + ' pos '+this.posX);
+                if (this.commandQueue.length > 0) this.nextCommand();
                 break;
         }
-        this.commandQueue.splice(0, 1);
+
     }
 
     public addSymbol(name: string): void{
