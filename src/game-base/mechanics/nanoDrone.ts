@@ -1,8 +1,5 @@
 import {EnergyDrone} from "./energyDrone";
 import {Player} from "./player";
-import {WormHole} from "./anomalies/worm-hole";
-import {Anomaly} from "./anomalies/anomaly";
-import {MainScene} from "../scenes/main-scene";
 import {BulletInfo} from "./weapon/bulletInfo";
 
 
@@ -31,7 +28,7 @@ export class NanoDrone extends EnergyDrone {
     }
 
     public explode():void{
-        this.explosion.explosionAt(this.x,this.y);
+        this.player.explosion.explosionAt(this.x,this.y);
         this.player.scene.time.delayedCall(300,()=>{this.setVisible(false)},[],this);
     }
 

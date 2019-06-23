@@ -4,7 +4,10 @@ import {Anomaly} from "./anomaly";
 
 export class BlackHole extends Anomaly {
 
-    private size = 10;
+    private size: number;
+    private counter: number;
+    private activated: boolean;
+    private maxCounter: number;
 
     public constructor(scene : Phaser.Scene, player: Player) {
         super(scene, player, 960, 500, "black_hole", "hole");
@@ -13,28 +16,31 @@ export class BlackHole extends Anomaly {
         this.scaleX = 0.0;
         this.scaleY = 0.0;
         this.size = 10;
+        this.counter = 0;
+        this.activated = false;
+        this.maxCounter = 500;
     }
 
     public update(delta: number): void {
-
-        if(this.scaleUp == -2 && this.scaleX < 0.4) this.scaleUp = 0;
-        if(this.scaleUp == -1 && this.scaleX < 0.7) this.scaleUp = 0;
-
-        if(this.scaleUp == 1 && this.scaleX > 1.0){
-            this.scaleUp = 0;
-        }
-
-        if(this.scaleX > -0.005){
-            this.scaleX += 0.01 * this.scaleUp;
-            this.scaleY += 0.01 * this.scaleUp;
+        this.counter += delta;
+        if(this.counter < this.maxCounter){
+            if (!this.activated){
+                this.setScale(this.counter / this.maxCounter);
+            }
+            else{
+                this.setScale( (1 - this.counter / this.maxCounter) / 10 + this.size / 10);
+            }
         }
         else{
-            this.destroy()
+            this.activated = true;
+            this.counter = this.maxCounter;
+            this.setScale(this.size / 10);
         }
 
     }
 
     public reduce(): void{
         this.size--;
+        this.counter = 0;
     }
 }

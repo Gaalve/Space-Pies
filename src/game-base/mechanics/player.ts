@@ -387,14 +387,14 @@ export class Player {
     private buildAnomalyPi(p : string, x: number, y: number){
         this.system.pushSymbol(
             this.system.add.replication(
-                this.system.add.channelIn('anomaly'+p, '').nullProcess()
+                this.system.add.channelIn('anomaly'+p, '', undefined, 0).nullProcess()
             )
         );
 
         // wormhole trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.1)
+                .channelIn('anomaly'+p, '', undefined, 0.2)
                 .channelOut('wormhole'+p, '').nullProcess()
         );
 
@@ -410,7 +410,7 @@ export class Player {
         // blackhole trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.1)
+                .channelIn('anomaly'+p, '', undefined, 0.2)
                 .channelOut('blackhole', '').nullProcess()
         );
 
@@ -421,22 +421,26 @@ export class Player {
                     this.blackhole = new BlackHole(this.scene, this);
                 }).concurrent([
                     this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
-                        new BulletInfo(true, x, y + 1000)).nullProcess(),
+                        new BulletInfo(true, 960, y + 1000)).nullProcess(),
                     this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
-                        new BulletInfo(true, x, y + 1000)).nullProcess(),
+                        new BulletInfo(true, 960, y + 1000)).nullProcess(),
                     this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
-                                new BulletInfo(true, x, y + 1000)).nullProcess(),
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
                     this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
-                                new BulletInfo(true, x, y + 1000)).nullProcess(),
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
+                        new BulletInfo(true, 960, y + 1000)).nullProcess(),
 
                     this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
-                                new BulletInfo(true, x, y + 1000)).nullProcess(),
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
                     this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
-                                new BulletInfo(true, x, y + 1000)).nullProcess(),
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
                     this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
-                                new BulletInfo(true, x, y + 1000)).nullProcess(),
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
                     this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
-                                new BulletInfo(true, x, y + 1000)).nullProcess()
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
+                        new BulletInfo(true, 960, y + 1000)).nullProcess()
                     ]
                 ));
         }
@@ -444,7 +448,7 @@ export class Player {
         // suneruption trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.1)
+                .channelIn('anomaly'+p, '', undefined, 0.2)
                 .channelOut('suneruption'+p, '').nullProcess()
         );
 
