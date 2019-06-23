@@ -97,12 +97,12 @@ export class Player {
         //this.anomalies = ["hole", "eruption", "nanodrone"];
 
         //TODO: remove when Triebwerke ready
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
+ /*       this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '',
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '',
-            new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
+            new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess())); */
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn(
             'shotblock'+this.getNameIdentifier().charAt(1), "","", 0).nullProcess())
         );
