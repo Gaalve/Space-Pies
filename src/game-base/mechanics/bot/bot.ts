@@ -8,6 +8,7 @@ import {BotWMod} from "./botwmod";
 import {BotSolar} from "./botsolar";
 import {BotEnd} from "./botend";
 import {BotAction} from "./botaction";
+import {BotMotor} from "./botmotor";
 
 
 export class Bot extends Player{
@@ -20,23 +21,32 @@ export class Bot extends Player{
 
     public steps: number;
 
+    public id: string;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
-        super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt);
+
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar, blackHole: string){
+        super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt, blackHole);
 
         this.weaponSlots = 2;
         this.active = false;
         this.steps = 0;
+        this.id = nameIdentifier.charAt(1);
 
         this.actions.splice(0, 0, new BotRegenerate("reg", this, 0));
         this.actions.splice(1, 0, new BotWext("wext", this, 0));
-        this.actions.splice(2, 0, new BotWMod("wMod", this, this.getEnergyCost("wmod")));
-        this.actions.splice(3, 0, new BotSolar("solar", this, this.getEnergyCost("solar")));
-        this.actions.splice(4, 0, new BotEnd("end", this, 0));
+        this.actions.splice(2, 0, new BotMotor("motor", this, 0));
+        this.actions.splice(3, 0, new BotWMod("wMod", this, this.getEnergyCost("wmod")));
+        this.actions.splice(4, 0, new BotSolar("solar", this, this.getEnergyCost("solar")));
+        this.actions.splice(5, 0, new BotEnd("end", this, 0));
     }
 
     public start(): void{
         while(this.active) {
+            if(this.isDead){
+                this.active = false;
+                break;
+            }
+
             this.steps++;
 
             this.updateExecutable();
@@ -116,7 +126,23 @@ export class Bot extends Player{
                 }
                 break;
             }
-            default: this.actions[4].activate(delay);
+            case(6):{
+                if(x <= 18){
+                    this.possibleActions[0].activate(delay);
+                }else if(x > 18 && x <= 36) {
+                    this.possibleActions[1].activate(delay);
+                }else if(x > 36 && x <= 54){
+                    this.possibleActions[2].activate(delay);
+                }else if(x > 54 && x <= 72) {
+                    this.possibleActions[3].activate(delay);
+                }else if(x > 72 && x <= 90){
+                    this.possibleActions[4].activate(delay);
+                }else{
+                    this.possibleActions[5].activate(delay);
+                }
+                break;
+            }
+            default: this.actions[5].activate(delay);
         }
     }
 }
