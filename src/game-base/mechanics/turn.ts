@@ -107,25 +107,19 @@ export class Turn {
         if(this.currentRound != 1){
             this.idx = 1 - this.idx;
             this.currentPlayer = this.players[this.idx];
-            //this.currentPlayer.gainEnergy(3);
             this.refScene.data.set('currentPlayer', this.currentPlayer.getNameIdentifier());
         }
 
 
-        // this.system.pushSymbol(this.system.add.channelOut("shopp1", "*").nullProcess());
-
         this.awaitInput = true; //nächster Spieler
-        // this.setShopTurn()
-        //this.refScene.data.set('turnAction', 'Shopping Phase');
         }
     }
 
     public Attackturn():void{
         if (!this.awaitInput) return;
         this.clickable = false;
-        // this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
 
-        //Waffen schießen lassen:
+
         //TODO: DEBUG STUFF REMOVE
         // this.currentPlayer.getSystem().pushSymbol(
         //     this.currentPlayer.getSystem().add.channelOut(
@@ -133,10 +127,10 @@ export class Turn {
         // this.currentPlayer.getSystem().pushSymbol(
         //     this.currentPlayer.getSystem().add.channelIn(
         //         'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
-       // this.refScene.data.set('turnAction', 'Battle Phase');
-       //  this.setAttackTurn()
-       // this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
-       //  this.endAttackTurn()
+        // this.refScene.data.set('turnAction', 'Battle Phase');
+        //  this.setAttackTurn()
+        // this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
+        //  this.endAttackTurn()
         // this.system.pushSymbol(this.system.add.channelOut("startephase"+this.currentPlayer.getNameIdentifier().charAt(1), "").nullProcess())
         //
     }
@@ -154,7 +148,6 @@ export class Turn {
 
     public endAttackTurn() {
             this.playerInput()
-            //this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
     }
 
     getScene(): Phaser.Scene{
