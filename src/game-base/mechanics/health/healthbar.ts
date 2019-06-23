@@ -3,6 +3,7 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {HealthType} from "./health-type";
 import Text = Phaser.GameObjects.Text;
 import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
+import {Infobox} from "../Infobox";
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
@@ -64,6 +65,14 @@ export class Healthbar {
 
     private updateText(): void{
         this.term.setText(this.toString());
+
+        for (let bar of this.bars)
+        {
+            let sprite = bar.sprite;
+            let infobox = <Infobox> this.scene.data.get("infoboxx");
+            infobox.addTooltipInfo(sprite, bar.toString());
+        }
+
     }
 
     public toString(): string{

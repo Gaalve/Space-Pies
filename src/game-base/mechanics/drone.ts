@@ -2,6 +2,7 @@ import {Player} from "./player";
 import {Weapon} from "./weapon";
 import {WeaponType} from "./weapon/weapon-type";
 import {BulletInfo} from "./weapon/bulletInfo";
+import {Infobox} from "./Infobox";
 
 
 export class Drone extends Phaser.GameObjects.Sprite{
@@ -47,6 +48,10 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		this.buildPiTerm();
 	    this.activateOnScreenText();
 	    this.buildWeaponPi(parseInt(player.getNameIdentifier().charAt(1)), index);
+	    this.onScreenText.setInteractive();
+	    let infobox = <Infobox> scene.data.get("infoboxx");
+	    infobox.addTooltipInfo(this.onScreenText, "[" + this.getPlayer().getNameIdentifier() + "] This is the pi-term of this drone. \n <> : output channel (resolves with corresponding () - channel)\n () : input channel (waits for incoming <> - channel)\n 0 : null process (resolves itself)")
+
 
     }
 
@@ -174,7 +179,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			droneRef.getWeapons()[0].createBullet(at)
 		}).        //function for weapon animation
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
-		channelOut("wait","").channelOut("wait","").
+		channelOut("wait",	"").channelOut("wait","").
 		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w2", "", (_, at) => {
 			droneRef.getWeapons()[1].createBullet(at)
