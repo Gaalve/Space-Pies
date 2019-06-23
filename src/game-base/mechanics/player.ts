@@ -106,9 +106,9 @@ export class Player {
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '',
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess())); */
-        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn(
-            'shotblock'+this.getNameIdentifier().charAt(1), "","", 0).nullProcess())
-        );
+    //    this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn(
+   //         'shotblock'+this.getNameIdentifier().charAt(1), "","", 0).nullProcess())
+    //    );
 
 
         // z1 starts with 1 shield
