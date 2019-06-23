@@ -419,27 +419,26 @@ export class Player {
             this.system.pushSymbol(
                 this.system.add.channelInCB('blackhole', '', () => {
                     this.blackhole = new BlackHole(this.scene, this);
-                })
-                    .channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
-                        new BulletInfo(true, x, y + 1000))
-                    .channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
-                        new BulletInfo(true, x, y + 1000))
-                    .channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
-                        new BulletInfo(true, x, y + 1000))
-                    .channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
-                        new BulletInfo(true, x, y + 1000))
+                }).concurrent([
+                    this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
+                        new BulletInfo(true, x, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
+                        new BulletInfo(true, x, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, x, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, x, y + 1000)).nullProcess(),
 
-                    .channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
-                        new BulletInfo(true, x, y + 1000))
-                    .channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
-                        new BulletInfo(true, x, y + 1000))
-                    .channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
-                        new BulletInfo(true, x, y + 1000))
-                    .channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
-                        new BulletInfo(true, x, y + 1000))
-
-                    .nullProcess()
-            );
+                    this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, x, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, x, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, x, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, x, y + 1000)).nullProcess()
+                    ]
+                ));
         }
 
         // suneruption trigger
