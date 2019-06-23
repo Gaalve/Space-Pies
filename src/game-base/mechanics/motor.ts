@@ -1,35 +1,10 @@
 import {Player} from "./player";
-import {motorType} from "./motor/motor-type";
 import {PiSystem} from "../mechanics/picalc/pi-system";
-import {BulletInfo} from "./weapon/bulletInfo";
-import {HealthType} from "./health/health-type";
-import {Drone} from "./drone";
-import {Ship} from "./ship";
-import {Health} from "./health/health";
-import {EnergyDrone} from "./energyDrone";
-import {Explosion} from "./animations/explosion";
-import {LaserImpact} from "./animations/laser-impact";
-import {ProjectileImpact} from "./animations/projectile-impact";
-import {LaserTrail} from "./animations/laser-trail";
-import {RocketTrail} from "./animations/rocket-trail";
-import {BulletTrail} from "./animations/bullet-trail";
-import {collectEnergy_ship} from "./animations/collectEnergy_ship";
-import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import {BattleTimeBar} from "./battleTimeBar";
-import get = Reflect.get;
-import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
-import {Anomaly} from "./anomalies/anomaly";
-import {SunEruption} from "./anomalies/sun-eruption";
-import {PiSystemAddAction} from "./picalc/pi-system-add-action";
-import {WormHole} from "./anomalies/worm-hole";
-import {NanoDrone} from "./nanoDrone";
-import {PiSystemAdd} from "./picalc/pi-system-add";
-import {BlackHole} from "./anomalies/black-hole";
+
 
 export class Motor {
 
     private player: Player;
-    private motorType: motorType;
     private system: PiSystem;
     private testnumber: number;
     private activeMotorsLaser: number;
@@ -38,8 +13,7 @@ export class Motor {
 
     //  private nameIdentifier : string;
 
-    public constructor(scene: Phaser.Scene, player: Player, type: motorType, x: number, y: number,) {
-        this.motorType = type;
+    public constructor(scene: Phaser.Scene, player: Player, x: number, y: number,) {
         this.player = player;
         this.testnumber = 1;
         this.activeMotorsLaser = 0;
