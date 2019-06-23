@@ -10,8 +10,8 @@ export class GuiScene extends Phaser.Scene {
         })
     }
 
-    create(): void {
-        this.scene.launch('MainScene');
+    create(data: {mode: string}): void {
+        this.scene.launch('MainScene', {mode: data.mode});
 
         const roundPlayerText = this.add.text(1920/2, 50, 'P?!', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, fontStyle: 'bold', strokeThickness: 2});

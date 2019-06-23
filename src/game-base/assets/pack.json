@@ -642,7 +642,28 @@
         "type": "image",
         "key": "shield/01",
         "url": "assets/sprites/shield/01.png"
+      },
+      {
+        "type": "image",
+        "key": "singleplayer",
+        "url": "assets/sprites/singleplayer.png"
+      },
+      {
+        "type": "image",
+        "key": "multiplayer",
+        "url": "assets/sprites/multiplayer.png"
+      },
+      {
+        "type": "image",
+        "key": "red_arrow",
+        "url": "assets/sprites/red_arrow_left.png"
+      },
+      {
+        "type": "image",
+        "key": "blue_arrow",
+        "url": "assets/sprites/blue_arrow_right.png"
       }
+
     ]
   }
 }

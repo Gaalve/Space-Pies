@@ -9,6 +9,7 @@ export class FadeScene extends Phaser.Scene {
     private start: string;
     private next: boolean;
     private sprite: Sprite;
+    private mode: string = "";
 
     constructor() {
         super({
@@ -18,7 +19,7 @@ export class FadeScene extends Phaser.Scene {
     }
 
 
-    create(data: {shut: string, start: string}): void {
+    create(data: {shut: string, start: string, mode: string}): void {
         this.sprite = new Sprite(this, 1920/2, 1080/2, 'button_bg');
         this.sprite.setScale(500);
         this.sprite.setTint(0x000000);
@@ -27,6 +28,7 @@ export class FadeScene extends Phaser.Scene {
         this.timer = 0;
         this.shutdown = data.shut;
         this.start = data.start;
+        this.mode = data.mode;
     }
 
 
@@ -50,7 +52,7 @@ export class FadeScene extends Phaser.Scene {
             this.next = true;
             this.sprite.setAlpha(1);
             this.scene.stop(this.shutdown);
-            this.scene.launch(this.start);
+            this.scene.launch(this.start, {mode: this.mode});
             //this.scene.moveBelow(this.scene.key, this.start);
         }
     }

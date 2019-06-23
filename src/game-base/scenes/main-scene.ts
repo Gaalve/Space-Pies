@@ -24,6 +24,7 @@ export class MainScene extends Phaser.Scene {
     private shop_bg_back: Sprite;//Phaser.GameObjects.Graphics;
     private shop_bg_out: Sprite;
     // private energy_bg: Phaser.GameObjects.Rectangle;
+    private playMode: string;
 
     private shop1: [Button, Button, Button, Button, Button, Button];
     private shopZ: [Button, Button, Button, Button, Button];
@@ -106,7 +107,7 @@ export class MainScene extends Phaser.Scene {
 
     }
 
-    create(): void {
+    create(data: {mode: string}): void {
         this.anims.create({
             key: 'snooze',
             frames:
@@ -125,7 +126,7 @@ export class MainScene extends Phaser.Scene {
             repeat: -1
         });
 
-
+        this.playMode = data.mode;
         this.battleTime = new BattleTimeBar(this);
         this.system = new PiSystem(this, 10,10,10,false);
         this.data.set("system", this.system);
