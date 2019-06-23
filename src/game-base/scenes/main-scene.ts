@@ -184,7 +184,7 @@ export class MainScene extends Phaser.Scene {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         this.energyRegen = this.add.text(1920/2+20, 470, "(+"+this.turn.getCurrentPlayer().getRegenRate()+ ")", {
             fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
-        this.shop = new Button(this, 1920/2, 500, "button_shadow",
+        this.shop = new Button(this, 1920/2, 1080-100, "button_shadow",
             "button_bg", "button_fg", "button_shop",0.95,
             ()=>{
                 this.displayShop(this.shop1, this.shop1Text);
@@ -198,7 +198,7 @@ export class MainScene extends Phaser.Scene {
         this.shop.removeInteractive();
         this.shop.setInvisible();
 
-        this.openShop = this.add.text(1920/2-50, 550, "shop", {
+        this.openShop = this.add.text(1920/2-50, 1080-50, "shop", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2}).setVisible(false);
 
 
@@ -394,7 +394,7 @@ export class MainScene extends Phaser.Scene {
         });
         this.solar.setAlt(this, 950, 1080-100, "ssb_solar_drone");
 
-        this.motors = this.setButton(1150, 1080-100, "ssr_solar_drone", 0.95,()=>{
+        this.motors = this.setButton(1150, 1080-100, "motor", 0.95,()=>{
             let system = this.system;
             let player = this.turn.getCurrentPlayer();
             if(this.shopSActive){
@@ -869,7 +869,7 @@ export class MainScene extends Phaser.Scene {
 
     createChooseMotor(): void{
         this.motorL = new Button(this, 550, 1080-300, "button_shadow",
-            "button_bg", "button_fg", "button_space_shuttle",0.6,
+            "button_bg", "button_fg", "motorL",0.6,
             ()=>{
                 let player = this.turn.getCurrentPlayer();
                 player.payEnergy(player.getEnergyCost("motor"));
@@ -884,7 +884,7 @@ export class MainScene extends Phaser.Scene {
                 //system.pushSymbol(createWMod)
             });
         this.motorP = new Button(this, 800, 1080-300, "button_shadow",
-            "button_bg", "button_fg", "button_wmod",0.6,
+            "button_bg", "button_fg", "motorP",0.6,
             ()=>{
                 let player = this.turn.getCurrentPlayer();
                 player.payEnergy(player.getEnergyCost("motor"));
@@ -899,7 +899,7 @@ export class MainScene extends Phaser.Scene {
             });
 
         this.motorR = new Button(this, 1050, 1080-300, "button_shadow",
-            "button_bg", "button_fg", "button_wmod",0.6,
+            "button_bg", "button_fg", "motorR",0.6,
             ()=>{
                 let player = this.turn.getCurrentPlayer();
                 player.payEnergy(player.getEnergyCost("motor"));
@@ -911,6 +911,7 @@ export class MainScene extends Phaser.Scene {
                 this.updateShop1(false);
                 this.updateShopM();
             });
+
         this.backM = new Button(this, 1300, 1080-300, "button_shadow",
             "button_bg", "button_fg", "button_back", 0.6,
             ()=>{
