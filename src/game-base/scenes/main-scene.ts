@@ -307,7 +307,6 @@ export class MainScene extends Phaser.Scene {
                 this.shop1Active = false;
                 this.shopSActive = true;
             });
-
         this.wExt = new Button(this, 650, 1080-100, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
@@ -381,6 +380,7 @@ export class MainScene extends Phaser.Scene {
 
 
         this.shop1 = [this.regen, this.wExt, this.wModule, this.solar, this.close, this.skip];
+
         this.shop1Text = [
             this.add.text(415, 1080-50, "Regenerate", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
@@ -396,9 +396,29 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false)
         ];
 
+        let infobox = <Infobox> this.data.get("infoboxx");
+
         this.energySym = this.createEnergyCostIcons();
         this.energyCostText = this.createEnergyCostText();
+
+        infobox.addTooltipInfo(this.regen.bg, "Regenerate any of your existing hitzones with different types of shields.", [this.regen.onClick, () => {this.regen.hovering = true; this.regen.updateStep();}, () => {this.regen.hovering = false; this.regen.updateStep();}]);
+        infobox.addTooltipInfo(this.wExt.bg, "Buy up to 3 weapons for each drone.", [this.wExt.onClick, () => {this.wExt.hovering = true; this.wExt.updateStep();}, () => {this.wExt.hovering = false; this.wExt.updateStep();}]);
+        infobox.addTooltipInfo(this.wModule.bg, "Add up to 2 drones equip more weapons.", [this.wModule.onClick, () => {this.wModule.hovering = true; this.wModule.updateStep();}, () => {this.wModule.hovering = false; this.wModule.updateStep();}]);
+        infobox.addTooltipInfo(this.solar.bg, "The more you have, the more energy you will collect per round.", [this.solar.onClick, () => {this.solar.hovering = true; this.solar.updateStep();}, () => {this.solar.hovering = false; this.solar.updateStep();}]);
+        infobox.addTooltipInfo(this.skip.bg, "Attack opponent with all weapons. Don't know why this is called skip though..", [this.skip.onClick, () => {this.skip.hovering = true; this.skip.updateStep();}, () => {this.skip.hovering = false; this.skip.updateStep();}]);
+        infobox.addTooltipInfo(this.close.bg, "Close the shop to see more of these beautiful stars.", [this.close.onClick, () => {this.close.hovering = true; this.close.updateStep();}, () => {this.close.hovering = false; this.close.updateStep();}]);
+        infobox.addTooltipInfo(this.energySym[0], "The cheapest part costs " + this.energyCostText[0].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energySym[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energySym[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energySym[3], "The cheapest part costs " + this.energyCostText[3].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energyCostText[0], "The cheapest part costs " + this.energyCostText[0].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energyCostText[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energyCostText[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energyCostText[3], "The cheapest part costs " + this.energyCostText[3].text.toString() + " energy.");
+
+
         this.closeShop(this.shop1, this.shop1Text, true);
+
 
         /*this.shieldText = this.add.text(1920-500, 330, "Shield", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});*/

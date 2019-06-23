@@ -13,7 +13,7 @@ export class Infobox
         this.scene = scene;
     }
 
-    public addTooltipInfo(object: any, info: String)
+    public addTooltipInfo(object: any, info: String , callbacks?: Function[])
     {
         let existingObject = this.tooltipStrings.get(object);
         if (typeof (existingObject) != 'undefined' && existingObject != null )
@@ -37,24 +37,39 @@ export class Infobox
             rounded.depth = 99;
 
             let width = tooltip.displayWidth + 50
-            let height = tooltip.displayHeight * 3;
+            let height = tooltip.displayHeight < 100 ? 100 : tooltip.displayHeight * 1.5;
             rounded.fillStyle("#0f0f0f", 1);
             //  32px radius on the corners
             rounded.fillRoundedRect(x, y, width, height, 32);
 
-            rounded.alpha = 0.8;
+            rounded.alpha = 0.9;
+
+            this.executeCallback(callbacks, 1);
 
             //  Using an object to define a different radius per corner
             // rounded.fillRoundedRect(360, 240, 400, 300, { tl: 12, tr: 12, bl: 12, br: 0 });
 
             // tooltip.style.setBackgroundColor("#000000");
         })
+        object.on('pointerup', () => {
+            this.executeCallback(callbacks, 0);
+        })
         object.on('pointerout', () =>
         {
             tooltip != null ? tooltip.destroy() : null;
             rounded.destroy();
+            this.executeCallback(callbacks, 2);
         })
     }
+
+    private executeCallback(callbacks: Function[], number: number)
+    {
+        if (typeof(callbacks) != 'undefined' && callbacks != null)
+            if (typeof(callbacks[number]) != 'undefined' && callbacks[number] != null)
+                callbacks[number]();
+
+    }
+
 
 
     private calculateTextWidth(info: String)
@@ -117,5 +132,22 @@ export class Infobox
         return {
             fill: '#fff', fontSize: 20, strokeThickness: 3, stroke: '#000'
         }
+    }
+
+    static getOppositeTerm(string: String, playerName : String)
+    {
+        switch (string[0])
+        {
+            case "l":
+                return  string[1] == "o" ? "lock<>" : "l"+ playerName.toLowerCase() + "<>";
+            case "a":
+                return  "s" + playerName.toLowerCase() + "<>, r" + playerName.toLowerCase() + "<>";
+            case "s":
+                return  "s"+ playerName.toLowerCase() + "<>, r" + playerName.toLowerCase() + "<>";
+            case "r":
+                return  "s"+ playerName.toLowerCase() + "<>, a" + playerName.toLowerCase() + "<>";
+
+        }
+
     }
 }

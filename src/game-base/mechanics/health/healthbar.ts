@@ -1,9 +1,8 @@
 import {HealthbarSprites} from "./healthbar-sprites";
-import Sprite = Phaser.GameObjects.Sprite;
 import {HealthType} from "./health-type";
-import Text = Phaser.GameObjects.Text;
-import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
 import {Infobox} from "../Infobox";
+import Sprite = Phaser.GameObjects.Sprite;
+import Text = Phaser.GameObjects.Text;
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
@@ -70,7 +69,28 @@ export class Healthbar {
         {
             let sprite = bar.sprite;
             let infobox = <Infobox> this.scene.data.get("infoboxx");
-            infobox.addTooltipInfo(sprite, bar.toString());
+            let playerName = this.direction == 1 ? "P1" : "P2";
+            let opponentName = this.direction == 1 ? "P2" : "P1";
+            let activeTerm = this.term.text.split(".")[0];
+            let hitzoneNumber = this.y == 170 ? 1 : this.y == 220 ? 2 : this.y == 270 ? 3 : 4;
+
+            let tooltipInfo = bar.type == HealthType.HitZoneBar ?
+                "[" + playerName + "] " +
+                "This is your Hitzone Bar. Each element represents one hitzone. \n"
+                + "     If all are destroyed, the process \"CoreExplosion\" "+ playerName + " will execute\n"
+                + "     and your ship will destroy.\n\n"
+                + "     current term:        " + this.term.text + "\n"
+                + "     currently active:    " + activeTerm  + "\n"
+                + "     will be resolved by: " + Infobox.getOppositeTerm(activeTerm, playerName) + "\n\n"
+                + "     (each of the other haelthbars emits an " + Infobox.getOppositeTerm(activeTerm, playerName) + "  after its last destroyed bar)"
+            :
+                "[" + playerName + "] Hitzone " + hitzoneNumber + "\n\n"
+                + "     current term:          " + this.term.text + "\n"
+                + "     currently active:      " + activeTerm + "\n"
+                + "     will be resolved by:   " + Infobox.getOppositeTerm(activeTerm,playerName) + "\n\n"
+                + "     (these come from each of " + opponentName + "'s weapons) \n"
+
+            infobox.addTooltipInfo(sprite, tooltipInfo);
         }
 
     }
