@@ -10,6 +10,23 @@ export class StartScene extends Phaser.Scene {
     private buttonStart: Button;
     private buttonSettings: Button;
 
+    private buttonSP: Button;
+    private buttonMP: Button;
+
+    private buttonP1: Button;
+    private buttonP2: Button;
+    private chosenMode: string;
+
+    private titleText: Phaser.GameObjects.Text;
+    private startText: Phaser.GameObjects.Text;
+    private settingsText: Phaser.GameObjects.Text;
+    private chooseModeText: Phaser.GameObjects.Text;
+    private singleText: Phaser.GameObjects.Text;
+    private multiText: Phaser.GameObjects.Text;
+    private choosePlayerText: Phaser.GameObjects.Text;
+    private olafText: Phaser.GameObjects.Text;
+    private holgerText: Phaser.GameObjects.Text;
+
     private Player1start = new Phaser.Math.Vector2(280, 540);
     private Player2start = new Phaser.Math.Vector2(1650, 540);
     private Radius=150;
@@ -83,7 +100,7 @@ export class StartScene extends Phaser.Scene {
         });
 
 
-        const titleText = this.add.text(1920/2-160, 200, 'Main-Menu', {
+        this.titleText = this.add.text(1920/2-160, 200, 'Main-Menu', {
             fill: '#f0f1ff', fontFamily: '"Roboto"', fontSize: 60, fontStyle: 'bold', strokeThickness: 2
         });
 
@@ -92,27 +109,76 @@ export class StartScene extends Phaser.Scene {
         this.buttonStart = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_resume",
             ()=>{
-                this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene'});
-                this.scene.bringToTop('FadeScene')}
-        );
+            this.changeToMode();
+        });
 
         this.buttonStart.setPosition(1920/2-150, 1080/2-75);
 
-        const StartText = this.add.text(1920/2-70, 1080/2-110, "Start Game", {
+        this.startText = this.add.text(1920/2-70, 1080/2-110, "Start Game", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
 
 
-        this.buttonSettings = new Button(this, 100, 100, "button_shadow",
+        /*this.buttonSettings = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_options",
             ()=>{
             });
 
         this.buttonSettings.setPosition(1920/2-150, 1080/2+75);
 
-        const SettingsText = this.add.text(1920/2-70, 1080/2+50, "Settings", {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+        this.settingsText = this.add.text(1920/2-70, 1080/2+50, "Settings", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});*/
 
+        //Buttons and Text for choose Mode
+        this.chooseModeText = this.add.text(1920/2-160, 200, 'Which mode do you want to play?', {
+            fill: '#f0f1ff', fontFamily: '"Roboto"', fontSize: 60, fontStyle: 'bold', strokeThickness: 2
+        });
+        this.chooseModeText.setVisible(false);
+
+        this.buttonSP = new Button(this, 1920/2-150, 1080/2-75, "button_shadow",
+            "button_bg", "button_fg", "button_resume", ()=>{
+                this.changeToPlayer();
+            });
+        this.singleText = this.add.text(1920/2-70, 1080/2-110, "Play against the computer", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+        this.singleText.setVisible(false);
+        this.buttonSP.removeInteractive();
+        this.buttonSP.setInvisible();
+
+        this.buttonMP = new Button(this, 1920/2-150, 1080/2+75, "button_shadow",
+            "button_bg", "button_fg", "button_resume", ()=>{
+                this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene'});
+                this.scene.bringToTop('FadeScene')
+            });
+        this.multiText = this.add.text(1920/2-70, 1080/2+50, "Play against a human friend", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+        this.multiText.setVisible(false);
+        this.buttonMP.removeInteractive();
+        this.buttonMP.setInvisible();
+
+        //Buttons and Text for choose Player in Singleplayer
+        this.choosePlayerText = this.add.text(1920/2-160, 200, 'Which player do you want to be?', {
+            fill: '#f0f1ff', fontFamily: '"Roboto"', fontSize: 60, fontStyle: 'bold', strokeThickness: 2
+        });
+        this.choosePlayerText.setVisible(false);
+
+        this.buttonP1 = new Button(this, 1920/2-150, 1080/2-150, "button_shadow",
+            "button_bg", "button_fg", "button_resume", ()=>{
+            });
+        this.olafText = this.add.text(1920/2-70, 1080/2-70, "Play as Olaf (Player 1)", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+        this.olafText.setVisible(false);
+        this.buttonP1.removeInteractive();
+        this.buttonP1.setInvisible();
+
+        this.buttonP2 = new Button(this, 1920/2+150, 1080/2-150, "button_shadow",
+            "button_bg", "button_fg", "button_resume", ()=>{
+            });
+        this.holgerText = this.add.text(1920/2+230, 1080/2-70, "Play as Holger (Player 2)", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+        this.holgerText.setVisible(false);
+        this.buttonP2.removeInteractive();
+        this.buttonP2.setInvisible();
     }
 
     update(time: number, delta: number): void {
@@ -122,8 +188,44 @@ export class StartScene extends Phaser.Scene {
 
             this.buttonStart.updateStep();
             this.buttonSettings.updateStep();
+            this.buttonSP.updateStep();
+            this.buttonMP.updateStep();
 
         }
     }
 
+    private changeToMode(): void{
+        this.titleText.setVisible(false);
+        this.buttonStart.removeInteractive();
+        this.buttonStart.setInvisible();
+        this.startText.setVisible(false);
+        //this.buttonSettings.removeInteractive();
+        //this.buttonSettings.setInvisible();
+        //this.settingsText.setVisible(false);
+        this.buttonSP.restoreInteractive();
+        this.buttonMP.restoreInteractive();
+        this.buttonSP.setVisible();
+        this.buttonMP.setVisible();
+        this.chooseModeText.setVisible(true);
+        this.singleText.setVisible(true);
+        this.multiText.setVisible(true);
+    }
+
+    private changeToPlayer(): void{
+        this.chooseModeText.setVisible(false);
+        this.singleText.setVisible(false);
+        this.multiText.setVisible(false);
+        this.buttonSP.removeInteractive();
+        this.buttonMP.removeInteractive();
+        this.buttonSP.setInvisible();
+        this.buttonMP.setInvisible();
+
+        this.olafText.setVisible(true);
+        this.holgerText.setVisible(true);
+        this.choosePlayerText.setVisible(true);
+        this.buttonP1.restoreInteractive();
+        this.buttonP2.restoreInteractive();
+        this.buttonP1.setVisible();
+        this.buttonP2.setVisible();
+    }
 }
