@@ -8,7 +8,9 @@ export class BotEnd extends BotAction{
 
     }
 
-    public checkExecutable(): void {}
+    public checkExecutable(): void {
+        this.executable = true;
+    }
 
     public activate(delay: number): void {
         let system = this.bot.getSystem();
@@ -16,7 +18,7 @@ export class BotEnd extends BotAction{
 
         //endTurn
         this.bot.scene.time.delayedCall(delay, ()=>{
-            system.pushSymbol(system.add.channelOut("","").nullProcess()) //TODO: turnwechsel implementieren
+            system.pushSymbol(system.add.channelOut("botend","").nullProcess());
             this.logAction(this.bot.steps);
             this.bot.steps = 0;
         }, [], this);

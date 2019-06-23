@@ -12,7 +12,7 @@ export abstract class BotAction{
         this.bot = bot;
         this.actCost = cost;
 
-        if(bot.getEnergy() < cost){
+        if(bot.getEnergy() <= cost){
             this.executable = false;
         }else{
             this.executable = true;

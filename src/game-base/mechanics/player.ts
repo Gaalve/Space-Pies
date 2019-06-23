@@ -14,14 +14,10 @@ import {HealthType} from "./health/health-type";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {BulletInfo} from "./weapon/bulletInfo";
 import {BattleTimeBar} from "./battleTimeBar";
-import get = Reflect.get;
-import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 import {Anomaly} from "./anomalies/anomaly";
 import {SunEruption} from "./anomalies/sun-eruption";
-import {PiSystemAddAction} from "./picalc/pi-system-add-action";
 import {WormHole} from "./anomalies/worm-hole";
 import {NanoDrone} from "./nanoDrone";
-import {PiSystemAdd} from "./picalc/pi-system-add";
 import {BlackHole} from "./anomalies/black-hole";
 
 export class Player {

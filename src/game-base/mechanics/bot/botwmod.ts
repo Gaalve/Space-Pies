@@ -23,10 +23,12 @@ export class BotWMod extends BotAction{
     }
 
     public activate(delay: number): void {
+        let d = this.bot.getNrDrones();
         let system = this.bot.getSystem();
+
         //create weapon mod
         this.bot.scene.time.delayedCall(delay, ()=>{
-            system.pushSymbol(system.add.channelOut("","").nullProcess()) //TODO: channelname
+            system.pushSymbol(system.add.channelOut("wmod" + this.bot.id + d,"").nullProcess());
             this.logAction(this.bot.steps);
         }, [], this);
     }
