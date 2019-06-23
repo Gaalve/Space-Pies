@@ -43,8 +43,8 @@ export class Turn {
             this.system.add.replication(
                 this.system.add.channelIn('player1', '').
                 channelOutCB('shopp1', '', () => this.setShopTurn()).
-                channelIn('shopp1end', '').
-                channelOut('anomalyunlock1', '').
+                channelIn('shopp1end', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('anomaly1', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -77,8 +77,8 @@ export class Turn {
             this.system.add.replication(
                 this.system.add.channelIn('player2', '').
                 channelOutCB('shopp1', '', () => this.setShopTurn()).
-                channelIn('shopp2end', '').
-                channelOut('anomalyunlock2', '').
+                channelIn('shopp2end', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('anomaly2', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').

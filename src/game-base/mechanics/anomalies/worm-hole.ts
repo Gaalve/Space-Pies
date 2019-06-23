@@ -17,7 +17,7 @@ export class WormHole extends Anomaly {
         this.scaleY = 0.0;
     }
 
-    public update(): void {
+    public update(delta: number): void {
 
         if(this.scaleX > 0.5){
             this.scaleUp = -1;

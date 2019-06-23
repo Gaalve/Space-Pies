@@ -12,7 +12,7 @@ export class SunEruption extends Anomaly {
         this.scene.time.delayedCall(3000, () => {this.destroy()},[],this);
     }
 
-    public update(): void {
+    public update(delta: number): void {
         this.y += 100;
     }
 }

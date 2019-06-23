@@ -4,15 +4,18 @@ import {Anomaly} from "./anomaly";
 
 export class BlackHole extends Anomaly {
 
+    private size = 10;
+
     public constructor(scene : Phaser.Scene, player: Player) {
         super(scene, player, 960, 500, "black_hole", "hole");
 
         this.scaleUp = 1;
         this.scaleX = 0.0;
         this.scaleY = 0.0;
+        this.size = 10;
     }
 
-    public update(): void {
+    public update(delta: number): void {
 
         if(this.scaleUp == -2 && this.scaleX < 0.4) this.scaleUp = 0;
         if(this.scaleUp == -1 && this.scaleX < 0.7) this.scaleUp = 0;
@@ -29,5 +32,9 @@ export class BlackHole extends Anomaly {
             this.destroy()
         }
 
+    }
+
+    public reduce(): void{
+        this.size--;
     }
 }
