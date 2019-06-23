@@ -5,6 +5,7 @@ import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterMana
 import {BulletInfo} from "./weapon/bulletInfo";
 import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 import {NanoDrone} from "./nanoDrone";
+import {PiAnimSystem} from "./pianim/pi-anim-system";
 
 
 export class EnergyDrone extends Phaser.GameObjects.Sprite{
@@ -18,7 +19,8 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
 
 
-    public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number, pem: Phaser.GameObjects.Particles.ParticleEmitterManager, type?: string){
+    public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number, piAnim: PiAnimSystem,
+                       pem: Phaser.GameObjects.Particles.ParticleEmitterManager, type?: string){
         super(scene, x, y, "ssr_solar_drone");
         if(player.getNameIdentifier() == "P2"){
             this.setTexture("ssb_solar_drone");
@@ -67,7 +69,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
         this.explosion = new Explosion(pem);
         this.collectED=new collectEnergy_Drones(pem);
         if(index > 0) {
-            this.health = new HealthbarSD(scene, this.x, this.y, player.getNameIdentifier(), index);
+            this.health = new HealthbarSD(scene, this.x, this.y, player.getNameIdentifier(), index, piAnim);
         }
         this.setVisible(false);
         scene.add.existing(this);

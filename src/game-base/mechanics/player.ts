@@ -77,9 +77,9 @@ export class Player {
         this.drones = [new Drone(scene, x, y, this, 0, piAnim), new Drone(scene, x, y, this, 1, piAnim), new Drone(scene, x, y, this,2, piAnim)];
         this.scene = scene;
         this.activatedDrones = 0;
-        this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,pem), new EnergyDrone(scene, x, y, this, 1,pem),
-            new EnergyDrone(scene, x, y, this, 2,pem),new EnergyDrone(scene, x, y, this, 3,pem),
-            new EnergyDrone(scene, x, y, this, 4,pem), new NanoDrone(scene, this, 5, pem)];
+        this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,piAnim,pem), new EnergyDrone(scene, x, y, this, 1,piAnim,pem),
+            new EnergyDrone(scene, x, y, this, 2,piAnim,pem),new EnergyDrone(scene, x, y, this, 3,piAnim,pem),
+            new EnergyDrone(scene, x, y, this, 4,piAnim,pem), new NanoDrone(scene, this, 5, piAnim, pem)];
         this.activatedSolarDrones = 0;
         this.smallestIndexSolDrone = 1;
         this.health = new Health(scene, this, piSystem, piAnim);

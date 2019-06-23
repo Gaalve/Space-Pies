@@ -4,8 +4,6 @@ import {RedShip} from "./ship/red-ship";
 import {BlueShip} from "./ship/blue-ship";
 import Scene = Phaser.Scene;
 import {Debris} from "./ship/debris";
-import {GuiScene} from "../scenes/gui-scene";
-import {MainScene} from "../scenes/main-scene";
 import {EndSceneP1} from "../scenes/end-sceneP1";
 
 
