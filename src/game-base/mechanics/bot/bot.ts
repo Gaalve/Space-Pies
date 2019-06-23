@@ -76,73 +76,7 @@ export class Bot extends Player{
     }
 
     public chooseAction(delay: number): void{
-        let x = Phaser.Math.Between(1,100);
-        switch(this.possibleActions.length){
-            case(1):{
-                this.possibleActions[0].activate(delay);
-                break;
-            }
-            case(2):{
-                if(x <= 90){
-                    this.possibleActions[0].activate(delay);
-                }else{
-                    this.possibleActions[1].activate(delay);
-                }
-                break;
-            }
-            case(3):{
-                if(x <= 45){
-                    this.possibleActions[0].activate(delay);
-                }else if(x > 45 && x <= 90){
-                    this.possibleActions[1].activate(delay);
-                }else{
-                    this.possibleActions[2].activate(delay);
-                }
-                break;
-            }
-            case(4):{
-                if(x <= 30){
-                    this.possibleActions[0].activate(delay);
-                }else if(x > 30 && x <= 60) {
-                    this.possibleActions[1].activate(delay);
-                }else if(x > 60 && x <= 90){
-                    this.possibleActions[2].activate(delay);
-                }else{
-                    this.possibleActions[3].activate(delay);
-                }
-                break;
-            }
-            case(5):{
-                if(x <= 22.5){
-                    this.possibleActions[0].activate(delay);
-                }else if(x > 22.5 && x <= 45) {
-                    this.possibleActions[1].activate(delay);
-                }else if(x > 45 && x <= 67.5){
-                    this.possibleActions[2].activate(delay);
-                }else if(x > 67.5 && x <= 90){
-                    this.possibleActions[3].activate(delay);
-                }else{
-                    this.possibleActions[4].activate(delay);
-                }
-                break;
-            }
-            case(6):{
-                if(x <= 18){
-                    this.possibleActions[0].activate(delay);
-                }else if(x > 18 && x <= 36) {
-                    this.possibleActions[1].activate(delay);
-                }else if(x > 36 && x <= 54){
-                    this.possibleActions[2].activate(delay);
-                }else if(x > 54 && x <= 72) {
-                    this.possibleActions[3].activate(delay);
-                }else if(x > 72 && x <= 90){
-                    this.possibleActions[4].activate(delay);
-                }else{
-                    this.possibleActions[5].activate(delay);
-                }
-                break;
-            }
-            default: this.actions[5].activate(delay);
-        }
+        let x = Phaser.Math.Between(0, this.possibleActions.length-1);
+        this.possibleActions[x].activate(delay);
     }
 }

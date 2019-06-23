@@ -17,10 +17,10 @@ export class BotEnd extends BotAction{
         //endTurn
         this.bot.scene.time.delayedCall(delay, ()=>{
             system.pushSymbol(system.add.channelOut("","").nullProcess()) //TODO: turnwechsel implementieren
+            this.logAction(this.bot.steps);
+            this.bot.steps = 0;
         }, [], this);
 
-        this.logAction(this.bot.steps);
-        this.bot.steps = 0;
     }
 
     public logAction(step: number): void {

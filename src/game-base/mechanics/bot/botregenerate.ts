@@ -6,6 +6,7 @@ export class BotRegenerate extends BotAction{
 
     public shieldTypes: [BotShield, BotShield, BotShield, BotShield, BotShield];
     public usableTypes: BotShield[];
+    public hitZones: string[];
 
     public constructor(type: string, bot: Bot, cost: number){
         super(type, bot, cost);
@@ -17,6 +18,7 @@ export class BotRegenerate extends BotAction{
         this.shieldTypes.splice(4, 0, new BotShield("adap", bot, bot.getEnergyCost("adap")));
 
         this.usableTypes = [];
+        this.hitZones = [];
     }
 
     public checkExecutable(): void{
@@ -29,74 +31,54 @@ export class BotRegenerate extends BotAction{
         }
     }
 
-    public activate(step: number): void {
+    public activate(delay: number): void {
         for(let s of this.shieldTypes){
             if(s.executable){
                 this.usableTypes.push(s);
             }
         }
+        //find type of shield and hitzone
         let shield = this.chooseShield();
         let hz = this.chooseHZ();
 
+        //push channel to system
+        let system = this.bot.getSystem();
+        this.bot.scene.time.delayedCall(delay, ()=>{
+            system.pushSymbol(system.add.channelOut("r"+shield+"p"+this.bot.id+"z"+hz,"").nullProcess());
+            this.logAction(this.bot.steps, shield, hz);
+        }, [], this);
+
+        //clear arrays
         this.usableTypes = [];
+        this.hitZones = [];
     }
 
     public chooseShield(): string{
-        let x = Phaser.Math.Between(1,100);
-        switch(this.usableTypes.length){
-            case(1):{
-                return this.usableTypes[0].type;
-            }
-            case(2):{
-                if(x <= 50){
-                    return this.usableTypes[0].type;
-                }else{
-                    return this.usableTypes[1].type;
-                }
-            }
-            case(3):{
-                if(x <= 33){
-                    return this.usableTypes[0].type;
-                }else if(x > 33 && x <= 66){
-                    return this.usableTypes[1].type;
-                }else{
-                    return this.usableTypes[2].type;
-                }
-            }
-            case(4):{
-                if(x <= 25){
-                    return this.usableTypes[0].type;
-                }else if(x > 25 && x <= 50){
-                    return this.usableTypes[1].type;
-                }else if(x > 50 && x <= 75){
-                    return this.usableTypes[2].type;
-                }else{
-                    return this.usableTypes[3].type;
-                }
-            }
-            case(5):{
-                if(x <= 20){
-                    return this.usableTypes[0].type;
-                }else if(x > 20 && x <= 40){
-                    return this.usableTypes[1].type;
-                }else if(x > 40 && x <= 60){
-                    return this.usableTypes[2].type;
-                }else if(x > 60 && x <= 80){
-                    return this.usableTypes[3].type;
-                }else{
-                    return this.usableTypes[4].type;
-                }
-            }
-            default: return "";
-        }
+        let x = Phaser.Math.Between(0, this.usableTypes.length-1);
+        return this.usableTypes[x].type;
     }
 
     public chooseHZ(): string{
-        let s = "";
+        if(!this.bot.z1Destroyed) this.hitZones.push("1");
+        if(!this.bot.z2Destroyed) this.hitZones.push("2");
+        if(!this.bot.z3Destroyed) this.hitZones.push("3");
+        if(!this.bot.z4Destroyed) this.hitZones.push("4");
 
-        return s;
+        let x = Phaser.Math.Between(0, this.hitZones.length-1);
+
+        return this.hitZones[x];
     }
 
-    public logAction(): void {
+    public logAction(step: number, shield: string, hz: string): void {
+        let s = step.toString();
+        if(shield == "shield") {
+            console.log(s + ". step: I built a laser shield on hitzone " + hz + ".");
+        }else if(shield == "adap"){
+            console.log(s + ". step: I built an adaptive shield on hitzone " + hz + ".");
+        }else if(shield == "armor"){
+            console.log(s + ". step: I built an armor shield on hitzone " + hz + ".");
+        }else{
+            console.log(s + ". step: I built a " + shield + " shield on hitzone " + hz + ".");
+        }
     }
 }

@@ -21,5 +21,5 @@ export abstract class BotAction{
 
     public abstract checkExecutable(): void;
     public abstract activate(delay: number): void;
-    public abstract logAction(step: number): void;
+    public abstract logAction(step: number, shield?: string, hz?: string): void;
 }
