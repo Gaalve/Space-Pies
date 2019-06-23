@@ -7,7 +7,6 @@ export class Motor {
 
     private player: Player;
     private system: PiSystem;
-    private testnumber: number;
     private activeMotorsLaserP1: number;
     private activeMotorsProjectileP1: number;
     private activeMotorsRocketP1: number;
@@ -19,7 +18,6 @@ export class Motor {
 
     public constructor(scene: Phaser.Scene, player: Player, x: number, y: number,) {
         this.player = player;
-        this.testnumber = 1;
         this.activeMotorsLaserP1 = 0;
         this.activeMotorsProjectileP1 = 0;
         this.activeMotorsRocketP1 = 0;
@@ -27,24 +25,6 @@ export class Motor {
         this.activeMotorsProjectileP2 = 0;
         this.activeMotorsRocketP2 = 0;
 
-            //  this.nameIdentifier = player.getNameIdentifier();
-
-            //    this.system.pushSymbol(
-            //       this.system.add.replication(
-            //           this.system.add.channelIn('player1', '').nullProcess()
-            //        )
-            //  );
-
-
-
-        /* ALTERNATIVE
-        //this.system.pushSymbol(
-        //             this.system.add.channelIn('buymotorlaser1', '').
-        //             channelOut('buildmotorlaser1', '').
-        //
-        //
-        //
-        */
 
         // creating laser motors when bought in shop for p1
         this.system.pushSymbol(
@@ -106,13 +86,9 @@ export class Motor {
             channelOutCB('buildmotorrocket23', '', () => this.activeMotorsRocketP2  = this.activeMotorsRocketP2 + 1).nullProcess()
         );
 
-        /*      this.system.pushSymbol(
-                  this.system.add.channelIn('buildmotorlaser11', '').
-                   replication(this.system.add.channelIn('shieldplayer1', '',
-                      new BulletInfo(true, x, y + Math.random()*800 - 400, 0.4).nullProcess()));
-                  )
-              )
-           */
+        //
+        // Dodge Chance for Player 1
+        //
 
         this.system.pushSymbol(
             this.system.add.channelIn('buildmotorlaser11', '').replication(this.system.add.channelIn('armorP1', '',
@@ -194,130 +170,8 @@ export class Motor {
 
         this.startMotor();
 
-        /*     this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn('buildmotorlaser11', ' ',
-                 new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
-             this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn('buildmotorlaser12', '',
-                 new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
-             this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn('buildmotorlaser13', '',
-                 new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
-             //this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn(
-             //     'shotblock'+this.nameIdentifier().charAt(1), "","", 0).nullProcess())
-             //  );
-
-             /*     this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
-                      new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
-                  this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '',
-                      new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
-                  this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+this.nameIdentifier, '',
-                      new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
-                  this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn(
-                      'shotblock'+this.getNameIdentifier().charAt(1), "","", 0).nullProcess())
-                  ); */
-
-        /*    this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
-                new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
-            this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '',
-                new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
-            this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '',
-                new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
-            this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn(
-                'shotblock'+this.getNameIdentifier().charAt(1), "","", 0).nullProcess())
-            );
-    */
-        /*   this.system.add.channelIn('buymotorlaser11', '').
-        channelOutCB('buildmotorlaser11', ''()=> this.buildLaserMotor()).
-        channelIn('buymotorlaser12', '').
-        channelOutCB('buildmotorlaser12', '', ()=> this.buildLaserMotor()).
-        channelIn('buymotorlaser13', '').
-        channelOutCB('buildmotorlaser13', '', ()=> this.buildLaserMotor());
-        */
-
-        /*    this.system.add.channelInCB('buildmotorlaser1', '', () => this.createLaserMotor());
-            this.system.add.channelInCB('buyprojectilemotor1', '', () => this.createProjectileMotor());
-            this.system.add.channelInCB('buyrocketmotor1', '', () => this.createRocketMotor());
 
 
-
-        /*    this.system.pushSymbol(
-                this.system.add.replication(
-                    this.system.add.channelIn() */
-
-
-        /*   this.system.pushSymbol(
-               this.system.add.channelInCB('buymotorlaser11', '', () => this.buildLaserMotor()).
-               channelInCB('buymotorlaser12', '', () => this.buildLaserMotor()).
-               channelInCB('biymotorlaser13', '', () => this.buildLaserMotor()).nullProcess()
-
-           );
-
-
-       }
-
-    }
-    public buildMotor(){
-
-        }
-
-       private buildProjectileMotor(){
-
-       }
-
-       private buildRocketMotor(){
-
-       }
-   */
-
-
-
-    }
-  /*  public buildMotor(){
-
-        //Player 1
-        let motorlaser11 = this.system.add.term('motorLaser11', undefined);
-        let motorlaser12 = this.system.add.term('motorLaser12', undefined);
-        let motorlaser13 =  this.system.add.term('motorLaser13', undefined);
-        let motorprojectile11 = this.system.add.term('motorprojectile11', undefined);
-        let motorprojectile12 = this.system.add.term('motorprojectile12', undefined);
-        let motorprojectile13 = this.system.add.term('motorprojectile13', undefined);
-        let motorrocket11 = this.system.add.term('motorprojectile11', undefined);
-        let motorrocket12 = this.system.add.term('motorprojectile12', undefined);
-        let motorrocket13 = this.system.add.term('motorprojectile13', undefined);
-
-        //Player 2
-        let motorlaser21 = this.system.add.term('motorLaser21', undefined);
-        let motorlaser22 = this.system.add.term('motorLaser22', undefined);
-        let motorlaser23 =  this.system.add.term('motorLaser23', undefined);
-        let motorprojectile21 = this.system.add.term('motorprojectile21', undefined);
-        let motorprojectile22 = this.system.add.term('motorprojectile22', undefined);
-        let motorprojectile23 = this.system.add.term('motorprojectile23', undefined);
-        let motorrocket21 = this.system.add.term('motorprojectile21', undefined);
-        let motorrocket22 = this.system.add.term('motorprojectile22', undefined);
-        let motorrocket23 = this.system.add.term('motorprojectile23', undefined);
-
-    this.system.pushSymbol(system.add.channelIn("buildmotorlaser11", '').next(motorlaser11));
-
-        this.system.pushSymbol(
-            this.system.add.channelIn('buildmotorlaser11', '').replication(this.system.add.channelIn('armorP1', '',
-                new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
-
-        this.system.pushSymbol(
-            this.system.add.channelIn('buildmotorlaser12', '').replication(this.system.add.channelIn('armorP1', '',
-                new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.5).nullProcess()));
-
-        this.system.pushSymbol(
-            this.system.add.channelIn('buildmotorlaser13', '').replication(this.system.add.channelIn('armorP1', '',
-                new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.6).nullProcess()));
-
-        this.system.pushSymbol(
-            this.system.add.channelIn('buildmotorprojectile11', '').replication(this.system.add.channelIn('shieldP1', '',
-                new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
-
-        this.system.pushSymbol(
-            this.system.add.channelIn('buildmotorrocket11', '').replication(this.system.add.channelIn('rocketP1', '',
-                new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
-
-    }
-*/
     public startMotor() {
         console.log("test");
         //For Player 1
