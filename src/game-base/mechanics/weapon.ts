@@ -4,6 +4,7 @@ import {Bullet} from "./weapon/bullet";
 import {Player} from "./player";
 import {HitMissNotification} from "./weapon/hit-miss-notification";
 import {BulletInfo} from "./weapon/bulletInfo";
+import {Infobox} from "./Infobox";
 
 
 export class Weapon extends Phaser.GameObjects.Sprite{
@@ -106,8 +107,8 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 			switch (type) {
 				case WeaponType.LASER_ARMOR: return "ssr_weap_las";
 				case WeaponType.PROJECTILE_SHIELD: return "ssr_weap_pro";
-                case WeaponType.ROCKET: return "ssr_weap_rock";
-                case WeaponType.NONE: return "ssb_weap_las"; // wrong model is intended!
+				case WeaponType.ROCKET: return "ssr_weap_rock";
+				case WeaponType.NONE: return "ssb_weap_las"; // wrong model is intended!
 			}
 		else
 			switch (type) {
@@ -130,6 +131,9 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     		this.piTerm = this.wClass + "p1";
     		this.simplePi = this.simplePi + "p1";
 		}
+		let infobox = <Infobox> this.scene.data.get("infoboxx");
+		infobox.addTooltipInfo(this, "[" + this.player.getNameIdentifier() + "] Weapon Type:    " + this.simplePi + "<>           (" + Infobox.weaponTypeToString(this.weaponType) + ")\n     destroys:       " + Infobox.weaponTypeTargetsPiTerm(this.weaponType, this.player) + "    (" + Infobox.weaponTypeTargetsToString(this.weaponType) + ")");
+
     }
 
     getPiTerm() : string{
