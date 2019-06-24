@@ -8,12 +8,8 @@ export class ShipPart {
     private offX: number;
     private offY: number;
     public currentTex;
-    public normal: Sprite;
-    public destroyed: Sprite;
-    private _offX: number;
-    private _offY: number;
-    private _x : number;
-    private _y : number;
+    private x : number;
+    private y : number;
     private desOffX: number;
     private desOffY: number;
 
@@ -24,8 +20,8 @@ export class ShipPart {
         this.scene = scene;
         this.normal = new Sprite(scene, x, y, normTex);
         this.destroyed = new Sprite(scene, x, y, desTex);
-        this._offX = offX;
-        this._offY = offY;
+        this.offX = offX;
+        this.offY = offY;
 
         this.desOffX = desOffX;
         this.desOffY = desOffY;
@@ -46,7 +42,7 @@ export class ShipPart {
     }
 
     public setPosition(x: number, y: number): void{
-        this.normal.setPosition(x + this._offX, y + this._offY);
+        this.normal.setPosition(x + this.offX, y + this.offY);
         this.destroyed.setPosition(x + this.desOffX, y + this.desOffY);
 
         this.x = this.normal.x;
@@ -55,47 +51,7 @@ export class ShipPart {
 
     public update(delta: number): void{
         if(!this.isDestroyed) return;
-        this.destroyed.x += (this._offX *0+ this.desOffX) / 5500 * delta;
-        this.destroyed.y += (this._offY *0+ this.desOffY)/ 5500 * delta;
-    }
-
-    get offX(): number
-    {
-        return this._offX;
-    }
-
-    set offX(value: number)
-    {
-        this._offX = value;
-    }
-
-    get offY(): number
-    {
-        return this._offY;
-    }
-
-    set offY(value: number)
-    {
-        this._offY = value;
-    }
-
-    get x()
-    {
-        return this._x;
-    }
-
-    set x(value)
-    {
-        this._x = value;
-    }
-
-    get y()
-    {
-        return this._y;
-    }
-
-    set y(value)
-    {
-        this._y = value;
+        this.destroyed.x += (this.offX *0+ this.desOffX) / 5500 * delta;
+        this.destroyed.y += (this.offY *0+ this.desOffY)/ 5500 * delta;
     }
 }
