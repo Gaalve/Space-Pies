@@ -150,6 +150,7 @@ export class MainScene extends Phaser.Scene {
             this.updateEnergyText();
             this.energy.setVisible(true);
             this.energyT.setVisible(true);
+            this.ship.setHover(this.turn.getCurrentPlayer());
         }));
         let closeShop = system.add.replication(system.add.channelIn('closeshop','*').process('close', () =>{
             this.closeShop(this.shop1, this.shop1Text, true);

@@ -203,13 +203,26 @@ export class Button{
         return this.active;
     }
 
-    hover(string: String){
-        if (this.hovering) this.scaleUp();
-        else this.scaleDown();
+    hover(player: Player){
+        if (this.hovering){
+            this.scaleUp();
+            player.ship_out.setVisible(true);
+
+        }
+        else {
+            this.scaleDown();
+            player.ship_out.setVisible(false);
+        }
         this.setScale();
         let colorObj = Phaser.Display.Color.Interpolate.ColorWithColor(this.startColor, this.endColor, this.colorDist, this.colorIdx);
         let color = Phaser.Display.Color.ObjectToColor(colorObj).color;
         this.shadow.setTintFill(color);
+
+    }
+
+    setHover(player : Player){
+    this.shadow.on('pointerover', () => {this.hovering = true; this.hover(player)}) //makes it feel more reactive
+        // .on('pointerout', () => this.hovering = false)
 
     }
 
