@@ -1,5 +1,6 @@
 import {BaseShip} from "./base-ship";
 import {ShipPart} from "./ship-part";
+import {Infobox} from "../Infobox";
 
 export class RedShip extends BaseShip{
     backUp: ShipPart;
@@ -28,6 +29,16 @@ export class RedShip extends BaseShip{
 
         this.hull = new ShipPart(scene, x, y, "ssbr/ssr_hull", "ssbr/ssr_des_hull",
             11, 0, 55, 15,2);
+
+        let infobox = <Infobox> scene.data.get("infoboxx");
+        infobox.addTooltipInfo(this.backDown.normal, "[P1] The right half of your Ship. God, how can P2 even look in the mirror ?")
+        infobox.addTooltipInfo(this.wingDown.normal, "[P1] The right half of your Ship. God, how can P2 even look in the mirror ?")
+        infobox.addTooltipInfo(this.backUp.normal, "[P1] Your left two wings. You got the latest model eh? You filthy ritch slut.");
+        infobox.addTooltipInfo(this.wingUp.normal, "[P1] Your left two wings. You got the latest model eh? You filthy ritch slut.")
+        infobox.addTooltipInfo(this.pilot.normal, "[P1] The pilot.. he is there, I swear...")
+        infobox.addTooltipInfo(this.hull.normal, "[P1] The hull of your ship. \nAt least this one's as ugly as the others. Not as rich as you though 'eh ?")
+
+
         this.setAllPartPosition();
         // this.toDestroyedShip();
     }
