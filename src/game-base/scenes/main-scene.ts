@@ -1,22 +1,12 @@
 import {Turn} from "../mechanics/turn";
 import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
-import {Animation} from "../mechanics/animation/Animation";
+
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import {Drone} from "../mechanics/drone";
+
 import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
-import {Weapon} from "../mechanics/weapon";
-import {ScenePiAnimation} from "./ScenePiAnimation";
-import {AnimationUtilities} from "../mechanics/animation/AnimationUtilites";
-import {HealthType} from "../mechanics/health/health-type";
-import {WeaponType} from "../mechanics/weapon/weapon-type";
-import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import Sprite = Phaser.GameObjects.Sprite;
-
-
-import {BulletInfo} from "../mechanics/weapon/bulletInfo";
 
 export class MainScene extends Phaser.Scene {
 
@@ -154,7 +144,7 @@ export class MainScene extends Phaser.Scene {
 
         this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
                         new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
-        this.players = [new Player(this, 280, 540, "P1", true, this.system, this.pem), new Player(this, 1650, 540, "P2", false, this.system, this.pem)];
+
 
         this.turn = new Turn(this, this.players);
         let system = this.system;

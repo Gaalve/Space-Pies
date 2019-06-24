@@ -46,12 +46,6 @@ export class BlueShip extends BaseShip{
         // this.toDestroyedShip();
     }
 
-
-    private moveSin(fromX: number, toX: number, fromY: number, toY: number, delta: number, sprite: Sprite) {
-        sprite.x = fromX + Math.sin(delta * Math.PI / 2) * (toX - fromX);
-        sprite.y = fromY + Math.cos(delta * Math.PI / 2) * (toY - fromY);
-    }
-
     toDestroyedShip(): void {
         this.back.toDestroyedPart();
         this.pilot.toDestroyedPart();
@@ -97,26 +91,6 @@ export class BlueShip extends BaseShip{
         this.hull.update(delta);
         this.wingUp.update(delta);
         this.wingDown.update(delta);
-
-        this.sinX += delta/ this.durationX;
-        this.sinY += delta/ this.durationY;
-
-        this.sinX %= 2*Math.PI;
-        this.sinY %= 2*Math.PI;
-
-        this.setAllPartPosition();
-
-
-        // this.swingTimer = this.swingTimer > this.swingSpeed * 2 ? 0 : this.swingTimer;
-        // this.swingTimer += delta;
-        // let fromX = this.x;
-        // if (typeof(this.wingUp.x) == 'undefined' && this.wingDown.x == null)
-        //     return;
-        // this.moveSin(this.wingDown.x, this.wingDown.x + 10 , this.wingDown.y, this.wingDown.y + 15, this.swingTimer / this.swingSpeed, this.wingDown.normal);
-        // this.moveSin(this.wingUp.x, this.wingUp.x + 10, this.wingUp.y, this.wingUp.y + 15, this.swingTimer / this.swingSpeed, this.wingUp.normal);
-        // this.moveSin(this.hull.x, this.hull.x + 10, this.hull.y, this.hull.y + 15, this.swingTimer / this.swingSpeed, this.hull.normal);
-        // this.moveSin(this.pilot.x, this.pilot.x + 10, this.pilot.y, this.pilot.y + 15, this.swingTimer / this.swingSpeed, this.pilot.normal);
-        // this.moveSin(this.back.x, this.back.x + 10, this.back.y, this.back.y + 15, this.swingTimer / this.swingSpeed, this.back.normal);
     }
 
 }

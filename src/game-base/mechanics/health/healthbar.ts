@@ -4,7 +4,6 @@ import {HealthType} from "./health-type";
 import {ScenePiAnimation} from "../../scenes/ScenePiAnimation";
 import {Animation} from "../animation/Animation";
 import {AnimationUtilities} from "../animation/AnimationUtilites";
-import Sprite = Phaser.GameObjects.Sprite;
 import Text = Phaser.GameObjects.Text;
 import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
 

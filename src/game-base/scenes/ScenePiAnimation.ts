@@ -448,23 +448,14 @@ export class ScenePiAnimation extends Phaser.Scene {
         }
         if (weaponNumber == 6)
         {
-            // if (this.weapon3Missed)
-            // {
-            //     this.allWeaponsUnlocked = true;
-            //     if (this.findAnimationById("(hitzone)") != null)
-            //         this.hitzoneUnlocked = true;
-            //     else
-            //     {
-            //         this.hitzoneUnlocked = true;
-            //         this.nullProcessesUnlocked = true;
-            //     }
-            // }
             if (this.allWeaponsUnlocked)
             {
                 this.hitzoneUnlocked = true;
                 if (this.findAnimationById("(hitzone)") == null)
                     this.nullProcessesUnlocked = true;
             }
+            if (this.weapon3Unlocked && this.weapon3Missed)
+                this.hitzoneUnlocked = true;
         }
 
     }
