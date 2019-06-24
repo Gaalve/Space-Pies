@@ -8,6 +8,7 @@ import {Drone} from "../mechanics/drone";
 import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
 import {BulletInfo} from "../mechanics/weapon/bulletInfo";
+import {Infobox} from "../mechanics/Infobox";
 
 export class MainScene extends Phaser.Scene {
 
@@ -142,8 +143,12 @@ export class MainScene extends Phaser.Scene {
         this.pem.setDepth(5);
 
 
+        this.input.enabled = true;
+        this.data.set("infoboxx",new Infobox(this));
+
         this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
                         new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
+
         this.turn = new Turn(this, this.players);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
@@ -531,8 +536,27 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false)
         ];
 
+        let infobox = <Infobox> this.data.get("infoboxx");
+
         this.energySym = this.createEnergyCostIcons();
         this.energyCostText = this.createEnergyCostText();
+
+        infobox.addTooltipInfo(this.regen.bg, "Regenerate any of your existing hitzones with different types of shields.", [this.regen.onClick, () => {this.regen.hovering = true; this.regen.updateStep();}, () => {this.regen.hovering = false; this.regen.updateStep();}]);
+        infobox.addTooltipInfo(this.wExt.bg, "Buy up to 3 weapons for each drone.", [this.wExt.onClick, () => {this.wExt.hovering = true; this.wExt.updateStep();}, () => {this.wExt.hovering = false; this.wExt.updateStep();}]);
+        infobox.addTooltipInfo(this.wModule.bg, "Add up to 2 drones equip more weapons.", [this.wModule.onClick, () => {this.wModule.hovering = true; this.wModule.updateStep();}, () => {this.wModule.hovering = false; this.wModule.updateStep();}]);
+        infobox.addTooltipInfo(this.solar.bg, "The more you have, the more energy you will collect per round.", [this.solar.onClick, () => {this.solar.hovering = true; this.solar.updateStep();}, () => {this.solar.hovering = false; this.solar.updateStep();}]);
+        infobox.addTooltipInfo(this.skip.bg, "Attack opponent with all weapons. Don't know why this is called skip though..", [this.skip.onClick, () => {this.skip.hovering = true; this.skip.updateStep();}, () => {this.skip.hovering = false; this.skip.updateStep();}]);
+        infobox.addTooltipInfo(this.close.bg, "Close the shop to see more of these beautiful stars.", [this.close.onClick, () => {this.close.hovering = true; this.close.updateStep();}, () => {this.close.hovering = false; this.close.updateStep();}]);
+        infobox.addTooltipInfo(this.energySym[0], "The cheapest part costs " + this.energyCostText[0].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energySym[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energySym[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energySym[3], "The cheapest part costs " + this.energyCostText[3].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energyCostText[0], "The cheapest part costs " + this.energyCostText[0].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energyCostText[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energyCostText[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energyCostText[3], "The cheapest part costs " + this.energyCostText[3].text.toString() + " energy.");
+
+
         this.closeShop(this.shop1, this.shop1Text, true);
 
         /*this.shieldText = this.add.text(1920-500, 330, "Shield", {
@@ -896,6 +920,7 @@ export class MainScene extends Phaser.Scene {
                 this.updateEnergyText();
                 let term = "buymotorlaser"+player.getNameIdentifier().charAt(1) + (player.getActiveMotorL()+1);
                 //this.updateShopW(true);
+
                 this.data.set("buy", "motorL");
                 this.system.pushSymbol(this.system.add.channelOut(term ,'').nullProcess());
                 this.updateShop1(false);

@@ -4,20 +4,20 @@ import {Turn} from "./turn";
 
 export class Button{
 
-    private hovering: boolean;
+    public hovering: boolean;
     private scale: number;
-    private onClick: Function;
+    public onClick: Function;
     private func: Function;
     private active: boolean;
     private activeP2: boolean;
 
     //Textures
-    private readonly shadow: Phaser.GameObjects.Sprite;
-    private readonly bg: Phaser.GameObjects.Sprite;
-    private readonly img: Phaser.GameObjects.Sprite;
-    private readonly fg: Phaser.GameObjects.Sprite;
-    private readonly inactive: Phaser.GameObjects.Sprite;
-    private alt: Phaser.GameObjects.Sprite;
+    public readonly shadow: Phaser.GameObjects.Sprite;
+    public readonly bg: Phaser.GameObjects.Sprite;
+    public readonly img: Phaser.GameObjects.Sprite;
+    public readonly fg: Phaser.GameObjects.Sprite;
+    public readonly inactive: Phaser.GameObjects.Sprite;
+    public alt: Phaser.GameObjects.Sprite;
 
     //Color Interpolation
     private readonly startColor: Phaser.Display.Color;
