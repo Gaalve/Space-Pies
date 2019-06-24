@@ -1,8 +1,5 @@
 import {EnergyDrone} from "./energyDrone";
 import {Player} from "./player";
-import {WormHole} from "./anomalies/worm-hole";
-import {Anomaly} from "./anomalies/anomaly";
-import {MainScene} from "../scenes/main-scene";
 import {BulletInfo} from "./weapon/bulletInfo";
 
 
@@ -31,7 +28,7 @@ export class NanoDrone extends EnergyDrone {
     }
 
     public explode():void{
-        this.explosion.explosionAt(this.x,this.y);
+        this.player.explosion.explosionAt(this.x,this.y);
         this.player.scene.time.delayedCall(300,()=>{this.setVisible(false)},[],this);
     }
 
@@ -47,7 +44,8 @@ export class NanoDrone extends EnergyDrone {
             .channelInCB("armorp"+p,"",()=>{this.player.getSolarDrones()[5].health.destroyBar()},
             new BulletInfo(false, x,y),0.6)
             .channelOutCB("dessol"+p+"nano","nano5", ()=>{this.player.getSolarDrones()[5].explode()})
-            .channelOut('rocketp'+p, '').channelOut('rocketp'+p, '')
+            .channelOut('rocketp'+p, '')
+            .channelOut('rocketp'+p, '')
             .channelOut('rocketp'+p, '')
             .next(shield);
 

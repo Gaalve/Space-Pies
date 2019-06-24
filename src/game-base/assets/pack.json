@@ -662,8 +662,27 @@
         "type": "image",
         "key": "blue_arrow",
         "url": "assets/sprites/blue_arrow_right.png"
+      },
+      {
+        "type": "image",
+        "key": "motorL",
+        "url": "assets/sprites/motorL.png"
+      },
+      {
+        "type": "image",
+        "key": "motorP",
+        "url": "assets/sprites/motorP.png"
+      },
+      {
+        "type": "image",
+        "key": "motorR",
+        "url": "assets/sprites/motorR.png"
+      },
+      {
+        "type": "image",
+        "key": "motor",
+        "url": "assets/sprites/motor.png"
       }
-
     ]
   }
 }
