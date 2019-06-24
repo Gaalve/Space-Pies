@@ -120,7 +120,7 @@ export class Bot extends Player{
         let delay = step*2000;
         let system = this.getSystem();
 
-        if(action == this.reg) {
+        if(action == this.reg){
             let shield = this.chooseShieldType();
             this.clearPosActions();
             let hz = this.chooseHitzone();
@@ -138,7 +138,6 @@ export class Bot extends Player{
                     this.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ".");
                 }
             }, [], this);
-            break;
         }else if(action == this.wext){
             let weapon = this.chooseWeaponType();
             this.clearPosActions();
@@ -153,7 +152,6 @@ export class Bot extends Player{
                 this.botLog.insertLog(s + ". I built a " + w + " on weapon mod " + mod + ".");
             },[], this);
             this.weaponSlots--;
-            break;
         }else if(action == this.mot){
                 let motor = this.chooseMotorType();
 
@@ -168,20 +166,17 @@ export class Bot extends Player{
                     system.pushSymbol(system.add.channelOut("buymotor" + motor + this.id + nr, "").nullProcess());
                     this.botLog.insertLog(s + ". I built a " + motor + " motor.");
                 },[], this);
-                break;
-            }else if(action == this.wmod{
+            }else if(action == this.wmod){
                 this.scene.time.delayedCall(delay, ()=> {
                     system.pushSymbol(system.add.channelOut("wmod" + this.id + this.getNrDrones(), "").nullProcess());
                     this.botLog.insertLog(s + ". I built a weapon mod.");
                 }, [], this);
                 this.weaponSlots += 3;
-                break;
             }else if(action == this.solar){
                 this.scene.time.delayedCall(delay, ()=> {
                     system.pushSymbol(system.add.channelOut("newsolar" + this.id + this.getNrSolarDrones(), "").nullProcess());
                     this.botLog.insertLog(s + ". I built a solar drone.");
                 }, [], this);
-                break;
             }else{
                 this.scene.time.delayedCall(delay, ()=> {
                     system.pushSymbol(system.add.channelOut("botend", "").nullProcess());
@@ -189,10 +184,8 @@ export class Bot extends Player{
                 }, [], this);
                 this.active = false;
                 this.steps = 0;
-                break;
             }
         }
-    }
 
     public chooseShieldType(): string{
         if(this.getEnergyCost("nano") <= this.getEnergy()) this.possibleActions.push(this.n);
