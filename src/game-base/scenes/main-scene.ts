@@ -133,8 +133,9 @@ export class MainScene extends Phaser.Scene {
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
 
-        let blackHoleAppears = this.randomizeBlackHoleAppearance();
 
+        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
+                        new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
         this.input.enabled = true;
         this.data.set("infoboxx",new Infobox(this));
 
@@ -307,6 +308,7 @@ export class MainScene extends Phaser.Scene {
                 this.shop1Active = false;
                 this.shopSActive = true;
             });
+
         this.wExt = new Button(this, 650, 1080-100, "button_shadow",
             "button_bg", "button_fg", "button_wext",
             ()=>{
@@ -1513,20 +1515,6 @@ export class MainScene extends Phaser.Scene {
             return "1";
         }
 
-    }
-
-    randomizeBlackHoleAppearance() : string{
-        let firstRandom = Math.random();
-        let secondRandom = Math.random();
-
-        if(firstRandom < 1/3.0) firstRandom = 1;
-        else if (firstRandom < 2/3.0) firstRandom = 2;
-        else firstRandom = 3
-
-        if(secondRandom < 0.5) secondRandom = 1;
-        else secondRandom = 2;
-
-        return firstRandom.toString() + secondRandom.toString();
     }
 
 

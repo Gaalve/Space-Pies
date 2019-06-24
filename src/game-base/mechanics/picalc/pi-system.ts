@@ -7,6 +7,7 @@ import {PiResolvingPair} from "./pi-resolving-pair";
 import {PiReplication} from "./pi-replication";
 import {PiResolvable} from "./pi-resolvable";
 import {PiAction} from "./pi-action";
+import {PiProcess} from "./pi-process";
 
 export class PiSystem {
 
@@ -26,6 +27,8 @@ export class PiSystem {
     private curSums: PiSum[];
     private curActiveSymbols: PiSymbol[];  // current Symbols that will get triggered in the cleanUpPhase
     private activeSymbolsQueue: PiSymbol[];
+
+    private pushedSymbols: PiResolvable[];
 
     private enableDebugLogging: boolean;
 
@@ -55,6 +58,8 @@ export class PiSystem {
         this.curSums = [];
         this.curActiveSymbols = [];
         this.activeSymbolsQueue = [];
+
+        this.pushedSymbols = [];
 
         this.reservedNames = [];
 
@@ -108,12 +113,16 @@ export class PiSystem {
         this.phase1changed = true;
         this.phase3changed = true;
         this.deadlock = false;
+
+
         // if(this.existing.indexOf(symbol)==-1){ // TODO: can probably be removed
         //     this.existing.push(symbol);
         // }
         // else if (!(symbol instanceof PiTerm)){// exception for PiTerm (Recursions)
         //     console.log("Warning: Symbol already exists: "+symbol.getName());
         // }
+
+        if ( symbol instanceof PiResolvable ) this.pushedSymbols.push(symbol);
 
         if (symbol instanceof PiChannelIn) this.curChannelIn.push(symbol);
         else if (symbol instanceof PiChannelOut) this.curChannelOut.push(symbol);
@@ -244,19 +253,28 @@ export class PiSystem {
             this.phase1changed = false;
             this.deadlock = true;
 
-            this.curChannelIn.forEach(
+            this.pushedSymbols.forEach(
                 (val1) => {
+                    this.curChannelIn.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
                     this.curChannelOut.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
-                    // this.curSums.forEach((val2) => {this.addAllResolvablePair(val1, val2);}); // Hehe performance drastically improved
-                    this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
-                }
-            );
-            this.curChannelOut.forEach(
-                (val1) => {
                     this.curSums.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
                     this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
                 }
             );
+
+            // this.curChannelIn.forEach(
+            //     (val1) => {
+            //         this.curChannelOut.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+            //         // this.curSums.forEach((val2) => {this.addAllResolvablePair(val1, val2);}); // Hehe performance drastically improved
+            //         this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+            //     }
+            // );
+            // this.curChannelOut.forEach(
+            //     (val1) => {
+            //         this.curSums.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+            //         this.curReplications.forEach((val2) => {this.addAllResolvablePair(val1, val2);});
+            //     }
+            // );
 
 
             // TODO: maybe add a boolean to activated full simulation?
@@ -274,6 +292,7 @@ export class PiSystem {
 
             this.phase2changed = this.potentiallyResolving.length > 0;
         }
+        this.pushedSymbols = [];
         let execTime = this.scene.time.now - startT;
         if (execTime < 0) console.warn("Phase 1 (Find) is taking too long");
         this.scene.time.delayedCall(this.resolveTimeOut - execTime, ()=>{this.phaseResolveActions()}, [], this);
