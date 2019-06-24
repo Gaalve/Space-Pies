@@ -49,6 +49,6 @@ export class BotMotor extends BotAction{
 
     public logAction(step: number, type: string): void {
         let s = step.toString();
-        console.log(s + ". step: I built a " + type + " motor.");
+        this.bot.botLog.insertLog(s + ". step: I built a " + type + " motor.");
     }
 }

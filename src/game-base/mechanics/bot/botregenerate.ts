@@ -73,13 +73,13 @@ export class BotRegenerate extends BotAction{
     public logAction(step: number, shield: string, hz: string): void {
         let s = step.toString();
         if(shield == "shield") {
-            console.log(s + ". step: I built a laser shield on hitzone " + hz + ".");
+            this.bot.botLog.insertLog(s + ". I built a laser shield on hitzone " + hz + ".");
         }else if(shield == "adap"){
-            console.log(s + ". step: I built an adaptive shield on hitzone " + hz + ".");
+            this.bot.botLog.insertLog(s + ". I built an adaptive shield on hitzone " + hz + ".");
         }else if(shield == "armor"){
-            console.log(s + ". step: I built an armor shield on hitzone " + hz + ".");
+            this.bot.botLog.insertLog(s + ". I built an armor shield on hitzone " + hz + ".");
         }else{
-            console.log(s + ". step: I built a " + shield + " shield on hitzone " + hz + ".");
+            this.bot.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ".");
         }
     }
 }

@@ -34,6 +34,6 @@ export class BotSolar extends BotAction{
 
     public logAction(step: number): void {
         let s = step.toString();
-        console.log(s + ". step: I built a solar drone.");
+        this.bot.botLog.insertLog(s + ". I built a solar drone.");
     }
 }

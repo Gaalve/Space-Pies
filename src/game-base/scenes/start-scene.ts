@@ -172,7 +172,7 @@ export class StartScene extends Phaser.Scene {
                 this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '1'});
                 this.scene.bringToTop('FadeScene')
             });
-        this.olafText = this.add.text(1920/2, 1080/2-220, "Play as Olaf (Player 1)\nwho stole the cake.", {
+        this.olafText = this.add.text(1920/2, 1080/2-220, "Play as Olaf (Player 1)\ntrying to escape with the stolen cake.", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         this.olafText.setVisible(false);
         this.olafText.setOrigin(0.5);
@@ -185,7 +185,7 @@ export class StartScene extends Phaser.Scene {
                 this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '2'});
                 this.scene.bringToTop('FadeScene')
             });
-        this.holgerText = this.add.text(1920/2, 1080/2+220, "Play as Olga (Player 2)\nwho wants to get the cake back.", {
+        this.holgerText = this.add.text(1920/2, 1080/2+220, "Play as Olga (Player 2)\ntrying to stop the thief.", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         this.holgerText.setVisible(false);
         this.holgerText.setOrigin(0.5);

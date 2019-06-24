@@ -75,6 +75,6 @@ export class BotWext extends BotAction{
             w = weapon == "armor" ? "laser weapon" : "projectile weapon";
         }
 
-        console.log(s + ". step: I built a " + w + " on weapon mod " + drone + ".");
+        this.bot.botLog.insertLog(s + ". I built a " + w + " on weapon mod " + drone + ".");
     }
 }
