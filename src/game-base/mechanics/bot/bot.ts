@@ -1,14 +1,7 @@
 import {Player} from "../player";
 import {PiSystem} from "../picalc/pi-system";
 import {BattleTimeBar} from "../battleTimeBar";
-import {BotRegenerate} from "./botregenerate";
-import {BotWext} from "./botwext";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import {BotWMod} from "./botwmod";
-import {BotSolar} from "./botsolar";
-import {BotEnd} from "./botend";
-import {BotAction} from "./botaction";
-import {BotMotor} from "./botmotor";
 import {Botlog} from "./botlog";
 
 
@@ -73,13 +66,13 @@ export class Bot extends Player{
         this.botLog.clearLog();
         this.botLog.setVisible();
         this.active = true;
+
         while(this.active) {
             this.clearPosActions();
             if(this.isDead){
                 this.active = false;
                 break;
             }
-
             this.steps++;
             this.getPossibleActions();
             let action = this.chooseAction();
@@ -150,12 +143,33 @@ export class Bot extends Player{
                 break;
             }
             case("wext"):{
+                let weapon = this.chooseWeaponType();
+                this.clearPosActions();
+                let mod = this.chooseWeaponMod();
+                this.clearPosActions();
 
+                system.pushSymbol(system.add.channelOut("wext" + this.id + mod, "").nullProcess());
+
+                let w = "rocket launcher";
+                if(weapon != "rocket"){
+                    w = weapon == "armor" ? "laser weapon" : "projectile weapon";
+                }
+                this.botLog.insertLog(s + ". I built a " + w + " on weapon mod " + mod + ".");
                 this.weaponSlots--;
                 break;
             }
             case("motor"):{
+                let motor = this.chooseMotorType();
 
+                this.clearPosActions();
+                if(motor == this.mlas) this.motorLaserSlots--;
+                if(motor == this.mpro) this.motorProjectileSlots--;
+                if(motor == this.mroc) this.motorRocketSlots--;
+
+                let nr = this.getMotorNr(motor);
+
+                system.pushSymbol(system.add.channelOut("buymotor" + motor + this.id + nr, "").nullProcess());
+                this.botLog.insertLog(s + ". I built a " + motor + " motor.");
                 break;
             }
             case("wmod"):{
@@ -198,12 +212,69 @@ export class Bot extends Player{
         return this.possibleActions[x];
     }
 
-    public chooseWeaponMod(): void{
+    public chooseWeaponType(): string{
+        if(this.getEnergyCost("weapon") <= this.getEnergy()) {this.possibleActions.push(this.las); this.possibleActions.push(this.pro)}
+        if(this.getEnergyCost("rocketl") <= this.getEnergy()) this.possibleActions.push(this.roc);
+
+        let x = Phaser.Math.Between(0, this.possibleActions.length-1)
+        return this.possibleActions[x];
+    }
+
+    public chooseWeaponMod(): string{
+
+        let mod0 = false;
+        let mod1 = false;
+        let mod2 = false;
+
+        for (let w of this.getDrones()[0].getWeapons()){if(!w.visible) mod0 = true;}
+        for (let w of this.getDrones()[1].getWeapons()){if(!w.visible) mod1 = true;}
+        for (let w of this.getDrones()[2].getWeapons()){if(!w.visible) mod2 = true;}
+
+        if(mod0) this.possibleActions.push("0");
+        if(mod1 && this.getNrDrones() == 2) this.possibleActions.push("1");
+        if(mod2 && this.getNrDrones() == 3) this.possibleActions.push("2");
+
+        let x = Phaser.Math.Between(0, this.possibleActions.length-1);
+        return this.possibleActions[x];
 
     }
 
-    public chooseMotorType(): void{
+    public chooseMotorType(): string{
 
+        if(this.motorRocketSlots < 3) this.possibleActions.push(this.mroc);
+        if(this.motorProjectileSlots < 3) this.possibleActions.push(this.mpro);
+        if(this.motorLaserSlots < 3) this.possibleActions.push(this.mlas);
+
+        let x = Phaser.Math.Between(0, this.possibleActions.length-1);
+        return this.possibleActions[x];
+    }
+
+    public getMotorNr(type: string): string{
+        let p1 = this.id == "1";
+
+        switch(type){
+            case("laser"):{
+                if(p1){
+                    return this.motor.getactiveMotorLaserP1().toString();
+                }else{
+                    return this.motor.getactiveMotorLaserP2().toString();
+                }
+            }
+            case("projectile"):{
+                if(p1){
+                    return this.motor.getactiveMotorProjectileP1().toString();
+                }else{
+                    return this.motor.getactiveMotorProjectileP2().toString();
+                }
+            }
+            case("rocket"):{
+                if(p1){
+                    return this.motor.getactiveMotorRocketP1().toString();
+                }else{
+                    return this.motor.getactiveMotorRocketP2().toString();
+                }
+            }
+        }
     }
 
 
