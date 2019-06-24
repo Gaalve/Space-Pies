@@ -27,8 +27,8 @@ export class Bot extends Player{
     public botLog: Botlog;
 
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar, blackHole: string){
-        super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt, blackHole);
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
+        super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt);
 
         this.weaponSlots = 2;
         this.active = false;

@@ -140,7 +140,7 @@ export class StartScene extends Phaser.Scene {
         this.chooseModeText.setOrigin(0.5);
 
         this.buttonSP = new Button(this, 1920/2-280, 1080/2-75, "button_shadow",
-            "button_bg", "button_fg", "singleplayer", ()=>{
+            "button_bg", "button_fg", "singleplayer", 1, ()=>{
                 this.changeToPlayer();
             });
         this.singleText = this.add.text(1920/2-200, 1080/2-110, "Play against the computer", {
@@ -150,7 +150,7 @@ export class StartScene extends Phaser.Scene {
         this.buttonSP.setInvisible();
 
         this.buttonMP = new Button(this, 1920/2-280, 1080/2+75, "button_shadow",
-            "button_bg", "button_fg", "multiplayer", ()=>{
+            "button_bg", "button_fg", "multiplayer", 1, ()=>{
                 this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '0'});
                 this.scene.bringToTop('FadeScene')
             });
@@ -168,7 +168,7 @@ export class StartScene extends Phaser.Scene {
         this.choosePlayerText.setOrigin(0.5);
 
         this.buttonP1 = new Button(this, 1920/2, 1080/2-100, "button_shadow",
-            "button_bg", "button_fg", "red_arrow", ()=>{
+            "button_bg", "button_fg", "red_arrow", 1, ()=>{
                 this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '1'});
                 this.scene.bringToTop('FadeScene')
             });
@@ -181,7 +181,7 @@ export class StartScene extends Phaser.Scene {
         this.buttonP1.setInvisible();
 
         this.buttonP2 = new Button(this, 1920/2, 1080/2+100, "button_shadow",
-            "button_bg", "button_fg", "blue_arrow", ()=>{
+            "button_bg", "button_fg", "blue_arrow", 1, ()=>{
                 this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '2'});
                 this.scene.bringToTop('FadeScene')
             });
@@ -194,14 +194,14 @@ export class StartScene extends Phaser.Scene {
         this.buttonP2.setInvisible();
 
         this.buttonReturnMain = new Button(this, 1920/2, 1080 - 130, "button_shadow",
-            "button_bg", "button_fg", "button_back", ()=>{
+            "button_bg", "button_fg", "button_back", 1, ()=>{
             this.returnToMain();
             });
         this.buttonReturnMain.setInvisible();
         this.buttonReturnMain.removeInteractive();
 
         this.buttonReturnMode = new Button(this, 1920/2, 1080 - 130, "button_shadow",
-            "button_bg", "button_fg", "button_back", ()=>{
+            "button_bg", "button_fg", "button_back", 1, ()=>{
             this.returnToMode();
             });
         this.buttonReturnMode.setInvisible();
