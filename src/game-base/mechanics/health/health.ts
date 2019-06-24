@@ -468,9 +468,10 @@ export class Health {
      */
     private static addPiHitzoneShield(pi: PiSystem, pid: string, hbid: string, regLSCB: ()=>any){
         pi.pushSymbol(
-            pi.add.channelInCB('rshield'+pid+hbid,'*', regLSCB).scope('reg1',
+            pi.add.channelInCB('rshield'+pid+hbid,'', regLSCB).scope('reg1',
                 pi.add.channelOut('reghelpls'+pid+hbid, 'reg1')
-                    .channelIn('reg1', '*').channelOut('hz'+pid, '').nullProcess()
+                    .channelIn('reg1', '').channelOut('wait', '')
+                    .channelOut('wait', '').channelOut('hz'+pid, '').nullProcess()
             )
         );
         pi.pushSymbol(pi.add.channelOut('rshield'+pid+hbid, '').nullProcess());
@@ -485,9 +486,10 @@ export class Health {
      */
     private static addPiHitzoneArmor(pi: PiSystem, pid: string, hbid: string, regASCB){
         pi.pushSymbol(
-            pi.add.channelInCB('rarmor'+pid+hbid,'*', regASCB).scope('reg1',
+            pi.add.channelInCB('rarmor'+pid+hbid,'', regASCB).scope('reg1',
                 pi.add.channelOut('reghelpas'+pid+hbid, 'reg1')
-                    .channelIn('reg1', '*').channelOut('hz'+pid, '').nullProcess()
+                    .channelIn('reg1', '').channelOut('wait', '')
+                    .channelOut('wait', '').channelOut('hz'+pid, '').nullProcess()
             )
         );
         pi.pushSymbol(pi.add.channelOut('rarmor'+pid+hbid, '').nullProcess());

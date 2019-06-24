@@ -8,6 +8,9 @@ export class PiAnimSequence {
     scene: Scene;
     sequence: PiAnimSymbol[];
     alignment: PiAnimAlignment;
+
+    realPosX: number;
+
     posX: number;
 
     toPosX: number;
@@ -23,6 +26,7 @@ export class PiAnimSequence {
         this.sequence = [new PiAnimSymbol(scene, name, '', x, y)];
         this.sequence[0].active();
         this.alignment = alignemnt;
+        this.realPosX = x;
         this.posX = x;
         this.toPosX = x;
         this.commandQueue = [];
@@ -33,12 +37,19 @@ export class PiAnimSequence {
     };
 
     public resolveAll(): void{
-        this.resolveSymbol();
+        if (this.sequence.length > 0 && !this.sequence[0].isResolving())
+            this.resolveSymbol();
         for (let i = 0; i < this.sequence.length - 1; i++) {
             this.commandQueue.push(PiAnimCommands.RESOLVE);
         }
-
     };
+
+    private logCommandQueue(): void{
+        console.log('##### Command Q #####');
+        for (let idx in this.commandQueue){
+            console.log('Command' +idx +" " + this.commandQueue[idx].toString());
+        }
+    }
 
     public resolveAndClearSequence(x: number, y: number, name: string, alignemnt: PiAnimAlignment = PiAnimAlignment.LEFT): PiAnimSequence{
         let other = new PiAnimSequence(this.scene, x, y, name, alignemnt);
@@ -53,7 +64,6 @@ export class PiAnimSequence {
         let other = new PiAnimSequence(this.scene, x, y, name, alignemnt);
         other.hide();
         this.clearSequenceQueue.push(other);
-        console.log('ResolveAllAndClear, Commands: '+this.commandQueue.length);
         this.resolveAll();
         this.commandQueue.push(PiAnimCommands.CLEAR);
         return other;
@@ -66,6 +76,7 @@ export class PiAnimSequence {
         this.alignment = alignemnt;
         this.posX = x;
         this.toPosX = x;
+        this.realPosX = x;
         this.updatePositions();
     };
 
@@ -83,7 +94,6 @@ export class PiAnimSequence {
         if (this.sequence.length == 0) return;
 
         if (this.posX != this.toPosX){
-            // console.log('posX '+this.posX +" toPosX "+this.toPosX);
             const maxSpeed = 4;
             this.posX += this.clamp(-maxSpeed,(this.toPosX - this.posX), maxSpeed);
             this.updatePositions();
@@ -101,7 +111,7 @@ export class PiAnimSequence {
                 return;
             }
             this.sequence[0].active();
-            this.toPosX = this.posX;
+            this.toPosX = this.realPosX;
             switch (this.alignment) {
                 case PiAnimAlignment.LEFT:
                     this.posX += width;
@@ -126,7 +136,8 @@ export class PiAnimSequence {
             case PiAnimCommands.NOTHING:
                 return;
             case PiAnimCommands.RESOLVE:
-                this.sequence[0].resolve();
+                if (this.sequence.length > 0)
+                    this.sequence[0].resolve();
                 break;
             case PiAnimCommands.CLEAR:
                 this.sequence.forEach(value => value.destroy());

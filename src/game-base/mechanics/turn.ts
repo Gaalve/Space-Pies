@@ -67,9 +67,9 @@ export class Turn {
                 channelOutCB('unlock1', '', () => {this.setAttackTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('attackp1end', '', () => {this.roundSeq.resolveSymbol();}).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('player2', '', () => {this.endAttackTurn(); this.changeSequenceP2()}).nullProcess()
             )
         );
@@ -101,10 +101,10 @@ export class Turn {
                 channelOut("startephase2", "").
                 channelOutCB('unlock2', '', () => {this.setAttackTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('attackp2end', '', () => {this.roundSeq.resolveSymbol();}).
-                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('player1', '', () => {this.endAttackTurn(); this.changeSequenceP1()}).nullProcess()
             )
         );

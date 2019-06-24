@@ -141,7 +141,7 @@ export class MainScene extends Phaser.Scene {
             repeat: -1
         });
         this.battleTime = new BattleTimeBar(this);
-        this.system = new PiSystem(this, 48,31,31,false);
+        this.system = new PiSystem(this, 33,33,33,false);
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);

@@ -37,7 +37,7 @@ export class PiAnimSymbol {
 
         this.stage = 1;
         this.counter = 0;
-        this.counterLimit = 200;
+        this.counterLimit = 250;
 
         this.colorInactive = new Color(255, 255, 255);
         this.colorActive = Color.HexStringToColor('#00aa44');
