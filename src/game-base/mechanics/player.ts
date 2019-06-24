@@ -14,17 +14,18 @@ import {HealthType} from "./health/health-type";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {BulletInfo} from "./weapon/bulletInfo";
 import {BattleTimeBar} from "./battleTimeBar";
-import get = Reflect.get;
-import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 import {Anomaly} from "./anomalies/anomaly";
 import {SunEruption} from "./anomalies/sun-eruption";
-import {PiSystemAddAction} from "./picalc/pi-system-add-action";
+import {WormHole} from "./anomalies/worm-hole";
+import {NanoDrone} from "./nanoDrone";
+import {BlackHole} from "./anomalies/black-hole";
+import {BlackholeParticle} from "./animations/blackhole-particle";
 
 export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
     private drones : [Drone, Drone, Drone];
-    private solarDrones: [EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone];
+    private solarDrones: [EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, EnergyDrone, NanoDrone];
     public scene : Phaser.Scene;
     private system : PiSystem;
     public ship : Ship;
@@ -59,12 +60,14 @@ export class Player {
     public rocketTrail: RocketTrail;
     public bulletTrail: BulletTrail;
     public collectE: collectEnergy_ship;
+    public blackholeParticles: BlackholeParticle;
 
 
-    private anomalies: string[];
     public currentAnomaly: Anomaly;
+    public blackhole: BlackHole;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean,
+                       piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
         this.isDead=false;
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
@@ -73,7 +76,9 @@ export class Player {
         this.drones = [new Drone(scene, x, y, this, 0), new Drone(scene, x, y, this, 1), new Drone(scene, x, y, this,2 )];
         this.scene = scene;
         this.activatedDrones = 0;
-        this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,pem), new EnergyDrone(scene, x, y, this, 1,pem),new EnergyDrone(scene, x, y, this, 2,pem),new EnergyDrone(scene, x, y, this, 3,pem),new EnergyDrone(scene, x, y, this, 4,pem)];
+        this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,pem), new EnergyDrone(scene, x, y, this, 1,pem),
+            new EnergyDrone(scene, x, y, this, 2,pem),new EnergyDrone(scene, x, y, this, 3,pem),
+            new EnergyDrone(scene, x, y, this, 4,pem), new NanoDrone(scene, this, 5, pem)];
         this.activatedSolarDrones = 0;
         this.smallestIndexSolDrone = 1;
         this.health = new Health(scene, this, piSystem);
@@ -85,9 +90,11 @@ export class Player {
         this.rocketTrail = new RocketTrail(pem);
         this.bulletTrail = new BulletTrail(pem);
         this.collectE = new collectEnergy_ship(pem);
+        this.blackholeParticles = new BlackholeParticle(pem);
 
-        this.anomalies = ["eruption"];
-
+        //console.log(blackholeAppears)
+        //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
+        //this.anomalies = ["hole", "eruption", "nanodrone"];
 
         //TODO: remove when Triebwerke ready
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
@@ -96,6 +103,7 @@ export class Player {
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '',
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
+
 
         // z1 starts with 1 shield
         // this.health.addToHz(piSystem, 'radap', 'z1');
@@ -134,7 +142,7 @@ export class Player {
 
         let p = this.getNameIdentifier().charAt(1);
         this.buildLocksPi(p, bt);
-        this.buildAnomalyPi(p);
+        this.buildAnomalyPi(p, x, y);
         this.buildEnergyDrones(p);
         this.createFirstWeapon(p);
         this.createFirstSolarDrone(p);
@@ -146,11 +154,17 @@ export class Player {
         this.drones[1].update(delta);
         this.drones[2].update(delta);
 
-        if(this.currentAnomaly != undefined) this.currentAnomaly.update();
+        if(this.currentAnomaly) this.currentAnomaly.update(delta);
+        if(this.blackhole) this.blackhole.update(delta);
     }
 
     getNameIdentifier(): string{
         return this.nameIdentifier;
+    }
+
+    getOpponentsIdentifier(): string{
+        if(this.getNameIdentifier().charAt(1) == '1') return "2";
+        else return "1";
     }
 
     isFirstPlayer(): boolean{
@@ -201,22 +215,24 @@ export class Player {
     }
 
     createSolarDrone(index : number) : void{
+
         this.activatedSolarDrones += 1;
         if (index != 0) {
             this.solarDrones[index].health.addBar(HealthType.ArmorBarSmall);
+            this.solarDrones[index].health.addBar(HealthType.ArmorBarSmall);
+            this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
             this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
             this.solarDrones[index].setVisible(true);
             this.setSmallestIndexSD();
         }
     }
 
-    createAnomaly(index :number) : void{
 
-        if(this.anomalies[index] == "eruption"){
-            this.currentAnomaly = new SunEruption(this.scene, this);
-        }
-        else{}
+    createNanoDrone() : void{
+        this.solarDrones[5].health.addBar(HealthType.ArmorBarSmall);
+        this.solarDrones[5].health.addBar(HealthType.ShieldBarSmall);
     }
+
 
     getEnergy() : number
     {
@@ -319,7 +335,6 @@ export class Player {
     }
 
     getSmallestIndexSD(): string{
-        console.log(this.smallestIndexSolDrone);
         return this.smallestIndexSolDrone.toString();
     }
     setSmallestIndexSD(): void{
@@ -385,23 +400,89 @@ export class Player {
         this.system.pushSymbol(rlock);
     }
 
-    private buildAnomalyPi(p : string){
+    private buildAnomalyPi(p : string, x: number, y: number){
+        this.system.pushSymbol(
+            this.system.add.replication(
+                this.system.add.channelIn('anomaly'+p, '', undefined, 1).nullProcess()
+            )
+        );
 
-        this.system.pushSymbol(this.system.add.channelIn('locklock'+p,'').replication(
-            this.system.add.channelIn('anomalyunlock'+p, '', '', 0.5).nullProcess())
-        );
+        // wormhole trigger
         this.system.pushSymbol(
-            this.system.add.channelInCB('firstanomaly'+p, '', () => {this.createAnomaly(0);}).nullProcess()
+            this.system.add.channelIn('anomaly'+p, '')
+                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelOut('wormhole'+p, '').nullProcess()
         );
+
+        // wormhole activate
         this.system.pushSymbol(
-            this.system.add.channelInCB('destroy'+p, '', () => {this.currentAnomaly = undefined}).nullProcess()
+            this.system.add.channelInCB('wormhole' + p, '', () => {
+                this.currentAnomaly = new WormHole(this.scene, this, this.solarDrones[5]);
+            })
+                .channelOut("newnano" + p, "solar" + p + "5")
+                .nullProcess()
         );
+
+        // blackhole trigger
         this.system.pushSymbol(
-            this.system.add.channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
-            channelIn('anomalyunlock'+p,'').channelIn('anomalyunlock'+p,'').
-            channelOut('locklock'+p, "").channelIn('anomalyunlock'+p,'').
-            channelOut('firstanomaly'+p,'').nullProcess()
+            this.system.add.channelIn('anomaly'+p, '')
+                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelOut('blackhole', '').nullProcess()
         );
+
+        // blackhole activate
+        if(this.isFirstPlayer()){
+            this.system.pushSymbol(
+                this.system.add.channelInCB('blackhole', '', () => {
+                    this.blackhole = new BlackHole(this.scene, this);
+                }).concurrent([
+                    this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
+                        new BulletInfo(true, 960, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
+                        new BulletInfo(true, 960, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp1', '', ()=>{this.blackhole.reduce()},
+                        new BulletInfo(true, 960, y + 1000)).nullProcess(),
+
+                    this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
+                                new BulletInfo(true, 960, y + 1000)).nullProcess(),
+                    this.system.add.channelInCB('shieldp2', '', ()=>{this.blackhole.reduce()},
+                        new BulletInfo(true, 960, y + 1000)).nullProcess()
+                    ]
+                ));
+        }
+
+        // suneruption trigger
+        this.system.pushSymbol(
+            this.system.add.channelIn('anomaly'+p, '')
+                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelOut('suneruption'+p, '').nullProcess());
+
+        let op = this.isFirstPlayer() ? 'p2' : 'p1';
+        this.system.pushSymbol(
+            this.system.add.channelInCB('suneruption' + p, '', () => {
+                this.currentAnomaly = new SunEruption(this.scene, this);
+            }).concurrent([
+                    this.system.add.channelOut('shieldp'+p, '').nullProcess(),
+                    this.system.add.channelOut('shieldp'+p, '').nullProcess(),
+                    this.system.add.channelOut('shieldp'+p, '').nullProcess(),
+                    this.system.add.channelOut('shieldp'+p, '').nullProcess(),
+                    this.system.add.channelOut('shieldp'+p, '',).nullProcess(),
+                    this.system.add.channelOut('shieldp'+p, '').nullProcess()
+                ]
+            ));
+
+
+
 
     }
 
@@ -429,6 +510,7 @@ export class Player {
         channelOut("e2", "25").
         channelOut("e3", "25").
         channelOut("e4", "25").
+        channelOut("nano5", "50").
         next(drone),
             this.system.add.channelInCB("newsolar" + p + "0", "e0", () =>{
                 this.createSolarDrone(0);
@@ -454,6 +536,11 @@ export class Player {
             }).
             channelOut("newShield" + p + "4","").
             next(drone),
+            this.system.add.channelInCB("newnano" + p, "nano5", () => {
+                this.createNanoDrone();
+            }).
+            channelOut("newShield" + p + "5","").
+            next(drone),
             this.system.add.channelIn("dessol" + p + "1", "solar" + p + "1").
             next(drone),
             this.system.add.channelIn("dessol" + p + "2", "solar" + p + "2").
@@ -461,6 +548,8 @@ export class Player {
             this.system.add.channelIn("dessol" + p + "3", "solar" + p + "3").
             next(drone),
             this.system.add.channelIn("dessol" + p + "4", "solar" + p + "4").
+            next(drone),
+            this.system.add.channelIn("dessol" + p + "nano", "solar" + p + "5").
             next(drone)
         ]);
 

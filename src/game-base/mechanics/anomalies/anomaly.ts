@@ -1,9 +1,9 @@
 import {Player} from "../player";
 
 
-export class Anomaly extends Phaser.GameObjects.Sprite {
+export abstract class Anomaly extends Phaser.GameObjects.Sprite {
 
-    private player: Player;
+    protected player: Player;
     public scaleUp: number;
     public anomalyType: string;
 
@@ -13,5 +13,7 @@ export class Anomaly extends Phaser.GameObjects.Sprite {
         this.player = player;
         this.anomalyType = type;
     }
+
+    public abstract update(delta: number): void;
 
 }

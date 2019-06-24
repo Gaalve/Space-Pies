@@ -462,8 +462,8 @@
       },
       {
         "type": "image",
-        "key": "debris/debris_0",
-        "url": "assets/sprites/debris/debris_0.png"
+        "key": "debris/debris_1",
+        "url": "assets/sprites/debris/debris_1.png"
       },
       {
         "type": "image",
@@ -572,11 +572,21 @@
         "type": "image",
         "key": "button_rocket",
         "url": "assets/sprites/button_rocket.png"
-      }, 
+      },
       {
         "type": "image",
         "key": "sun_erupt",
         "url": "assets/sprites/sun_erupt.png"
+      },
+      {
+        "type": "image",
+        "key": "worm_hole",
+        "url": "assets/sprites/worm_hole.png"
+      },
+      {
+        "type": "image",
+        "key": "black_hole",
+        "url": "assets/sprites/black_hole.png"
       },
       {
         "type": "image",

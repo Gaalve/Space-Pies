@@ -140,6 +140,8 @@ export class MainScene extends Phaser.Scene {
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
+
+
         this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
                         new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
         this.turn = new Turn(this, this.players);
@@ -234,9 +236,18 @@ export class MainScene extends Phaser.Scene {
         for(let i = 0; i < 5; i++) {
             this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("e" + i.toString(), "").nullProcess()));
         }
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("nano5", "").nullProcess()));
 
         //extra function for game sync
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("wait", "").nullProcess()));
+
+        // unlock black hole
+        this.system.pushSymbol(
+            this.system.add.channelIn("firstunlock1","").
+            channelIn("firstunlock2","").
+            channelIn("secondunlock2","").
+            channelIn("secondunlock1","").nullProcess()
+        );
 
         this.system.start();
     }
@@ -1780,8 +1791,6 @@ export class MainScene extends Phaser.Scene {
         }
 
     }
-
-
 
 
 }
