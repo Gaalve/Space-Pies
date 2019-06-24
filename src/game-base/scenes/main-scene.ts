@@ -150,7 +150,6 @@ export class MainScene extends Phaser.Scene {
             this.updateEnergyText();
             this.energy.setVisible(true);
             this.energyT.setVisible(true);
-            this.ship.setHover(this.turn.getCurrentPlayer());
         }));
         let closeShop = system.add.replication(system.add.channelIn('closeshop','*').process('close', () =>{
             this.closeShop(this.shop1, this.shop1Text, true);
@@ -203,6 +202,9 @@ export class MainScene extends Phaser.Scene {
         this.createChooseZones();
         this.createChooseType();
         this.createChooseMod();
+        this.ship.setHover(this.turn);
+        this.drone1.setHoverDrone(this.turn, 1);
+        this.drone2.setHoverDrone(this.turn, 2);
 
         //extra functions to resolve existing channels w1, w2, w3 after attack phase
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn("w1", "").nullProcess()));

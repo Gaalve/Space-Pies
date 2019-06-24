@@ -74,11 +74,11 @@ export class Player {
         this.system = piSystem;
         this.ship = new Ship(scene, x, y, this);
         if(nameIdentifier == "P1"){
-            this.ship_out = scene.add.sprite(x+20,y,"ssr_ship").setScale(1.1,1.1).setTintFill(0xa02c2c);
+            this.ship_out = scene.add.sprite(x+20,y,"ssr_ship").setScale(1.1,1.1).setTintFill(0xaff4444);
             this.ship_out.setVisible(false);
         }
         else{
-            this.ship_out = scene.add.sprite(x-30,y,"ssb_ship").setScale(1.1,1.1).setTintFill(0xa02c2c);
+            this.ship_out = scene.add.sprite(x-30,y,"ssb_ship").setScale(1.1,1.1).setTintFill(0xa4444ff);
             this.ship_out.setVisible(false);
 
         }

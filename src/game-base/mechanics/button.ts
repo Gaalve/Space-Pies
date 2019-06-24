@@ -1,5 +1,6 @@
 import Sprite = Phaser.GameObjects.Sprite;
 import {Player} from "./player";
+import {Turn} from "./turn";
 
 export class Button{
 
@@ -203,26 +204,27 @@ export class Button{
         return this.active;
     }
 
-    hover(player: Player){
-        if (this.hovering){
-            this.scaleUp();
-            player.ship_out.setVisible(true);
+    removeHover(){
+    this.shadow.on('pointerover', () => {this.hovering = true; this.updateStep()}) //makes it feel more reactive
+    this.shadow.on('pointerout', () => this.hovering = false)
+    }
 
-        }
-        else {
-            this.scaleDown();
-            player.ship_out.setVisible(false);
-        }
-        this.setScale();
-        let colorObj = Phaser.Display.Color.Interpolate.ColorWithColor(this.startColor, this.endColor, this.colorDist, this.colorIdx);
-        let color = Phaser.Display.Color.ObjectToColor(colorObj).color;
-        this.shadow.setTintFill(color);
+    setHover(turn : Turn){
+    this.shadow.on('pointerover', () => {this.hovering = true; this.updateStep(); turn.getCurrentPlayer().ship_out.setVisible(true)}) //makes it feel more reactive
+    this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().ship_out.setVisible(false)});
 
     }
 
-    setHover(player : Player){
-    this.shadow.on('pointerover', () => {this.hovering = true; this.hover(player)}) //makes it feel more reactive
-        // .on('pointerout', () => this.hovering = false)
+    setHoverDrone(turn : Turn, index: number){
+        this.shadow.on('pointerover', () => {
+            this.hovering = true;
+            this.updateStep();
+            if (turn.getCurrentPlayer().getNrDrones() >= index + 1) {
+                turn.getCurrentPlayer().getDrones()[index].back.setVisible(true)
+            }
+        }) //makes it feel more reactive
+
+        this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getDrones()[index].back.setVisible(false)});
 
     }
 

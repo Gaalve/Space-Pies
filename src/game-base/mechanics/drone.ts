@@ -2,6 +2,7 @@ import {Player} from "./player";
 import {Weapon} from "./weapon";
 import {WeaponType} from "./weapon/weapon-type";
 import {BulletInfo} from "./weapon/bulletInfo";
+import Sprite = Phaser.GameObjects.Sprite;
 
 
 export class Drone extends Phaser.GameObjects.Sprite{
@@ -13,6 +14,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private simplePi : string;
 	public onScreenText : Phaser.GameObjects.Text;
 	private activatedWeapons: integer;
+	public back: Sprite;
 
 	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
 		super(scene, x, y, "ssr_wmod");
@@ -23,14 +25,22 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    if(index == 1){
 	    	if(player.getNameIdentifier() == "P1"){
 				this.setPosition(x + 300, y - 300);
+				this. back = scene.add.sprite(x+295, y -300, "ssr_wmod").setTintFill(0xaff4444).setScale(1.2, 1.1).setVisible(false)
+
 			}else{
 				this.setPosition(x - 300, y - 300);
+				this. back = scene.add.sprite(x-295, y -300, "ssb_wmod").setTintFill(0xa4444ff).setScale(1.2, 1.1).setVisible(false)
+
 			}
 		}else if(index == 2){
 			if(player.getNameIdentifier() == "P1"){
 				this.setPosition(x + 300, y + 300);
+				this. back = scene.add.sprite(x+295, y + 300, "ssr_wmod").setTintFill(0xaff4444).setScale(1.2, 1.1).setVisible(false)
+
 			}else{
 				this.setPosition(x - 300, y + 300);
+				this. back = scene.add.sprite(x-295, y +300, "ssb_wmod").setTintFill(0xa4444ff).setScale(1.2, 1.1).setVisible(false)
+
 			}
 		}
 
@@ -38,7 +48,6 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    this.index = index;
 	    this.setVisible(false);
 	    scene.add.existing(this);
-
 	    this.activatedWeapons = 0;
 	    this.weapons = [new Weapon(scene, this, WeaponType.NONE, this.player, 0),
 						new Weapon(scene, this, WeaponType.NONE, this.player,1),
