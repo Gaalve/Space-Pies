@@ -1,6 +1,7 @@
 import {Button} from "../mechanics/button";
 import {MainScene} from "./main-scene";
 import {Player} from "../mechanics/player";
+import {GuiScene} from "./gui-scene";
 
 export class PauseScene extends Phaser.Scene {
 
@@ -12,6 +13,7 @@ export class PauseScene extends Phaser.Scene {
     private buttonResume: Button;
     private buttonReset: Button;
     private buttonDebug: Button;
+    private buttonMain: Button;
     private P1: Player;
     private P2: Player;
 
@@ -63,7 +65,7 @@ export class PauseScene extends Phaser.Scene {
             this.scene.get('MainScene').scene.restart();
             this.P2.resetEnergy();
             this.P1.resetEnergy();
-            this.scene.sleep();});0
+            this.scene.sleep();});
 
         this.buttonReset.setPosition(1920/2-130, 1080/2+75);
 
@@ -83,11 +85,22 @@ export class PauseScene extends Phaser.Scene {
             ()=>{
             this.P1.getSystem().changeDebugLogger();
             debugState.setText("State: " + this.P1.getSystem().getDebugLogState());
-            })
+            });
 
         this.buttonDebug.setPosition(1880, 1040);
 
+       /*this.buttonMain = new Button(this, 1920/2-130, 1080/2+225, "button_shadow",
+            "button_bg", "button_fg", "button_skip",
+            ()=>{
+                this.scene.launch('FadeScene',{shut: 'MainScene',start: 'StartScene'});
+                this.scene.launch('FadeScene', {shut: 'GuiScene', start: 'StartScene'});
+                this.scene.bringToTop('StartScene');
+                this.P2.resetEnergy();
+                this.P1.resetEnergy();
+                this.scene.sleep();});
 
+        this.add.text(1920/2-60, 1080/2+200, "Back to main", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});*/
 
         // Weapons Hints
         this.add.text(120,240,'Weapon Hints:',{

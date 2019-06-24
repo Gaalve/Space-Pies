@@ -12,20 +12,26 @@ export class BotMotor extends BotAction{
 
         this.motors = [];
         this.usable = [];
-        this.motors.splice(0,0,new BotEngine("laser", bot, this.bot.getEnergyCost("XXX")));
-        this.motors.splice(1,0,new BotEngine("projectile", bot, this.bot.getEnergyCost("XXX")));
-        this.motors.splice(2,0,new BotEngine("rocket", bot, this.bot.getEnergyCost("XXX")));
+        this.motors.splice(0,0,new BotEngine("laser", bot, this.bot.getEnergyCost("motor")));
+        this.motors.splice(1,0,new BotEngine("projectile", bot, this.bot.getEnergyCost("motor")));
+        this.motors.splice(2,0,new BotEngine("rocket", bot, this.bot.getEnergyCost("motor")));
 
         this.usable = [];
     }
 
     public checkExecutable(): void {
-
+        this.executable = false;
+        for(let m of this.motors){
+            if(m.checkExecutable()){
+                this.executable = true;
+                break;
+            }
+        }
     }
 
     public activate(delay: number): void {
         let type = this.chooseEngine();
-        //let nr = this.bot.getNrEngines()      TODO
+        let nr = 1//this.bot.getNrEngines()      TODO
 
         let system = this.bot.getSystem();
 

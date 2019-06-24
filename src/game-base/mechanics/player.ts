@@ -19,6 +19,7 @@ import {SunEruption} from "./anomalies/sun-eruption";
 import {WormHole} from "./anomalies/worm-hole";
 import {NanoDrone} from "./nanoDrone";
 import {BlackHole} from "./anomalies/black-hole";
+import {Botlog} from "./bot/botlog";
 
 export class Player {
     private nameIdentifier: string;
@@ -632,4 +633,7 @@ export class Player {
 
     //Methods needed in Bot
     public start():void{};
+    public getBotLog(): Botlog{
+        return undefined;
+    };
 }

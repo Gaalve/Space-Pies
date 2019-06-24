@@ -74,13 +74,8 @@ export class MainScene extends Phaser.Scene {
     private energyShopS: Phaser.GameObjects.Image[];
     private energyTextS: Phaser.GameObjects.Text[];
 
-
-
     public battleTime: BattleTimeBar;
-
-
-
-
+    public buttonBotLog: Button;
 
     private openShop: Phaser.GameObjects.Text;
 
@@ -196,6 +191,26 @@ export class MainScene extends Phaser.Scene {
         );
         this.buttonOption.setPosition(1880, 40);
 
+        this.buttonBotLog = new Button(this, 1880, 1040, "button_shadow",
+            "button_bg", "button_fg", "button_options",
+            ()=>{
+                if(this.gameMode == "1"){
+                    this.players[1].getBotLog().changeVisible();
+                }else if(this.gameMode == "2"){
+                    this.players[0].getBotLog().changeVisible();
+                }
+            });
+        this.buttonBotLog.setInvisible();
+        this.buttonBotLog.removeInteractive();
+
+        const botLog = this.add.text(1730, 1010, "show bot\nactions", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 24, strokeThickness: 2}).setVisible(false);
+        if(this.gameMode == "1" || this.gameMode == "2"){
+            botLog.setVisible(true);
+            this.buttonBotLog.setVisible();
+            this.buttonBotLog.restoreInteractive();
+        }
+
         this.creatChooseRegen();
         this.createShop1();
         this.createChooseZones();
@@ -239,6 +254,7 @@ export class MainScene extends Phaser.Scene {
             this.timeAccumulator -= this.timeUpdateTick;
             this.shop.updateStep();
             this.buttonOption.updateStep();
+            this.buttonBotLog.updateStep();
             if(this.shop1Active){
                 this.skip.updateStep();
                 this.close.updateStep();

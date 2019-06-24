@@ -9,6 +9,7 @@ import {BotSolar} from "./botsolar";
 import {BotEnd} from "./botend";
 import {BotAction} from "./botaction";
 import {BotMotor} from "./botmotor";
+import {Botlog} from "./botlog";
 
 
 export class Bot extends Player{
@@ -23,6 +24,8 @@ export class Bot extends Player{
 
     public id: string;
 
+    public botLog: Botlog;
+
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar, blackHole: string){
         super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt, blackHole);
@@ -32,6 +35,8 @@ export class Bot extends Player{
         this.steps = 0;
         this.id = nameIdentifier.charAt(1);
 
+        this.botLog = new Botlog(this);
+        this.botLog.setInvisible();
         this.actions = [];
         this.possibleActions = [];
         this.actions.splice(0, 0, new BotRegenerate("reg", this, 0));
@@ -43,6 +48,8 @@ export class Bot extends Player{
     }
 
     public start(): void{
+        this.botLog.clearLog();
+        this.botLog.setVisible();
         this.active = true;
         while(this.active) {
             if(this.isDead){
@@ -57,7 +64,6 @@ export class Bot extends Player{
             this.getPossibleActions();
             this.chooseAction(this.steps*2000);
         }
-
     }
 
     public getPossibleActions(): void{
@@ -89,5 +95,9 @@ export class Bot extends Player{
         }*/
 
         this.actions[5].activate(delay);
+    }
+
+    public getBotLog(): Botlog {
+        return this.botLog;
     }
 }
