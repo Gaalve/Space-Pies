@@ -43,6 +43,7 @@ export class Bot extends Player{
 
     public wmod: string = "wmod";
     public solar: string = "solar";
+    public end: string = "end";
 
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
@@ -68,13 +69,11 @@ export class Bot extends Player{
         this.active = true;
 
         while(this.active) {
-            this.clearPosActions();
             if(this.isDead){
                 this.active = false;
                 break;
             }
             this.steps++;
-            this.getPossibleActions();
             let action = this.chooseAction();
             this.clearPosActions();
             this.chooseType(action, this.steps);
@@ -82,7 +81,14 @@ export class Bot extends Player{
         }
     }
 
-    public getPossibleActions(): void{
+    public clearPosActions():void{
+        while(this.possibleActions.length > 0){
+            this.possibleActions.pop();
+        }
+    }
+
+
+    public chooseAction(): string {
         if(this.getEnergyCost("nano") <= this.getEnergy()){
             this.possibleActions.push(this.reg);
         }
@@ -98,16 +104,7 @@ export class Bot extends Player{
         if(this.getEnergyCost("solar") <= this.getEnergy() && this.getNrSolarDrones() < 4){
             this.possibleActions.push(this.solar);
         }
-    }
 
-    public clearPosActions():void{
-        while(this.possibleActions.length > 0){
-            this.possibleActions.pop();
-        }
-    }
-
-
-    public chooseAction(): string {
         let z = Phaser.Math.Between(1, 10);
 
         if(z > 90 || this.possibleActions.length == 0){
@@ -120,45 +117,44 @@ export class Bot extends Player{
 
     public chooseType(action: string, step: number){
         let s = step.toString();
+        let delay = step*2000;
         let system = this.getSystem();
 
-        switch(action){
-            case("reg"):{
-                let shield = this.chooseShieldType();
-                this.clearPosActions();
-                let hz = this.chooseHitzone();
-                this.clearPosActions();
+        if(action == this.reg) {
+            let shield = this.chooseShieldType();
+            this.clearPosActions();
+            let hz = this.chooseHitzone();
+            this.clearPosActions();
 
+            this.scene.time.delayedCall(delay, () => {
                 system.pushSymbol(system.add.channelOut("r" + shield + "p" + this.id + "z" + hz, "").nullProcess());
-
-                if(shield == "shield") {
+                if (shield == "shield") {
                     this.botLog.insertLog(s + ". I built a laser shield on hitzone " + hz + ".");
-                }else if(shield == "adap"){
+                } else if (shield == "adap") {
                     this.botLog.insertLog(s + ". I built an adaptive shield on hitzone " + hz + ".");
-                }else if(shield == "armor"){
+                } else if (shield == "armor") {
                     this.botLog.insertLog(s + ". I built an armor shield on hitzone " + hz + ".");
-                }else{
+                } else {
                     this.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ".");
                 }
-                break;
-            }
-            case("wext"):{
-                let weapon = this.chooseWeaponType();
-                this.clearPosActions();
-                let mod = this.chooseWeaponMod();
-                this.clearPosActions();
+            }, [], this);
+            break;
+        }else if(action == this.wext){
+            let weapon = this.chooseWeaponType();
+            this.clearPosActions();
+            let mod = this.chooseWeaponMod();
+            this.clearPosActions();
 
+            this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("wext" + this.id + mod, "").nullProcess());
 
                 let w = "rocket launcher";
-                if(weapon != "rocket"){
-                    w = weapon == "armor" ? "laser weapon" : "projectile weapon";
-                }
+                if(weapon != "rocket") w = weapon == "armor" ? "laser weapon" : "projectile weapon";
                 this.botLog.insertLog(s + ". I built a " + w + " on weapon mod " + mod + ".");
-                this.weaponSlots--;
-                break;
-            }
-            case("motor"):{
+            },[], this);
+            this.weaponSlots--;
+            break;
+        }else if(action == this.mot){
                 let motor = this.chooseMotorType();
 
                 this.clearPosActions();
@@ -168,24 +164,31 @@ export class Bot extends Player{
 
                 let nr = this.getMotorNr(motor);
 
-                system.pushSymbol(system.add.channelOut("buymotor" + motor + this.id + nr, "").nullProcess());
-                this.botLog.insertLog(s + ". I built a " + motor + " motor.");
+                this.scene.time.delayedCall(delay,()=> {
+                    system.pushSymbol(system.add.channelOut("buymotor" + motor + this.id + nr, "").nullProcess());
+                    this.botLog.insertLog(s + ". I built a " + motor + " motor.");
+                },[], this);
                 break;
-            }
-            case("wmod"):{
-                system.pushSymbol(system.add.channelOut("wmod" + this.id + this.getNrDrones(), "").nullProcess());
-                this.botLog.insertLog(s + ". I built a weapon mod.");
+            }else if(action == this.wmod{
+                this.scene.time.delayedCall(delay, ()=> {
+                    system.pushSymbol(system.add.channelOut("wmod" + this.id + this.getNrDrones(), "").nullProcess());
+                    this.botLog.insertLog(s + ". I built a weapon mod.");
+                }, [], this);
                 this.weaponSlots += 3;
                 break;
-            }
-            case("solar"):{
-                system.pushSymbol(system.add.channelOut("newsolar" + this.id + this.getNrSolarDrones(), "").nullProcess());
-                this.botLog.insertLog(s + ". I built a solar drone.");
+            }else if(action == this.solar){
+                this.scene.time.delayedCall(delay, ()=> {
+                    system.pushSymbol(system.add.channelOut("newsolar" + this.id + this.getNrSolarDrones(), "").nullProcess());
+                    this.botLog.insertLog(s + ". I built a solar drone.");
+                }, [], this);
                 break;
-            }
-            case("end"):{
-                system.pushSymbol(system.add.channelOut("botend", "").nullProcess());
-                this.botLog.insertLog(s + ". I´m finished. It´s your turn.");
+            }else{
+                this.scene.time.delayedCall(delay, ()=> {
+                    system.pushSymbol(system.add.channelOut("botend", "").nullProcess());
+                    this.botLog.insertLog(s + ". I´m finished. It´s your turn.");
+                }, [], this);
+                this.active = false;
+                this.steps = 0;
                 break;
             }
         }
