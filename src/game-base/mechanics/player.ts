@@ -46,8 +46,9 @@ export class Player {
     private shieldCost : number = 10; // cost for armor/shield/rocket shield
     private nanoCost : number = 6;  // cost for nano shield
     private wModCost : number = 10;  // cost for wMod
+    private rocketShieldCost: number = 55;
     private weaponCost : number = 25; // cost for laser/projectile weapon
-    private rocketCost : number = 40;  // cost for rocket launcher
+    private rocketCost : number = 75;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
     private adaptCost: number = 16; // cost for adaptive shield
     private motorCost: number = 5;
@@ -296,7 +297,7 @@ export class Player {
             return this.shieldCost;
         }
         case("rocket"):{
-            return this.shieldCost;
+            return this.rocketShieldCost;
         }
         case("nano"):{
             return this.nanoCost;
