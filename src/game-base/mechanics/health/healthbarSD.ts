@@ -17,6 +17,8 @@ export class HealthbarSD {
     private readonly piAnimSys: PiAnimSystem;
     private piAnimSequence: PiAnimSequence;
 
+    private disablePiAnim: boolean;
+
     public constructor(scene: Phaser.Scene, x: number, y: number, pid: string, index: number, piAnimSys: PiAnimSystem){
         this.scene = scene;
         this.piAnimSys = piAnimSys;
@@ -33,6 +35,7 @@ export class HealthbarSD {
         this.piAnimSequence = this.piAnimSys.addSequence(this.x,
             this.y + 14, 'NONE', PiAnimAlignment.CENTER);
         this.piAnimSequence.hide();
+        this.disablePiAnim = true;
     }
 
     public addBar(type: HealthType): void{
@@ -62,6 +65,7 @@ export class HealthbarSD {
     }
 
     private updateTextViaResolve(): void{
+        if (this.disablePiAnim) return;
         this.piAnimSequence.show();
         if(this.bars.length == 0){
             this.piAnimSequence.resolveAll();
@@ -83,6 +87,7 @@ export class HealthbarSD {
     }
 
     private updateTextViaNew(): void{
+        if (this.disablePiAnim) return;
         this.piAnimSequence.show();
         if(this.bars.length == 0) return;
         this.piAnimSequence.clearSequence(this.x - 10 * this.direction,
