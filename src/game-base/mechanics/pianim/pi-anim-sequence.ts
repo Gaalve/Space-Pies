@@ -122,7 +122,6 @@ export class PiAnimSequence {
                 case PiAnimAlignment.RIGHT:
                     break;
             }
-            // console.log('posX '+this.posX+' toPosX '+this.toPosX+' width '+width);
             this.updatePositions();
             this.nextCommand();
         }
@@ -147,7 +146,6 @@ export class PiAnimSequence {
                 this.sequence[0].active();
                 this.updatePositions();
                 this.show();
-                console.log('New Sequence, length '+this.sequence.length + ' pos '+this.posX);
                 if (this.commandQueue.length > 0) this.nextCommand();
                 break;
         }

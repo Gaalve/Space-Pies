@@ -1,5 +1,5 @@
 import {Player} from "./player";
-import {PiSystem} from "../mechanics/picalc/pi-system";
+import {PiSystem} from "./picalc/pi-system";
 import {PiAnimSequence} from "./pianim/pi-anim-sequence";
 import {PiAnimSystem} from "./pianim/pi-anim-system";
 import {PiAnimAlignment} from "./pianim/pi-anim-alignment";
@@ -58,12 +58,12 @@ export class Turn {
                 channelOutCB('shopp1', '', () => {this.setShopTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('shopp1end', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('anomaly1', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
-                channelOutCB('energy1', '', () => {this.setEnergyTurn(); this.roundSeq.resolveSymbol();}).
+                channelOutCB('energy1', '', () => {this.setEnergyTurn();}).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut("startephase1", "").
+                channelOutCB("startephase1", "", () => {this.roundSeq.resolveSymbol();}).
                 channelOutCB('unlock1', '', () => {this.setAttackTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('attackp1end', '', () => {this.roundSeq.resolveSymbol();}).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -77,12 +77,12 @@ export class Turn {
         this.system.pushSymbol(
                 this.system.add.channelOutCB('shopp1', '', () => {this.setShopTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('shopp1end', '', () => {this.roundSeq.resolveSymbol();}).
-                channelOutCB('energy1', '', () => {this.setEnergyTurn(); this.roundSeq.resolveSymbol(); }).
+                channelOutCB('energy1', '', () => {this.setEnergyTurn(); }).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut("startephase1", "").channelOutCB('player2', '',
+                channelOutCB("startephase1", "", ()=>this.roundSeq.resolveSymbol()).channelOutCB('player2', '',
                     () => {this.endAttackTurn(); this.changeSequenceP2();}).nullProcess()
         );
 
@@ -98,7 +98,7 @@ export class Turn {
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut("startephase2", "").
+                channelOutCB("startephase2", "", () => this.roundSeq.resolveSymbol()).
                 channelOutCB('unlock2', '', () => {this.setAttackTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('attackp2end', '', () => {this.roundSeq.resolveSymbol();}).
                 // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
