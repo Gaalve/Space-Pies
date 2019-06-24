@@ -107,7 +107,7 @@ export class Bot extends Player{
 
         let z = Phaser.Math.Between(1, 10);
 
-        if(z > 90 || this.possibleActions.length == 0){
+        if(z > 9 || this.possibleActions.length == 0){
             return "end";
         }else{
             let x = Phaser.Math.Between(0, this.possibleActions.length-1)
@@ -149,7 +149,7 @@ export class Bot extends Player{
 
                 let w = "rocket launcher";
                 if(weapon != "rocket") w = weapon == "armor" ? "laser weapon" : "projectile weapon";
-                this.botLog.insertLog(s + ". I built a " + w + " on weapon mod " + mod + ".");
+                this.botLog.insertLog(s + ". I built a " + w + " on wmod " + mod + ".");
             },[], this);
             this.weaponSlots--;
         }else if(action == this.mot){
