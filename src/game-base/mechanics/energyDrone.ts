@@ -113,7 +113,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
             system.add.replication(
                 system.add.channelInCB("solar" + p + d,"amount", (amount)=>{
                     this.player.gainEnergy(amount)})
-                    .nullProcess()));
+                    .process('Enegry', ()=>{})));
     }
 
     private createSolarShields(p: string, sd: number){

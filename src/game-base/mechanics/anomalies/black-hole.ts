@@ -28,6 +28,8 @@ export class BlackHole extends Anomaly {
         this.sinCounter += delta/1500;
         this.sinCounter %= 2 * Math.PI;
 
+        this.setScale(this.scaleX + Math.sin(this.sinCounter)/15);
+        this.setAlpha(0.95 + Math.sin(-this.sinCounter)/20 );
 
         this.player.blackholeParticles.at(this.scaleX, 2);
         if(this.counter < this.maxCounter){
@@ -42,10 +44,9 @@ export class BlackHole extends Anomaly {
             this.activated = true;
             this.counter = this.maxCounter;
             this.setScale(this.size / 10);
+            if (this.size == 0) this.destroy();
         }
 
-        this.setScale(this.scaleX + Math.sin(this.sinCounter)/15);
-        this.setAlpha(0.95 + Math.sin(-this.sinCounter)/20 );
     }
 
     public reduce(): void{

@@ -390,7 +390,7 @@ export class Player {
     private buildAnomalyPi(p : string, x: number, y: number){
         this.system.pushSymbol(
             this.system.add.replication(
-                this.system.add.channelIn('anomaly'+p, '', undefined, 0).nullProcess()
+                this.system.add.channelIn('anomaly'+p, '', undefined, 1).nullProcess()
             )
         );
 
@@ -415,12 +415,6 @@ export class Player {
             this.system.add.channelIn('anomaly'+p, '')
                 .channelIn('anomaly'+p, '', undefined, 0.2)
                 .channelOut('blackhole', '').nullProcess()
-        );
-
-        //TODO: REMOVE (DEBUG)
-
-        this.system.pushSymbol(
-            this.system.add.channelOut('blackhole', '').nullProcess()
         );
 
         // blackhole activate
@@ -458,12 +452,21 @@ export class Player {
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
                 .channelIn('anomaly'+p, '', undefined, 0.2)
-                .channelOut('suneruption'+p, '').nullProcess()
-        );
+                .channelOut('suneruption'+p, '').nullProcess());
 
-        this.system.pushSymbol( //TODO
-            this.system.add.channelInCB('suneruption' + p, '', () => {}).nullProcess()
-        );
+        let op = this.isFirstPlayer() ? 'p2' : 'p1';
+        this.system.pushSymbol(
+            this.system.add.channelInCB('suneruption' + p, '', () => {
+                this.currentAnomaly = new SunEruption(this.scene, this);
+            }).concurrent([
+                    this.system.add.channelOut('shieldp'+p, '').nullProcess(),
+                    this.system.add.channelOut('shieldp'+p, '').nullProcess(),
+                    this.system.add.channelOut('shieldp'+p, '').nullProcess(),
+                    this.system.add.channelOut('shieldp'+p, '').nullProcess(),
+                    this.system.add.channelOut('shieldp'+p, '',).nullProcess(),
+                    this.system.add.channelOut('shieldp'+p, '').nullProcess()
+                ]
+            ));
 
 
 
