@@ -1,8 +1,11 @@
 import {Player} from "./player";
 import {Weapon} from "./weapon";
 import {WeaponType} from "./weapon/weapon-type";
-import {BulletInfo} from "./weapon/bulletInfo";
 import {Infobox} from "./Infobox";
+import {MainScene} from "../scenes/main-scene";
+import {BlueShip} from "./ship/blue-ship";
+import {RedShip} from "./ship/red-ship";
+import Sprite = Phaser.GameObjects.Sprite;
 
 
 export class Drone extends Phaser.GameObjects.Sprite{
@@ -14,6 +17,12 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private simplePi : string;
 	public onScreenText : Phaser.GameObjects.Text;
 	private activatedWeapons: integer;
+	x : number;
+	y : number;
+	durationX : number;
+	durationY : number;
+	sinX : number;
+	sinY : number;
 
 	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number){
 		super(scene, x, y, "ssr_wmod");
@@ -23,15 +32,15 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    //reposition external drones
 	    if(index == 1){
 	    	if(player.getNameIdentifier() == "P1"){
-				this.setPosition(x + 300, y - 300);
+				this.setPosition(x += 300, y -= 300);
 			}else{
-				this.setPosition(x - 300, y - 300);
+				this.setPosition(x -= 300, y -= 300);
 			}
 		}else if(index == 2){
 			if(player.getNameIdentifier() == "P1"){
-				this.setPosition(x + 300, y + 300);
+				this.setPosition(x += 300, y += 300);
 			}else{
-				this.setPosition(x - 300, y + 300);
+				this.setPosition(x -= 300, y += 300);
 			}
 		}
 
@@ -44,6 +53,13 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    this.weapons = [new Weapon(scene, this, WeaponType.NONE, this.player, 0),
 						new Weapon(scene, this, WeaponType.NONE, this.player,1),
 						new Weapon(scene, this, WeaponType.NONE, this.player,2)];
+
+		this.x =  x;
+		this.y = y;
+		this.durationX = 1250;
+		this.durationY = 750;
+		this.sinX = 0;
+		this.sinY = 0;
 
 		this.buildPiTerm();
 	    this.activateOnScreenText();
@@ -174,11 +190,22 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 		this.index != 0 ? infobox.addTooltipInfo(this, "[" + this.player.getNameIdentifier() + "] Extension Drone " + this.index + ":\n     It will fire after the previous drone has fired.") : null;
 
-		//this.onScreenText.setDisplayOrigin(0.5);
+		this.index == 0 ? this.player.isFirstPlayer() ? this.scene.data.get("redship").setOnScreenText(this.onScreenText) :this.scene.data.get("blueship").setOnScreenText(this.onScreenText) : null;
 	}
 
     public update(delta: number): void {
-        this.weapons[0].update(delta);
+
+
+		this.sinX += delta/ this.durationX;
+		this.sinY += delta/ this.durationY;
+
+		this.sinX %= 2*Math.PI;
+		this.sinY %= 2*Math.PI;
+
+		this ? this.setPositionSin(true,true) : null;
+
+
+		this.weapons[0].update(delta);
         this.weapons[1].update(delta);
         this.weapons[2].update(delta);
     }
@@ -231,4 +258,43 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		next(weapon));
 	}
 
+	private moveSin(fromX: number, toX: number, fromY: number, toY: number, delta: number, sprite: Sprite) {
+		sprite.x = fromX + Math.sin(delta * Math.PI / 2) * (toX - fromX);
+		sprite.y = fromY + Math.cos(delta * Math.PI / 2) * (toY - fromY);
+	}
+
+	private setPositionSin(moveX: boolean, moveY: boolean)
+	{
+		let posX = moveX ? (this.x + Math.sin(this.sinX) / 2.0) : this.x;
+		let posY = moveY ? this.y + Math.cos(this.sinY) / 2.0: this.y;
+
+
+		if (this.index != 0 && this.weapons)
+		{
+			for (let i = 0; i < this.weapons.length; i++)
+			{
+				let weapon = this.weapons[i];
+				if (weapon)
+				{
+					// let posXweapon = moveX && weapon ? (weapon.x + Math.sin(this.sinX) * 25) : weapon ? weapon.x : null;
+					// let posYweapon = moveY && weapon ? (weapon.y + Math.cos(this.sinY) * 25) : weapon ? weapon.y : null;
+					let offX = this.player.isFirstPlayer() ? 75 : -75;
+
+
+					i == 0 ?
+						weapon.setPosition(this.x + offX, this.y -40)
+						:
+						i == 1 ?
+							weapon.setPosition(this.x + offX, this.y +40	)
+							:
+							null;
+				}
+			}
+		}
+
+		this.setPosition(posX,posY)
+		posX = this.getPlayer().isFirstPlayer() ? posX + this.onScreenText.width/2 :  posX - this.onScreenText.width/2
+		this.index != 0 ? this.onScreenText.setPosition(posX, posY + 75) : null;
+
+	}
 }
