@@ -44,10 +44,8 @@ export class BotRegenerate extends BotAction{
 
         //push channel to system
         let system = this.bot.getSystem();
-        this.bot.scene.time.delayedCall(delay, ()=>{
-            system.pushSymbol(system.add.channelOut("r"+shield+"p"+this.bot.id+"z"+hz,"").nullProcess());
-            this.logAction(this.bot.steps, shield, hz);
-        }, [], this);
+        system.pushSymbol(system.add.channelOut("r"+shield+"p"+this.bot.id+"z"+hz,"").nullProcess());
+        this.logAction(this.bot.steps, shield, hz);
 
         //clear arrays
         this.usableTypes = [];

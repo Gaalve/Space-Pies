@@ -42,10 +42,9 @@ export class BotWext extends BotAction{
 
         let system = this.bot.getSystem();
 
-        this.bot.scene.time.delayedCall(delay, ()=>{
-            system.pushSymbol(system.add.channelOut("wext" + this.bot.id + drone, weapon + "p" + opId).nullProcess());
-            this.logAction(this.bot.steps, weapon, drone);
-        }, [], this);
+        system.pushSymbol(system.add.channelOut("wext" + this.bot.id + drone, weapon + "p" + opId).nullProcess());
+        this.logAction(this.bot.steps, weapon, drone);
+
 
         this.usableWeapons = [];
     }

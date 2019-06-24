@@ -26,10 +26,8 @@ export class BotSolar extends BotAction{
         let sd = this.bot.getNrSolarDrones();
         let system = this.bot.getSystem();
         //create solar drone
-        this.bot.scene.time.delayedCall(delay, ()=>{
-            system.pushSymbol(system.add.channelOut("newsolar" + this.bot.id + sd,"").nullProcess());
-            this.logAction(this.bot.steps);
-        }, [], this);
+        system.pushSymbol(system.add.channelOut("newsolar" + this.bot.id + sd,"").nullProcess());
+        this.logAction(this.bot.steps);
     }
 
     public logAction(step: number): void {

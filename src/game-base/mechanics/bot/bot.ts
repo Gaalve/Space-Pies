@@ -16,12 +16,13 @@ export class Bot extends Player{
 
     public active: boolean;
     public weaponSlots: number;
+    public motorLaserSlots: number;
+    public motorProjectileSlots: number;
+    public motorRocketSlots: number;
 
-    public possibleActions: BotAction[];
-    public actions: BotAction[];
+    public possibleActions: string[];
 
     public steps: number;
-
     public id: string;
 
     public botLog: Botlog;
@@ -31,20 +32,17 @@ export class Bot extends Player{
         super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt);
 
         this.weaponSlots = 2;
+        this.motorLaserSlots = 2;
+        this.motorRocketSlots = 2;
+        this.motorProjectileSlots = 2;
+
         this.active = false;
         this.steps = 0;
         this.id = nameIdentifier.charAt(1);
 
         this.botLog = new Botlog(this);
         this.botLog.setInvisible();
-        this.actions = [];
         this.possibleActions = [];
-        this.actions.splice(0, 0, new BotRegenerate("reg", this, 0));
-        this.actions.splice(1, 0, new BotWext("wext", this, 0));
-        this.actions.splice(2, 0, new BotMotor("motor", this, 0));
-        this.actions.splice(3, 0, new BotWMod("wMod", this, this.getEnergyCost("wmod")));
-        this.actions.splice(4, 0, new BotSolar("solar", this, this.getEnergyCost("solar")));
-        this.actions.splice(5, 0, new BotEnd("end", this, 0));
     }
 
     public start(): void{
@@ -58,44 +56,90 @@ export class Bot extends Player{
             }
 
             this.steps++;
-
-            this.updateExecutable();
-            this.clearPosActions();
             this.getPossibleActions();
-            this.chooseAction(this.steps*2000);
+            let action = this.chooseAction();
+            this.possibleActions = [];
+            this.chooseType(action, this.steps);
         }
     }
 
     public getPossibleActions(): void{
-        for(let i = 0; i < 5; i++){
-            if(this.actions[i].executable){
-                this.possibleActions.push(this.actions[i]);
+        if(this.getEnergyCost("nano") <= this.getEnergy()){
+            this.possibleActions.push("reg");
+        }
+        if(this.getEnergyCost("weapon") <= this.getEnergy() && this.weaponSlots > 0){
+            this.possibleActions.push("wext");
+        }
+        if(this.getEnergyCost("motor") <= this.getEnergy() && (this.motorLaserSlots > 0 || this.motorProjectileSlots > 0 || this.motorRocketSlots > 0)){
+            this.possibleActions.push("motor");
+        }
+        if(this.getEnergyCost("wmod") <= this.getEnergy() && this.getNrDrones() < 3){
+            this.possibleActions.push("wmod");
+        }
+        if(this.getEnergyCost("solar") <= this.getEnergy() && this.getNrSolarDrones() < 4){
+            this.possibleActions.push("solar");
+        }
+        this.possibleActions.push("end");
+    }
+
+
+    public chooseAction(): string {
+        let z = Phaser.Math.Between(1, 10)
+
+        if(z > 90 || this.possibleActions.length == 1){
+            return "end";
+        }else{
+            let x = Phaser.Math.Between(0, this.possibleActions.length-2)
+            return this.possibleActions[x];
+        }
+    }
+
+    public chooseType(action: string, step: number){
+        let system = this.getSystem();
+
+        switch(action){
+            case("reg"):{
+
+                break;
+            }
+            case("wext"):{
+
+                break;
+            }
+            case("motor"):{
+
+                break;
+            }
+            case("wmod"):{
+                system.pushSymbol(system.add.channelOut("wmod" + this.id + this.getNrDrones(), "").nullProcess());
+                this.botLog.insertLog(step + ". I built a weapon mod.");
+                break;
+            }
+            case("solar"):{
+                system.pushSymbol(system.add.channelOut("newsolar" + this.id + this.getNrSolarDrones(), "").nullProcess());
+                this.botLog.insertLog(step + ". I built a solar drone.");
+                break;
+            }
+            case("end"):{
+                system.pushSymbol(system.add.channelOut("botend", "").nullProcess());
+                this.botLog.insertLog(step + ". I´m finished. It´s your turn.");
+                break;
             }
         }
     }
 
-    public clearPosActions(): void{
-        this.possibleActions = [];
+    public chooseShieldType(): void{
+
     }
 
-    public updateExecutable(): void{
-        for(let action of this.actions){
-            action.checkExecutable();
-        }
+    public chooseWeaponMod(): void{
+
     }
 
-    public chooseAction(delay: number): void {
-        /*let i = Phaser.Math.Between(1, 100);
+    public chooseMotorType(): void{
 
-        if (i > 90 || this.possibleActions.length <= 1) {                           //10% possibility to end Turn or no other actions possible
-            this.possibleActions[this.possibleActions.length-1].activate(delay);
-        } else {                                                                    //choose randomly between other actions (without end)
-            let x = Phaser.Math.Between(0, this.possibleActions.length - 2);
-            this.possibleActions[x].activate(delay);
-        }*/
-
-        this.actions[5].activate(delay);
     }
+
 
     public getBotLog(): Botlog {
         return this.botLog;

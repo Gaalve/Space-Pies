@@ -27,14 +27,12 @@ export class BotWMod extends BotAction{
         let system = this.bot.getSystem();
 
         //create weapon mod
-        this.bot.scene.time.delayedCall(delay, ()=>{
-            system.pushSymbol(system.add.channelOut("wmod" + this.bot.id + d,"").nullProcess());
-            this.logAction(this.bot.steps);
-        }, [], this);
+        system.pushSymbol(system.add.channelOut("wmod" + this.bot.id + d,"").nullProcess());
+        this.logAction(this.bot.steps);
     }
 
     public logAction(step: number): void {
         let s = step.toString();
-        console.log(s + ". step: I built a weapon mod.");
+        this.bot.botLog.insertLog(s + ". I built a weapon mod.");
     }
 }

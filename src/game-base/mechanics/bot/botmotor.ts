@@ -21,6 +21,10 @@ export class BotMotor extends BotAction{
 
     public checkExecutable(): void {
         this.executable = false;
+        if(this.bot.getEnergyCost("motor") > this.bot.getEnergy()){
+            this.executable = false;
+            return;
+        }
         for(let m of this.motors){
             if(m.checkExecutable()){
                 this.executable = true;
@@ -30,16 +34,20 @@ export class BotMotor extends BotAction{
     }
 
     public activate(delay: number): void {
+        for(let m of this.motors){
+            if(m.executable){
+                this.usable.push(m);
+            }
+        }
         let type = this.chooseEngine();
-        let nr = 1//this.bot.getNrEngines()      TODO
+        let nr = this.getMotorNr(type);
 
         let system = this.bot.getSystem();
 
-        this.bot.scene.time.delayedCall(delay, ()=>{
-            system.pushSymbol(system.add.channelOut("buymotor"+type+this.bot.id, "").nullProcess());        //TODO Channelnamen anpassen, sobald Methode bekannt
-            this.logAction(this.bot.steps, type);
-        }, [], this);
+        system.pushSymbol(system.add.channelOut("buymotor"+type+this.bot.id + nr, "").nullProcess());        //TODO Channelnamen anpassen, sobald Methode bekannt
+        this.logAction(this.bot.steps, type);
 
+        this.usable = [];
     }
 
     public chooseEngine(): string{
@@ -49,6 +57,36 @@ export class BotMotor extends BotAction{
 
     public logAction(step: number, type: string): void {
         let s = step.toString();
-        this.bot.botLog.insertLog(s + ". step: I built a " + type + " motor.");
+        this.bot.botLog.insertLog(s + ". I built a " + type + " motor.");
+    }
+
+    public getMotorNr(type: string): string{
+        let p1 = this.bot.id == "1";
+
+        switch(type){
+            case("laser"):{
+                if(p1){
+                    return this.bot.motor.getactiveMotorLaserP1().toString();
+                }else{
+                    return this.bot.motor.getactiveMotorLaserP2().toString();
+                }
+            }
+            case("projectile"):{
+                if(p1){
+                    return this.bot.motor.getactiveMotorProjectileP1().toString();
+                }else{
+                    return this.bot.motor.getactiveMotorProjectileP2().toString();
+                }
+            }
+            case("rocket"):{
+                if(p1){
+                    return this.bot.motor.getactiveMotorRocketP1().toString();
+                }else{
+                    return this.bot.motor.getactiveMotorRocketP1().toString();
+                }
+            }
+        }
+
+        return
     }
 }

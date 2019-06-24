@@ -123,7 +123,7 @@ export class Turn {
                         this.system.add.channelIn('player1', '').
                         channelOutCB('shopp1', '', () => this.setShopTurn()).
                         channelIn('shopp1end', '').
-                        channelOut('anomalyunlock1', '').
+                        channelOut('anomaly1', '').
                         channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -132,10 +132,6 @@ export class Turn {
                         channelOut("startephase1", "").
                         channelOutCB('unlock1', '', () => this.setAttackTurn()).
                         channelIn('attackp1end', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('player2', '', () => {this.endAttackTurn()}).nullProcess()
                     )
                 );
@@ -158,7 +154,7 @@ export class Turn {
                         this.system.add.channelIn('player2', '').
                         channelOutCB('shopp1', '', () => this.setShopTurn()).
                         channelIn('shopp2end', '').
-                        channelOut('anomalyunlock2', '').
+                        channelOut('anomaly2', '').
                         channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -167,10 +163,6 @@ export class Turn {
                         channelOut("startephase2", "").
                         channelOutCB('unlock2', '', () => this.setAttackTurn()).
                         channelIn('attackp2end', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('player1', '', () => {this.endAttackTurn();}).nullProcess()
                     )
                 );
@@ -184,7 +176,7 @@ export class Turn {
                         this.system.add.channelIn('player1', '').
                         channelOutCB('shopp1', '', () => this.setShopTurn()).
                         channelIn('shopp1end', '').
-                        channelOut('anomalyunlock1', '').
+                        channelOut('anomaly1', '').
                         channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -193,10 +185,6 @@ export class Turn {
                         channelOut("startephase1", "").
                         channelOutCB('unlock1', '', () => this.setAttackTurn()).
                         channelIn('attackp1end', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('botstart', '', () => {this.endAttackTurn()}).nullProcess()
                     )
                 );
@@ -218,7 +206,7 @@ export class Turn {
                     this.system.add.replication(
                         this.system.add.channelInCB('botstart', '', () => {this.setShopTurn(); this.players[1].start()}).
                         channelIn('botend', '').
-                        channelOut('anomalyunlock2', '').
+                        channelOut('anomaly2', '').
                         channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -227,10 +215,6 @@ export class Turn {
                         channelOut("startephase2", "").
                         channelOutCB('unlock2', '', () => this.setAttackTurn()).
                         channelIn('attackp2end', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('player1', '', () => {this.endAttackTurn()}).nullProcess()
                     )
                 );
@@ -242,7 +226,7 @@ export class Turn {
                     this.system.add.replication(
                         this.system.add.channelInCB('botstart', '', ()=>{this.setShopTurn(); this.players[0].start()}).
                         channelIn('botend', '').
-                        channelOut('anomalyunlock1', '').
+                        channelOut('anomaly1', '').
                         channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -251,10 +235,6 @@ export class Turn {
                         channelOut("startephase1", "").
                         channelOutCB('unlock1', '', () => this.setAttackTurn()).
                         channelIn('attackp1end', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('player2', '', () => {this.endAttackTurn()}).nullProcess()
                     )
                 );
@@ -278,7 +258,7 @@ export class Turn {
                         this.system.add.channelIn('player2', '').
                         channelOutCB('shopp1', '', () => this.setShopTurn()).
                         channelIn('shopp2end', '').
-                        channelOut('anomalyunlock2', '').
+                        channelOut('anomaly2', '').
                         channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -287,10 +267,6 @@ export class Turn {
                         channelOut("startephase2", "").
                         channelOutCB('unlock2', '', () => this.setAttackTurn()).
                         channelIn('attackp2end', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('botstart', '', () => {this.endAttackTurn();}).nullProcess()
                     )
                 );
@@ -303,7 +279,7 @@ export class Turn {
                         this.system.add.channelIn('player1', '').
                         channelOutCB('shopp1', '', () => this.setShopTurn()).
                         channelIn('shopp1end', '').
-                        channelOut('anomalyunlock1', '').
+                        channelOut('anomaly1', '').
                         channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -312,10 +288,6 @@ export class Turn {
                         channelOut("startephase1", "").
                         channelOutCB('unlock1', '', () => this.setAttackTurn()).
                         channelIn('attackp1end', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('player2', '', () => {this.endAttackTurn()}).nullProcess()
                     )
                 );
@@ -337,7 +309,7 @@ export class Turn {
                         this.system.add.channelIn('player2', '').
                         channelOutCB('shopp1', '', () => this.setShopTurn()).
                         channelIn('shopp2end', '').
-                        channelOut('anomalyunlock2', '').
+                        channelOut('anomaly2', '').
                         channelOutCB('Energy1', '', () => this.setEnergyTurn()).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -346,10 +318,6 @@ export class Turn {
                         channelOut("startephase2", "").
                         channelOutCB('unlock2', '', () => this.setAttackTurn()).
                         channelIn('attackp2end', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                        channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('player1', '', () => {this.endAttackTurn();}).nullProcess()
                     )
                 );
