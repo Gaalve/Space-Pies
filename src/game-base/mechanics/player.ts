@@ -41,6 +41,7 @@ export class Player {
     public z4Destroyed: boolean = false;
 
 
+
     private health : Health;
     private energy : number;
     private shieldCost : number = 10; // cost for armor/shield/rocket shield
