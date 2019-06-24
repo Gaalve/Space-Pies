@@ -132,8 +132,6 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
                 new BulletInfo(false, x,y), 0.6)
             .channelInCB("armorp"+p,"",()=>{this.player.getSolarDrones()[sd].health.destroyBar()},
                 new BulletInfo(false, x,y),0.6)
-            .channelInCB("armorp"+p,"",()=>{this.player.getSolarDrones()[sd].health.destroyBar()},
-                new BulletInfo(false, x,y),0.6)
             .channelOutCB("dessol"+p+d,"e"+d, ()=>{this.player.getSolarDrones()[sd].explode()})
             .next(shield);
 
