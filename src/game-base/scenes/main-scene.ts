@@ -1592,8 +1592,22 @@ export class MainScene extends Phaser.Scene {
             rate += 25;
         }
         this.children.remove(this.energyRegen);
-        this.energyRegen = this.add.text(1920/2+35, 170, "(+"+rate+ ")", {
-            fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
+
+        if(this.turn.getCurrentPlayer().getEnergy() >= 100){
+            this.energyRegen = this.add.text(1920/2+70, 170, "(+"+rate+ ")", {
+                fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
+
+        }
+        else if(this.turn.getCurrentPlayer().getEnergy() >= 1000){
+            this.energyRegen = this.add.text(1920/2+110, 170, "(+"+rate+ ")", {
+                fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
+
+        }
+        else{
+            this.energyRegen = this.add.text(1920/2+35, 170, "(+"+rate+ ")", {
+                fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
+
+        }
 
     }
 
