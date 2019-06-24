@@ -10,6 +10,8 @@ export class BotMotor extends BotAction{
     public constructor(type: string, bot: Bot, cost: number){
         super(type, bot, cost);
 
+        this.motors = [];
+        this.usable = [];
         this.motors.splice(0,0,new BotEngine("laser", bot, this.bot.getEnergyCost("XXX")));
         this.motors.splice(1,0,new BotEngine("projectile", bot, this.bot.getEnergyCost("XXX")));
         this.motors.splice(2,0,new BotEngine("rocket", bot, this.bot.getEnergyCost("XXX")));

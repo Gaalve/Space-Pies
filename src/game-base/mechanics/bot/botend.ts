@@ -22,7 +22,6 @@ export class BotEnd extends BotAction{
             this.logAction(this.bot.steps);
             this.bot.steps = 0;
         }, [], this);
-
     }
 
     public logAction(step: number): void {

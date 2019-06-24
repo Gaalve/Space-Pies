@@ -32,20 +32,18 @@ export class Bot extends Player{
         this.steps = 0;
         this.id = nameIdentifier.charAt(1);
 
+        this.actions = [];
+        this.possibleActions = [];
         this.actions.splice(0, 0, new BotRegenerate("reg", this, 0));
         this.actions.splice(1, 0, new BotWext("wext", this, 0));
         this.actions.splice(2, 0, new BotMotor("motor", this, 0));
         this.actions.splice(3, 0, new BotWMod("wMod", this, this.getEnergyCost("wmod")));
         this.actions.splice(4, 0, new BotSolar("solar", this, this.getEnergyCost("solar")));
         this.actions.splice(5, 0, new BotEnd("end", this, 0));
-
-        this.getSystem().pushSymbol(this.getSystem().add.replication(this.getSystem().add.channelInCB("botstart", "", ()=>{
-            this.active = true;
-            this.start();
-        }).nullProcess()));
     }
 
     public start(): void{
+        this.active = true;
         while(this.active) {
             if(this.isDead){
                 this.active = false;
@@ -81,13 +79,15 @@ export class Bot extends Player{
     }
 
     public chooseAction(delay: number): void {
-        let i = Phaser.Math.Between(1, 100);
+        /*let i = Phaser.Math.Between(1, 100);
 
         if (i > 90 || this.possibleActions.length <= 1) {                           //10% possibility to end Turn or no other actions possible
             this.possibleActions[this.possibleActions.length-1].activate(delay);
         } else {                                                                    //choose randomly between other actions (without end)
             let x = Phaser.Math.Between(0, this.possibleActions.length - 2);
             this.possibleActions[x].activate(delay);
-        }
+        }*/
+
+        this.actions[5].activate(delay);
     }
 }

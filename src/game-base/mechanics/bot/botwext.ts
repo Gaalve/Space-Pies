@@ -10,6 +10,7 @@ export class BotWext extends BotAction{
     public constructor(type: string, bot: Bot, cost: number){
         super(type, bot, cost);
         this.usableWeapons = [];
+        this.weapons = [];
 
         this.weapons.splice(0, 0, new BotWeapon("shield", bot, bot.getEnergyCost("weapon")));
         this.weapons.splice(1, 0, new BotWeapon("armor", bot, bot.getEnergyCost("weapon")));

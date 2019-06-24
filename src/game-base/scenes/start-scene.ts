@@ -151,7 +151,7 @@ export class StartScene extends Phaser.Scene {
 
         this.buttonMP = new Button(this, 1920/2-280, 1080/2+75, "button_shadow",
             "button_bg", "button_fg", "multiplayer", ()=>{
-                this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '000'});
+                this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '0'});
                 this.scene.bringToTop('FadeScene')
             });
         this.multiText = this.add.text(1920/2-200, 1080/2+50, "Play against a human friend", {
@@ -169,7 +169,7 @@ export class StartScene extends Phaser.Scene {
 
         this.buttonP1 = new Button(this, 1920/2, 1080/2-100, "button_shadow",
             "button_bg", "button_fg", "red_arrow", ()=>{
-                this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '110'});
+                this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '1'});
                 this.scene.bringToTop('FadeScene')
             });
         this.olafText = this.add.text(1920/2, 1080/2-190, "Play as Olaf (Player 1)", {
@@ -181,7 +181,7 @@ export class StartScene extends Phaser.Scene {
 
         this.buttonP2 = new Button(this, 1920/2, 1080/2+100, "button_shadow",
             "button_bg", "button_fg", "blue_arrow", ()=>{
-                this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '101'});
+                this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '2'});
                 this.scene.bringToTop('FadeScene')
             });
         this.holgerText = this.add.text(1920/2, 1080/2+190, "Play as Holger (Player 2)", {

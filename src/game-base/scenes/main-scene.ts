@@ -1,13 +1,11 @@
 import {Turn} from "../mechanics/turn";
 import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
-
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import {Drone} from "../mechanics/drone";
 import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
-import {BulletInfo} from "../mechanics/weapon/bulletInfo";
+import {Bot} from "../mechanics/bot/bot";
 
 export class MainScene extends Phaser.Scene {
 
@@ -24,7 +22,7 @@ export class MainScene extends Phaser.Scene {
     private shop_bg_back: Sprite;//Phaser.GameObjects.Graphics;
     private shop_bg_out: Sprite;
     // private energy_bg: Phaser.GameObjects.Rectangle;
-    private playMode: string;
+    private gameMode: string;
 
     private shop1: [Button, Button, Button, Button, Button, Button];
     private shopZ: [Button, Button, Button, Button, Button];
@@ -126,7 +124,7 @@ export class MainScene extends Phaser.Scene {
             repeat: -1
         });
 
-        this.playMode = data.mode;
+        this.gameMode = data.mode;
         this.battleTime = new BattleTimeBar(this);
         this.system = new PiSystem(this, 10,10,10,false);
         this.data.set("system", this.system);
@@ -135,9 +133,8 @@ export class MainScene extends Phaser.Scene {
 
         let blackHoleAppears = this.randomizeBlackHoleAppearance();
 
-        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, blackHoleAppears),
-                        new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, blackHoleAppears)];
-        this.turn = new Turn(this, this.players);
+        this.createPlayers(blackHoleAppears);
+        this.turn = new Turn(this, this.players, this.gameMode);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
             if(this.turn.getCurrentRound() != 1){
@@ -1501,6 +1498,30 @@ export class MainScene extends Phaser.Scene {
         else secondRandom = 2;
 
         return firstRandom.toString() + secondRandom.toString();
+    }
+
+    private createPlayers(blackHoleAppears: string): void{
+        switch(this.gameMode){
+            case("0"):{
+                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, blackHoleAppears),
+                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, blackHoleAppears)];
+                break;
+            }
+            case("1"):{
+                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, blackHoleAppears),
+                    new Bot(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, blackHoleAppears)];
+                break;
+            }
+            case("2"):{
+                this.players = [new Bot(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, blackHoleAppears),
+                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, blackHoleAppears)];
+                break;
+            }
+            default:{
+                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, blackHoleAppears),
+                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, blackHoleAppears)];
+            }
+        }
     }
 
 

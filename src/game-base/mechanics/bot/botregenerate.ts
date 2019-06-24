@@ -4,13 +4,14 @@ import {BotShield} from "./botshield";
 
 export class BotRegenerate extends BotAction{
 
-    public shieldTypes: [BotShield, BotShield, BotShield, BotShield, BotShield];
+    public shieldTypes: BotShield[];
     public usableTypes: BotShield[];
     public hitZones: string[];
 
     public constructor(type: string, bot: Bot, cost: number){
         super(type, bot, cost);
 
+        this.shieldTypes = [];
         this.shieldTypes.splice(0, 0, new BotShield("armor", bot, bot.getEnergyCost("armor")));
         this.shieldTypes.splice(1, 0, new BotShield("shield", bot, bot.getEnergyCost("shield")));
         this.shieldTypes.splice(2, 0, new BotShield("rocket", bot, bot.getEnergyCost("rocket")));

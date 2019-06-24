@@ -629,4 +629,7 @@ export class Player {
     private createFirstSolarDrone(p : string) : void{
         this.system.pushSymbol(this.system.add.channelOut("newsolar" + p + "0", "solar" + p + "0").nullProcess());
     }
+
+    //Methods needed in Bot
+    public start():void{};
 }
