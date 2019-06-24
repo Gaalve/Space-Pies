@@ -27,6 +27,30 @@ export class Bot extends Player{
 
     public botLog: Botlog;
 
+    public reg: string = "reg";
+        public n: string = "nano";
+        public ar: string = "armor";
+        public s: string = "shield";
+        public r: string = "rocket";
+        public ad: string = "adap";
+            public z1: string = "1";
+            public z2: string = "2";
+            public z3: string = "3";
+            public z4: string = "4";
+
+    public wext: string = "wext";
+        public las: string = "armor";
+        public pro: string = "shield";
+        public roc: string = "rocket";
+
+    public mot: string = "motor";
+        public mlas: string = "laser";
+        public mpro: string = "projectile";
+        public mroc: string = "rocket";
+
+    public wmod: string = "wmod";
+    public solar: string = "solar";
+
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
         super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt);
@@ -50,6 +74,7 @@ export class Bot extends Player{
         this.botLog.setVisible();
         this.active = true;
         while(this.active) {
+            this.clearPosActions();
             if(this.isDead){
                 this.active = false;
                 break;
@@ -58,52 +83,75 @@ export class Bot extends Player{
             this.steps++;
             this.getPossibleActions();
             let action = this.chooseAction();
-            this.possibleActions = [];
+            this.clearPosActions();
             this.chooseType(action, this.steps);
+
         }
     }
 
     public getPossibleActions(): void{
         if(this.getEnergyCost("nano") <= this.getEnergy()){
-            this.possibleActions.push("reg");
+            this.possibleActions.push(this.reg);
         }
         if(this.getEnergyCost("weapon") <= this.getEnergy() && this.weaponSlots > 0){
-            this.possibleActions.push("wext");
+            this.possibleActions.push(this.wext);
         }
         if(this.getEnergyCost("motor") <= this.getEnergy() && (this.motorLaserSlots > 0 || this.motorProjectileSlots > 0 || this.motorRocketSlots > 0)){
-            this.possibleActions.push("motor");
+            this.possibleActions.push(this.mot);
         }
         if(this.getEnergyCost("wmod") <= this.getEnergy() && this.getNrDrones() < 3){
-            this.possibleActions.push("wmod");
+            this.possibleActions.push(this.wmod);
         }
         if(this.getEnergyCost("solar") <= this.getEnergy() && this.getNrSolarDrones() < 4){
-            this.possibleActions.push("solar");
+            this.possibleActions.push(this.solar);
         }
-        this.possibleActions.push("end");
+    }
+
+    public clearPosActions():void{
+        while(this.possibleActions.length > 0){
+            this.possibleActions.pop();
+        }
     }
 
 
     public chooseAction(): string {
-        let z = Phaser.Math.Between(1, 10)
+        let z = Phaser.Math.Between(1, 10);
 
-        if(z > 90 || this.possibleActions.length == 1){
+        if(z > 90 || this.possibleActions.length == 0){
             return "end";
         }else{
-            let x = Phaser.Math.Between(0, this.possibleActions.length-2)
+            let x = Phaser.Math.Between(0, this.possibleActions.length-1)
             return this.possibleActions[x];
         }
     }
 
     public chooseType(action: string, step: number){
+        let s = step.toString();
         let system = this.getSystem();
 
         switch(action){
             case("reg"):{
+                let shield = this.chooseShieldType();
+                this.clearPosActions();
+                let hz = this.chooseHitzone();
+                this.clearPosActions();
 
+                system.pushSymbol(system.add.channelOut("r" + shield + "p" + this.id + "z" + hz, "").nullProcess());
+
+                if(shield == "shield") {
+                    this.botLog.insertLog(s + ". I built a laser shield on hitzone " + hz + ".");
+                }else if(shield == "adap"){
+                    this.botLog.insertLog(s + ". I built an adaptive shield on hitzone " + hz + ".");
+                }else if(shield == "armor"){
+                    this.botLog.insertLog(s + ". I built an armor shield on hitzone " + hz + ".");
+                }else{
+                    this.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ".");
+                }
                 break;
             }
             case("wext"):{
 
+                this.weaponSlots--;
                 break;
             }
             case("motor"):{
@@ -112,24 +160,42 @@ export class Bot extends Player{
             }
             case("wmod"):{
                 system.pushSymbol(system.add.channelOut("wmod" + this.id + this.getNrDrones(), "").nullProcess());
-                this.botLog.insertLog(step + ". I built a weapon mod.");
+                this.botLog.insertLog(s + ". I built a weapon mod.");
+                this.weaponSlots += 3;
                 break;
             }
             case("solar"):{
                 system.pushSymbol(system.add.channelOut("newsolar" + this.id + this.getNrSolarDrones(), "").nullProcess());
-                this.botLog.insertLog(step + ". I built a solar drone.");
+                this.botLog.insertLog(s + ". I built a solar drone.");
                 break;
             }
             case("end"):{
                 system.pushSymbol(system.add.channelOut("botend", "").nullProcess());
-                this.botLog.insertLog(step + ". I´m finished. It´s your turn.");
+                this.botLog.insertLog(s + ". I´m finished. It´s your turn.");
                 break;
             }
         }
     }
 
-    public chooseShieldType(): void{
+    public chooseShieldType(): string{
+        if(this.getEnergyCost("nano") <= this.getEnergy()) this.possibleActions.push(this.n);
+        if(this.getEnergyCost("armor") <= this.getEnergy()) this.possibleActions.push(this.ar);
+        if(this.getEnergyCost("shield") <= this.getEnergy()) this.possibleActions.push(this.s);
+        if(this.getEnergyCost("rocket") <= this.getEnergy()) this.possibleActions.push(this.r);
+        if(this.getEnergyCost("adap") <= this.getEnergy()) this.possibleActions.push(this.ad);
 
+        let x = Phaser.Math.Between(0, this.possibleActions.length-1)
+        return this.possibleActions[x];
+    }
+
+    public chooseHitzone(): string{
+        if(!this.z1Destroyed) this.possibleActions.push(this.z1);
+        if(!this.z2Destroyed) this.possibleActions.push(this.z2);
+        if(!this.z3Destroyed) this.possibleActions.push(this.z3);
+        if(!this.z4Destroyed) this.possibleActions.push(this.z4);
+
+        let x = Phaser.Math.Between(0, this.possibleActions.length-1)
+        return this.possibleActions[x];
     }
 
     public chooseWeaponMod(): void{
