@@ -99,7 +99,7 @@ export class Player {
         this.bulletTrail = new BulletTrail(pem);
         this.collectE = new collectEnergy_ship(pem);
         this.blackholeParticles = new BlackholeParticle(pem);
-        this.motor = new Motor(scene, this, x, y);
+        this.motor = new Motor(scene, this, x, y, piAnim);
         this.malusEnergy = 0;
         //console.log(blackholeAppears)
         //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
