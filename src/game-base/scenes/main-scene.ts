@@ -55,6 +55,9 @@ export class MainScene extends Phaser.Scene {
     private nano: Button;
     private rocketS: Button;
     private adapt: Button;
+    public eruptionBox: Button;
+    public wormholeBox: Button;
+    public blackholeBox: Button;
     private shop1Active: boolean;
     private shopWActive: boolean;
     private shopTActive: boolean;
@@ -1485,6 +1488,10 @@ export class MainScene extends Phaser.Scene {
             return "1";
         }
 
+    }
+
+    setAnomalyInfoBox() : void{
+        this.eruptionBox = new Button()
     }
 
 

@@ -21,6 +21,7 @@ import {NanoDrone} from "./nanoDrone";
 import {BlackHole} from "./anomalies/black-hole";
 import {BlackholeParticle} from "./animations/blackhole-particle";
 import {Motor} from "./motor";
+import Button = Phaser.Input.Gamepad.Button;
 
 export class Player {
     private nameIdentifier: string;
