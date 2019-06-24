@@ -568,4 +568,29 @@ export class Player {
     private createFirstSolarDrone(p : string) : void{
         this.system.pushSymbol(this.system.add.channelOut("newsolar" + p + "0", "solar" + p + "0").nullProcess());
     }
+
+    getActiveMotorL(): number{
+        if(this.nameIdentifier == "P1"){
+            return this.motor.getactiveMotorLaserP1();
+        }
+        else{
+            return this.motor.getactiveMotorLaserP2();
+        }
+    }
+    getActiveMotorP(): number{
+        if(this.nameIdentifier == "P1"){
+            return this.motor.getactiveMotorProjectileP1();
+        }
+        else{
+            return this.motor.getactiveMotorProjectileP2();
+        }
+    }
+    getActiveMotorR(): number{
+        if(this.nameIdentifier == "P1"){
+            return this.motor.getactiveMotorRocketP1();
+        }
+        else{
+            return this.motor.getactiveMotorRocketP2();
+        }
+    }
 }

@@ -427,7 +427,7 @@ export class MainScene extends Phaser.Scene {
             //this.closeShop(this.shop1, this.shop1Text, false);
             this.shop_bg_back2.setVisible(true);
             this.displayShop(this.shopM, this.shopMText);
-            this.updateShopM();
+            this.updateShopM("");
             this.shopMActive = true;
 
             //system.pushSymbol(system.add.channelOut("newsolar"+ player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD(), "solar"+player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD()).nullProcess())
@@ -885,12 +885,12 @@ export class MainScene extends Phaser.Scene {
                 let player = this.turn.getCurrentPlayer();
                 player.payEnergy(player.getEnergyCost("motor"));
                 this.updateEnergyText();
-                let term = "buymotorlaser"+player.getNameIdentifier().charAt(1) + "0" + player.getDrones()[0].getNrWeapons();
+                let term = "buymotorlaser"+player.getNameIdentifier().charAt(1) + (player.getActiveMotorL()+1);
                 //this.updateShopW(true);
                 this.data.set("buy", "motorL");
-                this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
+                this.system.pushSymbol(this.system.add.channelOut(term ,'').nullProcess());
                 this.updateShop1(false);
-                this.updateShopM();
+                this.updateShopM("L");
 
                 //system.pushSymbol(createWMod)
             });
@@ -900,12 +900,12 @@ export class MainScene extends Phaser.Scene {
                 let player = this.turn.getCurrentPlayer();
                 player.payEnergy(player.getEnergyCost("motor"));
                 this.updateEnergyText();
-                let term = "buymotorprojectile"+player.getNameIdentifier().charAt(1) + "0" + player.getDrones()[0].getNrWeapons();
+                let term = "buymotorprojectile"+player.getNameIdentifier().charAt(1) + (player.getActiveMotorP()+1);
                 //this.updateShopW(true);
                 this.data.set("buy", "motorP");
-                this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
+                this.system.pushSymbol(this.system.add.channelOut(term, '').nullProcess());
                 this.updateShop1(false);
-                this.updateShopM();
+                this.updateShopM("P");
 
             });
 
@@ -915,12 +915,12 @@ export class MainScene extends Phaser.Scene {
                 let player = this.turn.getCurrentPlayer();
                 player.payEnergy(player.getEnergyCost("motor"));
                 this.updateEnergyText();
-                let term = "buymotorrocket"+player.getNameIdentifier().charAt(1) + "0" + player.getDrones()[0].getNrWeapons();
+                let term = "buymotorrocket"+player.getNameIdentifier().charAt(1) + (player.getActiveMotorR()+1);
                 //this.updateShopW(true);
                 this.data.set("buy", "motorR");
-                this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
+                this.system.pushSymbol(this.system.add.channelOut(term, "").nullProcess());
                 this.updateShop1(false);
-                this.updateShopM();
+                this.updateShopM("R");
             });
 
         this.backM = new Button(this, 1300, 1080-300, "button_shadow",
@@ -1506,12 +1506,20 @@ export class MainScene extends Phaser.Scene {
 
     }
 
-    updateShopM(): void{
+    updateShopM(bought: string): void{
         let player = this.turn.getCurrentPlayer();
-        let activeL = 0; // placeholder
-        let activeP = 0; // placeholder
-        let activeR = 3; // placeholder
-
+        let activeL = player.getActiveMotorL(); // placeholder
+        let activeP = player.getActiveMotorP(); // placeholder
+        let activeR = player.getActiveMotorR(); // placeholder
+        if(bought == "L"){
+            activeL++;
+        }
+        else if(bought == "P"){
+            activeP++;
+        }
+        else if(bought == "R"){
+            activeR++;
+        }
         if(activeL >= 3){
             this.motorL.changeButton(this, false, false, player);
             this.motorL.removeInteractive();
