@@ -33,10 +33,14 @@ export class Health {
             HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid, piAnmimSys);
 
 
+        let p = pid.charAt(1)
         pi.pushSymbol(
             pi.add.channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
+                .channelOut("destroyHzEnergy" + p + "1", 'wait')
                 .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
+                .channelOut("destroyHzEnergy" + p + "2", 'wait')
                 .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
+                .channelOut("destroyHzEnergy" + p + "3", 'wait')
                 .channelInCB("hz"+pid, '', ()=>{this.shipBar.destroyBar()})
                 .process("CoreExplosion"+pid, ()=>{console.log(pid+" lost."); this.player.ship.explosion()})
         );
