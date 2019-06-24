@@ -3,11 +3,11 @@ import Scene = Phaser.Scene;
 
 export class ShipPart {
     private scene: Scene;
-    public normal: Sprite;
-    public destroyed: Sprite;
+    private normal: Sprite;
+    private destroyed: Sprite;
     private offX: number;
     private offY: number;
-    public currentTex;
+
     private desOffX: number;
     private desOffY: number;
 
@@ -29,8 +29,7 @@ export class ShipPart {
         this.normal.setDepth(depth);
         this.destroyed.setDepth(depth-2);
 
-        this.currentTex = this.scene.add.existing(this.normal);
-
+        this.scene.add.existing(this.normal);
     }
 
     public toDestroyedPart(): void{

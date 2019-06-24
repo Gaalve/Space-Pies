@@ -3,7 +3,7 @@ import Sprite = Phaser.GameObjects.Sprite;
 
 export class HealthbarSprites {
     public readonly sprite: Phaser.GameObjects.Sprite;
-    public readonly type: HealthType;
+    private readonly type: HealthType;
     private readonly pid: string;
     public constructor(scene: Phaser.Scene, type: HealthType, x: number, y: number, pid: string){
         this.sprite = new Sprite(scene, x, y, HealthbarSprites.getTexture(type));

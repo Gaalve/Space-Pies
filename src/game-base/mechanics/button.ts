@@ -3,20 +3,20 @@ import {Player} from "./player";
 
 export class Button{
 
-    public hovering: boolean;
+    private hovering: boolean;
     private scale: number;
-    public onClick: Function;
+    private onClick: Function;
     private func: Function;
     private active: boolean;
     private activeP2: boolean;
 
     //Textures
-    public readonly shadow: Phaser.GameObjects.Sprite;
-    public readonly bg: Phaser.GameObjects.Sprite;
-    public readonly img: Phaser.GameObjects.Sprite;
-    public readonly fg: Phaser.GameObjects.Sprite;
-    public readonly inactive: Phaser.GameObjects.Sprite;
-    public alt: Phaser.GameObjects.Sprite;
+    private readonly shadow: Phaser.GameObjects.Sprite;
+    private readonly bg: Phaser.GameObjects.Sprite;
+    private readonly img: Phaser.GameObjects.Sprite;
+    private readonly fg: Phaser.GameObjects.Sprite;
+    private readonly inactive: Phaser.GameObjects.Sprite;
+    private alt: Phaser.GameObjects.Sprite;
 
     //Color Interpolation
     private readonly startColor: Phaser.Display.Color;

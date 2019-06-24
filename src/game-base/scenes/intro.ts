@@ -32,8 +32,7 @@ export class Intro extends Phaser.Scene {
         else this.time.delayedCall(0, ()=>{this.fadeText()}, [], this);
     }
 
-    create(): void
-    {
+    create(): void {
         let counter = 0;
         this.text = new Text(this, 1900, 20, "Click to skip.", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 32, fontStyle: 'bold', strokeThickness: 2});
