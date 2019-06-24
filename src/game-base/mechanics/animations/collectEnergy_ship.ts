@@ -1,6 +1,7 @@
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import Particle = Phaser.GameObjects.Particles.Particle;
 import Sprite = Phaser.GameObjects.Sprite;
+import RandomZone = Phaser.GameObjects.Particles.Zones.RandomZone;
 
 
 export class collectEnergy_ship {
@@ -8,44 +9,23 @@ export class collectEnergy_ship {
     private pem: Phaser.GameObjects.Particles.ParticleEmitterManager;
     private collectEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
     public constructor(pem: ParticleEmitterManager){
-        /*this.block= this.physics.add.image(400, 100, 'ssr_ship');
-        var source = {
-            contains: function (x, y)
-            {
-                return block.body.hitTest(x, y);
-            }
-        };
-        */
-
         this.pem = pem;
         this.circle = new Phaser.Geom.Circle(400,300,500);
 
-
-        //{ frames: [ 'red', 'green', 'blue' ], cycle: true, quantity: 2 }
-
-
-
         this.collectEmitter = this.pem.createEmitter( {
             frame: "particle_1",
-            tint: 0x40FF00,
-            scale: 0.3,
-            quantity: 3,
-            blendMode: 'ADD',
-            alpha:0.5,
+            moveToX: 0,
+            moveToY: 0,
+            tint: 0xffd42a,
+            scale: {start: 0.6, end: 0},
             on: false,
-            emitZone: { source: this.circle },
-            //deathZone:{ type: 'onEnter', source: source }
+            emitZone: new RandomZone(this.circle),
         });
-
-
     }
 
     public collect(sx: number, sy: number): void{
-
         this.setCollectConfig(sx,sy);
-        this.collectEmitter.emitParticle(25);
-
-
+        this.collectEmitter.emitParticle(50);
     }
 
 
@@ -54,9 +34,8 @@ export class collectEnergy_ship {
         this.collectEmitter.fromJSON({
             moveToX: sx,
             moveToY: sy,
-            emitZone: { source: this.circle }
+            emitZone: new RandomZone(this.circle)
             }
-
         )
     }
 
