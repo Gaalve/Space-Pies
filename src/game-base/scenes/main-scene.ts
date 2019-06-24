@@ -224,6 +224,11 @@ export class MainScene extends Phaser.Scene {
         this.ship.setHover(this.turn);
         this.drone1.setHoverDrone(this.turn, 1);
         this.drone2.setHoverDrone(this.turn, 2);
+        this.zone1.setHoverZone(this.turn, 1);
+        this.zone2.setHoverZone(this.turn, 2);
+        this.zone3.setHoverZone(this.turn, 3);
+        this.zone4.setHoverZone(this.turn, 4);
+
 
 
         //extra functions to resolve existing channels w1, w2, w3 after attack phase
