@@ -503,7 +503,7 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
             this.add.text(915, 1080-50, "Solar", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
-            this.add.text(1115, 1080-50, "Motor", {
+            this.add.text(1115, 1080-50, "Engine", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
             this.add.text(1315, 1080-50, "close", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
@@ -1050,7 +1050,7 @@ export class MainScene extends Phaser.Scene {
             this.motors.changeButton(this, false, true, player);
             this.motors.restoreInteractive();
             this.children.remove(this.shop1Text[4]);
-            this.shop1Text[4] = this.add.text(1115, 1080 - 50, "motor", {
+            this.shop1Text[4] = this.add.text(1115, 1080 - 50, "Engine", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2
             });
         }
