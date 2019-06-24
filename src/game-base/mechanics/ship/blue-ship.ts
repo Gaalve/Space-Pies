@@ -1,6 +1,7 @@
 import {BaseShip} from "./base-ship";
 import {ShipPart} from "./ship-part";
 import Sprite = Phaser.GameObjects.Sprite;
+import {Infobox} from "../Infobox";
 
 export class BlueShip extends BaseShip{
 
@@ -36,6 +37,15 @@ export class BlueShip extends BaseShip{
         this.hull = new ShipPart(scene, x, y, "ssbr/ssb_hull", "ssbr/ssb_des_hull",
             -46, 0, -37, 13,2);
 
+        let infobox = <Infobox> scene.data.get("infoboxx");
+        infobox.addTooltipInfo(this.back.normal, "[P2] The back of your Ship.")
+        infobox.addTooltipInfo(this.pilot.normal, "[P2] The pilot.. even though you can't see him")
+        infobox.addTooltipInfo(this.wingUp.normal, "[P2] Your right wing.")
+        infobox.addTooltipInfo(this.wingDown.normal, "[P2] The left wing of your Ship.")
+        infobox.addTooltipInfo(this.hull.normal, "[P2] The hull of your ship.")
+
+
+
         this.x =  x;
         this.y = y;
         this.durationX = 500;
@@ -45,6 +55,7 @@ export class BlueShip extends BaseShip{
         this.setAllPartPosition();
         // this.toDestroyedShip();
     }
+
 
     toDestroyedShip(): void {
         this.back.toDestroyedPart();

@@ -5,6 +5,8 @@ import {BulletInfo} from "./weapon/bulletInfo";
 import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
 import {AnimationUtilities} from "./animation/AnimationUtilites";
 import {Animation} from "./animation/Animation";
+import {Infobox} from "./Infobox";
+
 
 export class Drone extends Phaser.GameObjects.Sprite{
 
@@ -237,6 +239,32 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	 */
 	refreshOnScreenText() : void{
 		this.onScreenText.setText(this.simplePi);
+
+		let infobox = <Infobox> this.scene.data.get("infoboxx");
+		let splitTerm = this.onScreenText.text.split(".");
+		let equippedWeapons = "";
+		for (let i = 0; i < splitTerm.length; i++)
+			if (i != 0 && i != splitTerm.length-1)
+				equippedWeapons += splitTerm[i] + ", ";
+		equippedWeapons = equippedWeapons ? equippedWeapons.substr(0, equippedWeapons.length-2) : "none yet";
+
+
+		let tooltipInfo =
+			"[" + this.getPlayer().getNameIdentifier() + "] This is the pi-term of this drone. \n"
+			+ "     <> : output channel (resolves with corresponding () - channel)\n"
+			+ "     () : input channel (waits for incoming <> - channel)\n"
+			+ "     0 : null process (resolves itself) \n\n"
+			+ "current term:         " + this.onScreenText.text + "\n"
+			+ "currently active:     " + this.onScreenText.text.split(".")[0] + "\n"
+			+ "will be resolved by:  " + Infobox.getOppositeTerm(this.onScreenText.text.split(".")[0], this.player.getNameIdentifier()) + "\n\n"
+			+ "The enclosing \"lock()\" - channel is literally a weapon lock. \n"
+			+ "As soon as you hit attack, a replication \"!(lock<>)\" will be pushed into \nthe pi-system, which continiously emits \"lock<>\" - terms.\n"
+			+ "Then, all equipped weapons (" + equippedWeapons + ") will fire in sequential order.\n"
+
+		infobox.addTooltipInfo(this.onScreenText, tooltipInfo);
+
+		this.index != 0 ? infobox.addTooltipInfo(this, "[" + this.player.getNameIdentifier() + "] Extension Drone " + this.index + ":\n     It will fire after the previous drone has fired.") : null;
+
 		this.onScreenText.setVisible(true);
 		//this.onScreenText.setDisplayOrigin(0.5);
 	}
