@@ -13,8 +13,8 @@ export class Ship{
 
     private scene: Scene;
     private player: Player;
-    private posX : number;
-    private posY : number;
+    public posX : number;
+    public posY : number;
     private isRed: boolean;
     private _modularShip: BaseShip;
     private debris: Debris[];
@@ -52,6 +52,7 @@ export class Ship{
         for (let i = 0; i < 30; i++){
             this.scene.time.delayedCall(500 * i, this.createDebris, [], this);
         }
+
         if(this.isRed) {
             this.exploedP1();
         }else this.exploedP2();
@@ -108,6 +109,15 @@ export class Ship{
         this.scene.time.delayedCall(11000, this.explosion2At, [165, 0, 0.85, 2.4], this);
         this.scene.time.delayedCall(11500, ()=>{this._modularShip.toDestroyedPilot()}, [], this);
 
+        this.scene.time.delayedCall(12000, ()=>{
+            for(let sd of this.player.getSolarDrones()){
+                if(sd.visible){
+                    sd.explode();
+                    sd.health.removeBars();
+                }
+            }
+        },[], this);
+
         this.scene.time.delayedCall(14000, this.explosion2At, [20, 0, 0.85, 2.4], this);
         this.scene.time.delayedCall(14080, this.explosion2At, [150, 0, 0.85, 1.2], this);
         this.scene.time.delayedCall(14500, ()=>{this._modularShip.toDestroyedHull()}, [], this);
@@ -153,6 +163,15 @@ export class Ship{
 
         this.scene.time.delayedCall(11000, this.explosion2At, [-155, 0, 0.5, 1.8], this);
         this.scene.time.delayedCall(11400, ()=>{this._modularShip.toDestroyedPilot()}, [], this);
+
+        this.scene.time.delayedCall(12000, ()=>{
+            for(let sd of this.player.getSolarDrones()){
+                if(sd.visible){
+                    sd.explode();
+                    sd.health.removeBars();
+                }
+            }
+        },[], this);
 
         this.scene.time.delayedCall(14000, this.explosion2At, [-40, 0, 0.85, 2.4], this);
         this.scene.time.delayedCall(14500, ()=>{this._modularShip.toDestroyedHull()}, [], this);

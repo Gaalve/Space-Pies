@@ -6,5 +6,7 @@ export enum HealthType {
     AdaptiveBar,
     AdaptiveBar2,
     NanoBar,
-    RocketBar
+    RocketBar,
+    ArmorBarSmall,
+    ShieldBarSmall
 }

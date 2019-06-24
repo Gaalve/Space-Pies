@@ -10,6 +10,10 @@ export class PiReplication extends PiResolvable{
         this.action = action;
     }
 
+    isNameInSequence(name: string): boolean {
+        return this.action.isNameInSequence(name);
+    }
+
     public getSymbolSequence(): string{
         return '!('+ this.action.getSymbolSequence() + ")";
     }
@@ -43,7 +47,11 @@ export class PiReplication extends PiResolvable{
     }
 
     public getAction(fullName: string): PiAction {
-        if(this.action.getFullName() == fullName) return this.action.copy();
+        if(this.action.getFullName() == fullName){
+            let copy = this.action;
+            this.action = this.action.copy();
+            return copy;
+        }
         throw new Error("Can't find action.");
     }
 

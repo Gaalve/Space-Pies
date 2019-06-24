@@ -19,7 +19,7 @@ export class Health {
         const pid = player.getNameIdentifier();
 
         this.shipBar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, false, 120,
-            "CoreExplosion"+pid, pid);
+            "CoreExplosion"+pid + "< >", pid);
         this.zone1Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 170,
             HealthbarSprites.getAbbreviation(HealthType.HitZoneBar)+pid.toLowerCase()+'< >', pid);
         this.zone2Bar = new Healthbar(scene, player.isFirstPlayer() ? 1 : -1, true, 220,

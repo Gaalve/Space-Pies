@@ -1,18 +1,21 @@
 import {HealthbarSprites} from "./healthbar-sprites";
+import Sprite = Phaser.GameObjects.Sprite;
 import {HealthType} from "./health-type";
 import {ScenePiAnimation} from "../../scenes/ScenePiAnimation";
 import {Animation} from "../animation/Animation";
 import {AnimationUtilities} from "../animation/AnimationUtilites";
 import Sprite = Phaser.GameObjects.Sprite;
 import Text = Phaser.GameObjects.Text;
+import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
-    private bars: HealthbarSprites[];
+    public bars: HealthbarSprites[];
+    public activeBars: number = 0;
     private readonly direction: 1|-1;
     private readonly offset: number = 14;
     private readonly y: number;
-    private readonly position: number;
+    public position: number;
     private readonly symbol: Sprite;
     private readonly lastPiSymbolString: string;
     private readonly pid: string;
@@ -44,6 +47,7 @@ export class Healthbar {
             this.position + this.bars.length * this.offset * this.direction,
             this.y, this.pid.toLowerCase()));
         this.updateText();
+        this.activeBars++;
     }
 
     public destroyBar(healthtype: HealthType): void{
@@ -106,7 +110,8 @@ export class Healthbar {
         bleedingSprite.on('animationcomplete', this.destroy(bleedingSprite));
         bleedingSprite.anims.play("bleeding");
         sprite.destroy();
-        // this.updateText();
+        this.updateText();
+        this.activeBars--;
     }
 
     private updateText(): void{
@@ -146,6 +151,7 @@ export class Healthbar {
         let sprite = this.bars.pop().sprite;
         this.scene.time.delayedCall(500,()=>{sprite.destroy()}, [],this);
         this.scene.time.delayedCall(500,()=>{this.updateText()}, [],this);
+        this.activeBars--;
     }
 
     public setTermVisible()

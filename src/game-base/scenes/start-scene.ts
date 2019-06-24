@@ -90,7 +90,7 @@ export class StartScene extends Phaser.Scene {
 
 
         this.buttonStart = new Button(this, 100, 100, "button_shadow",
-            "button_bg", "button_fg", "button_resume",
+            "button_bg", "button_fg", "button_resume",0.95,
             ()=>{
                 this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene'});
                 this.scene.bringToTop('FadeScene')}
@@ -104,7 +104,7 @@ export class StartScene extends Phaser.Scene {
 
 
         this.buttonSettings = new Button(this, 100, 100, "button_shadow",
-            "button_bg", "button_fg", "button_options",
+            "button_bg", "button_fg", "button_options",0.95,
             ()=>{
             });
 

@@ -28,6 +28,11 @@
       },
       {
         "type": "image",
+        "key": "armor_shield_small",
+        "url": "assets/sprites/armor_shield_small.png"
+      },
+      {
+        "type": "image",
         "key": "hitzone_shield",
         "url": "assets/sprites/hitzone_shield.png"
       },
@@ -35,6 +40,11 @@
         "type": "image",
         "key": "laser_shield",
         "url": "assets/sprites/laser_shield.png"
+      },
+      {
+        "type": "image",
+        "key": "laser_shield_small",
+        "url": "assets/sprites/laser_shield_small.png"
       },
       {
         "type": "image",
@@ -457,6 +467,11 @@
       },
       {
         "type": "image",
+        "key": "shield_animation",
+        "url": "assets/sprites/shield_animation.png"
+      },
+      {
+        "type": "image",
         "key": "debris/debris_2",
         "url": "assets/sprites/debris/debris_2.png"
       },
@@ -557,6 +572,96 @@
         "type": "image",
         "key": "button_rocket",
         "url": "assets/sprites/button_rocket.png"
+      },
+      {
+        "type": "image",
+        "key": "sun_erupt",
+        "url": "assets/sprites/sun_erupt.png"
+      },
+      {
+        "type": "image",
+        "key": "worm_hole",
+        "url": "assets/sprites/worm_hole.png"
+      },
+      {
+        "type": "image",
+        "key": "black_hole",
+        "url": "assets/sprites/black_hole.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/00",
+        "url": "assets/sprites/shield/00.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/10",
+        "url": "assets/sprites/shield/10.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/09",
+        "url": "assets/sprites/shield/09.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/08",
+        "url": "assets/sprites/shield/08.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/07",
+        "url": "assets/sprites/shield/07.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/06",
+        "url": "assets/sprites/shield/06.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/05",
+        "url": "assets/sprites/shield/05.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/04",
+        "url": "assets/sprites/shield/04.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/03",
+        "url": "assets/sprites/shield/03.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/02",
+        "url": "assets/sprites/shield/02.png"
+      },
+      {
+        "type": "image",
+        "key": "shield/01",
+        "url": "assets/sprites/shield/01.png"
+      },
+      {
+        "type": "image",
+        "key": "motorL",
+        "url": "assets/sprites/motorL.png"
+      },
+      {
+        "type": "image",
+        "key": "motorP",
+        "url": "assets/sprites/motorP.png"
+      },
+      {
+        "type": "image",
+        "key": "motorR",
+        "url": "assets/sprites/motorR.png"
+      },
+      {
+        "type": "image",
+        "key": "motor",
+        "url": "assets/sprites/motor.png"
       }
     ]
   }
