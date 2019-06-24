@@ -24,6 +24,7 @@ import {NanoDrone} from "./nanoDrone";
 import {BlackHole} from "./anomalies/black-hole";
 import {BlackholeParticle} from "./animations/blackhole-particle";
 import {Motor} from "./motor";
+import {NeutronStar} from "./anomalies/neutron-star";
 
 export class Player {
     private nameIdentifier: string;
@@ -74,6 +75,8 @@ export class Player {
 
     private malusEnergy: number;
 
+    private endGameAnomaly: NeutronStar;
+
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean,
                        piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar, piAnim: PiAnimSystem){
         this.isDead=false;
@@ -101,6 +104,8 @@ export class Player {
         this.blackholeParticles = new BlackholeParticle(pem);
         this.motor = new Motor(scene, this, x, y, piAnim);
         this.malusEnergy = 0;
+
+        if(isFirstPlayer) this.endGameAnomaly = new NeutronStar(scene, this);
         //console.log(blackholeAppears)
         //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
         //this.anomalies = ["hole", "eruption", "nanodrone"];
@@ -170,6 +175,7 @@ export class Player {
 
         if(this.currentAnomaly) this.currentAnomaly.update(delta);
         if(this.blackhole) this.blackhole.update(delta);
+        if(this.endGameAnomaly) this.endGameAnomaly.update(delta);
     }
 
     getNameIdentifier(): string{
