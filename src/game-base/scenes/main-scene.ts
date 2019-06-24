@@ -118,6 +118,7 @@ export class MainScene extends Phaser.Scene {
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
         this.players = [new Player(this, 280, 540, "P1", true, this.system, this.pem), new Player(this, 1650, 540, "P2", false, this.system, this.pem)];
+
         this.turn = new Turn(this, this.players);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
@@ -246,6 +247,7 @@ export class MainScene extends Phaser.Scene {
 
     update(time: number, delta: number): void {
         this.timeAccumulator += delta;
+
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
             this.shop.updateStep();
