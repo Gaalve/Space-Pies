@@ -64,7 +64,7 @@ export class EndSceneP1 extends Phaser.Scene {
 
 
         this.buttonMain = new Button(this, 100, 100, "button_shadow",
-            "button_bg", "button_fg", "button_skip",
+            "button_bg", "button_fg", "button_skip",0.95,
             ()=>{
                 this.scene.get('MainScene').scene.restart();
                 this.P2.resetEnergy();

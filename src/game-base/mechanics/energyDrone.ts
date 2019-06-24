@@ -14,7 +14,6 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
     protected readonly index : number;
     protected piTerm : string;
     public health : HealthbarSD;
-    public explosion: Explosion;
     public collectED:collectEnergy_Drones;
 
 
@@ -66,7 +65,6 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
         this.player = player;
         this.index = index;
-        this.explosion = new Explosion(pem);
         this.collectED=new collectEnergy_Drones(pem);
         if(index > 0) {
             this.health = new HealthbarSD(scene, this.x, this.y, player.getNameIdentifier(), index, piAnim);
@@ -105,7 +103,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
     public explode():void{
         this.player.activatedSolarDrones--;
         this.player.raiseEnergyCost("solar",-20);
-        this.explosion.explosionAt(this.x,this.y);
+        this.player.explosion.explosionAt(this.x,this.y);
         this.player.scene.time.delayedCall(300,()=>{this.setVisible(false); this.player.setSmallestIndexSD();},[],this);
     }
 
@@ -117,7 +115,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
             system.add.replication(
                 system.add.channelInCB("solar" + p + d,"amount", (amount)=>{
                     this.player.gainEnergy(amount)})
-                    .nullProcess()));
+                    .process('Enegry', ()=>{})));
     }
 
     private createSolarShields(p: string, sd: number){

@@ -204,19 +204,16 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		let sum = system.add.sum([system.add.channelInCB("lock" + p + d,"", ()=>{
 			this.piSeq.resolveSymbol();
 		}).
-		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w1","", (_, at) => {
 			droneRef.getWeapons()[0].createBullet(at); if (this.weapons[0].canShoot()) this.piSeq.resolveSymbol();
 		}).        //function for weapon animation
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
-		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w2", "", (_, at) => {
 			droneRef.getWeapons()[1].createBullet(at); if (this.weapons[1].canShoot()) this.piSeq.resolveSymbol();
 		}).
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
-		channelOut('shotblock'+this.player.getNameIdentifier().charAt(1), "").
 		channelOutCB("w3", "", (_, at) => {
 			droneRef.getWeapons()[2].createBullet(at); this.resolveAndClearPiAnimSeq();
 		}).
