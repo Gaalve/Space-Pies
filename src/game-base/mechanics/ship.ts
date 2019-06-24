@@ -7,6 +7,7 @@ import {Debris} from "./ship/debris";
 import {GuiScene} from "../scenes/gui-scene";
 import {MainScene} from "../scenes/main-scene";
 import {EndSceneP1} from "../scenes/end-sceneP1";
+import {Weapon} from "./weapon";
 
 
 export class Ship{
@@ -34,6 +35,7 @@ export class Ship{
         this.posY = y;
         this.debris = [];
 
+        this.isRed ? this.scene.data.set("redship",this.modularShip) : this.scene.data.set("blueship", this.modularShip);
 
     }
 
