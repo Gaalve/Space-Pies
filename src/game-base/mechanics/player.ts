@@ -66,6 +66,8 @@ export class Player {
     public currentAnomaly: Anomaly;
     public blackhole: BlackHole;
 
+    public motor: Motor;
+
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean,
                        piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
         this.isDead=false;
@@ -91,7 +93,7 @@ export class Player {
         this.bulletTrail = new BulletTrail(pem);
         this.collectE = new collectEnergy_ship(pem);
         this.blackholeParticles = new BlackholeParticle(pem);
-
+        this.motor = new Motor(scene, this, x, y);
         //console.log(blackholeAppears)
         //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
         //this.anomalies = ["hole", "eruption", "nanodrone"];
