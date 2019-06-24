@@ -20,6 +20,7 @@ import {WormHole} from "./anomalies/worm-hole";
 import {NanoDrone} from "./nanoDrone";
 import {BlackHole} from "./anomalies/black-hole";
 import {BlackholeParticle} from "./animations/blackhole-particle";
+import {Motor} from "./motor";
 
 export class Player {
     private nameIdentifier: string;
@@ -49,6 +50,7 @@ export class Player {
     private rocketCost : number = 40;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
     private adaptCost: number = 16; // cost for adaptive shield
+    private motorCost: number = 5;
 
 
 
@@ -65,6 +67,8 @@ export class Player {
 
     public currentAnomaly: Anomaly;
     public blackhole: BlackHole;
+
+    public motor: Motor;
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean,
                        piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
@@ -100,18 +104,23 @@ export class Player {
         this.bulletTrail = new BulletTrail(pem);
         this.collectE = new collectEnergy_ship(pem);
         this.blackholeParticles = new BlackholeParticle(pem);
-
+        this.motor = new Motor(scene, this, x, y);
         //console.log(blackholeAppears)
         //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
         //this.anomalies = ["hole", "eruption", "nanodrone"];
 
         //TODO: remove when Triebwerke ready
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
+      //  Motor.startMotor();
+
+ /*       this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '',
             new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
         this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '',
-            new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
+            new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess())); */
+    //    this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn(
+   //         'shotblock'+this.getNameIdentifier().charAt(1), "","", 0).nullProcess())
+    //    );
 
 
         // z1 starts with 1 shield
@@ -248,6 +257,15 @@ export class Player {
         return this.energy;
     }
 
+    getRegenRate(): number
+    {
+        let rate = 50;
+        if(this.activatedSolarDrones-1 >= 0){
+            rate += (this.activatedSolarDrones-1)*25;
+        }
+        return rate;
+    }
+
     payEnergy(cost: number) : void
     {
         this.energy -= cost;
@@ -297,6 +315,9 @@ export class Player {
         }
         case("adap"):{
             return this.adaptCost;
+        }
+        case("motor"):{
+            return this.motorCost;
         }
         default: return 0;
 
@@ -556,5 +577,30 @@ export class Player {
 
     private createFirstSolarDrone(p : string) : void{
         this.system.pushSymbol(this.system.add.channelOut("newsolar" + p + "0", "solar" + p + "0").nullProcess());
+    }
+
+    getActiveMotorL(): number{
+        if(this.nameIdentifier == "P1"){
+            return this.motor.getactiveMotorLaserP1();
+        }
+        else{
+            return this.motor.getactiveMotorLaserP2();
+        }
+    }
+    getActiveMotorP(): number{
+        if(this.nameIdentifier == "P1"){
+            return this.motor.getactiveMotorProjectileP1();
+        }
+        else{
+            return this.motor.getactiveMotorProjectileP2();
+        }
+    }
+    getActiveMotorR(): number{
+        if(this.nameIdentifier == "P1"){
+            return this.motor.getactiveMotorRocketP1();
+        }
+        else{
+            return this.motor.getactiveMotorRocketP2();
+        }
     }
 }

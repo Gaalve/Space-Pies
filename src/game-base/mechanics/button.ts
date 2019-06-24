@@ -26,9 +26,9 @@ export class Button{
     private readonly colorDist: integer;
 
     public constructor(scene: Phaser.Scene, x: number, y: number, shadowTex: string,
-                       bgText: string, imgTex: string, fgTex: string,
+                       bgText: string, imgTex: string, fgTex: string, scale:number,
                        onClick: Function = ()=>{}) {
-        this.scale = 0.95;
+        this.scale = scale;
         this.shadow = new Sprite(scene, x, y, shadowTex);
         this.bg = new Sprite(scene, x, y, bgText);
         this.img = new Sprite(scene, x, y, imgTex);
