@@ -5,6 +5,11 @@ export class ShipPart {
     private scene: Scene;
     public normal: Sprite;
     public destroyed: Sprite;
+    private offX: number;
+    private offY: number;
+    public currentTex;
+    public normal: Sprite;
+    public destroyed: Sprite;
     private _offX: number;
     private _offY: number;
     private _x : number;
@@ -30,7 +35,8 @@ export class ShipPart {
         this.normal.setDepth(depth);
         this.destroyed.setDepth(depth-2);
 
-        this.scene.add.existing(this.normal);
+        this.currentTex = this.scene.add.existing(this.normal);
+
     }
 
     public toDestroyedPart(): void{
