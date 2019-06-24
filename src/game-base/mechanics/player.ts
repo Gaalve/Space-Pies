@@ -29,6 +29,7 @@ export class Player {
     public scene : Phaser.Scene;
     private system : PiSystem;
     public ship : Ship;
+    public ship_out: Phaser.GameObjects.Sprite;
     private activatedDrones : number;
     public activatedSolarDrones : number;
     private smallestIndexSolDrone : number;
@@ -72,6 +73,15 @@ export class Player {
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
         this.ship = new Ship(scene, x, y, this);
+        if(nameIdentifier == "P1"){
+            this.ship_out = scene.add.sprite(x+20,y,"ssr_ship").setScale(1.1,1.1).setTintFill(0xa02c2c);
+            this.ship_out.setVisible(false);
+        }
+        else{
+            this.ship_out = scene.add.sprite(x-30,y,"ssb_ship").setScale(1.1,1.1).setTintFill(0xa02c2c);
+            this.ship_out.setVisible(false);
+
+        }
         this.drones = [new Drone(scene, x, y, this, 0), new Drone(scene, x, y, this, 1), new Drone(scene, x, y, this,2 )];
         this.scene = scene;
         this.activatedDrones = 0;

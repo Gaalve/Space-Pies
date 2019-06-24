@@ -203,5 +203,15 @@ export class Button{
         return this.active;
     }
 
+    hover(string: String){
+        if (this.hovering) this.scaleUp();
+        else this.scaleDown();
+        this.setScale();
+        let colorObj = Phaser.Display.Color.Interpolate.ColorWithColor(this.startColor, this.endColor, this.colorDist, this.colorIdx);
+        let color = Phaser.Display.Color.ObjectToColor(colorObj).color;
+        this.shadow.setTintFill(color);
+
+    }
+
 
 }
