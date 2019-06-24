@@ -32,12 +32,18 @@ export class NeutronStar {
         scene.add.existing(this.fg);
         this.fg.setTint(0x2eceff);
 
+        // this.comets.setDepth(14);
+        // this.star.setDepth(14);
+        // this.bg2.setDepth(14);
+        // this.bg1.setDepth(14);
+        // this.fg.setDepth(14);
     }
 
 
 
 
     public update(delta: number): void{
+        this.player.neutronParticles.emit();
         this.bg1.update(delta);
         this.bg2.update(delta);
         this.comets.update(delta);
