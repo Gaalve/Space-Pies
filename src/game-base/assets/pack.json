@@ -687,6 +687,16 @@
         "type": "image",
         "key": "neutron_comets",
         "url": "assets/sprites/neutron_comets.png"
+      },
+      {
+        "type": "image",
+        "key": "warning",
+        "url": "assets/sprites/warning.png"
+      },
+      {
+        "type": "image",
+        "key": "pixel8",
+        "url": "assets/sprites/pixel8.png"
       }
     ]
   }

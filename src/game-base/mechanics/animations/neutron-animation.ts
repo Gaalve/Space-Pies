@@ -19,7 +19,7 @@ export class NeutronAnimation {
             //     quantity: 0,
             //     stepRate: 2},
             tint: [0xaaeeff, 0x2ad4ff],
-            scale: {start: 0.25, end: 0},
+            scale: {start: 0.33, end: 0},
             // quantity: 2,
             // frequency:1,
             lifespan: 5000,
