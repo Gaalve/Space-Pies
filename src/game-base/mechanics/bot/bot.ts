@@ -3,6 +3,7 @@ import {PiSystem} from "../picalc/pi-system";
 import {BattleTimeBar} from "../battleTimeBar";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {Botlog} from "./botlog";
+import {parse} from "ts-node";
 
 
 export class Bot extends Player{
@@ -12,6 +13,9 @@ export class Bot extends Player{
     public motorLaserSlots: number;
     public motorProjectileSlots: number;
     public motorRocketSlots: number;
+    public wmodSlots: number;
+    public nextSolar: string;
+    public droneSlots: number[];
 
     public possibleActions: string[];
 
@@ -45,6 +49,16 @@ export class Bot extends Player{
     public solar: string = "solar";
     public end: string = "end";
 
+    public botEnergy: number;
+        private botShield: number;
+        private botnano: number;
+        private botWmod: number;
+        private botWeapon: number;
+        private botRocket: number;
+        private botSolar: number;
+        private botAdapt: number;
+        private botMotor: number;
+
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
         super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt);
@@ -53,6 +67,22 @@ export class Bot extends Player{
         this.motorLaserSlots = 2;
         this.motorRocketSlots = 2;
         this.motorProjectileSlots = 2;
+        this.wmodSlots = 2;
+        this.nextSolar = "1";
+        this.droneSlots = [];
+        this.droneSlots.splice(0,0, 2);
+        this.droneSlots.splice(1,0, 3);
+        this.droneSlots.splice(2,0, 3);
+
+        this.botShield = this.getEnergyCost("armor");
+        this.botnano = this.getEnergyCost("nano");
+        this.botWmod = this.getEnergyCost("wmod");
+        this.botWeapon = this.getEnergyCost("weapon");
+        this.botRocket = this.getEnergyCost("rocketl");
+        this.botSolar = this.getEnergyCost("solar");
+        this.botAdapt = this.getEnergyCost("adap");
+        this.botMotor = this.getEnergyCost("motor");
+        this.botEnergy = this.getEnergy();
 
         this.active = false;
         this.steps = 0;
@@ -67,6 +97,7 @@ export class Bot extends Player{
         this.botLog.clearLog();
         this.botLog.setVisible();
         this.active = true;
+        this.nextSolar = this.getSmallestIndexSD();
 
         while(this.active) {
             if(this.isDead){
@@ -89,19 +120,19 @@ export class Bot extends Player{
 
 
     public chooseAction(): string {
-        if(this.getEnergyCost("nano") <= this.getEnergy()){
+        if(this.botnano <= this.botEnergy ){
             this.possibleActions.push(this.reg);
         }
-        if(this.getEnergyCost("weapon") <= this.getEnergy() && this.weaponSlots > 0){
+        if(this.botWeapon <= this.botEnergy && this.weaponSlots > 0){
             this.possibleActions.push(this.wext);
         }
-        if(this.getEnergyCost("motor") <= this.getEnergy() && (this.motorLaserSlots > 0 || this.motorProjectileSlots > 0 || this.motorRocketSlots > 0)){
+        if(this.botMotor <= this.botEnergy && (this.motorLaserSlots > 0 || this.motorProjectileSlots > 0 || this.motorRocketSlots > 0)){
             this.possibleActions.push(this.mot);
         }
-        if(this.getEnergyCost("wmod") <= this.getEnergy() && this.getNrDrones() < 3){
+        if(this.botWmod <= this.botEnergy && this.wmodSlots > 0){
             this.possibleActions.push(this.wmod);
         }
-        if(this.getEnergyCost("solar") <= this.getEnergy() && this.getNrSolarDrones() < 4){
+        if(this.botSolar <= this.botEnergy && parseInt(this.nextSolar) < 4){
             this.possibleActions.push(this.solar);
         }
 
@@ -138,61 +169,76 @@ export class Bot extends Player{
                     this.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ".");
                 }
             }, [], this);
+
         }else if(action == this.wext){
             let weapon = this.chooseWeaponType();
             this.clearPosActions();
             let mod = this.chooseWeaponMod();
             this.clearPosActions();
+            let nr = mod.toString() + (3-this.droneSlots[mod]).toString();
+            this.droneSlots[mod]--;
 
             this.scene.time.delayedCall(delay, ()=> {
-                system.pushSymbol(system.add.channelOut("wext" + this.id + mod, "").nullProcess());
+                system.pushSymbol(system.add.channelOut("wext" + this.id + nr, weapon + "p" + this.id).nullProcess());
 
                 let w = "rocket launcher";
                 if(weapon != "rocket") w = weapon == "armor" ? "laser weapon" : "projectile weapon";
                 this.botLog.insertLog(s + ". I built a " + w + " on wmod " + mod + ".");
             },[], this);
             this.weaponSlots--;
+
         }else if(action == this.mot){
-                let motor = this.chooseMotorType();
+            let motor = this.chooseMotorType();
 
-                this.clearPosActions();
-                if(motor == this.mlas) this.motorLaserSlots--;
-                if(motor == this.mpro) this.motorProjectileSlots--;
-                if(motor == this.mroc) this.motorRocketSlots--;
+            this.clearPosActions();
 
-                let nr = this.getMotorNr(motor);
+            let nr = this.getMotorNr(motor);
 
-                this.scene.time.delayedCall(delay,()=> {
-                    system.pushSymbol(system.add.channelOut("buymotor" + motor + this.id + nr, "").nullProcess());
-                    this.botLog.insertLog(s + ". I built a " + motor + " motor.");
-                },[], this);
+            this.scene.time.delayedCall(delay,()=> {
+                system.pushSymbol(system.add.channelOut("buymotor" + motor + this.id + nr, "").nullProcess());
+                this.botLog.insertLog(s + ". I built a " + motor + " motor.");
+            },[], this);
+            if(motor == this.mlas) this.motorLaserSlots--;
+            if(motor == this.mpro) this.motorProjectileSlots--;
+            if(motor == this.mroc) this.motorRocketSlots--;
+
             }else if(action == this.wmod){
-                this.scene.time.delayedCall(delay, ()=> {
-                    system.pushSymbol(system.add.channelOut("wmod" + this.id + this.getNrDrones(), "").nullProcess());
-                    this.botLog.insertLog(s + ". I built a weapon mod.");
-                }, [], this);
-                this.weaponSlots += 3;
+            let nr = (3-this.wmodSlots).toString();
+            this.scene.time.delayedCall(delay, ()=> {
+                system.pushSymbol(system.add.channelOut("wmod" + this.id + nr, "").nullProcess());
+                this.botLog.insertLog(s + ". I built a weapon mod.");
+            }, [], this);
+            this.weaponSlots += 3;
+            this.wmodSlots--;
+
             }else if(action == this.solar){
-                this.scene.time.delayedCall(delay, ()=> {
-                    system.pushSymbol(system.add.channelOut("newsolar" + this.id + this.getNrSolarDrones(), "").nullProcess());
-                    this.botLog.insertLog(s + ". I built a solar drone.");
-                }, [], this);
+            this.setSmallestIndexSD();
+            this.nextSolar = this.getSmallestIndexSD();
+            let nr = this.nextSolar;
+            this.scene.time.delayedCall(delay, ()=> {
+                system.pushSymbol(system.add.channelOut("newsolar" + this.id + nr, "").nullProcess());
+                this.botLog.insertLog(s + ". I built a solar drone.");
+            }, [], this);
+
             }else{
-                this.scene.time.delayedCall(delay, ()=> {
-                    system.pushSymbol(system.add.channelOut("botend", "").nullProcess());
-                    this.botLog.insertLog(s + ". I´m finished. It´s your turn.");
-                }, [], this);
-                this.active = false;
-                this.steps = 0;
+            this.scene.time.delayedCall(delay, ()=> {
+                system.pushSymbol(system.add.channelOut("botend", "").nullProcess());
+                this.botLog.insertLog(s + ". I´m finished. It´s your turn.");
+            }, [], this);
+            this.scene.time.delayedCall(delay + 1000, ()=>this.botLog.setInvisible(), [], this);
+            this.active = false;
+            this.steps = 0;
             }
         }
 
     public chooseShieldType(): string{
-        if(this.getEnergyCost("nano") <= this.getEnergy()) this.possibleActions.push(this.n);
-        if(this.getEnergyCost("armor") <= this.getEnergy()) this.possibleActions.push(this.ar);
-        if(this.getEnergyCost("shield") <= this.getEnergy()) this.possibleActions.push(this.s);
-        if(this.getEnergyCost("rocket") <= this.getEnergy()) this.possibleActions.push(this.r);
-        if(this.getEnergyCost("adap") <= this.getEnergy()) this.possibleActions.push(this.ad);
+        this.possibleActions.push(this.n);
+        if(this.botShield <= this.botEnergy) {
+            this.possibleActions.push(this.ar);
+            this.possibleActions.push(this.s);
+        }
+        if(this.botShield <= this.botEnergy) this.possibleActions.push(this.r);
+        if(this.botAdapt <= this.botEnergy) this.possibleActions.push(this.ad);
 
         let x = Phaser.Math.Between(0, this.possibleActions.length-1)
         return this.possibleActions[x];
@@ -209,29 +255,29 @@ export class Bot extends Player{
     }
 
     public chooseWeaponType(): string{
-        if(this.getEnergyCost("weapon") <= this.getEnergy()) {this.possibleActions.push(this.las); this.possibleActions.push(this.pro)}
-        if(this.getEnergyCost("rocketl") <= this.getEnergy()) this.possibleActions.push(this.roc);
+        if(this.botWeapon <= this.botEnergy) {this.possibleActions.push(this.las); this.possibleActions.push(this.pro)}
+        if(this.botRocket <= this.botEnergy) this.possibleActions.push(this.roc);
 
-        let x = Phaser.Math.Between(0, this.possibleActions.length-1)
+        let x = Phaser.Math.Between(0, this.possibleActions.length-1);
         return this.possibleActions[x];
     }
 
-    public chooseWeaponMod(): string{
+    public chooseWeaponMod(): number{
 
         let mod0 = false;
         let mod1 = false;
         let mod2 = false;
 
-        for (let w of this.getDrones()[0].getWeapons()){if(!w.visible) mod0 = true;}
-        for (let w of this.getDrones()[1].getWeapons()){if(!w.visible) mod1 = true;}
-        for (let w of this.getDrones()[2].getWeapons()){if(!w.visible) mod2 = true;}
+        if(this.droneSlots[0] > 0) mod0 = true;
+        if(this.droneSlots[1] > 0) mod1 = true;
+        if(this.droneSlots[2] > 0) mod2 = true;
 
         if(mod0) this.possibleActions.push("0");
-        if(mod1 && this.getNrDrones() == 2) this.possibleActions.push("1");
-        if(mod2 && this.getNrDrones() == 3) this.possibleActions.push("2");
+        if(mod1 && this.wmodSlots == 1) this.possibleActions.push("1");
+        if(mod2 && this.wmodSlots == 0) this.possibleActions.push("2");
 
         let x = Phaser.Math.Between(0, this.possibleActions.length-1);
-        return this.possibleActions[x];
+        return parseInt(this.possibleActions[x]);
 
     }
 
@@ -246,35 +292,29 @@ export class Bot extends Player{
     }
 
     public getMotorNr(type: string): string{
-        let p1 = this.id == "1";
 
         switch(type){
             case("laser"):{
-                if(p1){
-                    return this.motor.getactiveMotorLaserP1().toString();
-                }else{
-                    return this.motor.getactiveMotorLaserP2().toString();
-                }
+                return (3-this.motorLaserSlots).toString();
             }
             case("projectile"):{
-                if(p1){
-                    return this.motor.getactiveMotorProjectileP1().toString();
-                }else{
-                    return this.motor.getactiveMotorProjectileP2().toString();
-                }
+                return(3-this.motorProjectileSlots).toString();
             }
             case("rocket"):{
-                if(p1){
-                    return this.motor.getactiveMotorRocketP1().toString();
-                }else{
-                    return this.motor.getactiveMotorRocketP2().toString();
-                }
+                return (3-this.motorRocketSlots).toString();
             }
         }
     }
 
-
     public getBotLog(): Botlog {
         return this.botLog;
+    }
+
+    public buyUpgrade(x: number): void{
+        this.botEnergy -= x;
+    }
+
+    public updateWmodCost(): void{
+        this.botWmod += 15;
     }
 }

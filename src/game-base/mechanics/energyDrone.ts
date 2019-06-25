@@ -113,7 +113,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
             system.add.replication(
                 system.add.channelInCB("solar" + p + d,"amount", (amount)=>{
                     this.player.gainEnergy(amount)})
-                    .process('Enegry', ()=>{})));
+                    .process('Energy', ()=>{})));
     }
 
     private createSolarShields(p: string, sd: number){
@@ -128,8 +128,6 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
                 new BulletInfo(false, x,y), 0.6)
             .channelInCB("shieldp"+p,"",()=>{this.player.getSolarDrones()[sd].health.destroyBar()},
                 new BulletInfo(false, x,y), 0.6)
-            .channelInCB("armorp"+p,"",()=>{this.player.getSolarDrones()[sd].health.destroyBar()},
-                new BulletInfo(false, x,y),0.6)
             .channelInCB("armorp"+p,"",()=>{this.player.getSolarDrones()[sd].health.destroyBar()},
                 new BulletInfo(false, x,y),0.6)
             .channelOutCB("dessol"+p+d,"e"+d, ()=>{this.player.getSolarDrones()[sd].explode()})
