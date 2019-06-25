@@ -1,92 +1,44 @@
 import {BaseShip} from "./base-ship";
 import {ShipPart} from "./ship-part";
 import {Infobox} from "../Infobox";
+import Sprite = Phaser.GameObjects.Sprite;
+import {Weapon} from "../weapon";
 
 export class RedShip extends BaseShip{
-    get backUp(): ShipPart
-    {
-        return this._backUp;
-    }
+    backUp: ShipPart;
+    backDown: ShipPart;
+    pilot: ShipPart;
+    wingUp: ShipPart;
+    wingDown: ShipPart;
+    hull: ShipPart;
+    x : number;
+    y : number;
+    durationX : number;
+    durationY : number;
+    sinX : number;
+    sinY : number;
+    private weapons: Array<Weapon>;
+    onScreenText : Phaser.GameObjects.Text;
 
-    set backUp(value: ShipPart)
-    {
-        this._backUp = value;
-    }
-
-    get backDown(): ShipPart
-    {
-        return this._backDown;
-    }
-
-    set backDown(value: ShipPart)
-    {
-        this._backDown = value;
-    }
-
-    get pilot(): ShipPart
-    {
-        return this._pilot;
-    }
-
-    set pilot(value: ShipPart)
-    {
-        this._pilot = value;
-    }
-
-    get wingUp(): ShipPart
-    {
-        return this._wingUp;
-    }
-
-    set wingUp(value: ShipPart)
-    {
-        this._wingUp = value;
-    }
-
-    get wingDown(): ShipPart
-    {
-        return this._wingDown;
-    }
-
-    set wingDown(value: ShipPart)
-    {
-        this._wingDown = value;
-    }
-
-    get hull(): ShipPart
-    {
-        return this._hull;
-    }
-
-    set hull(value: ShipPart)
-    {
-        this._hull = value;
-    }
-    private _backUp: ShipPart;
-    private _backDown: ShipPart;
-    private _pilot: ShipPart;
-    private _wingUp: ShipPart;
-    private _wingDown: ShipPart;
-    private _hull: ShipPart;
 
     public constructor(scene: Phaser.Scene,x: number, y: number){
         super(scene, x, y);
-        this._backUp = new ShipPart(scene, x, y, "ssbr/ssr_back_up", "ssbr/ssr_des_back_up",
+        this.backUp = new ShipPart(scene, x, y, "ssbr/ssr_back_up", "ssbr/ssr_des_back_up",
             -60, -85, -61, -103,1);
 
-        this._backDown = new ShipPart(scene, x, y, "ssbr/ssr_back_down", "ssbr/ssr_des_back_down",
+        this.backDown = new ShipPart(scene, x, y, "ssbr/ssr_back_down", "ssbr/ssr_des_back_down",
             -60, 85, -68, 72,1);
 
-        this._pilot = new ShipPart(scene, x, y, "ssbr/ssr_pilot", "ssbr/ssr_des_pilot",
+        this.pilot = new ShipPart(scene, x, y, "ssbr/ssr_pilot", "ssbr/ssr_des_pilot",
             141, 0, 133, -2,1);
 
-        this._wingUp = new ShipPart(scene, x, y, "ssbr/ssr_wing_up", "ssbr/ssr_des_wing_up_2",
+        this.wingUp = new ShipPart(scene, x, y, "ssbr/ssr_wing_up", "ssbr/ssr_des_wing_up_2",
             59, -151, 58, -76,1);
 
-        this._wingDown = new ShipPart(scene, x, y, "ssbr/ssr_wing_down", "ssbr/ssr_des_wing_down",
+        this.wingDown = new ShipPart(scene, x, y, "ssbr/ssr_wing_down", "ssbr/ssr_des_wing_down",
             59, 151, 51, 98,1);
 
-        this._hull = new ShipPart(scene, x, y, "ssbr/ssr_hull", "ssbr/ssr_des_hull",
+        this.hull = new ShipPart(scene, x, y, "ssbr/ssr_hull", "ssbr/ssr_des_hull",
             11, 0, 55, 15,2);
 
         let infobox = <Infobox> scene.data.get("infoboxx");
@@ -98,56 +50,124 @@ export class RedShip extends BaseShip{
         infobox.addTooltipInfo(this.hull.normal, "[P1] The hull of your ship. \nAt least this one's as ugly as the others. Not as rich as you though 'eh ?")
 
 
+        this.x =  x;
+        this.y = y;
+        this.durationX = 900;
+        this.durationY = 1000;
+        this.sinX = 0;
+        this.sinY = 0;
+        this.weapons = new Array<Weapon>();
+        this.setAllPartPosition();
+
         this.setAllPartPosition();
         // this.toDestroyedShip();
     }
 
-
-    toDestroyedShip(): void {
-        this._backDown.toDestroyedPart();
-        this._backUp.toDestroyedPart();
-        this._pilot.toDestroyedPart();
-        this._wingDown.toDestroyedPart();
-        this._wingUp.toDestroyedPart();
-        this._hull.toDestroyedPart();
+    private moveSin(moveX, moveY, fromX: number, toX: number, fromY: number, toY: number, delta: number, sprite: Sprite) {
+        if (moveX) sprite.x = fromX + Math.sin(delta * Math.PI / 2) * (toX - fromX);
+        if (moveY) sprite.y = fromY + Math.cos(delta * Math.PI / 2) * (toY - fromY);
     }
 
-    setAllPartPosition(): void {
-        this._backUp.setPosition(this.posX, this.posY);
-        this._backDown.setPosition(this.posX, this.posY);
-        this._pilot.setPosition(this.posX, this.posY);
-        this._wingUp.setPosition(this.posX, this.posY);
-        this._wingDown.setPosition(this.posX, this.posY);
-        this._hull.setPosition(this.posX, this.posY);
+
+    toDestroyedShip(): void {
+        this.backDown.toDestroyedPart();
+        this.backUp.toDestroyedPart();
+        this.pilot.toDestroyedPart();
+        this.wingDown.toDestroyedPart();
+        this.wingUp.toDestroyedPart();
+        this.hull.toDestroyedPart();
+    }
+
+    setAllPartPosition(moveX?: Boolean, moveY?: Boolean): void {
+        let posX = moveX ? (this.posX + Math.sin(this.sinX) * 25) : this.posX;
+        let posY = moveY ? this.posY + Math.cos(this.sinY) * 25 : this.posY;
+
+        this.onScreenText ? this.onScreenText.setPosition(posX - 210, posY + this.onScreenText.width/2) : null;
+
+        this.backUp.setPosition(posX, posY);
+        this.backDown.setPosition(posX, posY);
+        this.pilot.setPosition(posX, posY);
+        this.wingUp.setPosition(posX, posY);
+        this.wingDown.setPosition(posX, posY);
+        this.hull.setPosition(posX, posY);
+
+        if (this.weapons)
+        {
+            for (let i = 0; i < this.weapons.length; i++)
+            {
+                let weapon = this.weapons[i];
+                if (weapon)
+                {
+                    // let posXweapon = moveX && weapon ? (weapon.x + Math.sin(this.sinX) * 25) : weapon ? weapon.x : null;
+                    // let posYweapon = moveY && weapon ? (weapon.y + Math.cos(this.sinY) * 25) : weapon ? weapon.y : null;
+                    i == 0 ?
+                        weapon.setPosition(this.hull.normal.x + 100, this.hull.normal.y)
+                        :
+                        i == 1 ?
+                            weapon.setPosition(this.wingDown.normal.x, this.wingDown.normal.y)
+                            :
+                            i == 2 ?
+                                weapon.setPosition((this.wingUp.normal.x), this.wingUp.normal.y)
+                                : null;
+                }
+            }
+        }
+
     }
 
     toDestroyedBack(): void {
-        this._backDown.toDestroyedPart();
-        this._backUp.toDestroyedPart();
+        this.backDown.toDestroyedPart();
+        this.backUp.toDestroyedPart();
     }
 
     toDestroyedHull(): void {
-        this._hull.toDestroyedPart();
+        this.hull.toDestroyedPart();
     }
 
     toDestroyedPilot(): void {
-        this._pilot.toDestroyedPart();
+        this.pilot.toDestroyedPart();
     }
 
     toDestroyedWingDown(): void {
-        this._wingDown.toDestroyedPart();
+        this.wingDown.toDestroyedPart();
     }
 
     toDestroyedWingUp(): void {
-        this._wingUp.toDestroyedPart();
+        this.wingUp.toDestroyedPart();
+    }
+
+    addWeapon(weapon: Weapon): void
+    {
+        this.weapons.push(weapon);
     }
 
     update(delta: number): void {
-        this._backUp.update(delta);
-        this._backDown.update(delta);
-        this._pilot.update(delta);
-        this._hull.update(delta);
-        this._wingUp.update(delta);
-        this._wingDown.update(delta);
+        this.backUp.update(delta);
+        this.backDown.update(delta);
+        this.pilot.update(delta);
+        this.hull.update(delta);
+
+        this.wingUp.update(delta);
+        this.wingDown.update(delta);
+        this.backUp.update(delta);
+        this.backDown.update(delta);
+        this.pilot.update(delta);
+        this.hull.update(delta);
+        this.wingUp.update(delta);
+        this.wingDown.update(delta);
+
+
+        this.sinX += delta/ this.durationX;
+        this.sinY += delta/ this.durationY;
+
+        this.sinX %= 2*Math.PI;
+        this.sinY %= 2*Math.PI;
+
+        this.setAllPartPosition(false,true);
+    }
+
+    setOnScreenText(text)
+    {
+        this.onScreenText = text;
     }
 }

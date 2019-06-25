@@ -33,10 +33,6 @@ export class Intro extends Phaser.Scene {
     }
 
     create(): void {
-        // todo: KARA REMOVE FOLLOWING 2 LINES AFTER ANIM COMPLETE
-        this.scene.launch("GuiScene");
-        return;
-
         let counter = 0;
         this.text = new Text(this, 1900, 20, "Click to skip.", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 32, fontStyle: 'bold', strokeThickness: 2});
@@ -84,7 +80,6 @@ export class Intro extends Phaser.Scene {
 
 
     update(time: number, delta: number): void {
-        // todo: add back in
-        // this.mgr.update(delta/1000);
+        this.mgr.update(delta/1000);
     }
 }
