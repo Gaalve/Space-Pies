@@ -164,7 +164,10 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     		this.simplePi = this.simplePi + "p1";
 		}
 		let infobox = <Infobox> this.scene.data.get("infoboxx");
-		infobox.addTooltipInfo(this, "[" + this.player.getNameIdentifier() + "] Weapon Type:    " + this.simplePi + "<>           (" + Infobox.weaponTypeToString(this._weaponType) + ")\n     destroys:       " + Infobox.weaponTypeTargetsPiTerm(this._weaponType, this.player) + "    (" + Infobox.weaponTypeTargetsToString(this._weaponType) + ")");
+		infobox.addTooltipInfo(this, "[" + this.player.getNameIdentifier() + "] Weapon Type:    "
+			+ this.simplePi + "<>" +
+			"    (" + Infobox.weaponTypeToString(this._weaponType) + ")\n" + "     destroys:       " + Infobox.weaponTypeTargetsPiTerm(this._weaponType, this.player) +
+			"    (" + Infobox.weaponTypeTargetsToString(this._weaponType) + ")");
 
     }
 

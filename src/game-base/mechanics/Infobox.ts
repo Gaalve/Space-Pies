@@ -126,9 +126,9 @@ export class Infobox
     static weaponTypeTargetsToString(type: WeaponType)
     {
         switch (type) {
-            case WeaponType.LASER_ARMOR: return "armor, rocket";
-            case WeaponType.PROJECTILE_SHIELD: return "shield, rocket";
-            case WeaponType.ROCKET: return "armor, shield";
+            case WeaponType.LASER_ARMOR: return "Armor Shield";
+            case WeaponType.PROJECTILE_SHIELD: return "Laser Shield";
+            case WeaponType.ROCKET: return "Armor Shield, Laser Shield, Rocket Shield";
             case WeaponType.NONE: return "none"; // wrong model is intended!
         }
     }
@@ -137,9 +137,9 @@ export class Infobox
     {
         let targetPlayer = player.getNameIdentifier().indexOf("1") >= 0 ? "p2" : "p1";
         switch (type) {
-            case WeaponType.LASER_ARMOR: return "a" + targetPlayer + "(), r" + targetPlayer + "()";
-            case WeaponType.PROJECTILE_SHIELD: return "s" + targetPlayer + "(), r" + targetPlayer + "()";
-            case WeaponType.ROCKET: return "a" + targetPlayer + "(), s" + targetPlayer + "()";
+            case WeaponType.LASER_ARMOR: return "a" + targetPlayer + "()";
+            case WeaponType.PROJECTILE_SHIELD: return "s" + targetPlayer + "()";
+            case WeaponType.ROCKET: return "a" + targetPlayer + "(), s" + targetPlayer + "(), r"+ targetPlayer + "()";
             case WeaponType.NONE: return "none"; // wrong model is intended!
         }
     }
@@ -162,7 +162,7 @@ export class Infobox
             case "s":
                 return  "s"+ playerName.toLowerCase() + "<>, r" + playerName.toLowerCase() + "<>";
             case "r":
-                return  "s"+ playerName.toLowerCase() + "<>, a" + playerName.toLowerCase() + "<>";
+                return  "r"+ playerName.toLowerCase() + "<>";
 
         }
 

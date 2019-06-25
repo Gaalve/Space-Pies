@@ -83,6 +83,8 @@ export class Healthbar {
         }
         other.addSymbol(this.lastPiSymbolString);
         other.addSymbol('0');
+
+        this.updateInfoBox();
     }
 
     private updateTextViaNew(): void{
@@ -102,8 +104,11 @@ export class Healthbar {
         this.piAnimSequence.addSymbol(this.lastPiSymbolString);
         this.piAnimSequence.addSymbol('0');
 
-        for (let bar of this.bars)
-        {
+        this.updateInfoBox();
+    }
+
+    private updateInfoBox(): void{
+        for (let bar of this.bars){
             let sprite = bar.sprite;
             let infobox = <Infobox> this.scene.data.get("infoboxx");
             let playerName = this.direction == 1 ? "P1" : "P2";
@@ -113,21 +118,21 @@ export class Healthbar {
 
             let tooltipInfo = bar.type == HealthType.HitZoneBar ?
                 "[" + playerName + "] " +
-                "This is your Hitzone Bar. Each element represents one hitzone. \n"
+                "This is your HitZone Bar. Each element represents one HitZone. \n"
                 + "     If all are destroyed, the process \"CoreExplosion\" "+ playerName + " will execute\n"
                 + "     and your ship will be destroyed.\n\n"
-                + "     for each lost zone you'll receive a malus for the energy regeneration\n"
-                + "     of your ship"
+                + "     For each lost Zone you'll receive a Malus for the Energy Regeneration\n"
+                + "     of your Space Ship. (-5 for one, -14 for two, -27 for three)\n"
                 + "     current term:        " + this.toString() + "\n"
                 + "     currently active:    " + activeTerm  + "\n"
                 + "     will be resolved by: " + Infobox.getOppositeTerm(activeTerm, playerName) + "\n\n"
-                + "     (each of the other haelthbars emits an " + Infobox.getOppositeTerm(activeTerm, playerName) + "  after its last destroyed bar)"
-            :
-                "[" + playerName + "] Hitzone " + hitzoneNumber + "\n\n"
+                + "     (each of the other HealthBars emits an " + Infobox.getOppositeTerm(activeTerm, playerName) + " after its last destroyed bar)"
+                :
+                "[" + playerName + "] HitZone " + hitzoneNumber + "\n\n"
                 + "     current term:          " + this.toString() + "\n"
                 + "     currently active:      " + activeTerm + "\n"
                 + "     will be resolved by:   " + Infobox.getOppositeTerm(activeTerm,playerName) + "\n\n"
-                + "     (these come from each of " + opponentName + "'s weapons) \n"
+                + "     (these come from each of " + opponentName + "'s weapons) \n";
 
             infobox.addTooltipInfo(sprite, tooltipInfo);
         }
