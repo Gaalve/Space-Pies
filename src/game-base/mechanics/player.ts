@@ -212,6 +212,9 @@ export class Player {
         return this.solarDrones;
     }
 
+    getEnergyMalus(): number{
+        return this.malusEnergy;
+    }
 
     getSystem() : PiSystem{
         return this.system;

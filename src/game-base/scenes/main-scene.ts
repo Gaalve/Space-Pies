@@ -4,12 +4,9 @@ import {Button} from "../mechanics/button";
 
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import {Drone} from "../mechanics/drone";
 import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
-import {BulletInfo} from "../mechanics/weapon/bulletInfo";
 import {PiAnimSystem} from "../mechanics/pianim/pi-anim-system";
-import {PiAnimSequence} from "../mechanics/pianim/pi-anim-sequence";
 import {Infobox} from "../mechanics/Infobox";
 
 export class MainScene extends Phaser.Scene {
@@ -96,6 +93,7 @@ export class MainScene extends Phaser.Scene {
     private roundBG: Sprite;
     private roundFG: Sprite;
 
+    private infobox: Infobox;
 
 
 
@@ -150,6 +148,7 @@ export class MainScene extends Phaser.Scene {
 
         this.input.enabled = true;
         this.data.set("infoboxx",new Infobox(this));
+        this.infobox = <Infobox> this.data.get("infoboxx");
 
         if (!data && data !instanceof  PiAnimSystem) throw new Error("No Pi Anim System");
         this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
@@ -1622,11 +1621,13 @@ export class MainScene extends Phaser.Scene {
     }
 
     updateEnergyText(): void{
-        this.children.remove(this.energyT);
+        // this.children.remove(this.energyT);
+        this.energyT.destroy();
         // this.energyT = this.add.text(1920/2-15, 760, "= "+this.turn.getCurrentPlayer().getEnergy(), {
         //     fill: '#3771c8', fontFamily: '"Roboto-Medium"', fontSize: 64, strokeThickness: 2, stroke: '#214478'});
         this.energyT = this.add.text(1920/2-95, 160, "= "+this.turn.getCurrentPlayer().getEnergy(), {
                 fill: '#fff', fontFamily: '"Roboto-Medium"', fontSize: 64, strokeThickness: 1, stroke: '#fff'});
+
     }
 
     updateEnergyRate(bought: boolean):void{
@@ -1634,6 +1635,7 @@ export class MainScene extends Phaser.Scene {
         if(bought){
             rate += 25;
         }
+        this.infobox.removeTooltipInfo(this.energyRegen);
         this.children.remove(this.energyRegen);
 
         if(this.turn.getCurrentPlayer().getEnergy() >= 100){
@@ -1651,6 +1653,12 @@ export class MainScene extends Phaser.Scene {
                 fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
 
         }
+
+        this.infobox.addTooltipInfo(this.energyRegen, "Your Energy Regeneration.\n" +
+            "Receiving:\n" +
+            "+50 (from Ship)\n" +
+            "+"+(this.turn.getCurrentPlayer().getRegenRate()+ this.turn.getCurrentPlayer().getEnergyMalus()-50)+" (from Drones)\n" +
+            "-"+this.turn.getCurrentPlayer().getEnergyMalus()+" (from destroyed HitZones)");
 
     }
 

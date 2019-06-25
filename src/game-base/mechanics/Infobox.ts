@@ -53,7 +53,7 @@ export class Infobox
 
 
             let width = this.tooltip.displayWidth + 50;
-            let height = this.tooltip.displayHeight < 100 ? 100 : this.tooltip.displayHeight * 1.5;
+            let height = this.tooltip.displayHeight + 40;
             this.box.clear();
             this.box.fillStyle(0x0f0f0f, 0.9);
             this.box.fillRoundedRect(x, y, width, height, 32);
@@ -84,8 +84,12 @@ export class Infobox
     }
 
 
+    public removeTooltipInfo(object: GameObject): void{
+        this.tooltipStrings.delete(object);
+    }
 
-    private calculateTextWidth(info: string)
+
+     private calculateTextWidth(info: string)
     {
         let tempTextObject = this.scene.add.text(-1000, -1000, info, Infobox.getTooltipFontStyle());
         let textWidth = tempTextObject.width;
