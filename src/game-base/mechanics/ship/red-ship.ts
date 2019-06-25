@@ -83,9 +83,9 @@ export class RedShip extends BaseShip{
         this.wingDown.setPosition(posX, posY);
         this.hull.setPosition(posX, posY);
 
-        if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 100, this.hull.normal.y);
-        if(this.weapons[1]) this.weapons[1].setPosition(this.wingDown.normal.x, this.wingDown.normal.y);
-        if(this.weapons[2]) this.weapons[2].setPosition((this.wingUp.normal.x), this.wingUp.normal.y);
+        if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 124, this.hull.normal.y);
+        if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x + 44, this.hull.normal.y - 150);
+        if(this.weapons[2]) this.weapons[2].setPosition(this.hull.normal.x + 44, this.hull.normal.y + 150);
 
     }
 
