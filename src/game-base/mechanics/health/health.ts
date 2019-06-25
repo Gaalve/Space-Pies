@@ -225,11 +225,8 @@ export class Health {
     private static getPiRocketShield(pi: PiSystem, pid: string, hbid: string, desRSCB: ()=>any,
                                     regLSCB: ()=>any, regASCB: ()=>any, regRSCB: ()=>any, regNSCB: ()=> any, regADSCB: ()=>any): PiTerm{
         return pi.add.term('RockShld'+pid+hbid, pi.add.sum([
-            pi.add.channelInCB('armor'+pid,'', desRSCB) // rocketshield of player X
+            pi.add.channelInCB('rocket'+pid,'', desRSCB) // rocketshield of player X
                 .channelOut('regout', '') // sync
-                .nullProcess(),
-            pi.add.channelInCB('shield'+pid,'', desRSCB)
-                .channelOut('regout','')
                 .nullProcess(),
             pi.add.channelIn('rrocket'+pid+hbid, '') // regenerate rocket shield
                 .scope('reg1',
