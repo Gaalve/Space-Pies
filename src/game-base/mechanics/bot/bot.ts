@@ -14,10 +14,12 @@ export class Bot extends Player{
     public motorProjectileSlots: number;
     public motorRocketSlots: number;
     public wmodSlots: number;
-    public nextSolar: string;
     public droneSlots: number[];
 
     public possibleActions: string[];
+
+    public activeSD: boolean[];
+    public nrActiveSD: number;
 
     public steps: number;
     public id: string;
@@ -34,6 +36,10 @@ export class Bot extends Player{
             public z2: string = "2";
             public z3: string = "3";
             public z4: string = "4";
+            public z1Active: boolean;
+            public z2Active: boolean;
+            public z3Active: boolean;
+            public z4Active: boolean;
 
     public wext: string = "wext";
         public las: string = "armor";
@@ -58,6 +64,7 @@ export class Bot extends Player{
         private botSolar: number;
         private botAdapt: number;
         private botMotor: number;
+        private botRocketS: number;
 
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
@@ -68,7 +75,18 @@ export class Bot extends Player{
         this.motorRocketSlots = 2;
         this.motorProjectileSlots = 2;
         this.wmodSlots = 2;
-        this.nextSolar = "1";
+        this.activeSD = [];
+        this.activeSD.push(false);
+        this.activeSD.push(false);
+        this.activeSD.push(false);
+        this.activeSD.push(false);
+        this.nrActiveSD = 0;
+
+        this.z1Active = true;
+        this.z2Active = true;
+        this.z3Active = true;
+        this.z4Active = true;
+
         this.droneSlots = [];
         this.droneSlots.splice(0,0, 2);
         this.droneSlots.splice(1,0, 3);
@@ -82,6 +100,7 @@ export class Bot extends Player{
         this.botSolar = this.getEnergyCost("solar");
         this.botAdapt = this.getEnergyCost("adap");
         this.botMotor = this.getEnergyCost("motor");
+        this.botRocketS = this.getEnergyCost("rocket");
         this.botEnergy = this.getEnergy();
 
         this.active = false;
@@ -94,12 +113,15 @@ export class Bot extends Player{
     }
 
     public start(): void{
+        this.updateActiveSD();
+        this.updateHitzones();
         this.botLog.clearLog();
         this.botLog.setVisible();
         this.active = true;
-        this.nextSolar = this.getSmallestIndexSD();
+        this.botEnergy = this.getEnergy();
 
         while(this.active) {
+            console.log("Energie: " + this.botEnergy);
             if(this.isDead){
                 this.active = false;
                 break;
@@ -108,7 +130,6 @@ export class Bot extends Player{
             let action = this.chooseAction();
             this.clearPosActions();
             this.chooseType(action, this.steps);
-
         }
     }
 
@@ -132,16 +153,19 @@ export class Bot extends Player{
         if(this.botWmod <= this.botEnergy && this.wmodSlots > 0){
             this.possibleActions.push(this.wmod);
         }
-        if(this.botSolar <= this.botEnergy && parseInt(this.nextSolar) < 4){
+        if(this.botSolar <= this.botEnergy && this.nrActiveSD < 5){
             this.possibleActions.push(this.solar);
         }
+        console.log(this.possibleActions);
 
         let z = Phaser.Math.Between(1, 10);
 
         if(z > 9 || this.possibleActions.length == 0){
+            console.log("returned end")
             return "end";
         }else{
-            let x = Phaser.Math.Between(0, this.possibleActions.length-1)
+            let x = Phaser.Math.Between(0, this.possibleActions.length-1);
+            console.log("returned " + this.possibleActions[x]);
             return this.possibleActions[x];
         }
     }
@@ -156,6 +180,7 @@ export class Bot extends Player{
             this.clearPosActions();
             let hz = this.chooseHitzone();
             this.clearPosActions();
+            this.buyShield(shield);
 
             this.scene.time.delayedCall(delay, () => {
                 system.pushSymbol(system.add.channelOut("r" + shield + "p" + this.id + "z" + hz, "").nullProcess());
@@ -177,6 +202,8 @@ export class Bot extends Player{
             this.clearPosActions();
             let nr = mod.toString() + (3-this.droneSlots[mod]).toString();
             this.droneSlots[mod]--;
+            this.weaponSlots--;
+            this.buyWeapon(weapon);
 
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("wext" + this.id + nr, weapon + "p" + this.id).nullProcess());
@@ -185,14 +212,12 @@ export class Bot extends Player{
                 if(weapon != "rocket") w = weapon == "armor" ? "laser weapon" : "projectile weapon";
                 this.botLog.insertLog(s + ". I built a " + w + " on wmod " + mod + ".");
             },[], this);
-            this.weaponSlots--;
 
         }else if(action == this.mot){
             let motor = this.chooseMotorType();
-
             this.clearPosActions();
-
             let nr = this.getMotorNr(motor);
+            this.buyUpgrade(this.botMotor);
 
             this.scene.time.delayedCall(delay,()=> {
                 system.pushSymbol(system.add.channelOut("buymotor" + motor + this.id + nr, "").nullProcess());
@@ -202,25 +227,31 @@ export class Bot extends Player{
             if(motor == this.mpro) this.motorProjectileSlots--;
             if(motor == this.mroc) this.motorRocketSlots--;
 
-            }else if(action == this.wmod){
+        }else if(action == this.wmod){
             let nr = (3-this.wmodSlots).toString();
+            this.weaponSlots += 3;
+            this.wmodSlots--;
+            this.buyUpgrade(this.botWmod);
+            this.updateWmodCost();
+
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("wmod" + this.id + nr, "").nullProcess());
                 this.botLog.insertLog(s + ". I built a weapon mod.");
             }, [], this);
-            this.weaponSlots += 3;
-            this.wmodSlots--;
 
-            }else if(action == this.solar){
-            this.setSmallestIndexSD();
-            this.nextSolar = this.getSmallestIndexSD();
-            let nr = this.nextSolar;
+
+        }else if(action == this.solar){
+            let nr = this.getSolarNr();
+            this.activeSD[parseInt(nr)-1] = true;
+            this.buyUpgrade(this.botSolar);
+            this.updateSolarCost();
+
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("newsolar" + this.id + nr, "").nullProcess());
                 this.botLog.insertLog(s + ". I built a solar drone.");
             }, [], this);
 
-            }else{
+        }else if(action == this.end){
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("botend", "").nullProcess());
                 this.botLog.insertLog(s + ". I´m finished. It´s your turn.");
@@ -245,10 +276,10 @@ export class Bot extends Player{
     }
 
     public chooseHitzone(): string{
-        if(!this.z1Destroyed) this.possibleActions.push(this.z1);
-        if(!this.z2Destroyed) this.possibleActions.push(this.z2);
-        if(!this.z3Destroyed) this.possibleActions.push(this.z3);
-        if(!this.z4Destroyed) this.possibleActions.push(this.z4);
+        if(this.z1Active) this.possibleActions.push(this.z1);
+        if(this.z2Active) this.possibleActions.push(this.z2);
+        if(this.z3Active) this.possibleActions.push(this.z3);
+        if(this.z4Active) this.possibleActions.push(this.z4);
 
         let x = Phaser.Math.Between(0, this.possibleActions.length-1)
         return this.possibleActions[x];
@@ -306,6 +337,14 @@ export class Bot extends Player{
         }
     }
 
+    public getSolarNr(): string{
+        let nr = "";
+        for(let i = 3; i>=0; i--){
+            if(!this.activeSD[i]) nr = (i+1).toString();
+        }
+        return nr;
+    }
+
     public getBotLog(): Botlog {
         return this.botLog;
     }
@@ -314,7 +353,70 @@ export class Bot extends Player{
         this.botEnergy -= x;
     }
 
+    public buyShield(type: string): void{
+        switch(type){
+            case(this.n):{
+                this.botEnergy -= this.botnano;
+                break
+            }
+            case(this.ar):{
+                this.botEnergy -= this.botShield;
+                break
+            }
+            case(this.s):{
+                this.botEnergy -= this.botShield;
+                break
+            }
+            case(this.ad):{
+                this.botEnergy -= this.botAdapt;
+                break
+            }
+            case(this.r):{
+                this.botEnergy -= this.botRocketS;
+                break
+            }
+        }
+    }
+
+    public buyWeapon(type: string): void{
+        switch(type){
+            case(this.pro):{
+                this.botEnergy -= this.botWeapon;
+                break
+            }
+            case(this.las):{
+                this.botEnergy -= this.botWeapon;
+                break
+            }
+            case(this.roc): {
+                this.botEnergy -= this.botRocket;
+                break
+            }
+        }
+    }
+
     public updateWmodCost(): void{
         this.botWmod += 15;
+    }
+    public updateSolarCost(): void{
+        this.botSolar += 20;
+    }
+
+    public updateActiveSD(): void{
+        this.nrActiveSD = 0;
+        for(let i = 1; i <= 4; i++){
+            if(this.getSolarDrones()[i].visible){
+                this.activeSD[i-1] = true;
+                this.nrActiveSD++;
+            }
+        }
+        this.botSolar = this.getEnergyCost("solar") + (this.nrActiveSD*20);
+    }
+
+    public updateHitzones(): void{
+        if(this.z1Destroyed) this.z1Active = false;
+        if(this.z2Destroyed) this.z2Active = false;
+        if(this.z3Destroyed) this.z3Active = false;
+        if(this.z4Destroyed) this.z4Active = false;
     }
 }
