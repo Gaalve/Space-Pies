@@ -23,6 +23,7 @@ export class Bot extends Player{
 
     public steps: number;
     public id: string;
+    public opId : string;
 
     public botLog: Botlog;
 
@@ -106,6 +107,7 @@ export class Bot extends Player{
         this.active = false;
         this.steps = 0;
         this.id = nameIdentifier.charAt(1);
+        this.opId = nameIdentifier.charAt(1) == "1" ? "2" : "1";
 
         this.botLog = new Botlog(this);
         this.botLog.setInvisible();
@@ -118,7 +120,6 @@ export class Bot extends Player{
         this.botLog.clearLog();
         this.botLog.setVisible();
         this.active = true;
-        this.botEnergy = this.getEnergy();
 
         while(this.active) {
             console.log("Energie: " + this.botEnergy);
@@ -131,6 +132,8 @@ export class Bot extends Player{
             this.clearPosActions();
             this.chooseType(action, this.steps);
         }
+        this.updateActiveSD();
+        this.regenEnergy();
     }
 
     public clearPosActions():void{
@@ -203,7 +206,7 @@ export class Bot extends Player{
             this.buyWeapon(weapon);
 
             this.scene.time.delayedCall(delay, ()=> {
-                system.pushSymbol(system.add.channelOut("wext" + this.id + nr, weapon + "p" + this.id).nullProcess());
+                system.pushSymbol(system.add.channelOut("wext" + this.id + nr, weapon + "p" + this.opId).nullProcess());
 
                 let w = "rocket launcher";
                 if(weapon != "rocket") w = weapon == "armor" ? "laser weapon" : "projectile weapon";
@@ -407,7 +410,7 @@ export class Bot extends Player{
                 this.nrActiveSD++;
             }
         }
-        this.botSolar = this.getEnergyCost("solar") + (this.nrActiveSD*20);
+        this.botSolar = 60 + (this.nrActiveSD*20);
     }
 
     public updateHitzones(): void{
@@ -415,5 +418,11 @@ export class Bot extends Player{
         if(this.z2Destroyed) this.z2Active = false;
         if(this.z3Destroyed) this.z3Active = false;
         if(this.z4Destroyed) this.z4Active = false;
+    }
+
+    public regenEnergy(): void{
+        let nd = 0;
+        if(this.getSolarDrones()[5].visible) nd = 50;
+        this.botEnergy += (50 + this.nrActiveSD*25 + nd);
     }
 }
