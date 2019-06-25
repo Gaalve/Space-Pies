@@ -20,6 +20,10 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private simplePi : string;
 	// public onScreenText : Phaser.GameObjects.Text;
 	private activatedWeapons: integer;
+
+	private readonly posX: number;
+	private readonly posY: number;
+
 	x : number;
 	y : number;
 	durationX : number;
@@ -32,6 +36,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number, animSys: PiAnimSystem){
 		super(scene, x, y, "ssr_wmod");
+
 		this.animSys = animSys;
 		this.piSeq = animSys.addSequence(x, y+100, 'lock()', PiAnimAlignment.CENTER);
 		this.piSeq.addSymbol('0');
@@ -49,9 +54,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			}
 		}else if(index == 2){
 			if(player.getNameIdentifier() == "P1"){
-				this.setPosition(x += 300, y += 300);
+				this.setPosition(x += 300, y += 200);
 			}else{
-				this.setPosition(x -= 300, y += 300);
+				this.setPosition(x -= 300, y += 200);
 			}
 		}
 
@@ -67,6 +72,8 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 		this.x =  x;
 		this.y = y;
+		this.posX = x;
+		this.posY = y;
 		this.durationX = 1250;
 		this.durationY = 750;
 		this.sinX = 0;
@@ -213,7 +220,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private updatePiAnimSeq(): void{
 		this.piSeq.show();
 
-		this.piSeq.clearSequence(this.x, this.y + 80, 'lock'+this.player.getNameIdentifier().toLowerCase()+'()',
+		this.piSeq.clearSequence(this.posX, this.posY + 80, 'lock'+this.player.getNameIdentifier().toLowerCase()+'()',
 			PiAnimAlignment.CENTER);
 		if (this.weapons[0].canShoot()) this.piSeq.addSymbol(this.weapons[0].getSimplePi()+'<>');
 		if (this.weapons[1].canShoot()) this.piSeq.addSymbol(this.weapons[1].getSimplePi()+'<>');
