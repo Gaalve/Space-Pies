@@ -56,6 +56,7 @@ export class Bot extends Player{
     public solar: string = "solar";
     public end: string = "end";
 
+    public botRegenRate: number;
     public botEnergy: number;
         private botShield: number;
         private botnano: number;
@@ -103,6 +104,7 @@ export class Bot extends Player{
         this.botMotor = this.getEnergyCost("motor");
         this.botRocketS = this.getEnergyCost("rocket");
         this.botEnergy = this.getEnergy();
+        this.botRegenRate = 50;
 
         this.active = false;
         this.steps = 0;
@@ -115,6 +117,7 @@ export class Bot extends Player{
     }
 
     public start(): void{
+        this.botLog.setLogoVisible()
         this.updateActiveSD();
         this.updateHitzones();
         this.botLog.clearLog();
@@ -133,6 +136,7 @@ export class Bot extends Player{
             this.chooseType(action, this.steps);
         }
         this.updateActiveSD();
+        this.updateRegenRate();
         this.regenEnergy();
     }
 
@@ -192,7 +196,8 @@ export class Bot extends Player{
                     this.botLog.insertLog(s + ". I built an armor shield on hitzone " + hz + ".");
                 } else {
                     this.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ".");
-                }
+                };
+                this.botLog.updateEnergy(this.botEnergy, this.botRegenRate);
             }, [], this);
 
         }else if(action == this.wext){
@@ -211,6 +216,7 @@ export class Bot extends Player{
                 let w = "rocket launcher";
                 if(weapon != "rocket") w = weapon == "armor" ? "laser weapon" : "projectile weapon";
                 this.botLog.insertLog(s + ". I built a " + w + " on wmod " + mod + ".");
+                this.botLog.updateEnergy(this.botEnergy, this.botRegenRate);
             },[], this);
 
         }else if(action == this.mot){
@@ -222,6 +228,7 @@ export class Bot extends Player{
             this.scene.time.delayedCall(delay,()=> {
                 system.pushSymbol(system.add.channelOut("buymotor" + motor + this.id + nr, "").nullProcess());
                 this.botLog.insertLog(s + ". I built a " + motor + " motor.");
+                this.botLog.updateEnergy(this.botEnergy, this.botRegenRate);
             },[], this);
             if(motor == this.mlas) this.motorLaserSlots--;
             if(motor == this.mpro) this.motorProjectileSlots--;
@@ -237,6 +244,7 @@ export class Bot extends Player{
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("wmod" + this.id + nr, "").nullProcess());
                 this.botLog.insertLog(s + ". I built a weapon mod.");
+                this.botLog.updateEnergy(this.botEnergy, this.botRegenRate);
             }, [], this);
 
 
@@ -244,11 +252,14 @@ export class Bot extends Player{
             let nr = this.getSolarNr();
             this.activeSD[parseInt(nr)-1] = true;
             this.buyUpgrade(this.botSolar);
+            this.nrActiveSD++;
             this.updateSolarCost();
+            this.updateRegenRate();
 
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("newsolar" + this.id + nr, "").nullProcess());
                 this.botLog.insertLog(s + ". I built a solar drone.");
+                this.botLog.updateEnergy(this.botEnergy, this.botRegenRate);
             }, [], this);
 
         }else if(action == this.end){
@@ -256,7 +267,7 @@ export class Bot extends Player{
                 system.pushSymbol(system.add.channelOut("botend", "").nullProcess());
                 this.botLog.insertLog(s + ". I´m finished. It´s your turn.");
             }, [], this);
-            this.scene.time.delayedCall(delay + 1000, ()=>this.botLog.setInvisible(), [], this);
+            this.scene.time.delayedCall(delay + 1000, ()=>{this.botLog.setInvisible(); this.botLog.setLogoInvisible()}, [], this);
             this.active = false;
             this.steps = 0;
             }
@@ -275,7 +286,6 @@ export class Bot extends Player{
         return this.possibleActions[x];
     }
 
-    //TODO Hitzones werden falsch abgefragt
     public chooseHitzone(): string{
         if(this.z1Active) this.possibleActions.push(this.z1);
         if(this.z2Active) this.possibleActions.push(this.z2);
@@ -358,23 +368,23 @@ export class Bot extends Player{
         switch(type){
             case(this.n):{
                 this.botEnergy -= this.botnano;
-                break
+                break;
             }
             case(this.ar):{
                 this.botEnergy -= this.botShield;
-                break
+                break;
             }
             case(this.s):{
                 this.botEnergy -= this.botShield;
-                break
+                break;
             }
             case(this.ad):{
                 this.botEnergy -= this.botAdapt;
-                break
+                break;
             }
             case(this.r):{
                 this.botEnergy -= this.botRocketS;
-                break
+                break;
             }
         }
     }
@@ -383,15 +393,15 @@ export class Bot extends Player{
         switch(type){
             case(this.pro):{
                 this.botEnergy -= this.botWeapon;
-                break
+                break;
             }
             case(this.las):{
                 this.botEnergy -= this.botWeapon;
-                break
+                break;
             }
             case(this.roc): {
                 this.botEnergy -= this.botRocket;
-                break
+                break;
             }
         }
     }
@@ -415,15 +425,20 @@ export class Bot extends Player{
     }
 
     public updateHitzones(): void{
-        if(this.z1Destroyed) this.z1Active = false;
-        if(this.z2Destroyed) this.z2Active = false;
-        if(this.z3Destroyed) this.z3Active = false;
-        if(this.z4Destroyed) this.z4Active = false;
+        if(this.getHealth().zone1Bar.activeBars <= 0) this.z1Active = false;
+        if(this.getHealth().zone2Bar.activeBars <= 0) this.z2Active = false;
+        if(this.getHealth().zone3Bar.activeBars <= 0) this.z3Active = false;
+        if(this.getHealth().zone4Bar.activeBars <= 0) this.z4Active = false;
     }
 
     public regenEnergy(): void{
+
+        this.botEnergy += this.botRegenRate;
+    }
+
+    public updateRegenRate(): void{
         let nd = 0;
         if(this.getSolarDrones()[5].visible) nd = 50;
-        this.botEnergy += (50 + this.nrActiveSD*25 + nd);
+        this.botRegenRate = (50 + this.nrActiveSD*25 + nd);
     }
 }

@@ -8,6 +8,10 @@ export class Botlog{
     private bg: Phaser.GameObjects.Sprite;
     private nrLogs: number;
 
+    private energyLogo: Phaser.GameObjects.Image;
+    private energyText: Phaser.GameObjects.Text;
+    private regenText: Phaser.GameObjects.Text;
+
 
     public constructor(bot: Bot){
         this.bot = bot;
@@ -23,6 +27,20 @@ export class Botlog{
         this.bg.setAlpha(0.6);
         this.bg.setScale(0.4, 1.7);
         this.bg.setDepth(-1);
+
+        this.energyLogo = this.bot.scene.add.image(1920/2-125, 200, "energy_icon");
+        this.energyText = this.bot.scene.add.text(1920/2-115, 470, "= " + this.bot.botEnergy, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+        this.regenText = this.bot.scene.add.text(1920/2+20, 470, "(+"+ this.bot.botRegenRate + ")", {
+            fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
+
+        this.bot.scene.add.existing(this.energyLogo);
+        this.bot.scene.add.existing(this.energyText);
+        this.bot.scene.add.existing(this.regenText);
+
+        this.energyLogo.setVisible(false);
+        this.energyText.setVisible(false);
+        this.regenText.setVisible(false);
     }
 
     public insertLog(log: string): void{
@@ -58,5 +76,22 @@ export class Botlog{
             text.destroy();
         }
         this.nrLogs = 0;
+    }
+
+    public setLogoVisible(): void{
+        this.energyLogo.setVisible(true);
+        this.energyText.setVisible(true);
+        this.regenText.setVisible(true);
+    }
+
+    public setLogoInvisible(): void{
+        this.energyLogo.setVisible(false);
+        this.energyText.setVisible(false);
+        this.regenText.setVisible(false);
+    }
+
+    public updateEnergy(energy: number, regen: number): void{
+        this.energyText.setText(energy.toString());
+        this.regenText.setText(regen.toString());
     }
 }
