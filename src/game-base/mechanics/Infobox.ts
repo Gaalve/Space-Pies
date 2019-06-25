@@ -2,67 +2,80 @@ import Scene = Phaser.Scene;
 import {WeaponType} from "./weapon/weapon-type";
 import {Player} from "./player";
 import type = Mocha.utils.type;
+import GameObject = Phaser.GameObjects.GameObject;
+import Text = Phaser.GameObjects.Text;
+import Graphics = Phaser.GameObjects.Graphics;
 
 export class Infobox
 {
-    private tooltipStrings = new Map<any,String>();
-    private scene;
+    private tooltipStrings: Map<GameObject, string>;
+    private scene: Scene;
+    private tooltip: Text;
+    private box: Graphics;
 
     constructor(scene: Scene)
     {
+        this.tooltipStrings = new Map<GameObject, string>();
         this.scene = scene;
+        this.box = this.scene.add.graphics();
+        this.tooltip = this.scene.add.text(-100, -100, "No Description", Infobox.getTooltipFontStyle());
+
+        this.box.fillStyle(0x0f0f0f, 0.9);
+        this.box.setDepth(99);
+        this.box.setDataEnabled();
+        this.tooltip.setDepth(100);
     }
 
-    public addTooltipInfo(object: any, info: String , callbacks?: Function[])
+    public addTooltipInfo(object: GameObject, info: string , callbacks?: (()=>void)[])
     {
-        let existingObject = this.tooltipStrings.get(object);
-        if (typeof (existingObject) != 'undefined' && existingObject != null )
-            this.tooltipStrings.delete(existingObject);
         object.setInteractive();
         this.tooltipStrings.set(object, info);
-        let tooltip;
-        let rounded;
         let textWidth = this.calculateTextWidth(info);
-        object.on('pointermove', () =>
+
+        let xFix = 50;
+        object.on('pointermove', (pointer: Phaser.Input.Pointer) =>
         {
-            let xFix = 50;
-            let x = this.scene.game.input.mousePointer.x < 1920/2 ? this.scene.game.input.mousePointer.x + 20 : this.scene.game.input.mousePointer.x - textWidth - xFix;
-            let y = this.scene.game.input.mousePointer.y + 20;
-            tooltip != null || typeof (tooltip) != 'undefined' ? tooltip.destroy() : tooltip;
-            tooltip = this.scene.add.text(x + 20, y + 20, this.getTooltipText(object).toString(), Infobox.getTooltipFontStyle());
-            rounded != null || typeof (rounded) != 'undefined' ? rounded.destroy() : rounded;
-            rounded = this.scene.add.graphics();
+            let x = pointer.x < 1920/2 ? pointer.x + 20 : pointer.x - textWidth - xFix;
+            let y = pointer.y + 20;
+            this.tooltip.setPosition(x + 20, y + 20);
 
-            tooltip.depth = 100;
-            rounded.depth = 99;
+            this.box.x = x - this.box.getData('x');
+            this.box.y = y - this.box.getData('y');
+        });
+        object.on('pointerover', (pointer: Phaser.Input.Pointer) =>
+        {
+            if (this.tooltip.text.toString() == this.getTooltipText(object).toString()) return;
 
-            let width = tooltip.displayWidth + 50
-            let height = tooltip.displayHeight < 100 ? 100 : tooltip.displayHeight * 1.5;
-            rounded.fillStyle("#0f0f0f", 1);
-            //  32px radius on the corners
-            rounded.fillRoundedRect(x, y, width, height, 32);
+            let x = pointer.x < 1920/2 ? pointer.x + 20 : pointer.x - textWidth - xFix;
+            let y = pointer.y + 20;
+            this.tooltip.setText(this.getTooltipText(object));
+            this.tooltip.setPosition(x + 20, y + 20);
 
-            rounded.alpha = 0.9;
+
+            let width = this.tooltip.displayWidth + 50;
+            let height = this.tooltip.displayHeight < 100 ? 100 : this.tooltip.displayHeight * 1.5;
+            this.box.clear();
+            this.box.fillStyle(0x0f0f0f, 0.9);
+            this.box.fillRoundedRect(x, y, width, height, 32);
+            this.box.setData('y', y);
+            this.box.setData('x', x);
+
 
             this.executeCallback(callbacks, 1);
-
-            //  Using an object to define a different radius per corner
-            // rounded.fillRoundedRect(360, 240, 400, 300, { tl: 12, tr: 12, bl: 12, br: 0 });
-
-            // tooltip.style.setBackgroundColor("#000000");
-        })
+        });
         object.on('pointerup', () => {
             this.executeCallback(callbacks, 0);
-        })
+        });
         object.on('pointerout', () =>
         {
-            tooltip != null ? tooltip.destroy() : null;
-            rounded.destroy();
+            this.tooltip.setPosition(2500, 2500);
+            this.box.setPosition(2500, 2500);
+
             this.executeCallback(callbacks, 2);
         })
     }
 
-    private executeCallback(callbacks: Function[], number: number)
+    private executeCallback(callbacks: (()=>void)[], number: number)
     {
         if (typeof(callbacks) != 'undefined' && callbacks != null)
             if (typeof(callbacks[number]) != 'undefined' && callbacks[number] != null)
@@ -72,7 +85,7 @@ export class Infobox
 
 
 
-    private calculateTextWidth(info: String)
+    private calculateTextWidth(info: string)
     {
         let tempTextObject = this.scene.add.text(-1000, -1000, info, Infobox.getTooltipFontStyle());
         let textWidth = tempTextObject.width;
