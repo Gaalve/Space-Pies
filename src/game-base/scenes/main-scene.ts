@@ -1529,5 +1529,41 @@ export class MainScene extends Phaser.Scene {
         return firstRandom.toString() + secondRandom.toString();
     }
 
+    anomalyInfoBoxes(type: string){
 
+        let blackBox = this.add.graphics();
+        let tip = this.add.text(540, 460, this.getTipText(type), MainScene.getTipFontStyle());
+
+        tip.depth = 100;
+        blackBox.depth = 99;
+
+        let width = tip.displayWidth + 50;
+        let height = tip.displayHeight < 100 ? 100 : tip.displayHeight * 1.5;
+        blackBox.fillStyle(0x0f0f0f, 1);
+        blackBox.fillRoundedRect(520, 460, width, height, 32);
+
+        blackBox.alpha = 0.9;
+    }
+
+    private getTipText(type: string){
+        if (type == "erupt"){
+            return "A sun eruption is about to come through. Be careful, maybe your shields will be destroyed."
+        }
+        if (type == "worm"){
+            return "A worm hole is going to appear and leave a special solar drone for you, called nuclear drone." +
+                "For more information about this drone, just hover your mouse over it."
+        }
+        if (type == "black"){
+            return "A black hole will appear. It increases the number of projectile misses." +
+                " So be careful your projectiles may not find the right way."
+        }
+    }
+
+
+    private static getTipFontStyle()
+    {
+        return {
+            fill: '#fff', fontSize: 20, strokeThickness: 3, stroke: '#000'
+        }
+    }
 }
