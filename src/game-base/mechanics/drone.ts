@@ -10,6 +10,7 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
 import {AnimationUtilities} from "./animation/AnimationUtilites";
 import {Animation} from "./animation/Animation";
+import {BulletInfo} from "./weapon/bulletInfo";
 
 export class Drone extends Phaser.GameObjects.Sprite{
 

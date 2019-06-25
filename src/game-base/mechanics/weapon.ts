@@ -11,7 +11,17 @@ import {RedShip} from "./ship/red-ship";
 
 export class Weapon extends Phaser.GameObjects.Sprite{
 
-	get weaponType(): WeaponType
+    get player(): Player
+    {
+        return this._player;
+    }
+
+    set player(value: Player)
+    {
+        this._player = value;
+    }
+
+    get weaponType(): WeaponType
 	{
 		return this._weaponType;
 	}
@@ -29,7 +39,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     private bullet: Bullet;
     private _weaponType: WeaponType;
 	private isFirst: boolean;
-	private player: Player;
+	private _player: Player;
     private simplePi : string;
 	x : number;
 	y : number;
@@ -42,7 +52,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
         super(scene, drone.x, drone.y, Weapon.getWeaponTex(player.isFirstPlayer(), type));
         this._weaponType = type;
         this.isFirst = player.isFirstPlayer();
-        this.player = player;
+        this._player = player;
 		if (drone.getPlayer().getNameIdentifier() == "P1") {
             this.setX(drone.x + 70);
         }else{
@@ -160,7 +170,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     		this.simplePi = this.simplePi + "p1";
 		}
 		let infobox = <Infobox> this.scene.data.get("infoboxx");
-		infobox.addTooltipInfo(this, "[" + this.player.getNameIdentifier() + "] Weapon Type:    " + this.simplePi + "<>           (" + Infobox.weaponTypeToString(this._weaponType) + ")\n     destroys:       " + Infobox.weaponTypeTargetsPiTerm(this._weaponType, this.player) + "    (" + Infobox.weaponTypeTargetsToString(this._weaponType) + ")");
+		infobox.addTooltipInfo(this, "[" + this._player.getNameIdentifier() + "] Weapon Type:    " + this.simplePi + "<>           (" + Infobox.weaponTypeToString(this._weaponType) + ")\n     destroys:       " + Infobox.weaponTypeTargetsPiTerm(this._weaponType, this._player) + "    (" + Infobox.weaponTypeTargetsToString(this._weaponType) + ")");
 
     }
 
@@ -209,7 +219,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     		toY = info.toY;
 			hit = !info.miss;
 		}
-    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this._weaponType, hit, this.player, toX, toY);
+    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this._weaponType, hit, this._player, toX, toY);
 		this.notification = new HitMissNotification(this.scene, this.x, this.y, hit, this.isFirst);
 	}
 
@@ -233,11 +243,5 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		this.setPosition(posX,posY)
 	}
 
-	get player(): Player {
-		return this._player;
-	}
 
-	set player(value: Player) {
-		this._player = value;
-	}
 }
