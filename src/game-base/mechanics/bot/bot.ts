@@ -275,6 +275,7 @@ export class Bot extends Player{
         return this.possibleActions[x];
     }
 
+    //TODO Hitzones werden falsch abgefragt
     public chooseHitzone(): string{
         if(this.z1Active) this.possibleActions.push(this.z1);
         if(this.z2Active) this.possibleActions.push(this.z2);
