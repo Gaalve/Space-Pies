@@ -33,6 +33,8 @@ export class Intro extends Phaser.Scene {
     }
 
     create(): void {
+        this.scene.launch("MainScene");
+        return;
         let counter = 0;
         this.text = new Text(this, 1900, 20, "Click to skip.", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 32, fontStyle: 'bold', strokeThickness: 2});
@@ -80,6 +82,6 @@ export class Intro extends Phaser.Scene {
 
 
     update(time: number, delta: number): void {
-        this.mgr.update(delta/1000);
+        // this.mgr.update(delta/1000);
     }
 }

@@ -4,6 +4,11 @@ import {WeaponType} from "./weapon/weapon-type";
 import {PiAnimSystem} from "./pianim/pi-anim-system";
 import {PiAnimSequence} from "./pianim/pi-anim-sequence";
 import {PiAnimAlignment} from "./pianim/pi-anim-alignment";
+import {Infobox} from "./Infobox";
+import {MainScene} from "../scenes/main-scene";
+import {BlueShip} from "./ship/blue-ship";
+import {RedShip} from "./ship/red-ship";
+import Sprite = Phaser.GameObjects.Sprite;
 
 
 export class Drone extends Phaser.GameObjects.Sprite{
@@ -15,6 +20,12 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private simplePi : string;
 	// public onScreenText : Phaser.GameObjects.Text;
 	private activatedWeapons: integer;
+	x : number;
+	y : number;
+	durationX : number;
+	durationY : number;
+	sinX : number;
+	sinY : number;
 
 	private animSys: PiAnimSystem;
 	private piSeq: PiAnimSequence;
@@ -32,15 +43,15 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    //reposition external drones
 	    if(index == 1){
 	    	if(player.getNameIdentifier() == "P1"){
-				this.setPosition(x + 300, y - 300);
+				this.setPosition(x += 300, y -= 300);
 			}else{
-				this.setPosition(x - 300, y - 300);
+				this.setPosition(x -= 300, y -= 300);
 			}
 		}else if(index == 2){
 			if(player.getNameIdentifier() == "P1"){
-				this.setPosition(x + 300, y + 300);
+				this.setPosition(x += 300, y += 300);
 			}else{
-				this.setPosition(x - 300, y + 300);
+				this.setPosition(x -= 300, y += 300);
 			}
 		}
 
@@ -53,6 +64,13 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    this.weapons = [new Weapon(scene, this, WeaponType.NONE, this.player, 0),
 						new Weapon(scene, this, WeaponType.NONE, this.player,1),
 						new Weapon(scene, this, WeaponType.NONE, this.player,2)];
+
+		this.x =  x;
+		this.y = y;
+		this.durationX = 1250;
+		this.durationY = 750;
+		this.sinX = 0;
+		this.sinY = 0;
 
 		this.buildPiTerm();
 	    // this.activateOnScreenText();
@@ -157,7 +175,33 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	 */
 	refreshOnScreenText() : void{
 		// this.onScreenText.setText(this.simplePi);
-		//this.onScreenText.setDisplayOrigin(0.5);
+
+		let infobox = <Infobox> this.scene.data.get("infoboxx");
+		let splitTerm = this.onScreenText.text.split(".");
+		let equippedWeapons = "";
+		for (let i = 0; i < splitTerm.length; i++)
+			if (i != 0 && i != splitTerm.length-1)
+				equippedWeapons += splitTerm[i] + ", ";
+		equippedWeapons = equippedWeapons ? equippedWeapons.substr(0, equippedWeapons.length-2) : "none yet";
+
+
+		let tooltipInfo =
+			"[" + this.getPlayer().getNameIdentifier() + "] This is the pi-term of this drone. \n"
+			+ "     <> : output channel (resolves with corresponding () - channel)\n"
+			+ "     () : input channel (waits for incoming <> - channel)\n"
+			+ "     0 : null process (resolves itself) \n\n"
+			+ "current term:         " + this.onScreenText.text + "\n"
+			+ "currently active:     " + this.onScreenText.text.split(".")[0] + "\n"
+			+ "will be resolved by:  " + Infobox.getOppositeTerm(this.onScreenText.text.split(".")[0], this.player.getNameIdentifier()) + "\n\n"
+			+ "The enclosing \"lock()\" - channel is literally a weapon lock. \n"
+			+ "As soon as you hit attack, a replication \"!(lock<>)\" will be pushed into \nthe pi-system, which continiously emits \"lock<>\" - terms.\n"
+			+ "Then, all equipped weapons (" + equippedWeapons + ") will fire in sequential order.\n"
+
+		infobox.addTooltipInfo(this.onScreenText, tooltipInfo);
+
+		this.index != 0 ? infobox.addTooltipInfo(this, "[" + this.player.getNameIdentifier() + "] Extension Drone " + this.index + ":\n     It will fire after the previous drone has fired.") : null;
+
+		this.index == 0 ? this.player.isFirstPlayer() ? this.scene.data.get("redship").setOnScreenText(this.onScreenText) :this.scene.data.get("blueship").setOnScreenText(this.onScreenText) : null;
 		this.updatePiAnimSeq();
 	}
 
@@ -184,7 +228,18 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 
     public update(delta: number): void {
-        this.weapons[0].update(delta);
+
+
+		this.sinX += delta/ this.durationX;
+		this.sinY += delta/ this.durationY;
+
+		this.sinX %= 2*Math.PI;
+		this.sinY %= 2*Math.PI;
+
+		this ? this.setPositionSin(true,true) : null;
+
+
+		this.weapons[0].update(delta);
         this.weapons[1].update(delta);
         this.weapons[2].update(delta);
     }
@@ -239,4 +294,43 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		next(weapon));
 	}
 
+	private moveSin(fromX: number, toX: number, fromY: number, toY: number, delta: number, sprite: Sprite) {
+		sprite.x = fromX + Math.sin(delta * Math.PI / 2) * (toX - fromX);
+		sprite.y = fromY + Math.cos(delta * Math.PI / 2) * (toY - fromY);
+	}
+
+	private setPositionSin(moveX: boolean, moveY: boolean)
+	{
+		let posX = moveX ? (this.x + Math.sin(this.sinX) / 2.0) : this.x;
+		let posY = moveY ? this.y + Math.cos(this.sinY) / 2.0: this.y;
+
+
+		if (this.index != 0 && this.weapons)
+		{
+			for (let i = 0; i < this.weapons.length; i++)
+			{
+				let weapon = this.weapons[i];
+				if (weapon)
+				{
+					// let posXweapon = moveX && weapon ? (weapon.x + Math.sin(this.sinX) * 25) : weapon ? weapon.x : null;
+					// let posYweapon = moveY && weapon ? (weapon.y + Math.cos(this.sinY) * 25) : weapon ? weapon.y : null;
+					let offX = this.player.isFirstPlayer() ? 75 : -75;
+
+
+					i == 0 ?
+						weapon.setPosition(this.x + offX, this.y -40)
+						:
+						i == 1 ?
+							weapon.setPosition(this.x + offX, this.y +40	)
+							:
+							null;
+				}
+			}
+		}
+
+		this.setPosition(posX,posY)
+		posX = this.getPlayer().isFirstPlayer() ? posX + this.onScreenText.width/2 :  posX - this.onScreenText.width/2
+		this.index != 0 ? this.onScreenText.setPosition(posX, posY + 75) : null;
+
+	}
 }
