@@ -395,6 +395,9 @@ export class MainScene extends Phaser.Scene {
             this.data.set("buy", "w");
             //this.updateShopW(true);
             this.updateShop1(true);
+            if(this.shopWActive){
+                this.updateShopW(true);
+            }
 
             this.system.pushSymbol(this.system.add.channelOut('wmod'+ player.getNameIdentifier().charAt(1)+ player.getNrDrones(),'*' ).nullProcess());
 
