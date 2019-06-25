@@ -31,8 +31,8 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	private isFirst: boolean;
 	private player: Player;
     private simplePi : string;
-	x : number;
-	y : number;
+	posX : number;
+	posY : number;
 	durationX : number;
 	durationY : number;
 	sinX : number;
@@ -70,8 +70,8 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		this.bullet = null;
 		this.notification = null;
 
-		this.x = this.x;
-		this.y = this.y;
+		this.posX = this.x - drone.x;
+		this.posY = this.y - drone.y;
 		this.durationX = 900;
 		this.durationY = 1000;
 		this.sinX = 0;

@@ -74,8 +74,8 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		this.y = y;
 		this.posX = x;
 		this.posY = y;
-		this.durationX = 1250;
-		this.durationY = 750;
+		this.durationX = 700 + 600 * Math.random();
+		this.durationY = 500 + 300 * Math.random();
 		this.sinX = 0;
 		this.sinY = 0;
 
@@ -153,29 +153,6 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		return this.simplePi;
 	}
 
-	/**
-	first activation of displayed text for pi representation of drones
-	 */
-	// activateOnScreenText() : void{
-	// 	if(this.index != 0) {
-	// 		this.onScreenText = this.scene.add.text(this.x - 30, this.y + 60, this.simplePi, {
-	// 			fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
-	// 		});
-	// 	}else {
-	// 		if (this.player.getNameIdentifier() == "P1") {
-	// 			this.onScreenText = this.scene.add.text(this.x - 270, this.y + 100, this.simplePi, {
-	// 				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
-	// 			});
-	// 		} else {
-	// 			this.onScreenText = this.scene.add.text(this.x + 235, this.y + 100, this.simplePi, {
-	// 				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
-	// 			});
-	//
-	// 		}
-	// 		this.onScreenText.setAngle(270);
-	// 	}
-	// 	this.onScreenText.setDisplayOrigin(0.5);
-	// }
 
 	/**
 	refreshes the displayed Pi Term, if any changes (add Weapons) where made
@@ -306,43 +283,16 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		next(weapon));
 	}
 
-	private moveSin(fromX: number, toX: number, fromY: number, toY: number, delta: number, sprite: Sprite) {
-		sprite.x = fromX + Math.sin(delta * Math.PI / 2) * (toX - fromX);
-		sprite.y = fromY + Math.cos(delta * Math.PI / 2) * (toY - fromY);
-	}
-
-	private setPositionSin(moveX: boolean, moveY: boolean)
-	{
-		let posX = moveX ? (this.x + Math.sin(this.sinX) / 2.0) : this.x;
-		let posY = moveY ? this.y + Math.cos(this.sinY) / 2.0: this.y;
-
+	private setPositionSin(moveX: boolean, moveY: boolean) {
+		this.x = moveX ? (this.posX + Math.sin(this.sinX) * 15) : this.posX;
+		this.y = moveY ? (this.posY + Math.cos(this.sinY) * 15) : this.posY;
 
 		if (this.index != 0 && this.weapons)
 		{
-			for (let i = 0; i < this.weapons.length; i++)
-			{
-				let weapon = this.weapons[i];
-				if (weapon)
-				{
-					// let posXweapon = moveX && weapon ? (weapon.x + Math.sin(this.sinX) * 25) : weapon ? weapon.x : null;
-					// let posYweapon = moveY && weapon ? (weapon.y + Math.cos(this.sinY) * 25) : weapon ? weapon.y : null;
-					let offX = this.player.isFirstPlayer() ? 75 : -75;
-
-
-					i == 0 ?
-						weapon.setPosition(this.x + offX, this.y -40)
-						:
-						i == 1 ?
-							weapon.setPosition(this.x + offX, this.y +40	)
-							:
-							null;
-				}
-			}
+			this.weapons[0].setPosition(this.x + this.weapons[0].posX, this.y + this.weapons[0].posY)
+			this.weapons[1].setPosition(this.x + this.weapons[1].posX, this.y + this.weapons[1].posY)
+			this.weapons[2].setPosition(this.x + this.weapons[2].posX, this.y + this.weapons[2].posY)
 		}
-
-		this.setPosition(posX,posY)
-		// posX = this.getPlayer().isFirstPlayer() ? posX + this.onScreenText.width/2 :  posX - this.onScreenText.width/2
-		// this.index != 0 ? this.onScreenText.setPosition(posX, posY + 75) : null;
 
 	}
 }

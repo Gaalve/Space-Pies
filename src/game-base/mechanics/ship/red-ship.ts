@@ -17,8 +17,7 @@ export class RedShip extends BaseShip{
     durationY : number;
     sinX : number;
     sinY : number;
-    private weapons: Array<Weapon>;
-    onScreenText : Phaser.GameObjects.Text;
+    private weapons: Weapon[];
 
 
     public constructor(scene: Phaser.Scene,x: number, y: number){
@@ -52,21 +51,16 @@ export class RedShip extends BaseShip{
 
         this.x =  x;
         this.y = y;
-        this.durationX = 900;
+        this.durationX = 750;
         this.durationY = 1000;
         this.sinX = 0;
         this.sinY = 0;
-        this.weapons = new Array<Weapon>();
+        this.weapons = [];
         this.setAllPartPosition();
 
         this.setAllPartPosition();
-        // this.toDestroyedShip();
     }
 
-    private moveSin(moveX, moveY, fromX: number, toX: number, fromY: number, toY: number, delta: number, sprite: Sprite) {
-        if (moveX) sprite.x = fromX + Math.sin(delta * Math.PI / 2) * (toX - fromX);
-        if (moveY) sprite.y = fromY + Math.cos(delta * Math.PI / 2) * (toY - fromY);
-    }
 
 
     toDestroyedShip(): void {
@@ -78,11 +72,9 @@ export class RedShip extends BaseShip{
         this.hull.toDestroyedPart();
     }
 
-    setAllPartPosition(moveX?: Boolean, moveY?: Boolean): void {
-        let posX = moveX ? (this.posX + Math.sin(this.sinX) * 25) : this.posX;
-        let posY = moveY ? this.posY + Math.cos(this.sinY) * 25 : this.posY;
-
-        this.onScreenText ? this.onScreenText.setPosition(posX - 210, posY + this.onScreenText.width/2) : null;
+    setAllPartPosition(): void {
+        let posX = (this.posX + Math.sin(this.sinX) * 15);
+        let posY = (this.posY + Math.cos(this.sinY) * 15);
 
         this.backUp.setPosition(posX, posY);
         this.backDown.setPosition(posX, posY);
@@ -91,27 +83,9 @@ export class RedShip extends BaseShip{
         this.wingDown.setPosition(posX, posY);
         this.hull.setPosition(posX, posY);
 
-        if (this.weapons)
-        {
-            for (let i = 0; i < this.weapons.length; i++)
-            {
-                let weapon = this.weapons[i];
-                if (weapon)
-                {
-                    // let posXweapon = moveX && weapon ? (weapon.x + Math.sin(this.sinX) * 25) : weapon ? weapon.x : null;
-                    // let posYweapon = moveY && weapon ? (weapon.y + Math.cos(this.sinY) * 25) : weapon ? weapon.y : null;
-                    i == 0 ?
-                        weapon.setPosition(this.hull.normal.x + 100, this.hull.normal.y)
-                        :
-                        i == 1 ?
-                            weapon.setPosition(this.wingDown.normal.x, this.wingDown.normal.y)
-                            :
-                            i == 2 ?
-                                weapon.setPosition((this.wingUp.normal.x), this.wingUp.normal.y)
-                                : null;
-                }
-            }
-        }
+        if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 100, this.hull.normal.y);
+        if(this.weapons[1]) this.weapons[1].setPosition(this.wingDown.normal.x, this.wingDown.normal.y);
+        if(this.weapons[2]) this.weapons[2].setPosition((this.wingUp.normal.x), this.wingUp.normal.y);
 
     }
 
@@ -163,11 +137,7 @@ export class RedShip extends BaseShip{
         this.sinX %= 2*Math.PI;
         this.sinY %= 2*Math.PI;
 
-        this.setAllPartPosition(false,true);
+        this.setAllPartPosition();
     }
 
-    setOnScreenText(text)
-    {
-        this.onScreenText = text;
-    }
 }

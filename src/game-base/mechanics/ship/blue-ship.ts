@@ -17,10 +17,9 @@ export class BlueShip extends BaseShip{
     durationY : number;
     sinX : number;
     sinY : number;
-    private weapons: Array<Weapon>;
+    private weapons: Weapon[];
     private weaponSinX: number;
     private weaponSinY: number;
-    private onScreenText: Phaser.GameObjects.Text;
 
     public constructor(scene: Phaser.Scene,x: number, y: number){
         super(scene, x, y);
@@ -55,16 +54,10 @@ export class BlueShip extends BaseShip{
         this.sinY = 0;
         this.weaponSinX = 0;
         this.weaponSinY = 0;
-        this.weapons = new Array<Weapon>();
+        this.weapons = [];
         this.setAllPartPosition();
-        // this.toDestroyedShip();
     }
 
-
-    private moveSin(fromX: number, toX: number, fromY: number, toY: number, delta: number, sprite: Sprite) {
-        sprite.x = fromX + Math.sin(delta * Math.PI / 2) * (toX - fromX);
-        sprite.y = fromY + Math.cos(delta * Math.PI / 2) * (toY - fromY);
-    }
 
     toDestroyedShip(): void {
         this.back.toDestroyedPart();
@@ -75,11 +68,9 @@ export class BlueShip extends BaseShip{
     }
 
 
-    setAllPartPosition(moveX?: Boolean, moveY?: Boolean): void {
-        let posX = moveX ? (this.posX + Math.sin(this.sinX) * 25) : this.posX;
-        let posY = moveY ? this.posY + Math.cos(this.sinY) * 25 : this.posY;
-
-        this.onScreenText ? this.onScreenText.setPosition(posX + 165, posY + this.onScreenText.width/2) : null;
+    setAllPartPosition(): void {
+        let posX = (this.posX + Math.sin(this.sinX) * 15);
+        let posY = (this.posY + Math.cos(this.sinY) * 15);
 
         this.back.setPosition(posX, posY);
         this.pilot.setPosition(posX, posY);
@@ -87,27 +78,9 @@ export class BlueShip extends BaseShip{
         this.wingDown.setPosition(posX, posY);
         this.hull.setPosition(posX, posY);
 
-        if (this.weapons)
-        {
-            for (let i = 0; i < this.weapons.length; i++)
-            {
-                let weapon = this.weapons[i];
-                if (weapon)
-                {
-                    // let posXweapon = moveX && weapon ? (weapon.x + Math.sin(this.sinX) * 25) : weapon ? weapon.x : null;
-                    // let posYweapon = moveY && weapon ? (weapon.y + Math.cos(this.sinY) * 25) : weapon ? weapon.y : null;
-                    i == 0 ?
-                        weapon.setPosition(this.hull.normal.x - 100, this.hull.normal.y)
-                        :
-                        i == 1 ?
-                            weapon.setPosition(this.wingDown.normal.x - 25, this.wingDown.normal.y)
-                            :
-                            i == 2 ?
-                                weapon.setPosition((this.wingUp.normal.x - 25), this.wingUp.normal.y)
-                                : null;
-                }
-            }
-        }
+        if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 100, this.hull.normal.y);
+        if(this.weapons[1]) this.weapons[1].setPosition(this.wingDown.normal.x, this.wingDown.normal.y);
+        if(this.weapons[2]) this.weapons[2].setPosition((this.wingUp.normal.x), this.wingUp.normal.y);
     }
 
     toDestroyedBack(): void {
@@ -142,32 +115,14 @@ export class BlueShip extends BaseShip{
         this.wingUp.update(delta);
         this.wingDown.update(delta);
 
-
-
         this.sinX += delta/ this.durationX;
         this.sinY += delta/ this.durationY;
 
         this.sinX %= 2*Math.PI;
         this.sinY %= 2*Math.PI;
 
-        this.setAllPartPosition(true,true);
-
-
-        // this.swingTimer = this.swingTimer > this.swingSpeed * 2 ? 0 : this.swingTimer;
-        // this.swingTimer += delta;
-        // let fromX = this.x;
-        // if (typeof(this.wingUp.x) == 'undefined' && this.wingDown.x == null)
-        //     return;
-        // this.moveSin(this.wingDown.x, this.wingDown.x + 10 , this.wingDown.y, this.wingDown.y + 15, this.swingTimer / this.swingSpeed, this.wingDown.normal);
-        // this.moveSin(this.wingUp.x, this.wingUp.x + 10, this.wingUp.y, this.wingUp.y + 15, this.swingTimer / this.swingSpeed, this.wingUp.normal);
-        // this.moveSin(this.hull.x, this.hull.x + 10, this.hull.y, this.hull.y + 15, this.swingTimer / this.swingSpeed, this.hull.normal);
-        // this.moveSin(this.pilot.x, this.pilot.x + 10, this.pilot.y, this.pilot.y + 15, this.swingTimer / this.swingSpeed, this.pilot.normal);
-        // this.moveSin(this.back.x, this.back.x + 10, this.back.y, this.back.y + 15, this.swingTimer / this.swingSpeed, this.back.normal);
+        this.setAllPartPosition();
     }
 
-    setOnScreenText(text)
-    {
-        this.onScreenText = text;
-    }
 
 }
