@@ -3,6 +3,9 @@ import {PiSystem} from "./picalc/pi-system";
 import {PiAnimSequence} from "./pianim/pi-anim-sequence";
 import {PiAnimSystem} from "./pianim/pi-anim-system";
 import {PiAnimAlignment} from "./pianim/pi-anim-alignment";
+import {PiSystemAddAction} from "./picalc/pi-system-add-action";
+import {NeutronStar} from "./anomalies/neutron-star";
+import {BulletInfo} from "./weapon/bulletInfo";
 
 export class Turn {
     private refScene: Phaser.Scene;
@@ -17,6 +20,7 @@ export class Turn {
     private system: PiSystem;
     private roundSeq: PiAnimSequence;
 
+    private endGameAnomaly: NeutronStar;
 
     constructor(refScene: Phaser.Scene, players: [Player, Player], piAnim: PiAnimSystem){
 
@@ -46,6 +50,8 @@ export class Turn {
         this.roundSeq.addSymbol("player2<>");
         this.roundSeq.addSymbol("0");
 
+
+
         //Turn for Player1
 
         this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn('Energy1','*').process('Energy1', () =>{
@@ -59,6 +65,7 @@ export class Turn {
                 channelInCB('shopp1end', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('anomaly1', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('energy1', '', () => {this.setEnergyTurn();}).
+                channelOut('sdanomaly', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -67,9 +74,6 @@ export class Turn {
                 channelOutCB('unlock1', '', () => {this.setAttackTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('attackp1end', '', () => {this.roundSeq.resolveSymbol();}).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('player2', '', () => {this.endAttackTurn(); this.changeSequenceP2()}).nullProcess()
             )
         );
@@ -93,7 +97,7 @@ export class Turn {
                 channelOutCB('shopp1', '', () => {this.setShopTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('shopp2end', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('anomaly2', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
-                channelOutCB('Energy1', '', () => {this.setEnergyTurn(); this.roundSeq.resolveSymbol()}).
+                channelOutCB('Energy1', '', () => {this.setEnergyTurn();}).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -101,15 +105,105 @@ export class Turn {
                 channelOutCB("startephase2", "", () => this.roundSeq.resolveSymbol()).
                 channelOutCB('unlock2', '', () => {this.setAttackTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('attackp2end', '', () => {this.roundSeq.resolveSymbol();}).
-                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                // channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('player1', '', () => {this.endAttackTurn(); this.changeSequenceP1()}).nullProcess()
             )
         );
 
 
+        let symb = this.system.add.channelIn('sdanomaly', '');
+        for (let i = 0; i < 18; i++) {
+            symb = symb.channelIn('sdanomaly', '');
+        }
+        this.system.pushSymbol(symb.channelOut('suddendeath', '').nullProcess());
+
+        this.system.pushSymbol(
+            this.system.add.channelInCB('suddendeath', '',
+                () => this.endGameAnomaly = new NeutronStar(refScene, players[0], players[1]))
+                .concurrent(
+                    [
+
+                        this.system.add.replication(this.system.add.channelIn('sdanomaly', '').nullProcess()),
+
+                        this.system.add.replication(this.system.add
+                            .channelIn('anomaly1', '')
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .nullProcess()),
+
+                        this.system.add.replication(this.system.add
+                            .channelIn('anomaly1', '')
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .nullProcess()),
+
+                        this.system.add.replication(this.system.add
+                            .channelIn('anomaly1', '')
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .nullProcess()),
+
+                        this.system.add.replication(this.system.add
+                            .channelIn('anomaly1', '')
+                            .channelIn('anomaly1', '')
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .channelOutCB('rocketp2', '', (_, at) => this.createExplosion(this.players[1], at))
+                            .nullProcess()),
+
+                        this.system.add.replication(this.system.add
+                            .channelIn('anomaly2', '')
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .nullProcess()),
+
+                        this.system.add.replication(this.system.add
+                            .channelIn('anomaly2', '')
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .nullProcess()),
+
+                        this.system.add.replication(this.system.add
+                            .channelIn('anomaly2', '')
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .nullProcess()),
+
+                        this.system.add.replication(this.system.add
+                            .channelIn('anomaly2', '')
+                            .channelIn('anomaly2', '')
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .channelOutCB('rocketp1', '', (_, at) => this.createExplosion(this.players[0], at))
+                            .nullProcess()),
+
+
+                    ]
+                )
+        )
+
+    }
+
+    private createExplosion(player: Player, info?: BulletInfo){
+        let toX = player.isFirstPlayer() ? 300 : 1620;
+        let toY = 540;
+        let hit: boolean = !info;
+        if(info){
+            toX = info.toX;
+            toY = info.toY;
+            hit = !info.miss;
+        }
+        if (hit) player.explosion.explosionAt(toX + Math.random()*40, toY + Math.random()*40, 0.7, 1.6);
+    }
+
+    public update(delta: number){
+        if(this.endGameAnomaly) this.endGameAnomaly.update(delta);
     }
 
     public changeSequenceP2(){
