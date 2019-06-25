@@ -1,7 +1,6 @@
 import {HealthbarSprites} from "./healthbar-sprites";
 import {HealthType} from "./health-type";
 import {Infobox} from "../Infobox";
-import Sprite = Phaser.GameObjects.Sprite;
 import {PiAnimSystem} from "../pianim/pi-anim-system";
 import {PiAnimSequence} from "../pianim/pi-anim-sequence";
 import {PiAnimAlignment} from "../pianim/pi-anim-alignment";
@@ -20,6 +19,7 @@ export class Healthbar {
     private readonly pid: string;
     private readonly piAnimSys: PiAnimSystem;
     private piAnimSequence: PiAnimSequence;
+
 
     public constructor(scene: Phaser.Scene, direction: 1|-1, isHitZone: boolean, y: number, lastPiSymbolString: string, pid: string, piAnimSys: PiAnimSystem){
         this.scene = scene;
@@ -106,21 +106,23 @@ export class Healthbar {
             let infobox = <Infobox> this.scene.data.get("infoboxx");
             let playerName = this.direction == 1 ? "P1" : "P2";
             let opponentName = this.direction == 1 ? "P2" : "P1";
-            let activeTerm = this.term.text.split(".")[0];
+            let activeTerm = this.toString().split(".")[0];
             let hitzoneNumber = this.y == 170 ? 1 : this.y == 220 ? 2 : this.y == 270 ? 3 : 4;
 
             let tooltipInfo = bar.type == HealthType.HitZoneBar ?
                 "[" + playerName + "] " +
                 "This is your Hitzone Bar. Each element represents one hitzone. \n"
                 + "     If all are destroyed, the process \"CoreExplosion\" "+ playerName + " will execute\n"
-                + "     and your ship will destroy.\n\n"
-                + "     current term:        " + this.term.text + "\n"
+                + "     and your ship will be destroyed.\n\n"
+                + "     for each lost zone you'll receive a malus for the energy regeneration\n"
+                + "     of your ship"
+                + "     current term:        " + this.toString() + "\n"
                 + "     currently active:    " + activeTerm  + "\n"
                 + "     will be resolved by: " + Infobox.getOppositeTerm(activeTerm, playerName) + "\n\n"
                 + "     (each of the other haelthbars emits an " + Infobox.getOppositeTerm(activeTerm, playerName) + "  after its last destroyed bar)"
             :
                 "[" + playerName + "] Hitzone " + hitzoneNumber + "\n\n"
-                + "     current term:          " + this.term.text + "\n"
+                + "     current term:          " + this.toString() + "\n"
                 + "     currently active:      " + activeTerm + "\n"
                 + "     will be resolved by:   " + Infobox.getOppositeTerm(activeTerm,playerName) + "\n\n"
                 + "     (these come from each of " + opponentName + "'s weapons) \n"

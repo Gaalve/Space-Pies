@@ -177,7 +177,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		// this.onScreenText.setText(this.simplePi);
 
 		let infobox = <Infobox> this.scene.data.get("infoboxx");
-		let splitTerm = this.onScreenText.text.split(".");
+		let splitTerm = this.simplePi.split(".");
 		let equippedWeapons = "";
 		for (let i = 0; i < splitTerm.length; i++)
 			if (i != 0 && i != splitTerm.length-1)
@@ -190,18 +190,18 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			+ "     <> : output channel (resolves with corresponding () - channel)\n"
 			+ "     () : input channel (waits for incoming <> - channel)\n"
 			+ "     0 : null process (resolves itself) \n\n"
-			+ "current term:         " + this.onScreenText.text + "\n"
-			+ "currently active:     " + this.onScreenText.text.split(".")[0] + "\n"
-			+ "will be resolved by:  " + Infobox.getOppositeTerm(this.onScreenText.text.split(".")[0], this.player.getNameIdentifier()) + "\n\n"
+			+ "current term:         " + this.simplePi + "\n"
+			+ "currently active:     " + this.simplePi.split(".")[0] + "\n"
+			+ "will be resolved by:  " + Infobox.getOppositeTerm(this.simplePi.split(".")[0], this.player.getNameIdentifier()) + "\n\n"
 			+ "The enclosing \"lock()\" - channel is literally a weapon lock. \n"
 			+ "As soon as you hit attack, a replication \"!(lock<>)\" will be pushed into \nthe pi-system, which continiously emits \"lock<>\" - terms.\n"
 			+ "Then, all equipped weapons (" + equippedWeapons + ") will fire in sequential order.\n"
 
-		infobox.addTooltipInfo(this.onScreenText, tooltipInfo);
+		// infobox.addTooltipInfo(this.onScreenText, tooltipInfo);
 
 		this.index != 0 ? infobox.addTooltipInfo(this, "[" + this.player.getNameIdentifier() + "] Extension Drone " + this.index + ":\n     It will fire after the previous drone has fired.") : null;
 
-		this.index == 0 ? this.player.isFirstPlayer() ? this.scene.data.get("redship").setOnScreenText(this.onScreenText) :this.scene.data.get("blueship").setOnScreenText(this.onScreenText) : null;
+		// this.index == 0 ? this.player.isFirstPlayer() ? this.scene.data.get("redship").setOnScreenText(this.onScreenText) :this.scene.data.get("blueship").setOnScreenText(this.onScreenText) : null;
 		this.updatePiAnimSeq();
 	}
 
@@ -329,8 +329,8 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		}
 
 		this.setPosition(posX,posY)
-		posX = this.getPlayer().isFirstPlayer() ? posX + this.onScreenText.width/2 :  posX - this.onScreenText.width/2
-		this.index != 0 ? this.onScreenText.setPosition(posX, posY + 75) : null;
+		// posX = this.getPlayer().isFirstPlayer() ? posX + this.onScreenText.width/2 :  posX - this.onScreenText.width/2
+		// this.index != 0 ? this.onScreenText.setPosition(posX, posY + 75) : null;
 
 	}
 }

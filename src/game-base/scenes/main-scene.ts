@@ -123,7 +123,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(data?: PiAnimSystem): void {
-        if (!data) throw new Error("No Pi Anim System");
+
         this.anims.create({
             key: 'snooze',
             frames:
@@ -151,6 +151,7 @@ export class MainScene extends Phaser.Scene {
         this.input.enabled = true;
         this.data.set("infoboxx",new Infobox(this));
 
+        if (!data && data !instanceof  PiAnimSystem) throw new Error("No Pi Anim System");
         this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
                         new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
 
