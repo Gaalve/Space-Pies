@@ -112,7 +112,7 @@ export class Turn {
 
 
         let symb = this.system.add.channelIn('sdanomaly', '');
-        for (let i = 0; i < 18; i++) {
+        for (let i = 0; i < 18; i++) { // set amount of Rounds here!!
             symb = symb.channelIn('sdanomaly', '');
         }
         this.system.pushSymbol(symb.channelOut('suddendeath', '').nullProcess());
@@ -199,7 +199,7 @@ export class Turn {
             toY = info.toY;
             hit = !info.miss;
         }
-        if (hit) player.explosion.explosionAt(toX + Math.random()*40, toY + Math.random()*40, 0.7, 1.6);
+        if (hit) player.neutronExplosion.explosionAt(toX + Math.random()*40, toY + Math.random()*40, 0.4, 2.5);
     }
 
     public update(delta: number){

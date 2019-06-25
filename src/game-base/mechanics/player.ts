@@ -27,6 +27,7 @@ import {Motor} from "./motor";
 import {NeutronStar} from "./anomalies/neutron-star";
 import {NeutronAnimation} from "./animations/neutron-animation";
 import {NeutronTurb} from "./animations/neutron-turb";
+import {NeutronExplosion} from "./animations/neutron-explosion";
 
 export class Player {
     private nameIdentifier: string;
@@ -71,7 +72,7 @@ export class Player {
 
     public neutronParticles: NeutronAnimation;
     public neutronTurb: NeutronTurb;
-
+    public neutronExplosion: NeutronExplosion;
 
     public currentAnomaly: Anomaly;
     public blackhole: BlackHole;
@@ -109,6 +110,7 @@ export class Player {
         this.blackholeParticles = new BlackholeParticle(pem);
         this.neutronParticles = new NeutronAnimation(pem);
         this.neutronTurb = new NeutronTurb(pem);
+        this.neutronExplosion = new NeutronExplosion(pem);
 
         this.motor = new Motor(scene, this, x, y, piAnim);
         this.malusEnergy = 0;
