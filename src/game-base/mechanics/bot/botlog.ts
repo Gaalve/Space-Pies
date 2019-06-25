@@ -3,22 +3,20 @@ import {Bot} from "./bot";
 export class Botlog{
 
     private bot: Bot;
-    private logs: string[];
+    private logs: Phaser.GameObjects.Text[];
     private heading: Phaser.GameObjects.Text;
-    private botLog: Phaser.GameObjects.Text;
     private bg: Phaser.GameObjects.Sprite;
+    private nrLogs: number;
+
 
     public constructor(bot: Bot){
         this.bot = bot;
         this.logs = [];
-        this.heading = new Phaser.GameObjects.Text(this.bot.scene, 1920/2, 1080/2 - 250, "Bot:",
-        {fill: '#fff', fontFamily: '"Roboto"', fontSize: 36, strokeThickness: 2});
-        this.heading.setOrigin(0.5);
-        this.botLog = new Phaser.GameObjects.Text(this.bot.scene, 1920/2, 1080/2 - 200, this.logs,
-            {fill: '#fff', fontFamily: '"Roboto"', fontSize: 28, strokeThickness: 2});
-        this.botLog.setOrigin(0.5);
+        this.nrLogs = 0;
+
+        this.heading = new Phaser.GameObjects.Text(this.bot.scene, 1920/2-250, 1080/2 - 250, "Bot:",
+        {fill: '#fff', fontFamily: '"Roboto"', fontSize: 30, strokeThickness: 2});
         this.bot.scene.add.existing(this.heading);
-        this.bot.scene.add.existing(this.botLog);
 
         this.bg = new Phaser.GameObjects.Sprite(this.bot.scene, 1920/2, 1080/2-60, "shop_bg_back");
         this.bot.scene.add.existing(this.bg);
@@ -28,40 +26,37 @@ export class Botlog{
     }
 
     public insertLog(log: string): void{
-        this.logs.push(log);
-        this.updateLog();
-    }
-
-    public updateLog(): void{
-        this.botLog.setText(this.logs);
+        let newLog = new Phaser.GameObjects.Text(this.bot.scene, 1920/2-250, 1080/2 - 200 + this.nrLogs * 35, log,
+        {fill: '#fff', fontFamily: '"Roboto"', fontSize: 24, strokeThickness: 1});
+        this.bot.scene.add.existing(newLog);
+        this.logs.push(newLog);
+        this.nrLogs++;
     }
 
     public setVisible(): void{
-        this.bg.visible = true;
-        this.heading.visible = true;
-        this.botLog.visible = true;
+        this.bg.setVisible(true);
+        this.heading.setVisible(true);
+        for(let text of this.logs) text.setVisible(true);
     }
 
     public setInvisible(): void{
-        this.bg.visible = false;
-        this.heading.visible = false;
-        this.botLog.visible = false;
+        this.bg.setVisible(false);
+        this.heading.setVisible(false);
+        for(let text of this.logs) text.setVisible(false);
     }
 
     public changeVisible(): void{
         if(this.heading.visible){
-            this.bg.setVisible(false);
-            this.heading.setVisible(false);
-            this.botLog.setVisible(false);
+            this.setInvisible();
         }else{
-            this.bg.setVisible(true);
-            this.heading.setVisible(true);
-            this.botLog.setVisible(true);
+            this.setVisible();
         }
     }
 
     public clearLog(): void{
-        this.logs = [];
-        this.updateLog();
+        for(let text of this.logs){
+            text.destroy();
+        }
+        this.nrLogs = 0;
     }
 }

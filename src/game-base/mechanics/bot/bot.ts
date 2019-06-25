@@ -156,16 +156,13 @@ export class Bot extends Player{
         if(this.botSolar <= this.botEnergy && this.nrActiveSD < 5){
             this.possibleActions.push(this.solar);
         }
-        console.log(this.possibleActions);
 
         let z = Phaser.Math.Between(1, 10);
 
         if(z > 9 || this.possibleActions.length == 0){
-            console.log("returned end")
             return "end";
         }else{
             let x = Phaser.Math.Between(0, this.possibleActions.length-1);
-            console.log("returned " + this.possibleActions[x]);
             return this.possibleActions[x];
         }
     }
@@ -271,7 +268,7 @@ export class Bot extends Player{
         if(this.botShield <= this.botEnergy) this.possibleActions.push(this.r);
         if(this.botAdapt <= this.botEnergy) this.possibleActions.push(this.ad);
 
-        let x = Phaser.Math.Between(0, this.possibleActions.length-1)
+        let x = Phaser.Math.Between(0, this.possibleActions.length-1);
         return this.possibleActions[x];
     }
 
