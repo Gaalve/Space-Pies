@@ -21,4 +21,8 @@ export class PiAnimSystem {
     public update(delta: number){
         this.sequences.forEach(value => value.update(delta))
     }
+
+    public reset(): void{
+        this.sequences = [];
+    }
 }

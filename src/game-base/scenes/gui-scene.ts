@@ -1,5 +1,6 @@
 /** Scene for user interface elements. */
 import "phaser"
+import {Infobox} from "../mechanics/Infobox";
 
 export class GuiScene extends Phaser.Scene {
 
@@ -11,6 +12,7 @@ export class GuiScene extends Phaser.Scene {
     }
 
     create(): void {
+        this.data.set("infoboxx",new Infobox(this));
         this.scene.launch('SimplePiCalc');
 
         const roundPlayerText = this.add.text(1920/2, 30, 'P?!', {

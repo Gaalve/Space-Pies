@@ -48,6 +48,8 @@ export class Healthbar {
 
     public destroyBar(): void{
         let sprite = this.bars.pop().sprite;
+        let infobox = <Infobox> this.scene.data.get("infoboxx");
+        infobox.removeTooltipInfo(sprite);
         let bleedingSprite = this.scene.add.sprite(sprite.x, sprite.y, "bleedingbar");
         bleedingSprite.setFrame(0);
         bleedingSprite.anims.animationManager.create({
