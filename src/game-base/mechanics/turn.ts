@@ -69,8 +69,8 @@ export class Turn {
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB("startephase1", "", () => {this.roundSeq.resolveSymbol();}).
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB('unlock1', '', () => {this.setAttackTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('attackp1end', '', () => {this.roundSeq.resolveSymbol();}).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -82,7 +82,6 @@ export class Turn {
                 this.system.add.channelOutCB('shopp1', '', () => {this.setShopTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('shopp1end', '', () => {this.roundSeq.resolveSymbol();}).
                 channelOutCB('energy1', '', () => {this.setEnergyTurn(); }).
-                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -101,8 +100,9 @@ export class Turn {
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
-                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                 channelOutCB("startephase2", "", () => this.roundSeq.resolveSymbol()).
+                channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
+
                 channelOutCB('unlock2', '', () => {this.setAttackTurn(); this.roundSeq.resolveSymbol();}).
                 channelInCB('attackp2end', '', () => {this.roundSeq.resolveSymbol();}).
                 channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
