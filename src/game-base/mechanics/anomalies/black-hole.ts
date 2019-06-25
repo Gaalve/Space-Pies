@@ -4,30 +4,53 @@ import {Anomaly} from "./anomaly";
 
 export class BlackHole extends Anomaly {
 
+    private size: number;
+    private counter: number;
+    private activated: boolean;
+    private readonly maxCounter: number;
+    private sinCounter: number;
+
     public constructor(scene : Phaser.Scene, player: Player) {
-        super(scene, player, 960, 500, "black_hole", "hole");
+        super(scene, player, 960, 540, "black_hole", "hole");
 
         this.scaleUp = 1;
         this.scaleX = 0.0;
         this.scaleY = 0.0;
+        this.size = 10;
+        this.counter = 0;
+        this.activated = false;
+        this.maxCounter = 500;
+        this.sinCounter = 0;
     }
 
-    public update(): void {
+    public update(delta: number): void {
+        this.counter += delta;
+        this.sinCounter += delta/1500;
+        this.sinCounter %= 2 * Math.PI;
 
-        if(this.scaleUp == -2 && this.scaleX < 0.4) this.scaleUp = 0;
-        if(this.scaleUp == -1 && this.scaleX < 0.7) this.scaleUp = 0;
+        this.setScale(this.scaleX + Math.sin(this.sinCounter)/15);
+        this.setAlpha(0.95 + Math.sin(-this.sinCounter)/20 );
 
-        if(this.scaleUp == 1 && this.scaleX > 1.0){
-            this.scaleUp = 0;
-        }
-
-        if(this.scaleX > -0.005){
-            this.scaleX += 0.01 * this.scaleUp;
-            this.scaleY += 0.01 * this.scaleUp;
+        this.player.blackholeParticles.at(this.scaleX, 2);
+        if(this.counter < this.maxCounter){
+            if (!this.activated){
+                this.setScale(this.counter / this.maxCounter);
+            }
+            else{
+                this.setScale( (1 - this.counter / this.maxCounter) / 10 + this.size / 10);
+            }
         }
         else{
-            this.destroy()
+            this.activated = true;
+            this.counter = this.maxCounter;
+            this.setScale(this.size / 10);
+            if (this.size == 0) this.destroy();
         }
 
+    }
+
+    public reduce(): void{
+        this.size--;
+        this.counter = 0;
     }
 }

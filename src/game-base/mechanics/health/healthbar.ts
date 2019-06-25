@@ -3,6 +3,7 @@ import {HealthType} from "./health-type";
 import {Infobox} from "../Infobox";
 import Sprite = Phaser.GameObjects.Sprite;
 import Text = Phaser.GameObjects.Text;
+import ANIMATION_COMPLETE = Phaser.Animations.Events.ANIMATION_COMPLETE;
 
 export class Healthbar {
     private readonly scene: Phaser.Scene;
