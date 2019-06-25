@@ -10,7 +10,6 @@ export class NeutronStar {
     private fg: Sprite;
     private bg1: RotatingSprite;
     private bg2: RotatingSprite;
-    // private comets: RotatingSprite;
 
     private warn: Sprite;
     private pixel: Sprite;
@@ -29,10 +28,8 @@ export class NeutronStar {
 
         this.bg1 = new RotatingSprite(scene,"neutron_bg1", 960, 540, 2700);
         this.bg2 = new RotatingSprite(scene,"neutron_bg2", 960, 540, -2800);
-        // this.comets = new RotatingSprite(scene,"neutron_comets", 960, 540, 10000);
         this.pulseCounter = 0;
 
-        // scene.add.existing(this.comets);
         scene.add.existing(this.bg1);
         scene.add.existing(this.bg2);
         scene.add.existing(this.star);
@@ -45,12 +42,6 @@ export class NeutronStar {
 
         this.pixel.setTint(0xDD1111);
         this.pixel.setScale(300);
-
-        // this.comets.setDepth(14);
-        // this.star.setDepth(14);
-        // this.bg2.setDepth(14);
-        // this.bg1.setDepth(14);
-        // this.fg.setDepth(14);
 
         this.pixel.setDepth(14);
         this.warn.setDepth(14);
@@ -72,17 +63,13 @@ export class NeutronStar {
 
         this.bg1.update(delta);
         this.bg2.update(delta);
-        // this.comets.update(delta);
         this.pulseCounter += delta/1321;
         this.pulseCounter %= Math.PI * 2;
 
-
         this.warn.setAlpha(Math.cos(this.pulseCounter*5) * 0.5 + 0.5);
-
         this.pixel.setAlpha(Math.cos(this.pulseCounter*3) * 0.12 + 0.12);
 
         this.star.setScale(Math.cos(this.pulseCounter*2) * 0.02 + 0.98);
-
         this.fg.setScale(Math.cos(this.pulseCounter) * 0.1 + 0.9);
 
         this.fg.setAlpha(0.75);
