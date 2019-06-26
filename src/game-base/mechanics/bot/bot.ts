@@ -16,6 +16,8 @@ export class Bot extends Player{
     public wmodSlots: number;
     public droneSlots: number[];
 
+    public displayedEnergy: number;
+
     public possibleActions: string[];
 
     public activeSD: boolean[];
@@ -68,6 +70,9 @@ export class Bot extends Player{
         private botMotor: number;
         private botRocketS: number;
 
+    private bubble: Phaser.GameObjects.Sprite;
+    private bubbleText: Phaser.GameObjects.Text;
+
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
         super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt);
@@ -105,6 +110,7 @@ export class Bot extends Player{
         this.botRocketS = this.getEnergyCost("rocket");
         this.botEnergy = this.getEnergy();
         this.botRegenRate = 50;
+        this.displayedEnergy = this.botEnergy;
 
         this.active = false;
         this.steps = 0;
@@ -114,20 +120,34 @@ export class Bot extends Player{
         this.botLog = new Botlog(this);
         this.botLog.setInvisible();
         this.possibleActions = [];
+
+        this.bubble = new Phaser.GameObjects.Sprite(this.scene, 1920/2 + 350, 1080/2 - 170, "intro_textbox_scream");
+        this.bubble.flipX = true;
+        this.scene.add.existing(this.bubble);
+        this.bubble.setVisible(false);
+
+        this.bubbleText = new Phaser.GameObjects.Text(this.scene, 1920/2 + 365, 1080/2 - 185, "You win!\nThis time...",
+            {fill: '#000', fontFamily: '"Roboto"', fontSize: 32, strokeThickness: 4});
+        this.bubbleText.setOrigin(0.5,0.5);
+        this.scene.add.existing(this.bubbleText);
+        this.bubbleText.setVisible(false);
     }
 
     public start(): void{
-        this.botLog.setLogoVisible()
         this.updateActiveSD();
+        this.updateRegenRate();
         this.updateHitzones();
+        this.displayedEnergy = this.botEnergy;
         this.botLog.clearLog();
         this.botLog.setVisible();
+        this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
+        this.botLog.setLogoVisible();
         this.active = true;
 
         while(this.active) {
-            console.log("Energie: " + this.botEnergy);
             if(this.isDead){
                 this.active = false;
+                this.createBubble();
                 break;
             }
             this.steps++;
@@ -184,7 +204,7 @@ export class Bot extends Player{
             this.clearPosActions();
             let hz = this.chooseHitzone();
             this.clearPosActions();
-            this.buyShield(shield);
+            let x = this.buyShield(shield);
 
             this.scene.time.delayedCall(delay, () => {
                 system.pushSymbol(system.add.channelOut("r" + shield + "p" + this.id + "z" + hz, "").nullProcess());
@@ -196,8 +216,9 @@ export class Bot extends Player{
                     this.botLog.insertLog(s + ". I built an armor shield on hitzone " + hz + ".");
                 } else {
                     this.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ".");
-                };
-                this.botLog.updateEnergy(this.botEnergy, this.botRegenRate);
+                }
+                this.reduceDisplayedEnergy(x);
+                this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             }, [], this);
 
         }else if(action == this.wext){
@@ -208,7 +229,7 @@ export class Bot extends Player{
             let nr = mod.toString() + (3-this.droneSlots[mod]).toString();
             this.droneSlots[mod]--;
             this.weaponSlots--;
-            this.buyWeapon(weapon);
+            let x = this.buyWeapon(weapon);
 
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("wext" + this.id + nr, weapon + "p" + this.opId).nullProcess());
@@ -216,19 +237,21 @@ export class Bot extends Player{
                 let w = "rocket launcher";
                 if(weapon != "rocket") w = weapon == "armor" ? "laser weapon" : "projectile weapon";
                 this.botLog.insertLog(s + ". I built a " + w + " on wmod " + mod + ".");
-                this.botLog.updateEnergy(this.botEnergy, this.botRegenRate);
+                this.reduceDisplayedEnergy(x);
+                this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             },[], this);
 
         }else if(action == this.mot){
             let motor = this.chooseMotorType();
             this.clearPosActions();
             let nr = this.getMotorNr(motor);
-            this.buyUpgrade(this.botMotor);
+            let x = this.buyUpgrade(this.botMotor);
 
             this.scene.time.delayedCall(delay,()=> {
                 system.pushSymbol(system.add.channelOut("buymotor" + motor + this.id + nr, "").nullProcess());
                 this.botLog.insertLog(s + ". I built a " + motor + " motor.");
-                this.botLog.updateEnergy(this.botEnergy, this.botRegenRate);
+                this.reduceDisplayedEnergy(x);
+                this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             },[], this);
             if(motor == this.mlas) this.motorLaserSlots--;
             if(motor == this.mpro) this.motorProjectileSlots--;
@@ -238,29 +261,32 @@ export class Bot extends Player{
             let nr = (3-this.wmodSlots).toString();
             this.weaponSlots += 3;
             this.wmodSlots--;
-            this.buyUpgrade(this.botWmod);
-            this.updateWmodCost();
+            let x = this.buyUpgrade(this.botWmod);
 
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("wmod" + this.id + nr, "").nullProcess());
                 this.botLog.insertLog(s + ". I built a weapon mod.");
-                this.botLog.updateEnergy(this.botEnergy, this.botRegenRate);
+                this.reduceDisplayedEnergy(x);
+                this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             }, [], this);
 
+            this.updateWmodCost();
 
         }else if(action == this.solar){
             let nr = this.getSolarNr();
             this.activeSD[parseInt(nr)-1] = true;
-            this.buyUpgrade(this.botSolar);
+            let x = this.buyUpgrade(this.botSolar);
             this.nrActiveSD++;
-            this.updateSolarCost();
             this.updateRegenRate();
 
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("newsolar" + this.id + nr, "").nullProcess());
                 this.botLog.insertLog(s + ". I built a solar drone.");
-                this.botLog.updateEnergy(this.botEnergy, this.botRegenRate);
+                this.reduceDisplayedEnergy(x);
+                this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             }, [], this);
+
+            this.updateSolarCost();
 
         }else if(action == this.end){
             this.scene.time.delayedCall(delay, ()=> {
@@ -360,48 +386,49 @@ export class Bot extends Player{
         return this.botLog;
     }
 
-    public buyUpgrade(x: number): void{
+    public buyUpgrade(x: number): number{
         this.botEnergy -= x;
+        return x;
     }
 
-    public buyShield(type: string): void{
+    public buyShield(type: string): number{
         switch(type){
             case(this.n):{
                 this.botEnergy -= this.botnano;
-                break;
+                return this.botnano
             }
             case(this.ar):{
                 this.botEnergy -= this.botShield;
-                break;
+                return this.botShield
             }
             case(this.s):{
                 this.botEnergy -= this.botShield;
-                break;
+                return this.botShield
             }
             case(this.ad):{
                 this.botEnergy -= this.botAdapt;
-                break;
+                return this.botAdapt
             }
             case(this.r):{
                 this.botEnergy -= this.botRocketS;
-                break;
+                return this.botRocketS
             }
         }
     }
 
-    public buyWeapon(type: string): void{
+    public buyWeapon(type: string): number{
         switch(type){
             case(this.pro):{
                 this.botEnergy -= this.botWeapon;
-                break;
+                return this.botWeapon
             }
             case(this.las):{
                 this.botEnergy -= this.botWeapon;
-                break;
+                return this.botWeapon
             }
             case(this.roc): {
                 this.botEnergy -= this.botRocket;
-                break;
+                return this.botRocket
             }
         }
     }
@@ -440,5 +467,19 @@ export class Bot extends Player{
         let nd = 0;
         if(this.getSolarDrones()[5].visible) nd = 50;
         this.botRegenRate = (50 + this.nrActiveSD*25 + nd);
+    }
+
+    public reduceDisplayedEnergy(x: number): void{
+        this.displayedEnergy -= x;
+    }
+
+    public createBubble(): void{
+        if(this.id == "2") {
+            this.bubble.flipX = false;
+            this.bubble.setPosition(1920 / 2 - 350, 1080 / 2 - 170)
+            this.bubbleText.setPosition(1920 / 2 - 350, 1080 / 2 - 185);
+        }
+        this.bubble.setVisible(true);
+        this.bubbleText.setVisible(true);
     }
 }

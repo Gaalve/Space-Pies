@@ -202,10 +202,10 @@ export class Turn {
                 //Turn for Player 2 (Bot)
                 this.system.pushSymbol(
                     this.system.add.replication(
-                        this.system.add.channelInCB('botstart', '', () => {this.setShopTurn(); console.log("bot started"); this.players[1].start()}).
+                        this.system.add.channelInCB('botstart', '', () => {this.setShopTurn(); this.players[1].start()}).
                         channelIn('botend', '').
                         channelOut('anomaly2', '').
-                        channelOutCB('energy1', '', () => {this.setEnergyTurn(); console.log("e-turn bot")}).
+                        channelOutCB('energy1', '', () => {this.setEnergyTurn()}).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').

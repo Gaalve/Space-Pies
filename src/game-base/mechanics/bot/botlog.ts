@@ -29,9 +29,9 @@ export class Botlog{
         this.bg.setDepth(-1);
 
         this.energyLogo = this.bot.scene.add.image(1920/2-125, 200, "energy_icon");
-        this.energyText = this.bot.scene.add.text(1920/2-115, 470, "= " + this.bot.botEnergy, {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
-        this.regenText = this.bot.scene.add.text(1920/2+20, 470, "(+"+ this.bot.botRegenRate + ")", {
+        this.energyText = this.bot.scene.add.text(1920/2-95, 160, "= " + this.bot.botEnergy, {
+            fill: '#fff', fontFamily: '"Roboto-Medium"', fontSize: 64, strokeThickness: 1, stroke: '#fff'});
+        this.regenText = this.bot.scene.add.text(1920/2+35, 170, "(+"+ this.bot.botRegenRate.toString() + ")", {
             fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
 
         this.bot.scene.add.existing(this.energyLogo);
@@ -91,7 +91,17 @@ export class Botlog{
     }
 
     public updateEnergy(energy: number, regen: number): void{
-        this.energyText.setText(energy.toString());
-        this.regenText.setText(regen.toString());
+        this.energyText.setText("= " + energy);
+
+        this.regenText.setText("(+" + regen + ")");
+        if(this.bot.botEnergy >= 100) {
+            this.regenText.setX(1920 / 2 + 70);
+
+        }else if(this.bot.botEnergy >= 1000){
+            this.regenText.setX(1920 / 2 + 110);
+        }
+        else{
+            this.regenText.setX(1920 / 2 + 35);
+        }
     }
 }
