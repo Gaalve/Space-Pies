@@ -8,6 +8,8 @@ export class ShipPart {
     private offX: number;
     private offY: number;
     public currentTex;
+    private x : number;
+    private y : number;
     private desOffX: number;
     private desOffY: number;
 
@@ -42,6 +44,9 @@ export class ShipPart {
     public setPosition(x: number, y: number): void{
         this.normal.setPosition(x + this.offX, y + this.offY);
         this.destroyed.setPosition(x + this.desOffX, y + this.desOffY);
+
+        this.x = this.normal.x;
+        this.y = this.normal.y;
     }
 
     public update(delta: number): void{
