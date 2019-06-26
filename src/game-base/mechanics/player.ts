@@ -21,6 +21,7 @@ import {NanoDrone} from "./nanoDrone";
 import {BlackHole} from "./anomalies/black-hole";
 import {BlackholeParticle} from "./animations/blackhole-particle";
 import {Motor} from "./motor";
+import {MainScene} from "../scenes/main-scene";
 
 export class Player {
     private nameIdentifier: string;
@@ -66,6 +67,7 @@ export class Player {
 
     public currentAnomaly: Anomaly;
     public blackhole: BlackHole;
+    private blackholeExists: boolean;
 
     public motor: Motor;
 
@@ -94,6 +96,7 @@ export class Player {
         this.bulletTrail = new BulletTrail(pem);
         this.collectE = new collectEnergy_ship(pem);
         this.blackholeParticles = new BlackholeParticle(pem);
+        this.blackholeExists = false;
         this.motor = new Motor(scene, this, x, y);
         //console.log(blackholeAppears)
         //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
@@ -418,7 +421,10 @@ export class Player {
         // wormhole trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelInCB('anomaly'+p, '', () => {
+                    this.system.stop()
+                    if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("worm");
+                },undefined, 0.2)
                 .channelOut('wormhole'+p, '').nullProcess()
         );
 
@@ -434,7 +440,13 @@ export class Player {
         // blackhole trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelInCB('anomaly'+p, '', () => {
+                    if (!this.blackholeExists){
+                        this.blackholeExists = true;
+                        this.system.stop()
+                        if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("black");
+                    }
+                },undefined, 0.2)
                 .channelOut('blackhole', '').nullProcess()
         );
 
@@ -472,7 +484,10 @@ export class Player {
         // suneruption trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelInCB('anomaly'+p, '', () => {
+                    this.system.stop()
+                    if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("erupt");
+                },undefined, 0.2)
                 .channelOut('suneruption'+p, '').nullProcess());
 
         let op = this.isFirstPlayer() ? 'p2' : 'p1';
