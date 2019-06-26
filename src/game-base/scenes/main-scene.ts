@@ -185,10 +185,10 @@ export class MainScene extends Phaser.Scene {
         this.data.set('P2', this.players[1]);
         this.shop_bg_back = new Sprite(this, 1920/2, 990, "shop_bg_back");
         this.shop_bg_out = new Sprite(this, 1920/2, 990, "shop_bg_out");
-        this.shop_bg_back.setAlpha(0.6);
+        this.shop_bg_back.setAlpha(0.8);
         this.shop_bg_back2 = new Sprite(this, 1920/2, 775, "shop_bg_back").setScale(0.8,0.75).setVisible(false);
         this.shop_bg_out2 = new Sprite(this, 1920/2, 775, "shop_bg_out").setScale(0.8, 0.75);
-        this.shop_bg_back2.setAlpha(0.6);
+        this.shop_bg_back2.setAlpha(0.8);
         this.add.existing(this.shop_bg_back2);
         //this.add.existing(this.shop_bg_out2);
         this.add.existing(this.shop_bg_back);
