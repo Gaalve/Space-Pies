@@ -33,7 +33,7 @@ export class Ship{
         this.posY = y;
         this.debris = [];
 
-        this.isRed ? this.scene.data.set("redship",this.modularShip) : this.scene.data.set("blueship", this.modularShip);
+        this.isRed ? this.scene.data.set("redship",this._modularShip) : this.scene.data.set("blueship", this._modularShip);
 
     }
 
@@ -134,7 +134,8 @@ export class Ship{
                                                                     for(let w of this.player.getDrones()[1].getWeapons()){
                                                                         w.destroy();
                                                                     }
-                                                                    this.player.getDrones()[1].onScreenText.destroy();}, [], this);
+                                                                    // this.player.getDrones()[1].onScreenText.destroy();
+                                                                    }, [], this);
             this.scene.time.delayedCall(3400, ()=>{this.debris.push(new Debris(this.scene, this.posX - 300, this.posY - 300))}, [], this);
             this.scene.time.delayedCall(3400, ()=>{this.debris.push(new Debris(this.scene, this.posX - 300, this.posY - 300))}, [], this);
         }
@@ -144,7 +145,8 @@ export class Ship{
                                                                     for(let w of this.player.getDrones()[2].getWeapons()){
                                                                         w.destroy();
                                                                     }
-                                                                    this.player.getDrones()[2].onScreenText.destroy();}, [], this);
+                                                                    // this.player.getDrones()[2].onScreenText.destroy();
+                                                                    }, [], this);
             this.scene.time.delayedCall(3600, ()=>{this.debris.push(new Debris(this.scene, this.posX - 300, this.posY + 300))}, [], this);
             this.scene.time.delayedCall(3600, ()=>{this.debris.push(new Debris(this.scene, this.posX - 300, this.posY + 300))}, [], this);
         }

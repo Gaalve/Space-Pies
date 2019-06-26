@@ -3,12 +3,9 @@ import {PiSystem} from "./picalc/pi-system";
 import {PiAnimSequence} from "./pianim/pi-anim-sequence";
 import {PiAnimSystem} from "./pianim/pi-anim-system";
 import {PiAnimAlignment} from "./pianim/pi-anim-alignment";
-import {PiSystemAddAction} from "./picalc/pi-system-add-action";
 import {NeutronStar} from "./anomalies/neutron-star";
 import {BulletInfo} from "./weapon/bulletInfo";
-import {PiSystem} from "../mechanics/picalc/pi-system";
 import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
-import Scene = Phaser.Scene;
 
 export class Turn {
     private refScene: Phaser.Scene;

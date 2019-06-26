@@ -21,6 +21,8 @@ export class BlueShip extends BaseShip{
     private weaponSinX: number;
     private weaponSinY: number;
 
+    private onScreenText: Phaser.GameObjects.Text;
+
     public constructor(scene: Phaser.Scene,x: number, y: number){
         super(scene, x, y);
 
@@ -76,6 +78,7 @@ export class BlueShip extends BaseShip{
 
     setAllPartPosition(): void {
         let posX = (this.posX + Math.sin(this.sinX) * 15);
+        // noinspection JSSuspiciousNameCombination
         let posY = (this.posY + Math.cos(this.sinY) * 15);
 
         this.back.setPosition(posX, posY);
@@ -87,6 +90,8 @@ export class BlueShip extends BaseShip{
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x, this.hull.normal.y - 110);
         if(this.weapons[2]) this.weapons[2].setPosition((this.hull.normal.x), this.hull.normal.y + 110);
+
+        this.onScreenText ? this.onScreenText.setPosition(posX + 165, posY + this.onScreenText.width/2) : null;
     }
 
     toDestroyedBack(): void {
@@ -128,6 +133,10 @@ export class BlueShip extends BaseShip{
         this.sinY %= 2*Math.PI;
 
         this.setAllPartPosition();
+    }
+
+    setOnScreenText(text){
+        this.onScreenText = text;
     }
 
 

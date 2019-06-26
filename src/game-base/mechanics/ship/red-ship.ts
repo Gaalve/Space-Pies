@@ -17,6 +17,7 @@ export class RedShip extends BaseShip{
     durationY : number;
     sinX : number;
     sinY : number;
+    onScreenText : Phaser.GameObjects.Text;
     private weapons: Weapon[];
 
 
@@ -92,6 +93,8 @@ export class RedShip extends BaseShip{
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x + 44, this.hull.normal.y - 150);
         if(this.weapons[2]) this.weapons[2].setPosition(this.hull.normal.x + 44, this.hull.normal.y + 150);
 
+        this.onScreenText ? this.onScreenText.setPosition(posX - 210, posY + this.onScreenText.width/2) : null;
+
     }
 
     toDestroyedBack(): void {
@@ -143,6 +146,10 @@ export class RedShip extends BaseShip{
         this.sinY %= 2*Math.PI;
 
         this.setAllPartPosition();
+    }
+
+    setOnScreenText(text){
+        this.onScreenText = text;
     }
 
 }

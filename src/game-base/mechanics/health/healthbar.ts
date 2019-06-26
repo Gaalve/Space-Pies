@@ -42,6 +42,13 @@ export class Healthbar {
         this.piAnimSequence = this.piAnimSys.addSequence(this.position - 10 * this.direction,
             this.y + 14, this.lastPiSymbolString, this.direction == 1 ? PiAnimAlignment.LEFT : PiAnimAlignment.RIGHT);
 
+        scene = scene.scene.get("AnimationScene");
+        this.term = scene.add.text(this.position - 10 * this.direction, this.y, "", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 3, stroke: '#000'
+        });
+        this.term.setOrigin((-this.direction + 1)/2,0);
+        this.term.setDepth(2);
+        scene.add.existing(this.term);
     }
 
     public addBar(type: HealthType): void{
@@ -53,6 +60,8 @@ export class Healthbar {
     }
 
     public destroyBar(): void{
+
+        let healthtype = this.bars[this.bars.length - 1].type;
 
         // if (healthtype == HealthType.HitZoneBar)
         //     return;
@@ -119,6 +128,7 @@ export class Healthbar {
     }
 
     private updateTextViaResolve(): void{
+        this.term.setText(this.toString());
         // console.log("Res Bars: "+this.bars.length);
         if(this.bars.length == 0){
             this.piAnimSequence.resolveAll();
@@ -142,6 +152,7 @@ export class Healthbar {
     }
 
     private updateTextViaNew(): void{
+        this.term.setText(this.toString());
         // console.log("New Bars: "+this.bars.length);
         if(this.bars.length == 0) return;
         this.piAnimSequence.clearSequence(this.position - 10 * this.direction,
@@ -203,7 +214,7 @@ export class Healthbar {
                 str += '( ).';
             }
         }
-        if(this.bars.length > 0){
+        if(this.bars.length > 0) {
             str += this.lastPiSymbolString;
             str += ".0";
         }else{
@@ -212,18 +223,16 @@ export class Healthbar {
         return str;
     }
 
-    public removeBar() : void{
+    public removeBar() : void {
         let sprite = this.bars.pop().sprite;
         this.scene.time.delayedCall(500,()=>{sprite.destroy()}, [],this);
         this.activeBars--;
     }
 
-    public setTermVisible()
-    {
-
+    public setTermVisible() {
         if (this.bars.length > 0)
             this.term.setVisible(true);
-        this.updateText();
+        this.term.setText(this.toString());
     }
 
     public getBars() : number{

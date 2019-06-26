@@ -14,6 +14,7 @@ import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
 import {AnimationUtilities} from "./animation/AnimationUtilites";
 import {Animation} from "./animation/Animation";
 import {BulletInfo} from "./weapon/bulletInfo";
+import Text = Phaser.GameObjects.Text;
 
 export class Drone extends Phaser.GameObjects.Sprite{
 
@@ -22,14 +23,12 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private index : number;
 	private piTerm : string;
 	private simplePi : string;
-	// public onScreenText : Phaser.GameObjects.Text;
+	public onScreenText : Phaser.GameObjects.Text;
 	private activatedWeapons: integer;
 
 	private readonly posX: number;
 	private readonly posY: number;
 
-	x : number;
-	y : number;
 	durationX : number;
 	durationY : number;
 	sinX : number;
@@ -84,7 +83,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		this.sinY = 0;
 
 		this.buildPiTerm();
-	    // this.activateOnScreenText();
+	    this.activateOnScreenText();
 	    this.buildWeaponPi(parseInt(player.getNameIdentifier().charAt(1)), index);
 
     }
@@ -133,10 +132,11 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	}
 
 	private animatePiCalc(drone: Drone) {
+		// let onScreenText = new Text(this.scene, this.x, this.y, this.simplePi, {});
 		let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
 		let onScreenTexts = AnimationUtilities.popAllSymbols(drone.onScreenText, animationScene);
-		drone.onScreenText.setVisible(false);
-		let totalWidth = AnimationUtilities.calculateWidth(onScreenTexts)
+		// drone.onScreenText.setVisible(false);
+		let totalWidth = AnimationUtilities.calculateWidth(onScreenTexts);
 		let currentFontSize = parseInt(onScreenTexts[0].style.fontSize.substr(0,2));
 		let fontDelta = Math.abs(50 - currentFontSize);
 		let fontScaleFactor = 50 / currentFontSize;
@@ -250,6 +250,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	refreshes the displayed Pi Term, if any changes (add Weapons) where made
 	 */
 	refreshOnScreenText() : void{
+		this.onScreenText.setText(this.simplePi);
 		// this.onScreenText.setText(this.simplePi);
 
 		let infobox = <Infobox> this.scene.data.get("infoboxx");
@@ -282,7 +283,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			"    It will fire after the space ship has fired.") : null;
 
 
-		// this.index == 0 ? this.player.isFirstPlayer() ? this.scene.data.get("redship").setOnScreenText(this.onScreenText) :this.scene.data.get("blueship").setOnScreenText(this.onScreenText) : null;
+		this.index == 0 ? this.player.isFirstPlayer() ? this.scene.data.get("redship").setOnScreenText(this.onScreenText) :this.scene.data.get("blueship").setOnScreenText(this.onScreenText) : null;
 		this.updatePiAnimSeq();
 	}
 
@@ -387,10 +388,55 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 		if (this.index != 0 && this.weapons)
 		{
-			this.weapons[0].setPosition(this.x + this.weapons[0].posX, this.y + this.weapons[0].posY)
-			this.weapons[1].setPosition(this.x + this.weapons[1].posX, this.y + this.weapons[1].posY)
-			this.weapons[2].setPosition(this.x + this.weapons[2].posX, this.y + this.weapons[2].posY)
+			this.weapons[0].setPosition(this.x + this.weapons[0].posX, this.y + this.weapons[0].posY);
+			this.weapons[1].setPosition(this.x + this.weapons[1].posX, this.y + this.weapons[1].posY);
+			this.weapons[2].setPosition(this.x + this.weapons[2].posX, this.y + this.weapons[2].posY);
 		}
 
+		let posX = this.getPlayer().isFirstPlayer() ? this.x + this.onScreenText.width/2 :  this.x - this.onScreenText.width/2;
+		this.index != 0 ? this.onScreenText.setPosition(posX, this.y + 75) : null;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 first activation of displayed text for pi representation of drones
+	 */
+	activateOnScreenText() : void{
+		let scene = this.scene.scene.get("AnimationScene");
+		if(this.index != 0) {
+			this.onScreenText = scene.add.text(this.x - 30, this.y + 60, this.simplePi, {
+				fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
+			});
+		}else {
+			if (this.player.getNameIdentifier() == "P1") {
+				this.onScreenText = scene.add.text(this.x - 270, this.y + 100, this.simplePi, {
+					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
+				});
+			} else {
+				this.onScreenText = scene.add.text(this.x + 235, this.y + 100, this.simplePi, {
+					fill: '#fff', fontFamily: '"Roboto"', fontSize: 20
+				});
+
+			}
+			this.onScreenText.setAngle(270);
+		}
+		this.onScreenText.setDisplayOrigin(0.5);
+	}
+
+
+
+
+
+
 }
