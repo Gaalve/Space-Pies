@@ -1,13 +1,14 @@
 import {EnergyDrone} from "./energyDrone";
 import {Player} from "./player";
 import {BulletInfo} from "./weapon/bulletInfo";
+import {PiAnimSystem} from "./pianim/pi-anim-system";
 
 
 export class NanoDrone extends EnergyDrone {
 
 
-    public constructor(scene : Phaser.Scene, player : Player, index : number, pem: Phaser.GameObjects.Particles.ParticleEmitterManager) {
-        super(scene, 960, 540, player, index, pem, "nano");
+    public constructor(scene : Phaser.Scene, player : Player, index : number, piAnim: PiAnimSystem, pem: Phaser.GameObjects.Particles.ParticleEmitterManager) {
+        super(scene, 960, 540, player, index, piAnim, pem, "nano");
         if(this.player.getNameIdentifier() == "P1"){
             this.setTexture("ssr_nuke_drone");
         }else{
