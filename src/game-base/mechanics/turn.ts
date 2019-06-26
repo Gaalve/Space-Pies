@@ -6,6 +6,9 @@ import {PiAnimAlignment} from "./pianim/pi-anim-alignment";
 import {PiSystemAddAction} from "./picalc/pi-system-add-action";
 import {NeutronStar} from "./anomalies/neutron-star";
 import {BulletInfo} from "./weapon/bulletInfo";
+import {PiSystem} from "../mechanics/picalc/pi-system";
+import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
+import Scene = Phaser.Scene;
 
 export class Turn {
     private refScene: Phaser.Scene;
@@ -279,7 +282,13 @@ export class Turn {
     }
 
     public endAttackTurn() {
-            this.playerInput()
+        let animationScene = <ScenePiAnimation> this.refScene.scene.get("AnimationScene");
+        animationScene.destroyAll();
+        animationScene.reinitialize();
+        this.resetOnScreenTexts(this.players[0]);
+        this.resetOnScreenTexts(this.players[1])
+        this.playerInput()
+            //this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
     }
 
     getScene(): Phaser.Scene{
@@ -292,5 +301,15 @@ export class Turn {
 
     getCurrentRound(): number{
         return this.currentRound;
+    }
+
+    private resetOnScreenTexts(player: Player) {
+        for (let drone of player.getDrones())
+            drone.refreshOnScreenText();
+        player.getHealth().zone1Bar.setTermVisible();
+        player.getHealth().zone2Bar.setTermVisible();
+        player.getHealth().zone3Bar.setTermVisible();
+        player.getHealth().zone4Bar.setTermVisible();
+        player.getHealth().shipBar.setTermVisible();
     }
 }

@@ -121,6 +121,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(data?: PiAnimSystem): void {
+        this.scene.launch("AnimationScene");
         this.anims.create({
             key: 'snooze',
             frames:

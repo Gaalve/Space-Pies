@@ -10,6 +10,10 @@ import {BlueShip} from "./ship/blue-ship";
 import {RedShip} from "./ship/red-ship";
 import Sprite = Phaser.GameObjects.Sprite;
 
+import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
+import {AnimationUtilities} from "./animation/AnimationUtilites";
+import {Animation} from "./animation/Animation";
+import {BulletInfo} from "./weapon/bulletInfo";
 
 export class Drone extends Phaser.GameObjects.Sprite{
 
@@ -84,6 +88,94 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    this.buildWeaponPi(parseInt(player.getNameIdentifier().charAt(1)), index);
 
     }
+
+    private animateIfNotMissed(weaponNr: number, bulletInfo: BulletInfo)
+	{
+		var animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
+		if (this.getWeapons()[weaponNr-1].weaponType == WeaponType.NONE || typeof(bulletInfo) != 'undefined' && bulletInfo.miss)
+			switch(weaponNr)
+			{
+				case 1:
+				{
+					animationScene.weapon1Missed = true;
+					return;
+				}
+				case 2:
+				{
+					animationScene.weapon2Missed = true;
+					return;
+				}
+				case 3:
+				{
+					animationScene.weapon3Missed = true;
+					animationScene.allWeaponsFired = true;
+					return;
+				}
+
+			}
+
+	}
+
+	private animateLockReplication(drone: Drone) {
+		let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
+		let onScreenTextOut = animationScene.add.text(1920/2, 1080, AnimationUtilities.getLockReplicationText(), AnimationUtilities.getFontStyle());
+
+		let toX = 1920/2 - onScreenTextOut.width/2;
+		let toY = 1080 - 150;
+		let animationOut = new Animation("<lock>", animationScene, onScreenTextOut.x, onScreenTextOut.y, toX, toY, onScreenTextOut, 1000);
+
+		animationOut.move = true;
+		animationOut.scaleFont = true;
+		// animationOut.interpolate = true;
+		// animationOut.toColor = AnimationUtilities.getReplicationColor();
+
+		animationScene.addConcurrentAnimation(animationOut, false, false);
+	}
+
+	private animatePiCalc(drone: Drone) {
+		let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
+		let onScreenTexts = AnimationUtilities.popAllSymbols(drone.onScreenText, animationScene);
+		drone.onScreenText.setVisible(false);
+		let totalWidth = AnimationUtilities.calculateWidth(onScreenTexts)
+		let currentFontSize = parseInt(onScreenTexts[0].style.fontSize.substr(0,2));
+		let fontDelta = Math.abs(50 - currentFontSize);
+		let fontScaleFactor = 50 / currentFontSize;
+		totalWidth += (fontDelta * 2.8);
+		let toX = 0;
+		for (let i = 0 ; i < onScreenTexts.length; i++)
+		{
+			let textObject = onScreenTexts[i];
+			toX = i == 0 ? 1920/2 - (totalWidth/2) : toX += (onScreenTexts[i-1].displayWidth * fontScaleFactor);
+			let toY = 1080/1.3;
+			let id = textObject.text.indexOf("lock") >= 0 ? "(lock)" : "weapon";
+			if (textObject.text == "0")
+				id = "0";
+			let animation = new Animation(id, animationScene, textObject.x, textObject.y, toX, toY, textObject, 1000);
+			animation.rotate = true;
+			animation.move = true;
+			animation.scaleFont = true;
+			animation.interpolate = true;
+			if (i != 0 && i != onScreenTexts.length - 1)
+			{
+				if (i == 1)
+					animation.weaponNumber = 1;
+				else if (i == 2)
+					animation.weaponNumber = 2;
+				else if (i == 3)
+					animation.weaponNumber = 3;
+				animation.weaponType = animation.id == "weapon" ? textObject.text.substr(0,2) : null;
+			}
+
+			animation.toColor = AnimationUtilities.getPlayerColor(drone.getPlayer());
+			animationScene.addConcurrentAnimation(animation, false, false);
+			// if (drone.getIndex() == 0) animationScene.addConcurrentAnimation(animation, true, false);
+			// if (drone.getIndex() == 1) animationScene.addToNewBatch(animation, true, false);
+			// if (drone.getIndex() == 2) animationScene.addToNewBatch(animation, true, false);
+		}
+
+	}
+
+
 
     getPlayer() : Player{
 	    return this.player;
@@ -246,19 +338,25 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		let weapon = system.add.term("Weapon" + p + d, undefined);
 		let droneRef: Drone = this;
 		let sum = system.add.sum([system.add.channelInCB("lock" + p + d,"", ()=>{
-			this.piSeq.resolveSymbol();
+            this.piSeq.resolveSymbol();
+			this.animateLockReplication(droneRef);
+			this.animatePiCalc(droneRef);
 		}).
 		channelOutCB("w1","", (_, at) => {
-			droneRef.getWeapons()[0].createBullet(at); if (this.weapons[0].canShoot()) this.piSeq.resolveSymbol();
+			this.animateIfNotMissed(1,at)
+			droneRef.getWeapons()[0].createBullet(at)
+; if (this.weapons[0].canShoot()) this.piSeq.resolveSymbol();
 		}).        //function for weapon animation
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
 		channelOutCB("w2", "", (_, at) => {
+			this.animateIfNotMissed(2,at)
 			droneRef.getWeapons()[1].createBullet(at); if (this.weapons[1].canShoot()) this.piSeq.resolveSymbol();
 		}).
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
 		channelOutCB("w3", "", (_, at) => {
+			this.animateIfNotMissed(3,at)
 			droneRef.getWeapons()[2].createBullet(at); this.resolveAndClearPiAnimSeq();
 		}).
 		next(weapon),
