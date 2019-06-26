@@ -1,5 +1,6 @@
 import Sprite = Phaser.GameObjects.Sprite;
 import {Player} from "./player";
+import {Turn} from "./turn";
 
 export class Button{
 
@@ -201,6 +202,86 @@ export class Button{
 
     isActive(): boolean{
         return this.active;
+    }
+
+    removeHover(){
+        this.shadow.on('pointerover', () => {this.hovering = true; this.updateStep()}) //makes it feel more reactive
+        this.shadow.on('pointerout', () => this.hovering = false)
+    }
+
+    setHover(turn : Turn){
+        this.shadow.on('pointerover', () => {this.hovering = true; this.updateStep(); turn.getCurrentPlayer().ship_out.setVisible(true)}) //makes it feel more reactive
+        this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().ship_out.setVisible(false)});
+
+    }
+
+    setHoverDrone(turn : Turn, index: number){
+        this.shadow.on('pointerover', () => {
+            this.hovering = true;
+            this.updateStep();
+            if (turn.getCurrentPlayer().getNrDrones() >= index + 1) {
+                turn.getCurrentPlayer().getDrones()[index].back.setVisible(true)
+            }
+        }); //makes it feel more reactive
+
+        this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getDrones()[index].back.setVisible(false)});
+
+    }
+
+    setHoverZone(turn: Turn, index: number){
+        switch (index) {
+            case(1):{
+                this.shadow.on('pointerover', () => {
+                    this.hovering = true;
+                    this.updateStep();
+                    if (turn.getCurrentPlayer().getHealth().zone1Bar.activeBars > 0) {
+                        turn.getCurrentPlayer().getHealth().zone1Bar.back.setVisible(true)
+                    }
+                }); //makes it feel more reactive
+
+                this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getHealth().zone1Bar.back.setVisible(false)});
+                break;
+            }
+            case(2):{
+                this.shadow.on('pointerover', () => {
+                    this.hovering = true;
+                    this.updateStep();
+                    if (turn.getCurrentPlayer().getHealth().zone2Bar.activeBars > 0) {
+                        turn.getCurrentPlayer().getHealth().zone2Bar.back.setVisible(true)
+                    }
+                }); //makes it feel more reactive
+
+                this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getHealth().zone2Bar.back.setVisible(false)});
+                break;
+            }
+
+            case(3):{
+                this.shadow.on('pointerover', () => {
+                    this.hovering = true;
+                    this.updateStep();
+                    if (turn.getCurrentPlayer().getHealth().zone3Bar.activeBars > 0) {
+                        turn.getCurrentPlayer().getHealth().zone3Bar.back.setVisible(true)
+                    }
+                }); //makes it feel more reactive
+
+                this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getHealth().zone3Bar.back.setVisible(false)});
+                break;
+            }
+
+            case(4):{
+                this.shadow.on('pointerover', () => {
+                    this.hovering = true;
+                    this.updateStep();
+                    if (turn.getCurrentPlayer().getHealth().zone4Bar.activeBars > 0) {
+                        turn.getCurrentPlayer().getHealth().zone4Bar.back.setVisible(true)
+                    }
+                }); //makes it feel more reactive
+
+                this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getHealth().zone4Bar.back.setVisible(false)});
+            }
+
+        }
+
     }
 
 

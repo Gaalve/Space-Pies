@@ -45,7 +45,7 @@ export class Player {
     public z2Destroyed: boolean = false;
     public z3Destroyed: boolean = false;
     public z4Destroyed: boolean = false;
-
+    public ship_out: Phaser.GameObjects.Sprite;
 
     private health : Health;
     private energy : number;
@@ -90,7 +90,18 @@ export class Player {
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
         this.drones = [new Drone(scene, x, y, this, 0, piAnim), new Drone(scene, x, y, this, 1, piAnim), new Drone(scene, x, y, this,2, piAnim)];
+        if(nameIdentifier == "P1"){
+            this.ship_out = scene.add.sprite(x+20,y,"ssr_ship").setScale(1.1,1.1).setTintFill(0xaff4444);
+            this.ship_out.setVisible(false);
+        }
+        else{
+            this.ship_out = scene.add.sprite(x-30,y,"ssb_ship").setScale(1.1,1.1).setTintFill(0xa4444ff);
+            this.ship_out.setVisible(false);
+
+        }
         this.ship = new Ship(scene, x, y, this);
+
+
         this.scene = scene;
         this.activatedDrones = 0;
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,piAnim,pem), new EnergyDrone(scene, x, y, this, 1,piAnim,pem),

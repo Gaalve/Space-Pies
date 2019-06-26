@@ -20,6 +20,7 @@ export class Healthbar {
     private readonly y: number;
     public position: number;
     private readonly symbol: Sprite;
+    public back:Sprite;
     private readonly lastPiSymbolString: string;
     private readonly pid: string;
     private readonly piAnimSys: PiAnimSystem;
@@ -35,6 +36,7 @@ export class Healthbar {
         this.direction = direction;
         this.position = direction == 1 ? 10 + 50 : 1920 - 10 - 50;
         this.symbol = new Sprite(scene, this.position - 30 * direction, this.y, isHitZone ? "sym_zone" : "sym_core");
+        this.back = scene.add.sprite(this.position - 30 * direction, this.y, "sym_zone").setScale(1.2, 1.2).setTintFill(0xF6F657).setVisible(false);
         this.symbol.setOrigin(0.5,0.5);
         this.scene.add.existing(this.symbol);
         this.lastPiSymbolString = lastPiSymbolString;

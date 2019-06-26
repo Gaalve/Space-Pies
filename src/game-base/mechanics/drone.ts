@@ -25,6 +25,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private simplePi : string;
 	public onScreenText : Phaser.GameObjects.Text;
 	private activatedWeapons: integer;
+	public back: Sprite;
 
 	private readonly posX: number;
 	private readonly posY: number;
@@ -51,15 +52,23 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    //reposition external drones
 	    if(index == 1){
 	    	if(player.getNameIdentifier() == "P1"){
+				this.back = scene.add.sprite(x + 295, y - 300, "ssr_wmod").setScale(1.2,1.1).setTintFill(0xaff4444).setVisible(false);
 				this.setPosition(x += 300, y -= 300);
+
 			}else{
+				this.back = scene.add.sprite(x - 295, y - 300, "ssb_wmod").setScale(1.2,1.1).setTintFill(0xa4444ff).setVisible(false);
 				this.setPosition(x -= 300, y -= 300);
+
 			}
 		}else if(index == 2){
 			if(player.getNameIdentifier() == "P1"){
+				this.back = scene.add.sprite(x + 295, y + 200, "ssr_wmod").setScale(1.2,1.1).setTintFill(0xaff4444).setVisible(false);
 				this.setPosition(x += 300, y += 200);
+
 			}else{
+				this.back = scene.add.sprite(x - 295, y + 200, "ssb_wmod").setScale(1.2,1.1).setTintFill(0xa4444ff).setVisible(false);
 				this.setPosition(x -= 300, y += 200);
+
 			}
 		}
 
