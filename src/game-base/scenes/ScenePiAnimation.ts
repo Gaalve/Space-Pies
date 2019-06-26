@@ -35,7 +35,7 @@ export class ScenePiAnimation extends Phaser.Scene {
     constructor() {
         super({
             key: 'AnimationScene',
-            active: true
+            active: false
         });
         this.sequentialAnimations = new Array<Animation>();
         this.finishedAnimations = new Array<Animation>();
@@ -49,20 +49,14 @@ export class ScenePiAnimation extends Phaser.Scene {
         this.parallelAnimations[3] = new Array<Animation>();
     }
 
-    preload(): void {
-        this.load.pack(
-            "preload",
-            "assets/pack.json",
-            "preload"
-        )
-    }
 
     create(): void {
+        this.scene.setVisible(false);
         this.system = this.scene.get('MainScene').data.get("system");
-        console.log("ScenePiAnimation ACTIVE!");
     }
 
     update(time: number, delta: number): void {
+        if (!this.scene.isVisible())return;
         // if (this.sequentialAnimations.length > 0) {
         //     for (let i = 0; i < 1; i++) {
         //

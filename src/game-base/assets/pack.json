@@ -662,6 +662,41 @@
         "type": "image",
         "key": "motor",
         "url": "assets/sprites/motor.png"
+      },
+      {
+        "type": "image",
+        "key": "neutron",
+        "url": "assets/sprites/neutron.png"
+      },
+      {
+        "type": "image",
+        "key": "neutron_bg1",
+        "url": "assets/sprites/neutron_bg1.png"
+      },
+      {
+        "type": "image",
+        "key": "neutron_bg2",
+        "url": "assets/sprites/neutron_bg2.png"
+      },
+      {
+        "type": "image",
+        "key": "neutron_fg",
+        "url": "assets/sprites/neutron_fg.png"
+      },
+      {
+        "type": "image",
+        "key": "neutron_comets",
+        "url": "assets/sprites/neutron_comets.png"
+      },
+      {
+        "type": "image",
+        "key": "warning",
+        "url": "assets/sprites/warning.png"
+      },
+      {
+        "type": "image",
+        "key": "pixel8",
+        "url": "assets/sprites/pixel8.png"
       }
     ]
   }

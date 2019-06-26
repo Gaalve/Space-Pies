@@ -14,6 +14,9 @@ import {HealthType} from "./health/health-type";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {BulletInfo} from "./weapon/bulletInfo";
 import {BattleTimeBar} from "./battleTimeBar";
+import get = Reflect.get;
+import {PiAnimSystem} from "./pianim/pi-anim-system";
+import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 import {Anomaly} from "./anomalies/anomaly";
 import {SunEruption} from "./anomalies/sun-eruption";
 import {WormHole} from "./anomalies/worm-hole";
@@ -21,6 +24,10 @@ import {NanoDrone} from "./nanoDrone";
 import {BlackHole} from "./anomalies/black-hole";
 import {BlackholeParticle} from "./animations/blackhole-particle";
 import {Motor} from "./motor";
+import {NeutronStar} from "./anomalies/neutron-star";
+import {NeutronAnimation} from "./animations/neutron-animation";
+import {NeutronTurb} from "./animations/neutron-turb";
+import {NeutronExplosion} from "./animations/neutron-explosion";
 
 
 export class Player
@@ -65,28 +72,35 @@ export class Player
     public collectE: collectEnergy_ship;
     public blackholeParticles: BlackholeParticle;
 
+    public neutronParticles: NeutronAnimation;
+    public neutronTurb: NeutronTurb;
+    public neutronExplosion: NeutronExplosion;
 
     public currentAnomaly: Anomaly;
     public blackhole: BlackHole;
 
     public motor: Motor;
 
+    private malusEnergy: number;
+
+
+
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean,
-                       piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
+                       piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar, piAnim: PiAnimSystem){
         this.isDead=false;
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
         this.ship = new Ship(scene, x, y, this);
-        this.drones = [new Drone(scene, x, y, this, 0), new Drone(scene, x, y, this, 1), new Drone(scene, x, y, this,2 )];
+        this.drones = [new Drone(scene, x, y, this, 0, piAnim), new Drone(scene, x, y, this, 1, piAnim), new Drone(scene, x, y, this,2, piAnim)];
         this.scene = scene;
         this.activatedDrones = 0;
-        this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,pem), new EnergyDrone(scene, x, y, this, 1,pem),
-            new EnergyDrone(scene, x, y, this, 2,pem),new EnergyDrone(scene, x, y, this, 3,pem),
-            new EnergyDrone(scene, x, y, this, 4,pem), new NanoDrone(scene, this, 5, pem)];
+        this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,piAnim,pem), new EnergyDrone(scene, x, y, this, 1,piAnim,pem),
+            new EnergyDrone(scene, x, y, this, 2,piAnim,pem),new EnergyDrone(scene, x, y, this, 3,piAnim,pem),
+            new EnergyDrone(scene, x, y, this, 4,piAnim,pem), new NanoDrone(scene, this, 5, piAnim, pem)];
         this.activatedSolarDrones = 0;
         this.smallestIndexSolDrone = 1;
-        this.health = new Health(scene, this, piSystem);
+        this.health = new Health(scene, this, piSystem, piAnim);
         this.pem = pem;
         this.explosion = new Explosion(pem);
         this.laserImpact = new LaserImpact(pem);
@@ -96,7 +110,13 @@ export class Player
         this.bulletTrail = new BulletTrail(pem);
         this.collectE = new collectEnergy_ship(pem);
         this.blackholeParticles = new BlackholeParticle(pem);
-        this.motor = new Motor(scene, this, x, y);
+        this.neutronParticles = new NeutronAnimation(pem);
+        this.neutronTurb = new NeutronTurb(pem);
+        this.neutronExplosion = new NeutronExplosion(pem);
+
+        this.motor = new Motor(scene, this, x, y, piAnim);
+        this.malusEnergy = 0;
+
         //console.log(blackholeAppears)
         //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
         //this.anomalies = ["hole", "eruption", "nanodrone"];
@@ -194,6 +214,9 @@ export class Player
         return this.solarDrones;
     }
 
+    getEnergyMalus(): number{
+        return this.malusEnergy;
+    }
 
     getSystem() : PiSystem{
         return this.system;
@@ -221,6 +244,7 @@ export class Player
         }
         this.drones[index].buildPiTerm();
         this.drones[index].refreshOnScreenText();
+        this.drones[index].updatePiAnimSeq();
 
     }
 
@@ -228,7 +252,6 @@ export class Player
 
         this.activatedSolarDrones += 1;
         if (index != 0) {
-            this.solarDrones[index].health.addBar(HealthType.ArmorBarSmall);
             this.solarDrones[index].health.addBar(HealthType.ArmorBarSmall);
             this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
             this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
@@ -251,7 +274,7 @@ export class Player
 
     getRegenRate(): number
     {
-        let rate = 50;
+        let rate = 50 - this.malusEnergy;
         if(this.activatedSolarDrones-1 >= 0){
             rate += (this.activatedSolarDrones-1)*25;
         }
@@ -513,15 +536,50 @@ export class Player
      */
     private buildEnergyDrones(p : string) : void{
 
+        /** Energy - Generation of Hitzones**/
+        this.system.pushSymbol(
+            this.system.add.replication(
+                this.system.add.channelInCB("hze1"+p,"amount", (amount)=>{
+                    this.gainEnergy(amount)})
+                    .process('Enegry', ()=>{})));
+        this.system.pushSymbol(
+            this.system.add.replication(
+                this.system.add.channelInCB("hze2"+p,"amount", (amount)=>{
+                    this.gainEnergy(amount)})
+                    .process('Enegry', ()=>{})));
+        this.system.pushSymbol(
+            this.system.add.replication(
+                this.system.add.channelInCB("hze3"+p,"amount", (amount)=>{
+                    this.gainEnergy(amount)})
+                    .process('Enegry', ()=>{})));
+
         let drone = this.system.add.term("Drone" + p, undefined);
         let sum = this.system.add.sum([this.system.add.channelIn("startephase" + p, "").
-        channelOut("e0", "50").
+        channelOut("e0", "23").
         channelOut("e1", "25").
         channelOut("e2", "25").
         channelOut("e3", "25").
         channelOut("e4", "25").
         channelOut("nano5", "50").
+        channelOut("hze1"+p, "5").
+        channelOut("hze2"+p, "9").
+        channelOut("hze3"+p, "13").
         next(drone),
+
+            /* HitZone Energy - input receives wait as passed value*/
+            this.system.add.channelInCB("destroyHzEnergy" + p + "1", "hze1"+p, () =>{
+                this.malusEnergy = 5;
+            }).
+            next(drone),
+            this.system.add.channelInCB("destroyHzEnergy" + p + "2", "hze2"+p, () =>{
+                this.malusEnergy = 5 + 9;
+            }).
+            next(drone),
+            this.system.add.channelInCB("destroyHzEnergy" + p + "3", "hze3"+p, () =>{
+                this.malusEnergy = 5 + 9 + 13;
+            }).
+            next(drone),
+
             this.system.add.channelInCB("newsolar" + p + "0", "e0", () =>{
                 this.createSolarDrone(0);
             }).
