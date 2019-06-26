@@ -417,7 +417,7 @@ export class Bot extends Player{
                 this.botEnergy -= this.botAdapt;
                 return this.botAdapt;
             }
-            case(this.r):{
+            case(this.r): {
                 this.botEnergy -= this.botRocketS;
                 return this.botRocketS;
             }
