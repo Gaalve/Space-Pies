@@ -21,7 +21,7 @@ import {NanoDrone} from "./nanoDrone";
 import {BlackHole} from "./anomalies/black-hole";
 import {BlackholeParticle} from "./animations/blackhole-particle";
 import {Motor} from "./motor";
-import Button = Phaser.Input.Gamepad.Button;
+import {MainScene} from "../scenes/main-scene";
 
 export class Player {
     private nameIdentifier: string;
@@ -50,6 +50,7 @@ export class Player {
     private rocketCost : number = 40;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
     private adaptCost: number = 16; // cost for adaptive shield
+    private motorCost: number = 5;
 
 
 
@@ -66,6 +67,7 @@ export class Player {
 
     public currentAnomaly: Anomaly;
     public blackhole: BlackHole;
+    private blackholeExists: boolean;
 
     public motor: Motor;
 
@@ -94,6 +96,7 @@ export class Player {
         this.bulletTrail = new BulletTrail(pem);
         this.collectE = new collectEnergy_ship(pem);
         this.blackholeParticles = new BlackholeParticle(pem);
+        this.blackholeExists = false;
         this.motor = new Motor(scene, this, x, y);
         //console.log(blackholeAppears)
         //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
@@ -247,6 +250,15 @@ export class Player {
         return this.energy;
     }
 
+    getRegenRate(): number
+    {
+        let rate = 50;
+        if(this.activatedSolarDrones-1 >= 0){
+            rate += (this.activatedSolarDrones-1)*25;
+        }
+        return rate;
+    }
+
     payEnergy(cost: number) : void
     {
         this.energy -= cost;
@@ -296,6 +308,9 @@ export class Player {
         }
         case("adap"):{
             return this.adaptCost;
+        }
+        case("motor"):{
+            return this.motorCost;
         }
         default: return 0;
 
@@ -406,7 +421,10 @@ export class Player {
         // wormhole trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelInCB('anomaly'+p, '', () => {
+                    this.system.stop()
+                    if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("worm");
+                },undefined, 0.2)
                 .channelOut('wormhole'+p, '').nullProcess()
         );
 
@@ -422,7 +440,13 @@ export class Player {
         // blackhole trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelInCB('anomaly'+p, '', () => {
+                    if (!this.blackholeExists){
+                        this.blackholeExists = true;
+                        this.system.stop()
+                        if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("black");
+                    }
+                },undefined, 0.2)
                 .channelOut('blackhole', '').nullProcess()
         );
 
@@ -460,7 +484,10 @@ export class Player {
         // suneruption trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelInCB('anomaly'+p, '', () => {
+                    this.system.stop()
+                    if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("erupt");
+                },undefined, 0.2)
                 .channelOut('suneruption'+p, '').nullProcess());
 
         let op = this.isFirstPlayer() ? 'p2' : 'p1';
@@ -555,5 +582,30 @@ export class Player {
 
     private createFirstSolarDrone(p : string) : void{
         this.system.pushSymbol(this.system.add.channelOut("newsolar" + p + "0", "solar" + p + "0").nullProcess());
+    }
+
+    getActiveMotorL(): number{
+        if(this.nameIdentifier == "P1"){
+            return this.motor.getactiveMotorLaserP1();
+        }
+        else{
+            return this.motor.getactiveMotorLaserP2();
+        }
+    }
+    getActiveMotorP(): number{
+        if(this.nameIdentifier == "P1"){
+            return this.motor.getactiveMotorProjectileP1();
+        }
+        else{
+            return this.motor.getactiveMotorProjectileP2();
+        }
+    }
+    getActiveMotorR(): number{
+        if(this.nameIdentifier == "P1"){
+            return this.motor.getactiveMotorRocketP1();
+        }
+        else{
+            return this.motor.getactiveMotorRocketP2();
+        }
     }
 }
