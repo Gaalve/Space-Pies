@@ -41,7 +41,7 @@ export class Ship{
         this.player.isDead=true;
         this.player.getDrones()[0].destroyPiCalcTexts();
         //this.scene.scene.sleep('GuiScene');
-        this.scene.time.delayedCall(5000, ()=>{this.scene.scene.launch('EndSceneP1');this.scene.scene.bringToTop('EndSceneP1') }, [], this);
+        this.scene.time.delayedCall(5000, ()=>{this.scene.scene.launch('EndSceneP1');}, [], this);
 
         this.scene.time.delayedCall(0, this.explosionAt, [0, 0], this);
 
