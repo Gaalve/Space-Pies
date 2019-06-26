@@ -682,6 +682,11 @@
         "type": "image",
         "key": "motor",
         "url": "assets/sprites/motor.png"
+      },
+      {
+        "type": "image",
+        "key": "botLog",
+        "url": "assets/sprites/botLog.png"
       }
     ]
   }
