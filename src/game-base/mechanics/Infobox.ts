@@ -156,9 +156,13 @@ export class Infobox
             case "l":
                 return  string[1] == "o" ? "lock<>" : "l"+ playerName.toLowerCase() + "<>";
             case "a":
-                return  "s" + playerName.toLowerCase() + "<>, r" + playerName.toLowerCase() + "<>";
+                return  "a" + playerName.toLowerCase() + "<>, r" + playerName.toLowerCase() + "<>";
             case "s":
                 return  "s"+ playerName.toLowerCase() + "<>, r" + playerName.toLowerCase() + "<>";
+            case "n":
+                return  "a" + playerName.toLowerCase() +"<> s"+ playerName.toLowerCase() + "<>, r" + playerName.toLowerCase() + "<>";
+            case "x":
+                return  "a" + playerName.toLowerCase() +"<> s"+ playerName.toLowerCase() + "<>, r" + playerName.toLowerCase() + "<>";
             case "r":
                 return  "r"+ playerName.toLowerCase() + "<>";
 
