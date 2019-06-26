@@ -1659,7 +1659,7 @@ export class MainScene extends Phaser.Scene {
         this.infobox.addTooltipInfo(this.energyRegen, "Your Energy Regeneration.\n" +
             "Receiving:\n" +
             "+50 (from Ship)\n" +
-            "+"+(this.turn.getCurrentPlayer().getRegenRate()+ this.turn.getCurrentPlayer().getEnergyMalus()-50)+" (from Drones)\n" +
+            "+"+(rate + this.turn.getCurrentPlayer().getEnergyMalus() - 50)+" (from Drones)\n" +
             "-"+this.turn.getCurrentPlayer().getEnergyMalus()+" (from destroyed HitZones)");
 
     }
