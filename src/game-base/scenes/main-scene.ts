@@ -671,7 +671,7 @@ export class MainScene extends Phaser.Scene {
         this.closeShop(this.shopS, this.shopSText, false);
 
 
-        this.infobox.addTooltipInfo(this.rocketS.bg, "[R]ocket Shields can only be destroyed by Rockets.", [() =>this.rocket.onClick(), () => {this.rocket.hovering = true; this.rocket.updateStep();}, () => {this.rocket.hovering = false; this.rocket.updateStep();}]);
+        this.infobox.addTooltipInfo(this.rocketS.bg, "[R]ocket Shields can only be destroyed by Rockets.", [() =>this.rocketS.onClick(), () => {this.rocketS.hovering = true; this.rocketS.updateStep();}, () => {this.rocketS.hovering = false; this.rocketS.updateStep();}]);
         this.infobox.addTooltipInfo(this.shield.bg, "Laser [S]hields can be destroyed by Rockets and Projectiles.", [() => this.shield.onClick(), () => {this.shield.hovering = true; this.shield.updateStep();}, () => {this.shield.hovering = false; this.shield.updateStep();}]);
         this.infobox.addTooltipInfo(this.armor.bg, "[A]rmor Shields can be destroyed by Lasers and Projectiles.", [() =>this.armor.onClick(), () => {this.armor.hovering = true; this.armor.updateStep();}, () => {this.armor.hovering = false; this.armor.updateStep();}]);
         this.infobox.addTooltipInfo(this.nano.bg, "Nano Shields can be destroyed by all Weapons. But they are cheap!", [() =>this.nano.onClick(), () => {this.nano.hovering = true; this.nano.updateStep();}, () => {this.nano.hovering = false; this.nano.updateStep();}]);
