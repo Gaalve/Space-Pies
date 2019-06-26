@@ -6,7 +6,6 @@ import {MainScene} from "../scenes/main-scene";
 import {BlueShip} from "./ship/blue-ship";
 import {RedShip} from "./ship/red-ship";
 import Sprite = Phaser.GameObjects.Sprite;
-import Sprite = Phaser.GameObjects.Sprite;
 
 import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
 import {AnimationUtilities} from "./animation/AnimationUtilites";
@@ -39,25 +38,25 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    if(index == 1){
 	    	if(player.getNameIdentifier() == "P1"){
 				this.setPosition(x + 300, y - 300);
-				this. back = scene.add.sprite(x+295, y -300, "ssr_wmod").setTintFill(0xaff4444).setScale(1.2, 1.1).setVisible(false)
+				this.back = scene.add.sprite(x+=295, y -=300, "ssr_wmod").setTintFill(0xaff4444).setScale(1.2, 1.1).setVisible(false)
 
-				this.setPosition(x += 300, y -= 300);
+				//this.setPosition(x += 300, y -= 300);
 			}else{
-				this.setPosition(x - 300, y - 300);
+				//this.setPosition(x -= 300, y -= 300);
 				this. back = scene.add.sprite(x-295, y -300, "ssb_wmod").setTintFill(0xa4444ff).setScale(1.2, 1.1).setVisible(false)
 
 				this.setPosition(x -= 300, y -= 300);
 			}
 		}else if(index == 2){
 			if(player.getNameIdentifier() == "P1"){
-				this.setPosition(x += 300, y += 300);
+				//this.setPosition(x += 300, y += 300);
 				this.setPosition(x + 300, y + 300);
-				this. back = scene.add.sprite(x+295, y + 300, "ssr_wmod").setTintFill(0xaff4444).setScale(1.2, 1.1).setVisible(false)
+				this. back = scene.add.sprite(x+=295, y += 300, "ssr_wmod").setTintFill(0xaff4444).setScale(1.2, 1.1).setVisible(false)
 
 			}else{
-				this.setPosition(x -= 300, y += 300);
+				//this.setPosition(x -= 300, y += 300);
 				this.setPosition(x - 300, y + 300);
-				this. back = scene.add.sprite(x-295, y +300, "ssb_wmod").setTintFill(0xa4444ff).setScale(1.2, 1.1).setVisible(false)
+				this. back = scene.add.sprite(x-=295, y +=300, "ssb_wmod").setTintFill(0xa4444ff).setScale(1.2, 1.1).setVisible(false)
 
 			}
 		}

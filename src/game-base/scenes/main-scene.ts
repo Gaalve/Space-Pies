@@ -397,7 +397,6 @@ export class MainScene extends Phaser.Scene {
             this.updateEnergyText();
             this.data.set("buy", "w");
             //this.updateShopW(true);
-            this.updateShop1(true);
                 if(this.shopTActive){
                     this.updateShopT();
                 }
@@ -409,10 +408,8 @@ export class MainScene extends Phaser.Scene {
                     if(type == "rocketp"){
                         if(energy < rCost){
                             this.closeShop(this.shopW, this.shopWText, false);
-                            this.displayShop(this.shopT, this.shopTText);
-                            this.updateShopT();
+                            this.shop_bg_back2.setVisible(false);
                             this.shopWActive = false;
-                            this.shopTActive = true;
                         }
                         else{
                             this.updateShopW(false);
@@ -421,10 +418,8 @@ export class MainScene extends Phaser.Scene {
                     else{
                         if(energy < wCost){
                             this.closeShop(this.shopW, this.shopWText, false);
-                            this.displayShop(this.shopT, this.shopTText);
-                            this.updateShopT();
+                            this.shop_bg_back2.setVisible(false);
                             this.shopWActive = false;
-                            this.shopTActive = true;
                         }
                         else{
                             this.updateShopW(false);
@@ -449,8 +444,9 @@ export class MainScene extends Phaser.Scene {
                 if(this.shopSActive){
                     this.updateShopS();
                 }
+                this.updateShop1(true);
 
-            this.system.pushSymbol(this.system.add.channelOut('wmod'+ player.getNameIdentifier().charAt(1)+ player.getNrDrones(),'*' ).nullProcess());
+                this.system.pushSymbol(this.system.add.channelOut('wmod'+ player.getNameIdentifier().charAt(1)+ player.getNrDrones(),'*' ).nullProcess());
 
 
         });
@@ -485,7 +481,8 @@ export class MainScene extends Phaser.Scene {
                         this.shopTActive = true;
                     }
                     else{
-                        this.updateShopW(false);
+                        this.data.set("buy", "w");
+                        this.updateShopW(true);
                     }
                 }
                 else{
@@ -497,7 +494,8 @@ export class MainScene extends Phaser.Scene {
                         this.shopTActive = true;
                     }
                     else{
-                        this.updateShopW(false);
+                        this.data.set("buy", "w");
+                        this.updateShopW(true);
                     }
                 }
             }
@@ -1351,9 +1349,19 @@ export class MainScene extends Phaser.Scene {
             this.ship.changeButton(this, false, false, player);
             this.ship.removeInteractive();
             this.children.remove(this.shopWText[0]);
-            this.shopWText[0] = this.add.text(550-60, 1080 - 250, "max weapons", {
+            if(shipActive >= 3){
+                this.shopWText[0] = this.add.text(550-60, 1080 - 250, "max weapons", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2
-            }).setVisible(true);
+                }).setVisible(true);
+            }
+            else{
+                this.shopWText[0] = this.add.text(550-60, 1080 - 250, "! energy", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2
+                }).setVisible(true);
+            }
+
+
+
 
         }
         else if(shipActive < 3 && energy >= weaponCost){
