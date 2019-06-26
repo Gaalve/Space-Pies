@@ -144,7 +144,6 @@ export class Motor {
                 this.system.add.channelIn('buildmotorrocket23', '').replication(this.system.add.channelIn('rocketP2', '',
                     new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
 
-            ///////////////////////////////
         }
         this.startMotor();
 
@@ -177,6 +176,12 @@ export class Motor {
             );
         }
     }
+
+    public setVisualMotor(){
+
+
+    }
+
     getactiveMotorLaserP1(): number{
         return this.activeMotorsLaserP1;
     }
