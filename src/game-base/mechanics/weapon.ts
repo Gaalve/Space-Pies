@@ -124,7 +124,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
         this.simplePi = this.wClass.charAt(0);
 		this.createPiTerm();
 
-		this.drone.getPlayer().isFirstPlayer() ? this.scene.data.get("redship").addWeapon(this) : this.scene.data.get("blueship").addWeapon(this);
+		// this.drone.getPlayer().isFirstPlayer() ? this.scene.data.get("redship").addWeapon(this) : this.scene.data.get("blueship").addWeapon(this);
 	}
 
 	public canShoot() : boolean {
