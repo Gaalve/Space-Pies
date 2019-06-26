@@ -4,7 +4,7 @@ export class Botlog{
 
     private bot: Bot;
     private logs: Phaser.GameObjects.Text[];
-    private heading: Phaser.GameObjects.Text;
+    public heading: Phaser.GameObjects.Text;
     private bg: Phaser.GameObjects.Sprite;
     private nrLogs: number;
 
@@ -25,7 +25,7 @@ export class Botlog{
         this.bg = new Phaser.GameObjects.Sprite(this.bot.scene, 1920/2, 1080/2-60, "shop_bg_back");
         this.bot.scene.add.existing(this.bg);
         this.bg.setAlpha(0.6);
-        this.bg.setScale(0.4, 1.7);
+        this.bg.setScale(0.4, 2.0);
         this.bg.setDepth(-1);
 
         this.energyLogo = this.bot.scene.add.image(1920/2-125, 200, "energy_icon");

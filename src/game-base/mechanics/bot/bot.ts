@@ -142,6 +142,7 @@ export class Bot extends Player{
         this.botLog.setVisible();
         this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
         this.botLog.setLogoVisible();
+        this.botLog.insertLog("Started with " + this.displayedEnergy + " Energy.");
         this.active = true;
 
         while(this.active) {
@@ -209,13 +210,13 @@ export class Bot extends Player{
             this.scene.time.delayedCall(delay, () => {
                 system.pushSymbol(system.add.channelOut("r" + shield + "p" + this.id + "z" + hz, "").nullProcess());
                 if (shield == "shield") {
-                    this.botLog.insertLog(s + ". I built a laser shield on hitzone " + hz + ".");
+                    this.botLog.insertLog(s + ". I built a laser shield on hitzone " + hz + ". (-" + x + " E.)");
                 } else if (shield == "adap") {
-                    this.botLog.insertLog(s + ". I built an adaptive shield on hitzone " + hz + ".");
+                    this.botLog.insertLog(s + ". I built an adaptive shield on hitzone " + hz + ". (-" + x + " E.)");
                 } else if (shield == "armor") {
-                    this.botLog.insertLog(s + ". I built an armor shield on hitzone " + hz + ".");
+                    this.botLog.insertLog(s + ". I built an armor shield on hitzone " + hz + ". (-" + x + " E.)");
                 } else {
-                    this.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ".");
+                    this.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ". (-" + x + " E.)");
                 }
                 this.reduceDisplayedEnergy(x);
                 this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
@@ -236,7 +237,7 @@ export class Bot extends Player{
 
                 let w = "rocket launcher";
                 if(weapon != "rocket") w = weapon == "armor" ? "laser weapon" : "projectile weapon";
-                this.botLog.insertLog(s + ". I built a " + w + " on wmod " + mod + ".");
+                this.botLog.insertLog(s + ". I built a " + w + " on wmod " + mod + ". (-" + x + " E.)");
                 this.reduceDisplayedEnergy(x);
                 this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             },[], this);
@@ -249,7 +250,7 @@ export class Bot extends Player{
 
             this.scene.time.delayedCall(delay,()=> {
                 system.pushSymbol(system.add.channelOut("buymotor" + motor + this.id + nr, "").nullProcess());
-                this.botLog.insertLog(s + ". I built a " + motor + " motor.");
+                this.botLog.insertLog(s + ". I built a " + motor + " motor. (-" + x + " E.)");
                 this.reduceDisplayedEnergy(x);
                 this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             },[], this);
@@ -265,7 +266,7 @@ export class Bot extends Player{
 
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("wmod" + this.id + nr, "").nullProcess());
-                this.botLog.insertLog(s + ". I built a weapon mod.");
+                this.botLog.insertLog(s + ". I built a weapon mod. (-" + x + " E.)");
                 this.reduceDisplayedEnergy(x);
                 this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             }, [], this);
@@ -281,7 +282,7 @@ export class Bot extends Player{
 
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("newsolar" + this.id + nr, "").nullProcess());
-                this.botLog.insertLog(s + ". I built a solar drone.");
+                this.botLog.insertLog(s + ". I built a solar drone. (-" + x + " E.)");
                 this.reduceDisplayedEnergy(x);
                 this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             }, [], this);
@@ -292,8 +293,10 @@ export class Bot extends Player{
             this.scene.time.delayedCall(delay, ()=> {
                 system.pushSymbol(system.add.channelOut("botend", "").nullProcess());
                 this.botLog.insertLog(s + ". I´m finished. It´s your turn.");
+                this.botLog.insertLog("Finished with " + this.displayedEnergy + " Energy.");
+
             }, [], this);
-            this.scene.time.delayedCall(delay + 1000, ()=>{this.botLog.setInvisible(); this.botLog.setLogoInvisible()}, [], this);
+            this.scene.time.delayedCall(delay + 1500, ()=>{this.botLog.setInvisible(); this.botLog.setLogoInvisible()}, [], this);
             this.active = false;
             this.steps = 0;
             }
