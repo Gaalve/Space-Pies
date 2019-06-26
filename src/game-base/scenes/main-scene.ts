@@ -389,15 +389,65 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_wmod",0.95,
             ()=>{
             let player = this.turn.getCurrentPlayer();
+            let type = this.data.get("type");
             player.payEnergy(player.getEnergyCost("wmod"));
             player.raiseEnergyCost("wmod", 15);
+            let energy = player.getEnergy();
             this.updateEnergyText();
             this.data.set("buy", "w");
             //this.updateShopW(true);
             this.updateShop1(true);
-            if(this.shopWActive){
-                this.updateShopW(true);
-            }
+                if(this.shopTActive){
+                    this.updateShopT();
+                }
+                if(this.shopWActive){
+
+                    let rCost = player.getEnergyCost("rocketl");
+                    let wCost = player.getEnergyCost("weapon");
+
+                    if(type == "rocketp"){
+                        if(energy < rCost){
+                            this.closeShop(this.shopW, this.shopWText, false);
+                            this.displayShop(this.shopT, this.shopTText);
+                            this.updateShopT();
+                            this.shopWActive = false;
+                            this.shopTActive = true;
+                        }
+                        else{
+                            this.updateShopW(false);
+                        }
+                    }
+                    else{
+                        if(energy < wCost){
+                            this.closeShop(this.shopW, this.shopWText, false);
+                            this.displayShop(this.shopT, this.shopTText);
+                            this.updateShopT();
+                            this.shopWActive = false;
+                            this.shopTActive = true;
+                        }
+                        else{
+                            this.updateShopW(false);
+                        }
+                    }
+                }
+                if(this.shopZActive){
+                    let type = this.data.get("type");
+                    if(energy < player.getEnergyCost(type)){
+                        this.closeShop(this.shopZ, this.shopZText, false);
+                        this.displayShop(this.shopS, this.shopSText);
+                        this.updateShopS();
+                        this.shopZActive = false;
+                        this.shopSActive = true;
+
+                    }
+                }
+                if(this.shopMActive){
+                    this.updateShopM("");
+                }
+
+                if(this.shopSActive){
+                    this.updateShopS();
+                }
 
             this.system.pushSymbol(this.system.add.channelOut('wmod'+ player.getNameIdentifier().charAt(1)+ player.getNrDrones(),'*' ).nullProcess());
 
@@ -411,11 +461,63 @@ export class MainScene extends Phaser.Scene {
                 let player = this.turn.getCurrentPlayer();
                 player.payEnergy(player.getEnergyCost("solar"));
                 player.raiseEnergyCost("solar", 20);
-                this.updateEnergyText();
+            let energy = player.getEnergy();
+            this.updateEnergyText();
                 this.updateEnergyRate(true);
                 //this.updateShopW(false);
                 this.data.set("buy", "s");
                 this.updateShop1(true);
+            if(this.shopTActive){
+                this.updateShopT();
+            }
+            if(this.shopWActive){
+
+                let rCost = player.getEnergyCost("rocketl");
+                let wCost = player.getEnergyCost("weapon");
+                let type = this.data.get("type");
+                if(type == "rocketp"){
+                    if(energy < rCost){
+                        this.closeShop(this.shopW, this.shopWText, false);
+                        this.displayShop(this.shopT, this.shopTText);
+                        this.updateShopT();
+                        this.shopWActive = false;
+                        this.shopTActive = true;
+                    }
+                    else{
+                        this.updateShopW(false);
+                    }
+                }
+                else{
+                    if(energy < wCost){
+                        this.closeShop(this.shopW, this.shopWText, false);
+                        this.displayShop(this.shopT, this.shopTText);
+                        this.updateShopT();
+                        this.shopWActive = false;
+                        this.shopTActive = true;
+                    }
+                    else{
+                        this.updateShopW(false);
+                    }
+                }
+            }
+            if(this.shopZActive){
+                let type = this.data.get("type");
+                if(energy < player.getEnergyCost(type)){
+                    this.closeShop(this.shopZ, this.shopZText, false);
+                    this.displayShop(this.shopS, this.shopSText);
+                    this.updateShopS();
+                    this.shopZActive = false;
+                    this.shopSActive = true;
+
+                }
+            }
+            if(this.shopMActive){
+                this.updateShopM("");
+            }
+
+            if(this.shopSActive){
+                this.updateShopS();
+            }
 
                 system.pushSymbol(system.add.channelOut("newsolar"+ player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD(), "solar"+player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD()).nullProcess())
 
@@ -751,8 +853,8 @@ export class MainScene extends Phaser.Scene {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
                 this.add.text(1160, 1080-50, "Hitzone4", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
-                this.add.text(1430, 1080-50, "back", {
-                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false)
+                this.add.text(1330, 1080-250, "back", {
+                    fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false)
             ];
 
             this.closeShop(this.shopZ, this.shopZText, false);
