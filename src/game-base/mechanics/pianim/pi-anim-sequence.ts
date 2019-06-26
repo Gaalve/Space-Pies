@@ -197,4 +197,11 @@ export class PiAnimSequence {
         this.sequence.forEach(v => v.show());
     }
 
+    public destroy(): void{
+        this.sequence.forEach(v => v.destroy());
+        this.commandQueue = [];
+        this.clearSequenceQueue.forEach(v => v.destroy());
+        this.clearSequenceQueue = [];
+    }
+
 }

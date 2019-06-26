@@ -24,7 +24,7 @@ const config: GameConfig = {
 
     render: {batchSize: 4096},
 
-    scene: [Intro, Background, MainScene, StartScene,  SimplePiCalc, GuiScene, PauseScene, EndSceneP1, ScenePiAnimation, FadeScene],
+    scene: [Intro, Background, MainScene, StartScene,  SimplePiCalc, ScenePiAnimation, GuiScene, PauseScene, EndSceneP1,  FadeScene],
     //scene: [Background, MainScene,  GuiScene, ShopSceneP1, ShopSceneP2, chooseSceneP1,ChooseTypeSceneP2, ChooseTypeSceneP1,chooseSceneP2, PauseScene, ChooseZoneSceneP1, ChooseZoneSceneP2],
 
     physics: {

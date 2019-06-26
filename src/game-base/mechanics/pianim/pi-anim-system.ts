@@ -23,6 +23,7 @@ export class PiAnimSystem {
     }
 
     public reset(): void{
+        this.sequences.forEach(v => v.destroy());
         this.sequences = [];
     }
 }
