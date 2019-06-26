@@ -179,6 +179,7 @@ export class PauseScene extends Phaser.Scene {
             this.buttonReset.updateStep();
             this.buttonResume.updateStep();
             this.buttonDebug.updateStep();
+            this.changeAnimationButton.updateStep();
 
         }
     }
