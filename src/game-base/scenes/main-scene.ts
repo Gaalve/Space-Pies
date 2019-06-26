@@ -391,62 +391,63 @@ export class MainScene extends Phaser.Scene {
             ()=>{
             let player = this.turn.getCurrentPlayer();
             let type = this.data.get("type");
+            this.system.pushSymbol(this.system.add.channelOut('wmod'+ player.getNameIdentifier().charAt(1)+ player.getNrDrones(),'*' ).nullProcess());
+
             player.payEnergy(player.getEnergyCost("wmod"));
             player.raiseEnergyCost("wmod", 15);
             let energy = player.getEnergy();
             this.updateEnergyText();
             this.data.set("buy", "w");
             //this.updateShopW(true);
-                if(this.shopTActive){
-                    this.updateShopT();
-                }
-                if(this.shopWActive){
+            /*if(this.shopTActive){
+                this.updateShopT();
+            }
+            if(this.shopWActive){
 
-                    let rCost = player.getEnergyCost("rocketl");
-                    let wCost = player.getEnergyCost("weapon");
+                let rCost = player.getEnergyCost("rocketl");
+                let wCost = player.getEnergyCost("weapon");
 
-                    if(type == "rocketp"){
-                        if(energy < rCost){
-                            this.closeShop(this.shopW, this.shopWText, false);
-                            this.shop_bg_back2.setVisible(false);
-                            this.shopWActive = false;
-                        }
-                        else{
-                            this.updateShopW(false);
-                        }
+                if(type == "rocketp"){
+                    if(energy < rCost){
+                        this.closeShop(this.shopW, this.shopWText, false);
+                        this.shop_bg_back2.setVisible(false);
+                        this.shopWActive = false;
                     }
                     else{
-                        if(energy < wCost){
-                            this.closeShop(this.shopW, this.shopWText, false);
-                            this.shop_bg_back2.setVisible(false);
-                            this.shopWActive = false;
-                        }
-                        else{
-                            this.updateShopW(false);
-                        }
+                        this.updateShopW(false);
                     }
                 }
-                if(this.shopZActive){
-                    let type = this.data.get("type");
-                    if(energy < player.getEnergyCost(type)){
-                        this.closeShop(this.shopZ, this.shopZText, false);
-                        this.displayShop(this.shopS, this.shopSText);
-                        this.updateShopS();
-                        this.shopZActive = false;
-                        this.shopSActive = true;
-
+            else{
+                if(energy < wCost){
+                        this.closeShop(this.shopW, this.shopWText, false);
+                        this.shop_bg_back2.setVisible(false);
+                        this.shopWActive = false;
+                    }
+                    else{
+                        this.updateShopW(false);
                     }
                 }
-                if(this.shopMActive){
-                    this.updateShopM("");
-                }
-
-                if(this.shopSActive){
+            }
+            if(this.shopZActive){
+                let type = this.data.get("type");
+                if(energy < player.getEnergyCost(type)){
+                    this.closeShop(this.shopZ, this.shopZText, false);
+                    this.displayShop(this.shopS, this.shopSText);
                     this.updateShopS();
-                }
-                this.updateShop1(true);
+                    this.shopZActive = false;
+                    this.shopSActive = true;
 
-                this.system.pushSymbol(this.system.add.channelOut('wmod'+ player.getNameIdentifier().charAt(1)+ player.getNrDrones(),'*' ).nullProcess());
+                }
+            }
+            if(this.shopMActive){
+                this.updateShopM("");
+            }
+
+            if(this.shopSActive){
+                this.updateShopS();
+            }*/
+            this.updateShop1(true);
+
 
 
         });
@@ -454,17 +455,19 @@ export class MainScene extends Phaser.Scene {
 
 
         this.solar = this.setButton(950, 1080-100, "ssr_solar_drone", 0.95,()=>{
-                let system = this.system;
-                let player = this.turn.getCurrentPlayer();
-                player.payEnergy(player.getEnergyCost("solar"));
-                player.raiseEnergyCost("solar", 20);
+            let system = this.system;
+            let player = this.turn.getCurrentPlayer();
+            system.pushSymbol(system.add.channelOut("newsolar"+ player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD(), "solar"+player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD()).nullProcess())
+
+            player.payEnergy(player.getEnergyCost("solar"));
+            player.raiseEnergyCost("solar", 20);
             let energy = player.getEnergy();
             this.updateEnergyText();
                 this.updateEnergyRate(true);
                 //this.updateShopW(false);
                 this.data.set("buy", "s");
                 this.updateShop1(true);
-            if(this.shopTActive){
+            /*if(this.shopTActive){
                 this.updateShopT();
             }
             if(this.shopWActive){
@@ -516,9 +519,8 @@ export class MainScene extends Phaser.Scene {
 
             if(this.shopSActive){
                 this.updateShopS();
-            }
+            }*/
 
-                system.pushSymbol(system.add.channelOut("newsolar"+ player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD(), "solar"+player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD()).nullProcess())
 
         });
         this.solar.setAlt(this, 950, 1080-100, "ssb_solar_drone");
