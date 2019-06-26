@@ -40,11 +40,17 @@ export class BlueShip extends BaseShip{
             -46, 0, -37, 13,2);
 
         let infobox = <Infobox> scene.data.get("infoboxx");
-        infobox.addTooltipInfo(this.back.normal, "[P2] The back of your Ship.")
-        infobox.addTooltipInfo(this.pilot.normal, "[P2] The pilot.. even though you can't see him")
-        infobox.addTooltipInfo(this.wingUp.normal, "[P2] Your right wing.")
-        infobox.addTooltipInfo(this.wingDown.normal, "[P2] The left wing of your Ship.")
-        infobox.addTooltipInfo(this.hull.normal, "[P2] The hull of your ship.")
+        infobox.addTooltipInfo(this.back.normal, "[P2] The back of your Ship.");
+        infobox.addTooltipInfo(this.pilot.normal, "[P2] This is Olga!\n" +
+            "Bio:\n" +
+            "     + baked a cake...\n" +
+            "     + ...the best cake in the universe...\n" +
+            "     + ...it's way too good... almost god like...\n" +
+            "     + ...one can not simply describe the taste of it in words.\n" +
+            "     + Olga's cake was stolen and Olga wants it back, at all costs!");
+        infobox.addTooltipInfo(this.wingUp.normal, "[P2] Your right wing.");
+        infobox.addTooltipInfo(this.wingDown.normal, "[P2] The left wing of your Ship.");
+        infobox.addTooltipInfo(this.hull.normal, "[P2] The hull of your ship.");
 
         this.x =  x;
         this.y = y;
