@@ -554,9 +554,15 @@ export class MainScene extends Phaser.Scene {
         infobox.addTooltipInfo(this.regen.bg, "Regenerate any of your existing hitzones with different types of shields.", [() => this.regen.onClick(), () => {this.regen.hovering = true; this.regen.updateStep();}, () => {this.regen.hovering = false; this.regen.updateStep();}]);
         infobox.addTooltipInfo(this.wExt.bg, "Buy up to 3 weapons for each drone.", [() =>this.wExt.onClick(), () => {this.wExt.hovering = true; this.wExt.updateStep();}, () => {this.wExt.hovering = false; this.wExt.updateStep();}]);
         infobox.addTooltipInfo(this.wModule.bg, "Add up to 2 drones equip more weapons.", [() =>this.wModule.onClick(), () => {this.wModule.hovering = true; this.wModule.updateStep();}, () => {this.wModule.hovering = false; this.wModule.updateStep();}]);
-        infobox.addTooltipInfo(this.solar.bg, "The more you have, the more energy you will collect per round.", [() =>this.solar.onClick(), () => {this.solar.hovering = true; this.solar.updateStep();}, () => {this.solar.hovering = false; this.solar.updateStep();}]);
+        infobox.addTooltipInfo(this.solar.bg, "Collect +25 Energy per round.", [() =>this.solar.onClick(), () => {this.solar.hovering = true; this.solar.updateStep();}, () => {this.solar.hovering = false; this.solar.updateStep();}]);
         infobox.addTooltipInfo(this.skip.bg, "Attack opponent with all weapons. Don't know why this is called skip though..", [() => this.skip.onClick(), () => {this.skip.hovering = true; this.skip.updateStep();}, () => {this.skip.hovering = false; this.skip.updateStep();}]);
         infobox.addTooltipInfo(this.close.bg, "Close the shop to see more of these beautiful stars.", [() =>this.close.onClick(), () => {this.close.hovering = true; this.close.updateStep();}, () => {this.close.hovering = false; this.close.updateStep();}]);
+
+        /* ## Weapons ## */
+
+        /* ## Shields ## */
+
+
         infobox.addTooltipInfo(this.energySym[0], "The cheapest part costs " + this.energyCostText[0].text.toString() + " energy.");
         infobox.addTooltipInfo(this.energySym[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.");
         infobox.addTooltipInfo(this.energySym[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.");
@@ -575,6 +581,13 @@ export class MainScene extends Phaser.Scene {
     }
 
     creatChooseRegen():void{
+
+        if(this.armor) this.infobox.removeTooltipInfo(this.armor.bg);
+        if(this.shield) this.infobox.removeTooltipInfo(this.shield.bg);
+        if(this.rocketS) this.infobox.removeTooltipInfo(this.rocketS.bg);
+        if(this.adapt) this.infobox.removeTooltipInfo(this.adapt.bg);
+        if(this.nano) this.infobox.removeTooltipInfo(this.nano.bg);
+
         this.armor = this.setButton(500, 1080-300, "button_armor", 0.6, ()=>{
             this.data.set("type", "armor");
             this.closeShop(this.shopS, this.shopSText, false);
@@ -657,6 +670,14 @@ export class MainScene extends Phaser.Scene {
         this.energyTextS = this.createEnergyCostTextS();
         this.closeShop(this.shopS, this.shopSText, false);
 
+
+        this.infobox.addTooltipInfo(this.rocketS.bg, "[R]ocket Shields can only be destroyed by Rockets.", [() =>this.rocket.onClick(), () => {this.rocket.hovering = true; this.rocket.updateStep();}, () => {this.rocket.hovering = false; this.rocket.updateStep();}]);
+        this.infobox.addTooltipInfo(this.shield.bg, "Laser [S]hields can be destroyed by Rockets and Projectiles.", [() => this.shield.onClick(), () => {this.shield.hovering = true; this.shield.updateStep();}, () => {this.shield.hovering = false; this.shield.updateStep();}]);
+        this.infobox.addTooltipInfo(this.armor.bg, "[A]rmor Shields can be destroyed by Lasers and Projectiles.", [() =>this.armor.onClick(), () => {this.armor.hovering = true; this.armor.updateStep();}, () => {this.armor.hovering = false; this.armor.updateStep();}]);
+        this.infobox.addTooltipInfo(this.nano.bg, "Nano Shields can be destroyed by all Weapons. But they are cheap!", [() =>this.nano.onClick(), () => {this.nano.hovering = true; this.nano.updateStep();}, () => {this.nano.hovering = false; this.nano.updateStep();}]);
+        this.infobox.addTooltipInfo(this.adapt.bg, "Adaptive Shields. Will add two shields. The second shield will change to Rocket,\n" +
+            "Laser or Armor Shield based on the Weapon that hits the first shield.\n" +
+            "Rocket -> Rocket Shield; Laser -> Laser Shield; Projectile -> Armor Shield", [() =>this.adapt.onClick(), () => {this.adapt.hovering = true; this.adapt.updateStep();}, () => {this.adapt.hovering = false; this.adapt.updateStep();}]);
 
 
     }
@@ -767,6 +788,9 @@ export class MainScene extends Phaser.Scene {
     }
 
     private createChooseType(): void{
+        if(this.laser) this.infobox.removeTooltipInfo(this.laser.bg);
+        if(this.projectile) this.infobox.removeTooltipInfo(this.projectile.bg);
+        if(this.rocket) this.infobox.removeTooltipInfo(this.rocket.bg);
         this.laser = new Button(this, 550, 1080-300, "button_shadow",
             "button_bg", "button_fg", "ssr_weap_las",0.6,
             () => {
@@ -829,6 +853,11 @@ export class MainScene extends Phaser.Scene {
         this.energyShopT = this.createEnergyCostIconsT();
         this.energyCostT = this.createEnergyCostTextT();
         this.closeShop(this.shopT, this.shopTText, false);
+
+        this.infobox.addTooltipInfo(this.rocket.bg, "Rockets. Can destroy all shields and will hardly miss.", [() =>this.rocket.onClick(), () => {this.rocket.hovering = true; this.rocket.updateStep();}, () => {this.rocket.hovering = false; this.rocket.updateStep();}]);
+        this.infobox.addTooltipInfo(this.laser.bg, "Lasers. Destroys Laser Shields, but can't attack\nArmor Shields or Rocket Shields.", [() => this.laser.onClick(), () => {this.laser.hovering = true; this.laser.updateStep();}, () => {this.laser.hovering = false; this.laser.updateStep();}]);
+        this.infobox.addTooltipInfo(this.projectile.bg, "Projectile Weapons. Destroys Armor Shields,\nbut can't attack Laser Shields or Rocket Shields.", [() =>this.projectile.onClick(), () => {this.projectile.hovering = true; this.projectile.updateStep();}, () => {this.projectile.hovering = false; this.projectile.updateStep();}]);
+
     }
 
     createChooseMod(): void{
