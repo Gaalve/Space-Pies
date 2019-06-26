@@ -3,6 +3,7 @@ import {ShipPart} from "./ship-part";
 import {Infobox} from "../Infobox";
 import Sprite = Phaser.GameObjects.Sprite;
 import {Weapon} from "../weapon";
+import {Player} from "../player";
 
 export class BlueShip extends BaseShip{
 
@@ -23,7 +24,7 @@ export class BlueShip extends BaseShip{
 
     private onScreenText: Phaser.GameObjects.Text;
 
-    public constructor(scene: Phaser.Scene,x: number, y: number){
+    public constructor(scene: Phaser.Scene,x: number, y: number, player: Player){
         super(scene, x, y);
 
         this.back = new ShipPart(scene, x, y, "ssbr/ssb_back", "ssbr/ssb_des_back",
@@ -62,7 +63,7 @@ export class BlueShip extends BaseShip{
         this.sinY = 0;
         this.weaponSinX = 0;
         this.weaponSinY = 0;
-        this.weapons = [];
+        this.weapons = this.weapons = player.getDrones()[0].getWeapons();
         this.setAllPartPosition();
     }
 

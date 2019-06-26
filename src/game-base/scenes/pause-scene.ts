@@ -57,16 +57,12 @@ export class PauseScene extends Phaser.Scene {
         this.buttonReset = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_skip",0.95,
             ()=>{
-                let anim1: boolean = this.scene.isVisible("AnimationScene");
-
                 this.scene.get('AnimationScene').scene.stop();
                 this.scene.get('SimplePiCalc').scene.stop();
-                // this.scene.get('GuiScene').scene.stop();
                 this.scene.get('MainScene').scene.stop();
                 this.scene.launch('FadeScene', {shut: 'PauseScene', start: 'SimplePiCalc'});
                 this.P2.resetEnergy();
                 this.P1.resetEnergy();
-                // this.scene.sleep();
         });
 
         this.buttonReset.setPosition(1920/2-130, 1080/2+75);
@@ -98,23 +94,24 @@ export class PauseScene extends Phaser.Scene {
 
         this.add.image(120,350,'ssr_weap_pro');
         this.add.image(120,400,'ssb_weap_pro');
-        this.add.text(230,350,'Projectile Weapons attack laser\nand rocket shields.', {
+        this.add.text(230,365,'Projectile Weapons attack laser shields.', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 24});
-        this.add.image(200, 350,"laser_shield");
-        this.add.image(200, 400, "rocket_shield");
+        this.add.image(200, 375,"laser_shield");
+        // this.add.image(200, 400, "rocket_shield");
 
         this.add.image(120,550,'ssr_weap_las');
         this.add.image(120,600,'ssb_weap_las');
-        this.add.text(230,550,'Laser Weapons attack armor \nand rocket shields.', {
+        this.add.text(230,565,'Laser Weapons attack armor shields.', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 24});
-        this.add.image(200, 550,"armor_shield");
-        this.add.image(200, 600, "rocket_shield");
+        this.add.image(200, 575,"armor_shield");
+        // this.add.image(200, 600, "rocket_shield");
 
         this.add.image(120,750,'ssr_weap_rock');
         this.add.image(120,800,'ssb_weap_rock');
-        this.add.text(230,750,'Rocket launchers attack armor \nand laser shields.', {
+        this.add.text(230,750,'Rocket launchers attack armor, rocket \nand laser shields.', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 24});
         this.add.image(200, 750,"armor_shield");
+        this.add.image(218, 775,"rocket_shield");
         this.add.image(200, 800, "laser_shield");
 
 
@@ -155,7 +152,7 @@ export class PauseScene extends Phaser.Scene {
 
         this.add.image(1920-120,580,'button_rocket');
         this.add.image(1920-170,580, "rocket_shield");
-        this.add.text(1920-600,557,'Rocket shields protect against\nrocket launchers.', {
+        this.add.text(1920-600,557,'Rocket shields protect against\nlaser and projectile weapons.', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 24});
 
         this.add.image(1920-120,700,'button_nano');
@@ -179,6 +176,7 @@ export class PauseScene extends Phaser.Scene {
             this.buttonReset.updateStep();
             this.buttonResume.updateStep();
             this.buttonDebug.updateStep();
+            this.changeAnimationButton.updateStep();
 
         }
     }

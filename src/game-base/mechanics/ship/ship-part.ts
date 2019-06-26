@@ -42,6 +42,7 @@ export class ShipPart {
     }
 
     public setPosition(x: number, y: number): void{
+        if(this.isDestroyed) return;
         this.normal.setPosition(x + this.offX, y + this.offY);
         this.destroyed.setPosition(x + this.desOffX, y + this.desOffY);
 
