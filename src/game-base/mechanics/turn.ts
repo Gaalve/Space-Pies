@@ -301,6 +301,7 @@ export class Turn {
     }
 
     private resetOnScreenTexts(player: Player) {
+        if (!this.refScene.scene.isVisible("AnimationScene")) return;
         for (let drone of player.getDrones())
             drone.refreshOnScreenText();
         player.getHealth().zone1Bar.setTermVisible();
