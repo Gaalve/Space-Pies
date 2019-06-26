@@ -44,6 +44,7 @@ export class Infobox
         });
         object.on('pointerover', (pointer: Phaser.Input.Pointer) =>
         {
+            this.executeCallback(callbacks, 1);
             if (this.tooltip.text.toString() == this.getTooltipText(object).toString()) return;
 
             let x = pointer.x < 1920/2 ? pointer.x + 20 : pointer.x - textWidth - xFix;
@@ -59,9 +60,6 @@ export class Infobox
             this.box.fillRoundedRect(x, y, width, height, 32);
             this.box.setData('y', y);
             this.box.setData('x', x);
-
-
-            this.executeCallback(callbacks, 1);
         });
         object.on('pointerup', () => {
             this.executeCallback(callbacks, 0);
