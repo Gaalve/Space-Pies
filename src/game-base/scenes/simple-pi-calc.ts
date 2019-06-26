@@ -20,7 +20,7 @@ export class SimplePiCalc extends Phaser.Scene {
     }
 
     create(): void {
-        this.scene.setVisible(false);
+        // this.scene.setVisible(false);
         this.animSys = new PiAnimSystem(this);
         this.scene.launch('MainScene', this.animSys);
     }

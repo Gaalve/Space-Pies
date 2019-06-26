@@ -51,10 +51,12 @@ export class ScenePiAnimation extends Phaser.Scene {
 
 
     create(): void {
+        this.scene.setVisible(false);
         this.system = this.scene.get('MainScene').data.get("system");
     }
 
     update(time: number, delta: number): void {
+        if (!this.scene.isVisible())return;
         // if (this.sequentialAnimations.length > 0) {
         //     for (let i = 0; i < 1; i++) {
         //

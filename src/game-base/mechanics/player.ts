@@ -242,6 +242,7 @@ export class Player {
         }
         this.drones[index].buildPiTerm();
         this.drones[index].refreshOnScreenText();
+        this.drones[index].updatePiAnimSeq();
 
     }
 

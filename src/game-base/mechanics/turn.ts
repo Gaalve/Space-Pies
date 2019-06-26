@@ -283,7 +283,7 @@ export class Turn {
         animationScene.destroyAll();
         animationScene.reinitialize();
         this.resetOnScreenTexts(this.players[0]);
-        this.resetOnScreenTexts(this.players[1])
+        this.resetOnScreenTexts(this.players[1]);
         this.playerInput()
             //this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
     }

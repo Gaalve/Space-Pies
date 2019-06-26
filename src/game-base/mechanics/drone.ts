@@ -88,9 +88,11 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
     }
 
-    private animateIfNotMissed(weaponNr: number, bulletInfo: BulletInfo)
-	{
-		var animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
+    private animateIfNotMissed(weaponNr: number, bulletInfo: BulletInfo){
+		let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
+		if (!animationScene.scene.isVisible()){
+			return;
+		}
 		if (this.getWeapons()[weaponNr-1].weaponType == WeaponType.NONE || typeof(bulletInfo) != 'undefined' && bulletInfo.miss)
 			switch(weaponNr)
 			{
@@ -134,6 +136,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private animatePiCalc(drone: Drone) {
 		// let onScreenText = new Text(this.scene, this.x, this.y, this.simplePi, {});
 		let animationScene = <ScenePiAnimation> this.scene.scene.get("AnimationScene");
+		if (!animationScene.scene.isVisible()){
+			return;
+		}
 		let onScreenTexts = AnimationUtilities.popAllSymbols(drone.onScreenText, animationScene);
 		// drone.onScreenText.setVisible(false);
 		let totalWidth = AnimationUtilities.calculateWidth(onScreenTexts);
@@ -198,6 +203,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	    w.setVisible(true);
 	    this.buildPiTerm();
 	    this.refreshOnScreenText();
+		this.updatePiAnimSeq();
 		this.activatedWeapons = this.activatedWeapons + 1;
     }
 
@@ -248,6 +254,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 	/**
 	refreshes the displayed Pi Term, if any changes (add Weapons) where made
+	 will be called when adding a weapon.. and for some reason every turn.........
 	 */
 	refreshOnScreenText() : void{
 		this.onScreenText.setText(this.simplePi);
@@ -284,10 +291,10 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 
 		this.index == 0 ? this.player.isFirstPlayer() ? this.scene.data.get("redship").setOnScreenText(this.onScreenText) :this.scene.data.get("blueship").setOnScreenText(this.onScreenText) : null;
-		this.updatePiAnimSeq();
+
 	}
 
-	private updatePiAnimSeq(): void{
+	public updatePiAnimSeq(): void{
 		this.piSeq.show();
 
 		this.piSeq.clearSequence(this.posX, this.posY + 80, 'lock'+this.player.getNameIdentifier().toLowerCase()+'()',
@@ -345,8 +352,8 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		}).
 		channelOutCB("w1","", (_, at) => {
 			this.animateIfNotMissed(1,at)
-			droneRef.getWeapons()[0].createBullet(at)
-; if (this.weapons[0].canShoot()) this.piSeq.resolveSymbol();
+			droneRef.getWeapons()[0].createBullet(at);
+			if (this.weapons[0].canShoot()) this.piSeq.resolveSymbol();
 		}).        //function for weapon animation
 		channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
 		channelOut("wait","").channelOut("wait","").
