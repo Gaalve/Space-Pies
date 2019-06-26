@@ -30,7 +30,7 @@ export class GuiScene extends Phaser.Scene {
         //     roundActionText.setText(value)
         // });
         this.scene.get('MainScene').data.events.on('changedata-currentPlayer', (scene, value) => {
-            roundPlayerText.setText(value);
+            roundPlayerText.setText(value +" - "+ (value == "P1" ? "Olaf": "Olga"));
             roundPlayerColor = roundPlayerColor == "#FF4444" ? "#4444FF" : "#FF4444";
             roundPlayerStrokeColor = roundPlayerStrokeColor == "#AA2222" ? "#2222AA" : "#AA2222" ;
             roundPlayerText.setColor(roundPlayerColor);
