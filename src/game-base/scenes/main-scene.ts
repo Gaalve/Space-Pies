@@ -4,7 +4,7 @@ import {Button} from "../mechanics/button";
 
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-import {Drone} from "../mechanics/drone";
+
 import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
 import {BulletInfo} from "../mechanics/weapon/bulletInfo";
@@ -117,6 +117,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
+        this.scene.launch("AnimationScene");
         this.anims.create({
             key: 'snooze',
             frames:
