@@ -778,6 +778,7 @@ export class MainScene extends Phaser.Scene {
             //this.displayShop(this.shop1, this.shop1Text);
             this.shopSActive = false;
             //this.shop1Active = true;
+            this.updateShop1(false);
 
 
         });
@@ -973,6 +974,7 @@ export class MainScene extends Phaser.Scene {
                 this.shop_bg_back2.setVisible(false);
                 //this.displayShop(this.shop1, this.shop1Text);
                 this.shopTActive = false;
+                this.updateShop1(false);
                 //this.shop1Active = true;
 
 
@@ -1147,6 +1149,9 @@ export class MainScene extends Phaser.Scene {
                 this.closeShop(this.shopM, this.shopMText, false);
                 this.shop_bg_back2.setVisible(false);
                 this.shopMActive = false;
+
+                this.updateShop1(false);
+
             });
 
         this.shopM = [this.motorL, this.motorP, this.motorR, this.backM];
@@ -1439,7 +1444,7 @@ export class MainScene extends Phaser.Scene {
                 }).setVisible(true);
             }
             else{
-                this.shopWText[0] = this.add.text(550-60, 1080 - 250, "! energy", {
+                this.shopWText[0] = this.add.text(550-40, 1080 - 250, "! energy", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2
                 }).setVisible(true);
             }
