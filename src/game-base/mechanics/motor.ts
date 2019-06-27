@@ -148,19 +148,19 @@ export class Motor  {
                 this.system.add.channelIn('buildmotorrocket11', '').replication(
                     this.system.add.channelInCB('rocketP1', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0).nullProcess()));
 
             this.system.pushSymbol(
                 this.system.add.channelIn('buildmotorrocket12', '').replication(
                     this.system.add.channelInCB('rocketP1', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.2).nullProcess()));
 
             this.system.pushSymbol(
                 this.system.add.channelIn('buildmotorrocket13', '').replication(
                     this.system.add.channelInCB('rocketP1', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.2).nullProcess()));
 
         }
 
@@ -252,19 +252,19 @@ export class Motor  {
                 this.system.add.channelIn('buildmotorrocket21', '').replication(
                     this.system.add.channelInCB('rocketP2', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0).nullProcess()));
 
             this.system.pushSymbol(
                 this.system.add.channelIn('buildmotorrocket22', '').replication(
                     this.system.add.channelInCB('rocketP2', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.2).nullProcess()));
 
             this.system.pushSymbol(
                 this.system.add.channelIn('buildmotorrocket23', '').replication(
                     this.system.add.channelInCB('rocketP2', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.2).nullProcess()));
 
 
         }

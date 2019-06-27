@@ -108,6 +108,7 @@ export class BlueShip extends BaseShip{
         this.motorProj2 = new MotorFlame(scene);
         this.motorProj2.tintPurple();
 
+
         this.x =  x;
         this.y = y;
         this.durationX = 1250;
@@ -184,6 +185,55 @@ export class BlueShip extends BaseShip{
             channelInCB('increasesizerocket23', '',() => {this.motorRsize1 = 1.4, this.motorRsize2 = 1.4}).nullProcess()
         );
     };
+
+    chanceDisplay() {
+        if (this.player.getActiveMotorL() == 1) {
+        this.scene.add.text(1875, 888, "30%", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
+            });
+        }
+        if (this.player.getActiveMotorL() == 2) {
+            this.scene.add.text(1880, 835, "45%", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
+            });
+        }
+        if (this.player.getActiveMotorL() == 3) {
+            this.scene.add.text(1880, 835, "55%", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
+            });
+        }
+        if (this.player.getActiveMotorP() == 1) {
+            this.scene.add.text(1875, 938, "30%", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
+            });
+        }
+        if (this.player.getActiveMotorP() == 2) {
+            this.scene.add.text(1875, 937, "45%", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
+            });
+        }
+        if (this.player.getActiveMotorP() == 3) {
+            this.scene.add.text(1875, 937, "55%", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
+            });
+        }
+        if (this.player.getActiveMotorR() == 1) {
+            this.scene.add.text(1800, 800, "test", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
+            });
+        }
+        if (this.player.getActiveMotorR() == 1) {
+            this.scene.add.text(1800, 800, "test", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
+            });
+        }
+        if (this.player.getActiveMotorR() == 1) {
+            this.scene.add.text(1800, 800, "test", {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
+            });
+        }
+
+    }
     toDestroyedBack(): void {
         this.back.toDestroyedPart();
     }
@@ -223,6 +273,7 @@ export class BlueShip extends BaseShip{
         this.sinY %= 2*Math.PI;
 
         this.setAllPartPosition();
+        this.chanceDisplay();
     }
 
     setOnScreenText(text){

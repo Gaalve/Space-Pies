@@ -9,7 +9,7 @@ import {MainScene} from "../scenes/main-scene";
 import {BlueShip} from "./ship/blue-ship";
 import {RedShip} from "./ship/red-ship";
 import Sprite = Phaser.GameObjects.Sprite;
-import {MotorFlame} from "./motor-flame";
+import {MotorFlame} from "./ship/motor-flame";
 import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
 import {AnimationUtilities} from "./animation/AnimationUtilites";
 import {Animation} from "./animation/Animation";
@@ -38,7 +38,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 	private piSeq: PiAnimSequence;
 
 	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number, animSys: PiAnimSystem){
-		super(scene, x, y, "ssr_wmod");
+		super(scene, x, y, "ssr_wmod_off");
 
 		this.animSys = animSys;
 		this.piSeq = animSys.addSequence(x, y+100, 'lock()', PiAnimAlignment.CENTER);
@@ -46,7 +46,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		this.piSeq.hide();
 
 	    if(player.getNameIdentifier() == "P2"){
-	    	this.setTexture("ssb_wmod");
+	    	this.setTexture("ssb_wmod_off");
 		}
 	    //reposition external drones
 	    if(index == 1){
