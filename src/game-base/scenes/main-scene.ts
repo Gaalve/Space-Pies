@@ -180,6 +180,9 @@ export class MainScene extends Phaser.Scene {
             this.energy.setVisible(true);
             this.energyT.setVisible(true);
             this.energyRegen.setVisible(true);
+
+
+
         }));
         let closeShop = system.add.replication(system.add.channelIn('closeshop','*').process('close', () =>{
             this.closeShop(this.shop1, this.shop1Text, true);
@@ -226,6 +229,7 @@ export class MainScene extends Phaser.Scene {
                 this.shop1Active = true;
                 this.shop_bg_back.setVisible(true);
                 this.shop_bg_out.setVisible(true);
+
             });
         this.shop.removeInteractive();
         this.shop.setInvisible();
@@ -445,6 +449,11 @@ export class MainScene extends Phaser.Scene {
             let type = this.data.get("type");
                 if(this.shopTActive){
                     this.updateShopT();
+                    if(energy < player.getEnergyCost("weapon")){
+                        this.closeShop(this.shopT, this.shopTText, false);
+                        this.shop_bg_back2.setVisible(false);
+                        this.shopTActive = false;
+                    }
                 }
                 if(this.shopWActive){
 
@@ -493,6 +502,11 @@ export class MainScene extends Phaser.Scene {
 
                 if(this.shopSActive){
                     this.updateShopS();
+                    if(energy < player.getEnergyCost("nano")){
+                        this.closeShop(this.shopS, this.shopSText, false);
+                        this.shop_bg_back2.setVisible(false);
+                        this.shopSActive = false;
+                    }
                 }
 
 
@@ -522,6 +536,11 @@ export class MainScene extends Phaser.Scene {
             let type = this.data.get("type");
             if(this.shopTActive){
                 this.updateShopT();
+                if(energy < player.getEnergyCost("weapon")){
+                    this.closeShop(this.shopT, this.shopTText, false);
+                    this.shop_bg_back2.setVisible(false);
+                    this.shopTActive = false;
+                }
             }
             if(this.shopWActive){
 
@@ -570,6 +589,11 @@ export class MainScene extends Phaser.Scene {
 
             if(this.shopSActive){
                 this.updateShopS();
+                if(energy < player.getEnergyCost("nano")){
+                    this.closeShop(this.shopS, this.shopSText, false);
+                    this.shop_bg_back2.setVisible(false);
+                    this.shopSActive = false;
+                }
             }
 
                 system.pushSymbol(system.add.channelOut("newsolar"+ player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD(), "solar"+player.getNameIdentifier().charAt(1)+player.getSmallestIndexSD()).nullProcess())
@@ -640,6 +664,7 @@ export class MainScene extends Phaser.Scene {
                 this.shop.setVisible();
                 this.shop.restoreInteractive();
                 this.shop1Active = false;
+
             });
 
         this.skip = new Button(this, 1550, 1080-100, "button_shadow",
@@ -680,6 +705,7 @@ export class MainScene extends Phaser.Scene {
                     this.energy.setVisible(false);
                     this.energyT.setVisible(false);
                     this.energyRegen.setVisible(false);
+
                 }
         });
 
@@ -1232,9 +1258,11 @@ export class MainScene extends Phaser.Scene {
         if(array == this.shop1) {
             for (let i of this.energySym) {
                 i.setVisible(false);
+                i.removeInteractive()
             }
             for (let t of this.energyCostText) {
                 t.setVisible(false);
+                t.removeInteractive()
             }
         }
         else if(array == this.shopT) {
@@ -1268,9 +1296,11 @@ export class MainScene extends Phaser.Scene {
         if(array == this.shop1) {
             for (let i of this.energySym) {
                 i.setVisible(true);
+                i.setInteractive();
             }
             for (let t of this.energyCostText) {
                 t.setVisible(true);
+                t.setInteractive();
             }
         }
         else if(array == this.shopT) {
