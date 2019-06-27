@@ -15,7 +15,6 @@ import {AnimationUtilities} from "./animation/AnimationUtilites";
 import {Animation} from "./animation/Animation";
 import {BulletInfo} from "./weapon/bulletInfo";
 import Text = Phaser.GameObjects.Text;
-import {droneOut} from "./droneOutline";
 
 export class Drone extends Phaser.GameObjects.Sprite{
 
