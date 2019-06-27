@@ -1,6 +1,9 @@
 import {HealthbarSprites} from "./healthbar-sprites";
 import {HealthType} from "./health-type";
 import Text = Phaser.GameObjects.Text;
+import {PiAnimSystem} from "../pianim/pi-anim-system";
+import {PiAnimSequence} from "../pianim/pi-anim-sequence";
+import {PiAnimAlignment} from "../pianim/pi-anim-alignment";
 
 export class HealthbarSD {
     private readonly scene: Phaser.Scene;
@@ -10,11 +13,15 @@ export class HealthbarSD {
     private readonly x: number;
     private readonly y: number;
     private readonly pid: string;
-    private readonly term: Text;
     private readonly index : number;
+    private readonly piAnimSys: PiAnimSystem;
+    private piAnimSequence: PiAnimSequence;
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, pid: string, index: number){
+    private disablePiAnim: boolean;
+
+    public constructor(scene: Phaser.Scene, x: number, y: number, pid: string, index: number, piAnimSys: PiAnimSystem){
         this.scene = scene;
+        this.piAnimSys = piAnimSys;
         this.x = x;
         this.y = y;
         this.bars = [];
@@ -25,20 +32,17 @@ export class HealthbarSD {
         }else{
             this.direction = -1;
         }
-
-        this.term = scene.add.text(this.x, this.y-63, "", {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 3, stroke: '#000'
-        });
-        this.term.setOrigin(0.5);
-        this.term.setDepth(-1);
-        scene.add.existing(this.term);
+        this.piAnimSequence = this.piAnimSys.addSequence(this.x,
+            this.y + 14, 'NONE', PiAnimAlignment.CENTER);
+        this.piAnimSequence.hide();
+        this.disablePiAnim = true;
     }
 
     public addBar(type: HealthType): void{
         if(this.index > 0) {
             this.bars.push(new HealthbarSprites(this.scene, type,
                 this.x + this.bars.length * this.offset * this.direction, this.y - 40, this.pid.toLowerCase()));
-            this.updateText();
+            this.updateTextViaNew();
             for(let b of this.bars){
                 b.sprite.setDepth(-2);
             }
@@ -57,13 +61,50 @@ export class HealthbarSD {
         bleedingSprite.on('animationcomplete', this.destroy(bleedingSprite));
         bleedingSprite.anims.play("bleeding");
         sprite.destroy();
-        this.updateText();
+        this.updateTextViaResolve();
     }
 
-    private updateText(): void{
-        this.term.setText(this.toString());
-        this.term.setOrigin(0.5);
+    private updateTextViaResolve(): void{
+        if (this.disablePiAnim) return;
+        this.piAnimSequence.show();
+        if(this.bars.length == 0){
+            this.piAnimSequence.resolveAll();
+            return;
+        }
+        let other = this.piAnimSequence.resolveAndClearSequence(this.x,
+            this.y - 70, this.bars[this.bars.length - 1].toString() + '( )',
+            PiAnimAlignment.CENTER);
+        for (let i = this.bars.length - 2; i >= 0; i--) {
+            if (i >= 2 && i < this.bars.length - 3) {
+                if(i == 2)
+                    other.addSymbol('[...]');
+            } else{
+                other.addSymbol(this.bars[i].toString() + '( )');
+            }
+        }
+        other.addSymbol("dessol" + this.pid + "< >");
+        other.addSymbol('0');
     }
+
+    private updateTextViaNew(): void{
+        if (this.disablePiAnim) return;
+        this.piAnimSequence.show();
+        if(this.bars.length == 0) return;
+        this.piAnimSequence.clearSequence(this.x - 10 * this.direction,
+            this.y - 70, this.bars[this.bars.length - 1].toString() + '( )',
+            PiAnimAlignment.CENTER);
+        for (let i = this.bars.length - 2; i >= 0; i--) {
+            if (i >= 2 && i < this.bars.length - 3) {
+                if(i == 2)
+                    this.piAnimSequence.addSymbol('[...]');
+            } else{
+                this.piAnimSequence.addSymbol(this.bars[i].toString() + '( )');
+            }
+        }
+        this.piAnimSequence.addSymbol("dessol" + this.pid + "< >");
+        this.piAnimSequence.addSymbol('0');
+    }
+
 
     public toString(): string{
         let str: string = "";
@@ -96,6 +137,6 @@ export class HealthbarSD {
         for(let bar of this.bars){
             bar.destroy();
         }
-        this.term.destroy();
+        this.piAnimSequence.resolveAll();
     }
 }

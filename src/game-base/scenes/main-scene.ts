@@ -4,10 +4,9 @@ import {Button} from "../mechanics/button";
 
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-
 import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
-import {BulletInfo} from "../mechanics/weapon/bulletInfo";
+import {PiAnimSystem} from "../mechanics/pianim/pi-anim-system";
 import {Infobox} from "../mechanics/Infobox";
 
 export class MainScene extends Phaser.Scene {
@@ -90,6 +89,11 @@ export class MainScene extends Phaser.Scene {
     public battleTime: BattleTimeBar;
 
 
+    /** Round Pi Calc Animation **/
+    private roundBG: Sprite;
+    private roundFG: Sprite;
+
+    private infobox: Infobox;
 
 
 
@@ -116,8 +120,7 @@ export class MainScene extends Phaser.Scene {
 
     }
 
-    create(): void {
-        this.scene.launch("AnimationScene");
+    create(data?: PiAnimSystem): void {
         this.anims.create({
             key: 'snooze',
             frames:
@@ -135,22 +138,26 @@ export class MainScene extends Phaser.Scene {
             frameRate: 8,
             repeat: -1
         });
-
-
         this.battleTime = new BattleTimeBar(this);
-        this.system = new PiSystem(this, 10,10,10,false);
+        this.system = new PiSystem(this, 33,33,33,false);
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
 
 
         this.input.enabled = true;
-        this.data.set("infoboxx",new Infobox(this));
 
-        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
-                        new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
+        this.infobox = <Infobox> this.scene.get('GuiScene').data.get("infoboxx");
+        this.data.set("infoboxx", this.infobox);
+        if (!this.infobox) throw Error("No Infobox loaded");
 
-        this.turn = new Turn(this, this.players);
+        if (!data && data !instanceof  PiAnimSystem) throw new Error("No Pi Anim System");
+        data.reset();
+        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
+                        new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+
+
+        this.turn = new Turn(this, this.players, data);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
             if(this.turn.getCurrentRound() != 1){
@@ -186,6 +193,17 @@ export class MainScene extends Phaser.Scene {
         //this.add.existing(this.shop_bg_out2);
         this.add.existing(this.shop_bg_back);
         this.add.existing(this.shop_bg_out);
+
+
+        this.roundBG = new Sprite(this, 1920/2, 60, "shop_bg_back");
+        this.roundFG = new Sprite(this, 1920/2, 60, "shop_bg_out");
+
+        this.roundBG.setAlpha(0.6);
+        this.roundBG.setScale(0.62);
+        this.roundFG.setScale(0.62);
+
+        this.add.existing(this.roundBG);
+        this.add.existing(this.roundFG);
 
         this.energy = this.add.image(1920/2-125, 200, "energy_icon");
         this.energyT = this.add.text(1920/2-115, 470, "= "+this.turn.getCurrentPlayer().getEnergy(), {
@@ -321,7 +339,7 @@ export class MainScene extends Phaser.Scene {
         }
         this.players[0].update(delta);
         this.players[1].update(delta);
-
+        this.turn.update(delta);
     }
 
     private createShop1(): void
@@ -535,12 +553,18 @@ export class MainScene extends Phaser.Scene {
         this.energySym = this.createEnergyCostIcons();
         this.energyCostText = this.createEnergyCostText();
 
-        infobox.addTooltipInfo(this.regen.bg, "Regenerate any of your existing hitzones with different types of shields.", [this.regen.onClick, () => {this.regen.hovering = true; this.regen.updateStep();}, () => {this.regen.hovering = false; this.regen.updateStep();}]);
-        infobox.addTooltipInfo(this.wExt.bg, "Buy up to 3 weapons for each drone.", [this.wExt.onClick, () => {this.wExt.hovering = true; this.wExt.updateStep();}, () => {this.wExt.hovering = false; this.wExt.updateStep();}]);
-        infobox.addTooltipInfo(this.wModule.bg, "Add up to 2 drones equip more weapons.", [this.wModule.onClick, () => {this.wModule.hovering = true; this.wModule.updateStep();}, () => {this.wModule.hovering = false; this.wModule.updateStep();}]);
-        infobox.addTooltipInfo(this.solar.bg, "The more you have, the more energy you will collect per round.", [this.solar.onClick, () => {this.solar.hovering = true; this.solar.updateStep();}, () => {this.solar.hovering = false; this.solar.updateStep();}]);
-        infobox.addTooltipInfo(this.skip.bg, "Attack opponent with all weapons. Don't know why this is called skip though..", [this.skip.onClick, () => {this.skip.hovering = true; this.skip.updateStep();}, () => {this.skip.hovering = false; this.skip.updateStep();}]);
-        infobox.addTooltipInfo(this.close.bg, "Close the shop to see more of these beautiful stars.", [this.close.onClick, () => {this.close.hovering = true; this.close.updateStep();}, () => {this.close.hovering = false; this.close.updateStep();}]);
+        infobox.addTooltipInfo(this.regen.bg, "Regenerate any of your existing hitzones with different types of shields.", [() => this.regen.onClick(), () => {this.regen.hovering = true; this.regen.updateStep();}, () => {this.regen.hovering = false; this.regen.updateStep();}]);
+        infobox.addTooltipInfo(this.wExt.bg, "Buy up to 3 weapons for each drone.", [() =>this.wExt.onClick(), () => {this.wExt.hovering = true; this.wExt.updateStep();}, () => {this.wExt.hovering = false; this.wExt.updateStep();}]);
+        infobox.addTooltipInfo(this.wModule.bg, "Add up to 2 drones equip more weapons.", [() =>this.wModule.onClick(), () => {this.wModule.hovering = true; this.wModule.updateStep();}, () => {this.wModule.hovering = false; this.wModule.updateStep();}]);
+        infobox.addTooltipInfo(this.solar.bg, "Collect +25 Energy per round.", [() =>this.solar.onClick(), () => {this.solar.hovering = true; this.solar.updateStep();}, () => {this.solar.hovering = false; this.solar.updateStep();}]);
+        infobox.addTooltipInfo(this.skip.bg, "Attack opponent with all weapons. Don't know why this is called skip though..", [() => this.skip.onClick(), () => {this.skip.hovering = true; this.skip.updateStep();}, () => {this.skip.hovering = false; this.skip.updateStep();}]);
+        infobox.addTooltipInfo(this.close.bg, "Close the shop to see more of these beautiful stars.", [() =>this.close.onClick(), () => {this.close.hovering = true; this.close.updateStep();}, () => {this.close.hovering = false; this.close.updateStep();}]);
+
+        /* ## Weapons ## */
+
+        /* ## Shields ## */
+
+
         infobox.addTooltipInfo(this.energySym[0], "The cheapest part costs " + this.energyCostText[0].text.toString() + " energy.");
         infobox.addTooltipInfo(this.energySym[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.");
         infobox.addTooltipInfo(this.energySym[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.");
@@ -559,6 +583,13 @@ export class MainScene extends Phaser.Scene {
     }
 
     creatChooseRegen():void{
+
+        if(this.armor) this.infobox.removeTooltipInfo(this.armor.bg);
+        if(this.shield) this.infobox.removeTooltipInfo(this.shield.bg);
+        if(this.rocketS) this.infobox.removeTooltipInfo(this.rocketS.bg);
+        if(this.adapt) this.infobox.removeTooltipInfo(this.adapt.bg);
+        if(this.nano) this.infobox.removeTooltipInfo(this.nano.bg);
+
         this.armor = this.setButton(500, 1080-300, "button_armor", 0.6, ()=>{
             this.data.set("type", "armor");
             this.closeShop(this.shopS, this.shopSText, false);
@@ -641,6 +672,14 @@ export class MainScene extends Phaser.Scene {
         this.energyTextS = this.createEnergyCostTextS();
         this.closeShop(this.shopS, this.shopSText, false);
 
+
+        this.infobox.addTooltipInfo(this.rocketS.bg, "[R]ocket Shields can only be destroyed by Rockets.", [() =>this.rocketS.onClick(), () => {this.rocketS.hovering = true; this.rocketS.updateStep();}, () => {this.rocketS.hovering = false; this.rocketS.updateStep();}]);
+        this.infobox.addTooltipInfo(this.shield.bg, "Laser [S]hields can be destroyed by Rockets and Projectiles.", [() => this.shield.onClick(), () => {this.shield.hovering = true; this.shield.updateStep();}, () => {this.shield.hovering = false; this.shield.updateStep();}]);
+        this.infobox.addTooltipInfo(this.armor.bg, "[A]rmor Shields can be destroyed by Lasers and Projectiles.", [() =>this.armor.onClick(), () => {this.armor.hovering = true; this.armor.updateStep();}, () => {this.armor.hovering = false; this.armor.updateStep();}]);
+        this.infobox.addTooltipInfo(this.nano.bg, "Nano Shields can be destroyed by all Weapons. But they are cheap!", [() =>this.nano.onClick(), () => {this.nano.hovering = true; this.nano.updateStep();}, () => {this.nano.hovering = false; this.nano.updateStep();}]);
+        this.infobox.addTooltipInfo(this.adapt.bg, "Adaptive Shields. Will add two shields. The second shield will change to Rocket,\n" +
+            "Laser or Armor Shield based on the Weapon that hits the first shield.\n" +
+            "Rocket -> Rocket Shield; Laser -> Laser Shield; Projectile -> Armor Shield", [() =>this.adapt.onClick(), () => {this.adapt.hovering = true; this.adapt.updateStep();}, () => {this.adapt.hovering = false; this.adapt.updateStep();}]);
 
 
     }
@@ -751,6 +790,9 @@ export class MainScene extends Phaser.Scene {
     }
 
     private createChooseType(): void{
+        if(this.laser) this.infobox.removeTooltipInfo(this.laser.bg);
+        if(this.projectile) this.infobox.removeTooltipInfo(this.projectile.bg);
+        if(this.rocket) this.infobox.removeTooltipInfo(this.rocket.bg);
         this.laser = new Button(this, 550, 1080-300, "button_shadow",
             "button_bg", "button_fg", "ssr_weap_las",0.6,
             () => {
@@ -813,6 +855,11 @@ export class MainScene extends Phaser.Scene {
         this.energyShopT = this.createEnergyCostIconsT();
         this.energyCostT = this.createEnergyCostTextT();
         this.closeShop(this.shopT, this.shopTText, false);
+
+        this.infobox.addTooltipInfo(this.rocket.bg, "Rockets. Can destroy all shields and will hardly miss.", [() =>this.rocket.onClick(), () => {this.rocket.hovering = true; this.rocket.updateStep();}, () => {this.rocket.hovering = false; this.rocket.updateStep();}]);
+        this.infobox.addTooltipInfo(this.laser.bg, "Lasers. Destroys Laser Shields, but can't attack\nArmor Shields or Rocket Shields.", [() => this.laser.onClick(), () => {this.laser.hovering = true; this.laser.updateStep();}, () => {this.laser.hovering = false; this.laser.updateStep();}]);
+        this.infobox.addTooltipInfo(this.projectile.bg, "Projectile Weapons. Destroys Armor Shields,\nbut can't attack Laser Shields or Rocket Shields.", [() =>this.projectile.onClick(), () => {this.projectile.hovering = true; this.projectile.updateStep();}, () => {this.projectile.hovering = false; this.projectile.updateStep();}]);
+
     }
 
     createChooseMod(): void{
@@ -1607,11 +1654,13 @@ export class MainScene extends Phaser.Scene {
     }
 
     updateEnergyText(): void{
-        this.children.remove(this.energyT);
+        // this.children.remove(this.energyT);
+        this.energyT.destroy();
         // this.energyT = this.add.text(1920/2-15, 760, "= "+this.turn.getCurrentPlayer().getEnergy(), {
         //     fill: '#3771c8', fontFamily: '"Roboto-Medium"', fontSize: 64, strokeThickness: 2, stroke: '#214478'});
         this.energyT = this.add.text(1920/2-95, 160, "= "+this.turn.getCurrentPlayer().getEnergy(), {
                 fill: '#fff', fontFamily: '"Roboto-Medium"', fontSize: 64, strokeThickness: 1, stroke: '#fff'});
+
     }
 
     updateEnergyRate(bought: boolean):void{
@@ -1619,6 +1668,7 @@ export class MainScene extends Phaser.Scene {
         if(bought){
             rate += 25;
         }
+        this.infobox.removeTooltipInfo(this.energyRegen);
         this.children.remove(this.energyRegen);
 
         if(this.turn.getCurrentPlayer().getEnergy() >= 100){
@@ -1636,6 +1686,12 @@ export class MainScene extends Phaser.Scene {
                 fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
 
         }
+
+        this.infobox.addTooltipInfo(this.energyRegen, "Your Energy Regeneration.\n" +
+            "Receiving:\n" +
+            "+50 (from Ship)\n" +
+            "+"+(rate + this.turn.getCurrentPlayer().getEnergyMalus() - 50)+" (from Drones)\n" +
+            "-"+this.turn.getCurrentPlayer().getEnergyMalus()+" (from destroyed HitZones)");
 
     }
 
@@ -1822,13 +1878,14 @@ export class MainScene extends Phaser.Scene {
             // this.shop_bg.lineStyle(5, 0xAA2222);
             // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
             this.shop_bg_out.setTint(0xa02c2c);
+            this.roundFG.setTint(0xa02c2c);
 
         }
         else{
             // this.shop_bg.lineStyle(5, 0x2222AA);
             // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
             this.shop_bg_out.setTint(0x214478);
-
+            this.roundFG.setTint(0x214478);
         }
     }
 

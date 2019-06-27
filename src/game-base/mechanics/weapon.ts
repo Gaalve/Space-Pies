@@ -41,8 +41,8 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	private isFirst: boolean;
 	private _player: Player;
     private simplePi : string;
-	x : number;
-	y : number;
+	posX : number;
+	posY : number;
 	durationX : number;
 	durationY : number;
 	sinX : number;
@@ -80,8 +80,8 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 		this.bullet = null;
 		this.notification = null;
 
-		this.x = this.x;
-		this.y = this.y;
+		this.posX = this.x - drone.x;
+		this.posY = this.y - drone.y;
 		this.durationX = 900;
 		this.durationY = 1000;
 		this.sinX = 0;
@@ -124,8 +124,12 @@ export class Weapon extends Phaser.GameObjects.Sprite{
         this.simplePi = this.wClass.charAt(0);
 		this.createPiTerm();
 
-		this.drone.getPlayer().isFirstPlayer() ? this.scene.data.get("redship").addWeapon(this) : this.scene.data.get("blueship").addWeapon(this);
+		// this.drone.getPlayer().isFirstPlayer() ? this.scene.data.get("redship").addWeapon(this) : this.scene.data.get("blueship").addWeapon(this);
 	}
+
+	public canShoot() : boolean {
+	    return this.weaponType != WeaponType.NONE;
+    }
 
 	public getWeapon() : string {
 		return Weapon.getWeaponClass(this._weaponType);
@@ -170,7 +174,10 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     		this.simplePi = this.simplePi + "p1";
 		}
 		let infobox = <Infobox> this.scene.data.get("infoboxx");
-		infobox.addTooltipInfo(this, "[" + this._player.getNameIdentifier() + "] Weapon Type:    " + this.simplePi + "<>           (" + Infobox.weaponTypeToString(this._weaponType) + ")\n     destroys:       " + Infobox.weaponTypeTargetsPiTerm(this._weaponType, this._player) + "    (" + Infobox.weaponTypeTargetsToString(this._weaponType) + ")");
+		infobox.addTooltipInfo(this, "[" + this._player.getNameIdentifier() + "] Weapon Type:    "
+			+ this.simplePi + "<>" +
+			"    (" + Infobox.weaponTypeToString(this._weaponType) + ")\n" + "     destroys:       " + Infobox.weaponTypeTargetsPiTerm(this._weaponType, this._player) +
+			"    (" + Infobox.weaponTypeTargetsToString(this._weaponType) + ")");
 
     }
 
@@ -242,6 +249,4 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 
 		this.setPosition(posX,posY)
 	}
-
-
 }
