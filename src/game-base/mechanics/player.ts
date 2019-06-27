@@ -80,6 +80,7 @@ export class Player {
     public motor: Motor;
 
     private malusEnergy: number;
+    offset: number;
 
 
 
@@ -93,10 +94,12 @@ export class Player {
         if(nameIdentifier == "P1"){
             this.ship_out = scene.add.sprite(x+20,y,"ssr_ship").setScale(1.1,1.1).setTintFill(0xaff4444);
             this.ship_out.setVisible(false);
+            this.offset = 20;
         }
         else{
             this.ship_out = scene.add.sprite(x-30,y,"ssb_ship").setScale(1.1,1.1).setTintFill(0xa4444ff);
             this.ship_out.setVisible(false);
+            this.offset = -30;
 
         }
         this.ship = new Ship(scene, x, y, this);
@@ -192,6 +195,7 @@ export class Player {
         this.drones[0].update(delta);
         this.drones[1].update(delta);
         this.drones[2].update(delta);
+        //this.ship_out.setPosition(this.ship._modularShip. + this.offset, this.ship.posY);
 
         if(this.currentAnomaly) this.currentAnomaly.update(delta);
         if(this.blackhole) this.blackhole.update(delta);

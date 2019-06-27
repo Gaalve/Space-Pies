@@ -15,7 +15,7 @@ export class Ship{
     public posX : number;
     public posY : number;
     private isRed: boolean;
-    private _modularShip: BaseShip;
+    public _modularShip: BaseShip;
     private debris: Debris[];
 
     public constructor (scene : Phaser.Scene, x: number, y: number, player : Player){
@@ -189,4 +189,5 @@ export class Ship{
     public explosion2At(offX: number, offY: number, lifeScale: number = 1, speedScale: number = 1): void{
         this.player.explosion.explosionAt(this.posX + offX, this.posY + offY, lifeScale, speedScale);
     }
+
 }
