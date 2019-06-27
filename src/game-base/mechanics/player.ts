@@ -419,6 +419,7 @@ export class Player {
         this.system.pushSymbol(
             this.system.add.channelInCB('wormhole' + p, '', () => {
                 this.currentAnomaly = new WormHole(this.scene, this, this.solarDrones[5]);
+                this.solarDrones[5].active = true;
             })
                 .channelOut("newnano" + p, "solar" + p + "5")
                 .nullProcess()
