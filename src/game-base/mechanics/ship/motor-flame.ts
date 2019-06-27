@@ -33,9 +33,9 @@ export class MotorFlame {
         this.flameFront.setTint(0x42e6f5);
     }
     public tintPurple(){
-        this.flameBack.setTint(0x9642f5);
-        this.flameMid.setTint(0xec42f5);
-        this.flameFront.setTint(0xf542d1);
+        this.flameBack.setTint(0x6600ff);
+        this.flameMid.setTint(0xd42aff);
+        this.flameFront.setTint(0xeeaaff);
     }
 
     public setScale(scale: number){
@@ -57,9 +57,9 @@ export class MotorFlame {
     }
 
     public setScaleSin(scale: number, sinX: number){
-        this.setScaleBack(this.getSin(sinX * 17) * scale);
-        this.setScaleMid(this.getSin(sinX * 20) * scale);
-        this.setScaleFront(this.getSin(sinX * 23) * scale);
+        this.setScaleBack(this.getSin(sinX * 4) * scale);
+        this.setScaleMid(this.getSin(sinX * 5) * scale);
+        this.setScaleFront(this.getSin(sinX * 6) * scale);
     }
 
     private getSin(sinX: number){
