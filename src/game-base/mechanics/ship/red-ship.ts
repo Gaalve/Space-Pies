@@ -6,6 +6,8 @@ import {Weapon} from "../weapon";
 import {Player} from "../player";
 import {Motor} from "../motor";
 import {PiSystem} from "../picalc/pi-system";
+import {MotorFlame} from "./motor-flame";
+
 
 export class RedShip extends BaseShip{
     backUp: ShipPart;
@@ -22,12 +24,22 @@ export class RedShip extends BaseShip{
     sinY : number;
     onScreenText : Phaser.GameObjects.Text;
     private weapons: Weapon[];
-    private motorL1: Sprite;
-    private motorL2: Sprite;
-    private motorP1: Sprite;
-    private motorP2: Sprite;
-    private motorR1: Sprite;
-    private motorR2: Sprite;
+
+    public motorRocket1: MotorFlame;
+    public motorRocket2: MotorFlame;
+    public motorRsize1: number;
+    public motorRsize2: number;
+
+    public motorLaser1: MotorFlame;
+    public motorLaser2: MotorFlame;
+    public motorLsize1: number;
+    public motorLsize2: number;
+
+    public motorProj1: MotorFlame;
+    public motorProj2: MotorFlame;
+    public motorPsize1: number;
+    public motorPsize2: number;
+
     private player: Player;
     private system: PiSystem;
 
@@ -36,6 +48,15 @@ export class RedShip extends BaseShip{
         super(scene, x, y);
         this.player = player;
         this.system = this.player.getSystem();
+
+        this.motorRsize1 = 1.0;
+        this.motorRsize2 = 1.0;
+
+        this.motorLsize1 = 1.0;
+        this.motorLsize2 = 1.0
+
+        this.motorPsize1 = 1.0;
+        this.motorPsize2 = 1.0;
 
         this.backUp = new ShipPart(scene, x, y, "ssbr/ssr_back_up", "ssbr/ssr_des_back_up",
             -60, -85, -61, -103,1);
@@ -55,12 +76,6 @@ export class RedShip extends BaseShip{
         this.hull = new ShipPart(scene, x, y, "ssbr/ssr_hull", "ssbr/ssr_des_hull",
             11, 0, 55, 15,2);
 
-        this.motorL1 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
-        this.motorL2 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
-        this.motorP1 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
-        this.motorP2 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
-        this.motorR1 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
-        this.motorR2 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
 
         let infobox = <Infobox> scene.data.get("infoboxx");
         infobox.addTooltipInfo(this.backDown.normal, "[P1] The right half of your Ship");
@@ -75,6 +90,31 @@ export class RedShip extends BaseShip{
             "     + does not like tangerines");
         infobox.addTooltipInfo(this.hull.normal, "[P1] The hull of your ship. \nAt least this one's as ugly as the others. Not as rich as you though 'eh ?")
 
+        this.motorRocket1 = new MotorFlame(scene);
+        this.motorRocket1.tintRed();
+        this.motorRocket1.flipX();
+        this.motorRocket1.setAngle(320);
+
+        this.motorRocket2 = new MotorFlame(scene);
+        this.motorRocket2.tintRed();
+        this.motorRocket2.flipX();
+        this.motorRocket2.setAngle(40);
+
+        this.motorLaser1 = new MotorFlame(scene);
+        this.motorLaser1.tintBlue();
+        this.motorLaser1.flipX();
+
+        this.motorLaser2 = new MotorFlame(scene);
+        this.motorLaser2.tintBlue();
+        this.motorLaser2.flipX();
+
+        this.motorProj1 = new MotorFlame(scene);
+        this.motorProj1.tintPurple();
+        this.motorProj1.flipX();
+
+        this.motorProj2 = new MotorFlame(scene);
+        this.motorProj2.tintPurple();
+        this.motorProj2.flipX();
 
         this.x =  x;
         this.y = y;
@@ -109,12 +149,30 @@ export class RedShip extends BaseShip{
         this.wingDown.setPosition(posX, posY);
         this.hull.setPosition(posX, posY);
 
-        this.motorL1.setPosition(this.hull.normal.x - 125, this.hull.normal.y - 12).setTint(0x00BFFF).setFlip(true, false);
+        this.motorRocket1.setPosition(this.hull.normal.x - 160, this.hull.normal.y + 130);
+        this.motorRocket1.setScaleSin(this.motorRsize1, this.sinX);
+
+        this.motorRocket2.setPosition(this.hull.normal.x - 160, this.hull.normal.y - 130);
+        this.motorRocket2.setScaleSin(this.motorRsize2, this.sinX);
+
+        this.motorLaser1.setPosition(this.hull.normal.x - 102, this.hull.normal.y + 12);
+        this.motorLaser1.setScaleSin(this.motorLsize1, this.sinX);
+
+        this.motorLaser2.setPosition(this.hull.normal.x - 102, this.hull.normal.y - 12);
+        this.motorLaser2.setScaleSin(this.motorLsize2, this.sinX);
+
+        this.motorProj1.setPosition(this.hull.normal.x - 173, this.hull.normal.y + 92);
+        this.motorProj1.setScaleSin(this.motorPsize1, this.sinX);
+
+        this.motorProj2.setPosition(this.hull.normal.x - 173, this.hull.normal.y - 92);
+        this.motorProj2.setScaleSin(this.motorPsize2, this.sinX);
+
+ /*       this.motorL1.setPosition(this.hull.normal.x - 125, this.hull.normal.y - 12).setTint(0x00BFFF).setFlip(true, false);
         this.motorL2.setPosition(this.hull.normal.x - 125, this.hull.normal.y + 12).setTint(0x00BFFF).setFlip(true, false);
         this.motorP1.setPosition(this.hull.normal.x - 190, this.hull.normal.y - 92).setTint(0xCD00CD).setFlip(true, false);
         this.motorP2.setPosition(this.hull.normal.x - 190, this.hull.normal.y + 92).setTint(0xCD00CD).setFlip(true, false);
         this.motorR1.setPosition(this.hull.normal.x - 170, this.hull.normal.y - 140).setTint(0xFF0000).setFlip(true, false).setAngle(40);
-        this.motorR2.setPosition(this.hull.normal.x - 170, this.hull.normal.y + 140).setTint(0xFF0000).setFlip(true, false).setAngle(320);
+        this.motorR2.setPosition(this.hull.normal.x - 170, this.hull.normal.y + 140).setTint(0xFF0000).setFlip(true, false).setAngle(320); */
 
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 124, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x + 44, this.hull.normal.y - 150);
@@ -126,18 +184,18 @@ export class RedShip extends BaseShip{
 
     motorIncreaseSize(){
         this.system.pushSymbol(
-            this.system.add.channelInCB('increasesizelaser12', '', () =>  {this.motorL1.setScale(1.0, 1.0), this.motorL2.setScale(1.0, 1.0)}).
-            channelInCB('increasesizelaser13', '',() => {this.motorL1.setScale(1.2, 1.2), this.motorL2.setScale(1.2, 1.2)}).nullProcess()
+            this.system.add.channelInCB('increasesizelaser12', '', () => {this.motorLsize1 = 1.2, this.motorLsize2 = 1.2}).
+            channelInCB('increasesizelaser13', '',() => {this.motorLsize2 = 1.4, this.motorLsize1 = 1.4}).nullProcess()
         );
 
         this.system.pushSymbol(
-            this.system.add.channelInCB('increasesizeprojectile12', '', () =>  {this.motorP1.setScale(1.0, 1.0), this.motorP2.setScale(1.0, 1.0)}).
-            channelInCB('increasesizeprojectile13', '',() => {this.motorP1.setScale(1.2, 1.2), this.motorP2.setScale(1.2, 1.2)}).nullProcess()
+            this.system.add.channelInCB('increasesizeprojectile12', '', () =>  {this.motorPsize1 = 1.2, this.motorPsize2 = 1.2}).
+            channelInCB('increasesizeprojectile13', '',() => {this.motorPsize1 = 1.4, this.motorPsize2 = 1.4}).nullProcess()
         );
 
         this.system.pushSymbol(
-            this.system.add.channelInCB('increasesizerocket12', '', () =>  {this.motorR1.setScale(1.0, 1.0), this.motorR2.setScale(1.0, 1.0)}).
-            channelInCB('increasesizerocket13', '',() => {this.motorR1.setScale(1.2, 1.2), this.motorR2.setScale(1.2, 1.2)}).nullProcess()
+            this.system.add.channelInCB('increasesizerocket12', '', () =>  {this.motorRsize1 = 1.2, this.motorRsize2 = 1.2}).
+            channelInCB('increasesizerocket13', '',() => {this.motorRsize1 = 1.4, this.motorRsize2 = 1.4}).nullProcess()
         );
     };
 

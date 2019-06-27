@@ -51,10 +51,13 @@ export class BlueShip extends BaseShip{
         super(scene, x, y);
         this.player = player;
         this.system = this.player.getSystem();
+
         this.motorRsize1 = 1.0;
         this.motorRsize2 = 1.0;
+
         this.motorLsize1 = 1.0;
         this.motorLsize2 = 1.0;
+
         this.motorPsize1 = 1.0;
         this.motorPsize2 = 1.0;
 
@@ -95,7 +98,6 @@ export class BlueShip extends BaseShip{
 
         this.motorLaser1 = new MotorFlame(scene);
         this.motorLaser1.tintBlue();
-        this.motorLaser1.setScale(1.0);
 
         this.motorLaser2 = new MotorFlame(scene);
         this.motorLaser2.tintBlue();

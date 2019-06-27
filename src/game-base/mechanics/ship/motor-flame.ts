@@ -38,6 +38,20 @@ export class MotorFlame {
         this.flameFront.setTint(0xeeaaff);
     }
 
+    public flipX(){
+        this.flameBack.setFlipX(true);
+        this.flameMid.setFlipX(true);
+        this.flameFront.setFlipX(true);
+        this.flameBack.setOrigin(1 , 0.5);
+        this.flameMid.setOrigin(1, 0.5);
+        this.flameFront.setOrigin(1, 0.5);
+    }
+    public setAngle(angle: number){
+        this.flameBack.setAngle(angle);
+        this.flameMid.setAngle(angle);
+        this.flameFront.setAngle(angle);
+    }
+
     public setScale(scale: number){
         this.setScaleBack(scale);
         this.setScaleMid(scale);
