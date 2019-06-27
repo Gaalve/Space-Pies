@@ -77,7 +77,6 @@ export class Player {
 
     public currentAnomaly: Anomaly;
     public blackhole: BlackHole;
-    private blackholeExists: boolean;
 
     public motor: Motor;
 
@@ -116,8 +115,6 @@ export class Player {
 
         this.motor = new Motor(scene, this, x, y, piAnim);
         this.malusEnergy = 0;
-
-        this.blackholeExists = false;
 
         //console.log(blackholeAppears)
         //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
@@ -465,10 +462,12 @@ export class Player {
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
                 .channelInCB('anomaly'+p, '', () => {
-                    if (!this.blackholeExists){
-                        this.blackholeExists = true;
-                        this.system.stop()
-                        if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("black");
+                    if (this.scene instanceof MainScene){
+                        if (!this.scene.blackholeExists){
+                            this.scene.blackholeExists = true;
+                            this.system.stop();
+                            this.scene.anomalyInfoBoxes("black");
+                        }
                     }
                 },undefined, 0.2)
                 .channelOut('blackhole', '').nullProcess()

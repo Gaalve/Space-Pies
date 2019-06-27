@@ -38,7 +38,6 @@ export class NanoDrone extends EnergyDrone {
     }
 
     public refreshInfoBox(){
-
         if (this.exists){
             this.infobox = <Infobox> this.scene.data.get("infoboxx");
             this.infobox.addTooltipInfo(this,

@@ -94,7 +94,7 @@ export class MainScene extends Phaser.Scene {
     private roundFG: Sprite;
 
     private infobox: Infobox;
-
+    public blackholeExists;
 
 
     private openShop: Phaser.GameObjects.Text;
@@ -274,6 +274,8 @@ export class MainScene extends Phaser.Scene {
             channelIn("secondunlock2","").
             channelIn("secondunlock1","").nullProcess()
         );
+
+        this.blackholeExists = false;
 
         this.system.start();
     }
