@@ -57,7 +57,7 @@ export class Player
     private rocketCost : number = 40;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
     private adaptCost: number = 16; // cost for adaptive shield
-    private motorCost: number = 5;
+    private motorCost: number = 35;
 
     public pem: Phaser.GameObjects.Particles.ParticleEmitterManager;
     public explosion: Explosion;
