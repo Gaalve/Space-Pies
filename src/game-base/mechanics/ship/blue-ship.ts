@@ -6,6 +6,7 @@ import {Weapon} from "../weapon";
 import {Player} from "../player";
 import {Motor} from "../motor";
 import {PiSystem} from "../picalc/pi-system";
+import {MotorFlame} from "./motor-flame";
 
 
 export class BlueShip extends BaseShip{
@@ -24,47 +25,16 @@ export class BlueShip extends BaseShip{
     private weapons: Weapon[];
     private weaponSinX: number;
     private weaponSinY: number;
-    public motorL11: Sprite; //motor<type><upper/lower><inner/outer>
-    public motorL12: Sprite;
-    public motorL13: Sprite;
-    public motorL14: Sprite;
-    public motorL15: Sprite;
-    public motorL16: Sprite;
 
-    public motorL21: Sprite;
-    public motorL22: Sprite;
-    public motorL23: Sprite;
-    public motorL24: Sprite;
-    public motorL25: Sprite;
-    public motorL26: Sprite;
+    public motorRocket1: MotorFlame;
+    public motorRocket2: MotorFlame;
 
-    public motorP11: Sprite;
-    private motorP12: Sprite;
-    private motorP13: Sprite;
-    private motorP14: Sprite;
-    private motorP15: Sprite;
-    private motorP16: Sprite;
+    public motorLaser1: MotorFlame;
+    public motorLaser2: MotorFlame;
 
-    private motorP21: Sprite;
-    private motorP22: Sprite;
-    private motorP23: Sprite;
-    private motorP24: Sprite;
-    private motorP25: Sprite;
-    private motorP26: Sprite;
+    public motorProj1: MotorFlame;
+    public motorProj2: MotorFlame;
 
-    private motorR11: Sprite;
-    private motorR12: Sprite;
-    private motorR13: Sprite;
-    private motorR14: Sprite;
-    private motorR15: Sprite;
-    private motorR16: Sprite;
-
-    public motorR21: Sprite;
-    public motorR22: Sprite;
-    public motorR23: Sprite;
-    public motorR24: Sprite;
-    public motorR25: Sprite;
-    public motorR26: Sprite;
 
     private player: Player;
     private system: PiSystem;
@@ -91,47 +61,6 @@ export class BlueShip extends BaseShip{
         this.hull = new ShipPart(scene, x, y, "ssbr/ssb_hull", "ssbr/ssb_des_hull",
             -46, 0, -37, 13,2);
 
-        this.motorL16 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8).setTint(0xff2a2a);
-        this.motorL15 = scene.add.sprite (0,0, "fire_light").setScale(0.7,0.7).setTint(0xaa0000);
-        this.motorL14 = scene.add.sprite (0,0, "fire_light").setScale(0.65,0.65).setTint(0xff9955);
-        this.motorL13 = scene.add.sprite (0,0, "fire_light").setScale(0.6,0.6).setTint(0xff6600);
-        this.motorL12 = scene.add.sprite (0,0, "fire_light").setScale(0.5,0.5).setTint(0xffdd55);
-        this.motorL11 = scene.add.sprite (0,0, "fire_light").setScale(0.4,0.4).setTint(0xffcc00);
-
-        this.motorL26 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8).setTint(0x00BFFF);
-        this.motorL25 = scene.add.sprite (0,0, "fire_light").setScale(0.7,0.7).setTint(0xaa0000);
-        this.motorL24 = scene.add.sprite (0,0, "fire_light").setScale(0.65,0.65).setTint(0xff9955);
-        this.motorL23 = scene.add.sprite (0,0, "fire_light").setScale(0.6,0.6).setTint(0xff6600);
-        this.motorL22 = scene.add.sprite (0,0, "fire_light").setScale(0.5,0.5).setTint(0xffdd55);
-        this.motorL21 = scene.add.sprite (0,0, "fire_light").setScale(0.4,0.4).setTint(0xffcc00);
-
-        this.motorP16 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8).setTint(0xCD00CD);
-        this.motorP15 = scene.add.sprite (0,0, "fire_light").setScale(0.7,0.7).setTint(0xaa0000);
-        this.motorP14 = scene.add.sprite (0,0, "fire_light").setScale(0.65,0.65).setTint(0xff9955);
-        this.motorP13 = scene.add.sprite (0,0, "fire_light").setScale(0.6,0.6).setTint(0xff6600);
-        this.motorP12 = scene.add.sprite (0,0, "fire_light").setScale(0.5,0.5).setTint(0xffdd55);
-        this.motorP11 = scene.add.sprite (0,0, "fire_light").setScale(0.4,0.4).setTint(0xffcc00);
-
-        this.motorP26 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8).setTint(0xCD00CD);
-        this.motorP25 = scene.add.sprite (0,0, "fire_light").setScale(0.7,0.7).setTint(0xaa0000);
-        this.motorP24 = scene.add.sprite (0,0, "fire_light").setScale(0.65,0.65).setTint(0xff9955);
-        this.motorP23 = scene.add.sprite (0,0, "fire_light").setScale(0.6,0.6).setTint(0xff6600);
-        this.motorP22 = scene.add.sprite (0,0, "fire_light").setScale(0.5,0.5).setTint(0xffdd55);
-        this.motorP21 = scene.add.sprite (0,0, "fire_light").setScale(0.4,0.4).setTint(0xffcc00);
-
-        this.motorR16 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8).setTint(0xff2a2a);
-        this.motorR16 = scene.add.sprite (0,0, "fire_light").setScale(0.7,0.7).setTint(0xaa0000);
-        this.motorR14 = scene.add.sprite (0,0, "fire_light").setScale(0.65,0.65).setTint(0xff9955);
-        this.motorR13 = scene.add.sprite (0,0, "fire_light").setScale(0.6,0.6).setTint(0xff6600);
-        this.motorR12 = scene.add.sprite (0,0, "fire_light").setScale(0.5,0.5).setTint(0xffdd55);
-        this.motorR11 = scene.add.sprite (0,0, "fire_light").setScale(0.4,0.4).setTint(0xffcc00);
-
-        this.motorR26 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8).setTint(0xff2a2a);
-        this.motorR25 = scene.add.sprite (0,0, "fire_light").setScale(0.7,0.7).setTint(0xaa0000);
-        this.motorR24 = scene.add.sprite (0,0, "fire_light").setScale(0.65,0.65).setTint(0xff9955);
-        this.motorR23 = scene.add.sprite (0,0, "fire_light").setScale(0.6,0.6).setTint(0xff6600);
-        this.motorR22 = scene.add.sprite (0,0, "fire_light").setScale(0.5,0.5).setTint(0xffdd55);
-        this.motorR21 = scene.add.sprite (0,0, "fire_light").setScale(0.4,0.4).setTint(0xffcc00);
 
         let infobox = <Infobox> scene.data.get("infoboxx");
         infobox.addTooltipInfo(this.back.normal, "[P2] The back of your Ship.");
@@ -145,6 +74,12 @@ export class BlueShip extends BaseShip{
         infobox.addTooltipInfo(this.wingUp.normal, "[P2] Your right wing.");
         infobox.addTooltipInfo(this.wingDown.normal, "[P2] The left wing of your Ship.");
         infobox.addTooltipInfo(this.hull.normal, "[P2] The hull of your ship.");
+
+        this.motorRocket1 = new MotorFlame(scene);
+        this.motorRocket1.tintRed();
+
+        this.motorRocket2 = new MotorFlame(scene);
+        this.motorRocket2.tintRed();
 
         this.x =  x;
         this.y = y;
@@ -180,47 +115,59 @@ export class BlueShip extends BaseShip{
         this.wingDown.setPosition(posX, posY);
         this.hull.setPosition(posX, posY);
 
-        this.motorR21.setPosition(this.hull.normal.x + 250, this.hull.normal.y + 218);
-        this.motorR22.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
-        this.motorR23.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
-        this.motorR24.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
-        this.motorR25.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
-        this.motorR26.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
 
-        this.motorL11.setPosition(this.hull.normal.x + 213, this.hull.normal.y - 18);
-        this.motorL12.setPosition(this.hull.normal.x + 217, this.hull.normal.y - 18);
-        this.motorL13.setPosition(this.hull.normal.x + 222, this.hull.normal.y - 18);
-        this.motorL14.setPosition(this.hull.normal.x + 223, this.hull.normal.y - 18);
-        this.motorL15.setPosition(this.hull.normal.x + 224, this.hull.normal.y - 18);
-        this.motorL16.setPosition(this.hull.normal.x + 225, this.hull.normal.y - 18);
+        this.motorRocket1.setPosition(this.hull.normal.x + 115, this.hull.normal.y + 118);
+        this.motorRocket1.setScaleSin(1.0, this.sinX);
 
-        this.motorL21.setPosition(this.hull.normal.x + 213, this.hull.normal.y + 18);
-        this.motorL22.setPosition(this.hull.normal.x + 217, this.hull.normal.y + 18);
-        this.motorL23.setPosition(this.hull.normal.x + 222, this.hull.normal.y + 18);
-        this.motorL24.setPosition(this.hull.normal.x + 223, this.hull.normal.y + 18);
-        this.motorL25.setPosition(this.hull.normal.x + 224, this.hull.normal.y + 18);
-        this.motorL26.setPosition(this.hull.normal.x + 225, this.hull.normal.y + 18);
+        this.motorRocket2.setPosition(this.hull.normal.x + 115, this.hull.normal.y - 118);
+        this.motorRocket2.setScaleSin(1.5, this.sinX);
+        // this.motorRocket2.setScaleBack((Math.sin(this.sinX*17) + 1)/2 * 0.15 + 0.85);
+        // this.motorRocket2.setScaleMid((Math.sin(this.sinX*23) + 1)/2 * 0.15 + 0.7);
+        // this.motorRocket2.setScaleFront((Math.sin(this.sinX*27) + 1)/2 * 0.15 + 0.7);
+        // this.motorRocket2.setScaleRandom((Math.sin(this.sinX*17) + 1)/2 * 0.3 + 0.7);
 
-        this.motorP11.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        this.motorP12.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        this.motorP13.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        this.motorP14.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        this.motorP15.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        this.motorP16.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
 
-        this.motorP21.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        this.motorP22.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        this.motorP23.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        this.motorP24.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        this.motorP25.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        this.motorP26.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-
-        this.motorR11.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
-        this.motorR12.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
-        this.motorR13.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
-        this.motorR14.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
-        this.motorR15.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
-        this.motorR16.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
+        // this.motorR21.setPosition(this.hull.normal.x + 250, this.hull.normal.y + 218);
+        // this.motorR22.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
+        // this.motorR23.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
+        // this.motorR24.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
+        // this.motorR25.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
+        // this.motorR26.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
+        //
+        // this.motorL11.setPosition(this.hull.normal.x + 213, this.hull.normal.y - 18);
+        // this.motorL12.setPosition(this.hull.normal.x + 217, this.hull.normal.y - 18);
+        // this.motorL13.setPosition(this.hull.normal.x + 222, this.hull.normal.y - 18);
+        // this.motorL14.setPosition(this.hull.normal.x + 223, this.hull.normal.y - 18);
+        // this.motorL15.setPosition(this.hull.normal.x + 224, this.hull.normal.y - 18);
+        // this.motorL16.setPosition(this.hull.normal.x + 225, this.hull.normal.y - 18);
+        //
+        // this.motorL21.setPosition(this.hull.normal.x + 213, this.hull.normal.y + 18);
+        // this.motorL22.setPosition(this.hull.normal.x + 217, this.hull.normal.y + 18);
+        // this.motorL23.setPosition(this.hull.normal.x + 222, this.hull.normal.y + 18);
+        // this.motorL24.setPosition(this.hull.normal.x + 223, this.hull.normal.y + 18);
+        // this.motorL25.setPosition(this.hull.normal.x + 224, this.hull.normal.y + 18);
+        // this.motorL26.setPosition(this.hull.normal.x + 225, this.hull.normal.y + 18);
+        //
+        // this.motorP11.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
+        // this.motorP12.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
+        // this.motorP13.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
+        // this.motorP14.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
+        // this.motorP15.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
+        // this.motorP16.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
+        //
+        // this.motorP21.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
+        // this.motorP22.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
+        // this.motorP23.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
+        // this.motorP24.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
+        // this.motorP25.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
+        // this.motorP26.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
+        //
+        // this.motorR11.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
+        // this.motorR12.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
+        // this.motorR13.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
+        // this.motorR14.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
+        // this.motorR15.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
+        // this.motorR16.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
 
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x, this.hull.normal.y - 110);

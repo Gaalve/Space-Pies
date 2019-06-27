@@ -23,7 +23,8 @@ export class Motor  {
     private piSeqS: PiAnimSequence;
     private piSeqA: PiAnimSequence;
     private piSeqR: PiAnimSequence;
-    private blueship : BlueShip;
+
+
     //<reference path=" />
 
     //  private nameIdentifier : string;
