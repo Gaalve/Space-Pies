@@ -48,7 +48,7 @@ export class Turn {
 
         this.roundSeq = piAnim.addSequence(960, 110, "upgradep1<>", PiAnimAlignment.CENTER);
         this.roundSeq.addSymbol("upgradep1end()");
-        this.roundSeq.addSymbol("ernergyp1()");
+        this.roundSeq.addSymbol("energyp1()");
         this.roundSeq.addSymbol("player2<>");
         this.roundSeq.addSymbol("0");
 
@@ -56,7 +56,7 @@ export class Turn {
 
         //Turn for Player1
 
-        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn('Energy1','*').process('Energy1', () =>{
+        this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn('energy1','*').process('Energy1', () =>{
             this.currentPlayer.CollectEnergyAnimation();
         })));
 
@@ -310,7 +310,7 @@ export class Turn {
                         channelOutCB('shopp1', '', () => {this.setShopTurn(); this.roundSeq.resolveSymbol();}).
                         channelInCB('shopp2end', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('anomaly2', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
-                        channelOutCB('Energy1', '', () => {this.setEnergyTurn();}).
+                        channelOutCB('energy1', '', () => {this.setEnergyTurn();}).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -350,7 +350,7 @@ export class Turn {
                 this.system.pushSymbol(
                     this.system.add.channelOutCB('shopp1', '', () => {this.setShopTurn(); this.roundSeq.resolveSymbol();}).
                     channelInCB('shopp1end', '', () => {this.roundSeq.resolveSymbol();}).
-                    channelOutCB('energy1', '', () => {this.setEnergyTurn(); }).
+                    channelOutCB('energy1', '', () => {this.setEnergyTurn();}).
                     channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                     channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                     channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -364,7 +364,7 @@ export class Turn {
                         this.system.add.channelInCB('botstart', '', () => {this.roundSeq.resolveSymbol(); this.setShopTurn(); this.players[1].start(); this.roundSeq.resolveSymbol();}).
                         channelInCB('botend', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('anomaly2', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
-                        channelOutCB('Energy1', '', () => {this.setEnergyTurn();}).
+                        channelOutCB('energy1', '', () => {this.setEnergyTurn();}).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
@@ -419,7 +419,7 @@ export class Turn {
                         channelOutCB('shopp1', '', () => {this.setShopTurn(); this.roundSeq.resolveSymbol();}).
                         channelInCB('shopp2end', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
                         channelOutCB('anomaly2', '', () => {this.roundSeq.resolveSymbol();}).channelOut('wait', '').channelOut('wait', '').
-                        channelOutCB('Energy1', '', () => {this.setEnergyTurn();}).
+                        channelOutCB('energy1', '', () => {this.setEnergyTurn();}).
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').
                         channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').channelOut('wait', '').

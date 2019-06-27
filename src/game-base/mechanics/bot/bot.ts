@@ -235,6 +235,8 @@ export class Bot extends Player{
             let nr = mod.toString() + (3-this.droneSlots[mod]).toString();
             this.droneSlots[mod]--;
             this.weaponSlots--;
+            console.log(this.droneSlots);
+            console.log(mod);
             let x = this.buyWeapon(weapon);
 
             this.scene.time.delayedCall(delay, ()=> {
@@ -349,8 +351,8 @@ export class Bot extends Player{
         if(this.droneSlots[2] > 0) mod2 = true;
 
         if(mod0) this.possibleActions.push("0");
-        if(mod1 && this.wmodSlots == 1) this.possibleActions.push("1");
-        if(mod2 && this.wmodSlots == 0) this.possibleActions.push("2");
+        if(mod1 && this.wmodSlots < 2) this.possibleActions.push("1");
+        if(mod2 && this.wmodSlots < 1) this.possibleActions.push("2");
 
         let x = Phaser.Math.Between(0, this.possibleActions.length-1);
         return parseInt(this.possibleActions[x]);
