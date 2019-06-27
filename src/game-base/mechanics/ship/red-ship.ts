@@ -3,6 +3,8 @@ import {ShipPart} from "./ship-part";
 import {Infobox} from "../Infobox";
 import Sprite = Phaser.GameObjects.Sprite;
 import {Weapon} from "../weapon";
+import {Player} from "../player";
+import {PiSystem} from "../picalc/pi-system";
 
 export class RedShip extends BaseShip{
     backUp: ShipPart;
@@ -25,10 +27,15 @@ export class RedShip extends BaseShip{
     private motorP2: Sprite;
     private motorR1: Sprite;
     private motorR2: Sprite;
+    private player: Player;
+    private system: PiSystem;
 
 
     public constructor(scene: Phaser.Scene, x: number, y: number, player: Player){
         super(scene, x, y);
+        this.player = player;
+        this.system = this.player.getSystem();
+
         this.backUp = new ShipPart(scene, x, y, "ssbr/ssr_back_up", "ssbr/ssr_des_back_up",
             -60, -85, -61, -103,1);
 

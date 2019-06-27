@@ -165,9 +165,11 @@ export class Motor  {
             this.system.pushSymbol(
                 this.system.add.channelIn('buymotorlaser21', '').
                 channelOutCB('buildmotorlaser21', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).
-                channelInCB('buymotorlaser22', '', ()=> this.setmotorL12()).
+                channelIn('buymotorlaser22', '').
+                channelOut('increasesizelaser22', '').
                 channelOutCB('buildmotorlaser22', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).
-                channelInCB('buymotorlaser23', '', () => this.setmotorL13()).
+                channelIn('buymotorlaser23', '').
+                channelOut('increasesizelaser23', '').
                 channelOutCB('buildmotorlaser23', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).
                 nullProcess()
             );

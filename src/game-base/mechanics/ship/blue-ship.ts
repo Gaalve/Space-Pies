@@ -5,6 +5,7 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {Weapon} from "../weapon";
 import {Player} from "../player";
 import {Motor} from "../motor";
+import {PiSystem} from "../picalc/pi-system";
 
 
 export class BlueShip extends BaseShip{
@@ -29,12 +30,15 @@ export class BlueShip extends BaseShip{
     private motorP2: Sprite;
     private motorR1: Sprite;
     private motorR2: Sprite;
+    private player: Player;
+    private system: PiSystem;
 
     private onScreenText: Phaser.GameObjects.Text;
 
     public constructor(scene: Phaser.Scene,x: number, y: number, player: Player){
         super(scene, x, y);
-
+        this.player = player;
+        this.system = this.player.getSystem();
 
         this.back = new ShipPart(scene, x, y, "ssbr/ssb_back", "ssbr/ssb_des_back",
             79, 0, 36, 6,1);
@@ -51,12 +55,12 @@ export class BlueShip extends BaseShip{
         this.hull = new ShipPart(scene, x, y, "ssbr/ssb_hull", "ssbr/ssb_des_hull",
             -46, 0, -37, 13,2);
 
-        this.motorL1 = scene.add.sprite (0,0, "fire_light");
-        this.motorL2 = scene.add.sprite (0,0, "fire_light");
-        this.motorP1 = scene.add.sprite (0,0, "fire_light");
-        this.motorP2 = scene.add.sprite (0,0, "fire_light");
-        this.motorR1 = scene.add.sprite (0,0, "fire_light");
-        this.motorR2 = scene.add.sprite (0,0, "fire_light");
+        this.motorL1 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
+        this.motorL2 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
+        this.motorP1 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
+        this.motorP2 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
+        this.motorR1 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
+        this.motorR2 = scene.add.sprite (0,0, "fire_light").setScale(0.8,0.8);
 
         let infobox = <Infobox> scene.data.get("infoboxx");
         infobox.addTooltipInfo(this.back.normal, "[P2] The back of your Ship.");
@@ -81,6 +85,7 @@ export class BlueShip extends BaseShip{
         this.weaponSinY = 0;
         this.weapons = this.weapons = player.getDrones()[0].getWeapons();
         this.setAllPartPosition();
+        this.motorIncreaseSize();
     }
 
 
@@ -103,12 +108,12 @@ export class BlueShip extends BaseShip{
         this.wingUp.setPosition(posX, posY);
         this.wingDown.setPosition(posX, posY);
         this.hull.setPosition(posX, posY);
-        this.motorL1.setPosition(this.hull.normal.x + 225, this.hull.normal.y - 18).setScale(0.8,0.8).setTint(0x00BFFF);
-        this.motorL2.setPosition(this.hull.normal.x + 225, this.hull.normal.y + 18).setScale(0.8,0.8).setTint(0x00BFFF);
-        this.motorP1.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70).setScale(0.8,0.8).setTint(0xCD00CD);
-        this.motorP2.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 70).setScale(0.8,0.8).setTint(0xCD00CD);
-        this.motorR1.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115).setScale(0.8,0.8).setTint(0xFF0000);
-        this.motorR2.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 115).setScale(0.8,0.8).setTint(0xFF0000);
+        this.motorL1.setPosition(this.hull.normal.x + 225, this.hull.normal.y - 18).setTint(0x00BFFF);
+        this.motorL2.setPosition(this.hull.normal.x + 225, this.hull.normal.y + 18).setTint(0x00BFFF);
+        this.motorP1.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70).setTint(0xCD00CD);
+        this.motorP2.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 70).setTint(0xCD00CD);
+        this.motorR1.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115).setTint(0xFF0000);
+        this.motorR2.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 115).setTint(0xFF0000);
 
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x, this.hull.normal.y - 110);
@@ -117,12 +122,12 @@ export class BlueShip extends BaseShip{
         this.onScreenText ? this.onScreenText.setPosition(posX + 165, posY + this.onScreenText.width/2) : null;
     }
 
- //   motorIncreaseSize(){
- //      this.system.pushSymbol(
-  //        this.system.add.channelInCB('increasesizelaser12', '', () => this.motorL1.setScale(1.0,1.0)).
- //         channelInCB('increasesizelaser13', '',() => this.motorL1.setScale(1.2, 1.2)).nullProcess()
-  //     );
- //   };
+    motorIncreaseSize(){
+       this.system.pushSymbol(
+          this.system.add.channelInCB('increasesizelaser22', '', () =>  {this.motorL1.setScale(1.0, 1.0), this.motorL2.setScale(1.0, 1.0)}).
+          channelInCB('increasesizelaser23', '',() => {this.motorL1.setScale(1.2, 1.2), this.motorL2.setScale(1.2, 1.2)}).nullProcess()
+       );
+    };
     toDestroyedBack(): void {
         this.back.toDestroyedPart();
     }
