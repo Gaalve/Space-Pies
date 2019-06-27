@@ -91,17 +91,6 @@ export class Player {
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
         this.drones = [new Drone(scene, x, y, this, 0, piAnim), new Drone(scene, x, y, this, 1, piAnim), new Drone(scene, x, y, this,2, piAnim)];
-        if(nameIdentifier == "P1"){
-            this.ship_out = scene.add.sprite(x+20,y,"ssr_ship").setScale(1.1,1.1).setTintFill(0xaff4444);
-            this.ship_out.setVisible(false);
-            this.offset = 20;
-        }
-        else{
-            this.ship_out = scene.add.sprite(x-30,y,"ssb_ship").setScale(1.1,1.1).setTintFill(0xa4444ff);
-            this.ship_out.setVisible(false);
-            this.offset = -30;
-
-        }
         this.ship = new Ship(scene, x, y, this);
 
 
