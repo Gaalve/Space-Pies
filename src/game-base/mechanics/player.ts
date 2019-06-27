@@ -58,7 +58,7 @@ export class Player
     private rocketCost : number = 40;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
     private adaptCost: number = 16; // cost for adaptive shield
-    private motorCost: number = 35;
+    private motorCost: number = 5;
 
 
 
@@ -631,27 +631,12 @@ export class Player
     }
 
     getActiveMotorL(): number{
-        if(this.nameIdentifier == "P1"){
-            return this.motor.getactiveMotorLaserP1();
-        }
-        else{
-            return this.motor.getactiveMotorLaserP2();
-        }
+        return this.motor.activeMotorsLaser;
     }
     getActiveMotorP(): number{
-        if(this.nameIdentifier == "P1"){
-            return this.motor.getactiveMotorProjectileP1();
-        }
-        else{
-            return this.motor.getactiveMotorProjectileP2();
-        }
+        return this.motor.activeMotorsProjectile;
     }
     getActiveMotorR(): number{
-        if(this.nameIdentifier == "P1"){
-            return this.motor.getactiveMotorRocketP1();
-        }
-        else{
-            return this.motor.getactiveMotorRocketP2();
-        }
+        return this.motor.activeMotorsRocket;
     }
 }

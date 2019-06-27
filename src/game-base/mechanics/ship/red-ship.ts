@@ -25,20 +25,7 @@ export class RedShip extends BaseShip{
     onScreenText : Phaser.GameObjects.Text;
     private weapons: Weapon[];
 
-    public motorRocket1: MotorFlame;
-    public motorRocket2: MotorFlame;
-    public motorRsize1: number;
-    public motorRsize2: number;
 
-    public motorLaser1: MotorFlame;
-    public motorLaser2: MotorFlame;
-    public motorLsize1: number;
-    public motorLsize2: number;
-
-    public motorProj1: MotorFlame;
-    public motorProj2: MotorFlame;
-    public motorPsize1: number;
-    public motorPsize2: number;
 
     private player: Player;
     private system: PiSystem;
@@ -124,7 +111,6 @@ export class RedShip extends BaseShip{
         this.sinY = 0;
         this.weapons = player.getDrones()[0].getWeapons();
         this.setAllPartPosition();
-        this.motorIncreaseSize();
     }
 
 
@@ -167,13 +153,6 @@ export class RedShip extends BaseShip{
         this.motorProj2.setPosition(this.hull.normal.x - 173, this.hull.normal.y - 92);
         this.motorProj2.setScaleSin(this.motorPsize2, this.sinY*4.5);
 
- /*       this.motorL1.setPosition(this.hull.normal.x - 125, this.hull.normal.y - 12).setTint(0x00BFFF).setFlip(true, false);
-        this.motorL2.setPosition(this.hull.normal.x - 125, this.hull.normal.y + 12).setTint(0x00BFFF).setFlip(true, false);
-        this.motorP1.setPosition(this.hull.normal.x - 190, this.hull.normal.y - 92).setTint(0xCD00CD).setFlip(true, false);
-        this.motorP2.setPosition(this.hull.normal.x - 190, this.hull.normal.y + 92).setTint(0xCD00CD).setFlip(true, false);
-        this.motorR1.setPosition(this.hull.normal.x - 170, this.hull.normal.y - 140).setTint(0xFF0000).setFlip(true, false).setAngle(40);
-        this.motorR2.setPosition(this.hull.normal.x - 170, this.hull.normal.y + 140).setTint(0xFF0000).setFlip(true, false).setAngle(320); */
-
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 124, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x + 44, this.hull.normal.y - 150);
         if(this.weapons[2]) this.weapons[2].setPosition(this.hull.normal.x + 44, this.hull.normal.y + 150);
@@ -181,23 +160,6 @@ export class RedShip extends BaseShip{
         this.onScreenText ? this.onScreenText.setPosition(posX - 210, posY + this.onScreenText.width/2) : null;
 
     }
-
-    motorIncreaseSize(){
-        this.system.pushSymbol(
-            this.system.add.channelInCB('increasesizelaser12', '', () => {this.motorLsize1 = 1.2, this.motorLsize2 = 1.2}).
-            channelInCB('increasesizelaser13', '',() => {this.motorLsize2 = 1.4, this.motorLsize1 = 1.4}).nullProcess()
-        );
-
-        this.system.pushSymbol(
-            this.system.add.channelInCB('increasesizeprojectile12', '', () =>  {this.motorPsize1 = 1.2, this.motorPsize2 = 1.2}).
-            channelInCB('increasesizeprojectile13', '',() => {this.motorPsize1 = 1.4, this.motorPsize2 = 1.4}).nullProcess()
-        );
-
-        this.system.pushSymbol(
-            this.system.add.channelInCB('increasesizerocket12', '', () =>  {this.motorRsize1 = 1.2, this.motorRsize2 = 1.2}).
-            channelInCB('increasesizerocket13', '',() => {this.motorRsize1 = 1.4, this.motorRsize2 = 1.4}).nullProcess()
-        );
-    };
 
     toDestroyedBack(): void {
         this.backDown.toDestroyedPart();

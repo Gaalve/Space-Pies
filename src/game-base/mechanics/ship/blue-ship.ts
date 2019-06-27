@@ -119,7 +119,6 @@ export class BlueShip extends BaseShip{
         this.weaponSinY = 0;
         this.weapons = this.weapons = player.getDrones()[0].getWeapons();
         this.setAllPartPosition();
-        this.motorIncreaseSize();
     }
 
 
@@ -144,22 +143,22 @@ export class BlueShip extends BaseShip{
         this.hull.setPosition(posX, posY);
 
 
-        this.motorRocket1.setPosition(this.hull.normal.x + 115, this.hull.normal.y + 116);
+        this.motorRocket1.setPosition(this.hull.normal.x + 119, this.hull.normal.y + 116);
         this.motorRocket1.setScaleSin(this.motorRsize1, this.sinX*6);
 
-        this.motorRocket2.setPosition(this.hull.normal.x + 115, this.hull.normal.y - 116);
+        this.motorRocket2.setPosition(this.hull.normal.x + 119, this.hull.normal.y - 116);
         this.motorRocket2.setScaleSin(this.motorRsize2, this.sinY*4);
 
-        this.motorLaser1.setPosition(this.hull.normal.x + 195, this.hull.normal.y + 18);
+        this.motorLaser1.setPosition(this.hull.normal.x + 198, this.hull.normal.y + 18);
         this.motorLaser1.setScaleSin(this.motorLsize1, this.sinX*7);
 
-        this.motorLaser2.setPosition(this.hull.normal.x + 195, this.hull.normal.y - 18);
+        this.motorLaser2.setPosition(this.hull.normal.x + 198, this.hull.normal.y - 18);
         this.motorLaser2.setScaleSin(this.motorLsize2, this.sinY*3);
 
-        this.motorProj1.setPosition(this.hull.normal.x + 130, this.hull.normal.y + 70);
+        this.motorProj1.setPosition(this.hull.normal.x + 134, this.hull.normal.y + 70);
         this.motorProj1.setScaleSin(this.motorPsize1, this.sinX*5);
 
-        this.motorProj2.setPosition(this.hull.normal.x + 130, this.hull.normal.y - 70);
+        this.motorProj2.setPosition(this.hull.normal.x + 134, this.hull.normal.y - 70);
         this.motorProj2.setScaleSin(this.motorPsize2, this.sinY*3.5);
 
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
@@ -169,71 +168,6 @@ export class BlueShip extends BaseShip{
         this.onScreenText ? this.onScreenText.setPosition(posX + 165, posY + this.onScreenText.width/2) : null;
     }
 
-    motorIncreaseSize(){
-       this.system.pushSymbol(
-          this.system.add.channelInCB('increasesizelaser22', '', () => {this.motorLsize1 = 1.2, this.motorLsize2 = 1.2}).
-          channelInCB('increasesizelaser23', '',() => {this.motorLsize2 = 1.4, this.motorLsize1 = 1.4}).nullProcess()
-       );
-
-        this.system.pushSymbol(
-            this.system.add.channelInCB('increasesizeprojectile22', '', () =>  {this.motorPsize1 = 1.2, this.motorPsize2 = 1.2}).
-            channelInCB('increasesizeprojectile23', '',() => {this.motorPsize1 = 1.4, this.motorPsize2 = 1.4}).nullProcess()
-        );
-
-        this.system.pushSymbol(
-            this.system.add.channelInCB('increasesizerocket22', '', () =>  {this.motorRsize1 = 1.2, this.motorRsize2 = 1.2}).
-            channelInCB('increasesizerocket23', '',() => {this.motorRsize1 = 1.4, this.motorRsize2 = 1.4}).nullProcess()
-        );
-    };
-
-    chanceDisplay() {
-        if (this.player.getActiveMotorL() == 1) {
-        this.scene.add.text(1875, 888, "30%", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
-            });
-        }
-        if (this.player.getActiveMotorL() == 2) {
-            this.scene.add.text(1880, 835, "45%", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
-            });
-        }
-        if (this.player.getActiveMotorL() == 3) {
-            this.scene.add.text(1880, 835, "55%", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
-            });
-        }
-        if (this.player.getActiveMotorP() == 1) {
-            this.scene.add.text(1875, 938, "30%", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
-            });
-        }
-        if (this.player.getActiveMotorP() == 2) {
-            this.scene.add.text(1875, 937, "45%", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
-            });
-        }
-        if (this.player.getActiveMotorP() == 3) {
-            this.scene.add.text(1875, 937, "55%", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
-            });
-        }
-        if (this.player.getActiveMotorR() == 1) {
-            this.scene.add.text(1800, 800, "test", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
-            });
-        }
-        if (this.player.getActiveMotorR() == 1) {
-            this.scene.add.text(1800, 800, "test", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
-            });
-        }
-        if (this.player.getActiveMotorR() == 1) {
-            this.scene.add.text(1800, 800, "test", {
-                fill: '#fff', fontFamily: '"Roboto"', fontSize: 22
-            });
-        }
-
-    }
     toDestroyedBack(): void {
         this.back.toDestroyedPart();
     }
@@ -273,7 +207,6 @@ export class BlueShip extends BaseShip{
         this.sinY %= 2*Math.PI;
 
         this.setAllPartPosition();
-        this.chanceDisplay();
     }
 
     setOnScreenText(text){
