@@ -210,8 +210,8 @@ export class Button{
     }
 
     setHover(turn : Turn){
-        this.shadow.on('pointerover', () => {this.hovering = true; this.updateStep(); turn.getCurrentPlayer().ship._modularShip.setShipOutVisible(true)}) //makes it feel more reactive
-        this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().ship._modularShip.setShipOutVisible(false)});
+        this.shadow.on('pointerover', () => {this.hovering = true; this.updateStep(); turn.getCurrentPlayer().ship.modularShip.setShipOutVisible(true)}) //makes it feel more reactive
+        this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().ship.modularShip.setShipOutVisible(false)});
     }
 
     setHoverDrone(turn : Turn, index: number){

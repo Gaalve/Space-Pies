@@ -80,7 +80,8 @@ export class BlueShip extends BaseShip{
 
         this.ship_out = scene.add.sprite(x-30,y,"ssb_ship").setScale(1.1,1.1).setTintFill(0xa4444ff);
         this.ship_out.setVisible(false);
-        this.offset = -30;
+        this.ship_out.setDepth(-4);
+        this.offset = 15;
 
         let infobox = <Infobox> scene.data.get("infoboxx");
         infobox.addTooltipInfo(this.back.normal, "[P2] The back of your Ship.");

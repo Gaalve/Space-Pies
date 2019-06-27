@@ -65,8 +65,9 @@ export class RedShip extends BaseShip{
         this.hull = new ShipPart(scene, x, y, "ssbr/ssr_hull", "ssbr/ssr_des_hull",
             11, 0, 55, 15,2);
         this.ship_out = scene.add.sprite(x+20,y,"ssr_ship").setScale(1.1,1.1).setTintFill(0xaff4444);
+        this.ship_out.setDepth(-4);
         this.ship_out.setVisible(false);
-        this.offset = 20;
+        this.offset = 15;
         let infobox = <Infobox> scene.data.get("infoboxx");
         infobox.addTooltipInfo(this.backDown.normal, "[P1] The right half of your Ship. God, how can Olga even look in the mirror ?")
         infobox.addTooltipInfo(this.wingDown.normal, "[P1] The right half of your Ship. God, how can Olga even look in the mirror ?")

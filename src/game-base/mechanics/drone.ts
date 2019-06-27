@@ -10,6 +10,7 @@ import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
 import {AnimationUtilities} from "./animation/AnimationUtilites";
 import {Animation} from "./animation/Animation";
 import {BulletInfo} from "./weapon/bulletInfo";
+import Sprite = Phaser.GameObjects.Sprite;
 
 export class Drone extends Phaser.GameObjects.Sprite{
 
@@ -53,21 +54,24 @@ export class Drone extends Phaser.GameObjects.Sprite{
         //reposition external drones
         if(index == 1){
             if(player.getNameIdentifier() == "P1"){
-                this.back = scene.add.sprite(x + 295, y - 300, "ssr_wmod").setScale(1.2,1.1).setTintFill(0xaff4444).setVisible(false);this.setPosition(x += 300, y -= 300);
-            this.offset = -5;
-
+                this.back = scene.add.sprite(x + 285, y - 300, "ssr_wmod").setScale(1.2,1.1).setTintFill(0xaff4444).setVisible(false);this.setPosition(x += 300, y -= 300);
+                this.offset = -30;
 			}else{
-				this.back = scene.add.sprite(x - 295, y - 300, "ssb_wmod").setScale(1.2,1.1).setTintFill(0xa4444ff).setVisible(false);
-                this.setPosition(x -= 300, y -= 300);this.offset = 5;
+				this.back = scene.add.sprite(x - 285, y - 300, "ssb_wmod").setScale(1.2,1.1).setTintFill(0xa4444ff).setVisible(false);
+                this.setPosition(x -= 300, y -= 300);
+                this.offset = 30;
             }
+            this.back.setDepth(-4);
         }else if(index == 2){
             if(player.getNameIdentifier() == "P1"){
-                this.back = scene.add.sprite(x + 295, y + 200, "ssr_wmod").setScale(1.2,1.1).setTintFill(0xaff4444).setVisible(false);this.setPosition(x += 300, y += 200);
-            this.offset = -5;}else{
-                this.back = scene.add.sprite(x - 295, y + 200, "ssb_wmod").setScale(1.2,1.1).setTintFill(0xa4444ff).setVisible(false);
+                this.back = scene.add.sprite(x + 285, y + 200, "ssr_wmod").setScale(1.2,1.1).setTintFill(0xaff4444).setVisible(false);this.setPosition(x += 300, y += 200);
+                this.offset = -30;
+            }else{
+                this.back = scene.add.sprite(x - 285, y + 200, "ssb_wmod").setScale(1.2,1.1).setTintFill(0xa4444ff).setVisible(false);
 				this.setPosition(x -= 300, y += 200);
-				this.offset = 5;
+				this.offset = 30;
             }
+            this.back.setDepth(-4);
         }
 
         this.player = player;
@@ -101,6 +105,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
         }
         this.flame.tintRed();
         this.flame.setVisible(false);
+
     }
 
     private animateIfNotMissed(weaponNr: number, bulletInfo: BulletInfo){
