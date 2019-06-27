@@ -20,6 +20,8 @@ export class RedShip extends BaseShip{
     sinY : number;
     onScreenText : Phaser.GameObjects.Text;
     private weapons: Weapon[];
+    public ship_out: Sprite;
+    offset: number;
 
 
     public constructor(scene: Phaser.Scene, x: number, y: number, player: Player){
@@ -41,7 +43,9 @@ export class RedShip extends BaseShip{
 
         this.hull = new ShipPart(scene, x, y, "ssbr/ssr_hull", "ssbr/ssr_des_hull",
             11, 0, 55, 15,2);
-
+        this.ship_out = scene.add.sprite(x+20,y,"ssr_ship").setScale(1.1,1.1).setTintFill(0xaff4444);
+        this.ship_out.setVisible(false);
+        this.offset = 20;
         let infobox = <Infobox> scene.data.get("infoboxx");
         infobox.addTooltipInfo(this.backDown.normal, "[P1] The right half of your Ship. God, how can Olga even look in the mirror ?")
         infobox.addTooltipInfo(this.wingDown.normal, "[P1] The right half of your Ship. God, how can Olga even look in the mirror ?")
@@ -93,7 +97,7 @@ export class RedShip extends BaseShip{
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 124, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x + 44, this.hull.normal.y - 150);
         if(this.weapons[2]) this.weapons[2].setPosition(this.hull.normal.x + 44, this.hull.normal.y + 150);
-
+        this.ship_out.setPosition(this.hull.normal.x + this.offset, this.hull.normal.y);
         this.onScreenText ? this.onScreenText.setPosition(posX - 210, posY + this.onScreenText.width/2) : null;
 
     }
@@ -151,6 +155,10 @@ export class RedShip extends BaseShip{
 
     setOnScreenText(text){
         this.onScreenText = text;
+    }
+
+    setShipOutVisible(bool: boolean): void{
+        this.ship_out.setVisible(bool);
     }
 
 }

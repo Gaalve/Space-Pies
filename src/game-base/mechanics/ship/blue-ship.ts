@@ -21,6 +21,8 @@ export class BlueShip extends BaseShip{
     private weapons: Weapon[];
     private weaponSinX: number;
     private weaponSinY: number;
+    public ship_out: Sprite;
+    offset: number;
 
     private onScreenText: Phaser.GameObjects.Text;
 
@@ -41,6 +43,10 @@ export class BlueShip extends BaseShip{
 
         this.hull = new ShipPart(scene, x, y, "ssbr/ssb_hull", "ssbr/ssb_des_hull",
             -46, 0, -37, 13,2);
+
+        this.ship_out = scene.add.sprite(x-30,y,"ssb_ship").setScale(1.1,1.1).setTintFill(0xa4444ff);
+        this.ship_out.setVisible(false);
+        this.offset = -30;
 
         let infobox = <Infobox> scene.data.get("infoboxx");
         infobox.addTooltipInfo(this.back.normal, "[P2] The back of your Ship.");
@@ -91,7 +97,7 @@ export class BlueShip extends BaseShip{
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x, this.hull.normal.y - 110);
         if(this.weapons[2]) this.weapons[2].setPosition((this.hull.normal.x), this.hull.normal.y + 110);
-
+        this.ship_out.setPosition(this.hull.normal.x + this.offset, this.hull.normal.y);
         this.onScreenText ? this.onScreenText.setPosition(posX + 165, posY + this.onScreenText.width/2) : null;
     }
 
@@ -140,5 +146,8 @@ export class BlueShip extends BaseShip{
         this.onScreenText = text;
     }
 
+    setShipOutVisible(bool: boolean): void{
+        this.ship_out.setVisible(bool);
+    }
 
 }

@@ -31,4 +31,5 @@ export abstract class BaseShip {
     public abstract addWeapon(weapon:Weapon): void;
 
     public abstract update(delta: number): void;
+    public abstract setShipOutVisible(bool: boolean): void;
 }
