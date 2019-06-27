@@ -330,22 +330,7 @@ export class Motor  {
         }
     }
 
-    public setmotorL12(){
-        this.blueship.motorL1.setScale(1.0,1.0);
 
-    }
-    public setmotorL13(){
-        this.blueship.motorL1.setScale(1.2,1.2);
-
-    }
-    public setmotorP12(){
-
-
-    }
-    public setmotorPL12(){
-
-
-    }
 
     getactiveMotorLaserP1(): number{
         return this.activeMotorsLaserP1;
