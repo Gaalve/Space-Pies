@@ -1637,7 +1637,7 @@ export class MainScene extends Phaser.Scene {
             this.motorR.changeButton(this, false, true, player);
             this.motorR.restoreInteractive();
             this.children.remove(this.shopMText[2]);
-            this.shopMText[2] = this.add.text(1020, 1080 - 250, "Laser", {
+            this.shopMText[2] = this.add.text(1020, 1080 - 250, "Rocket", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2
             }).setVisible(true);
         }
