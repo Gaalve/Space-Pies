@@ -182,11 +182,9 @@ export class MainScene extends Phaser.Scene {
         this.energyRegen = this.add.text(1920/2+20, 470, "(+"+this.turn.getCurrentPlayer().getRegenRate()+ ")", {
             fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
 
-        if(this.gameMode == "2"){
             this.energy.setVisible(false);
             this.energyT.setVisible(false);
             this.energyRegen.setVisible(false);
-        }
 
         this.shop = new Button(this, 1920/2, 1080-100, "button_shadow",
             "button_bg", "button_fg", "button_shop",0.95,

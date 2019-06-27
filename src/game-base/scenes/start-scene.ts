@@ -8,7 +8,7 @@ export class StartScene extends Phaser.Scene {
     private timeUpdateTick = 1000/60;
 
     private buttonStart: Button;
-    private buttonSettings: Button;
+    private buttonCredits: Button;
 
     private buttonSP: Button;
     private buttonMP: Button;
@@ -17,6 +17,8 @@ export class StartScene extends Phaser.Scene {
     private buttonP1: Button;
     private buttonP2: Button;
     private buttonReturnMode: Button;
+
+    private buttonFromCreditsToMain: Button;
 
 
     private titleText: Phaser.GameObjects.Text;
@@ -29,6 +31,9 @@ export class StartScene extends Phaser.Scene {
     private olafText: Phaser.GameObjects.Text;
     private holgerText: Phaser.GameObjects.Text;
     private backText: Phaser.GameObjects.Text;
+    private creditsText: Phaser.GameObjects.Text;
+    private creditsText2: Phaser.GameObjects.Text;
+    private creditsHeader: Phaser.GameObjects.Text;
 
     private Player1start = new Phaser.Math.Vector2(280, 540);
     private Player2start = new Phaser.Math.Vector2(1650, 540);
@@ -121,15 +126,51 @@ export class StartScene extends Phaser.Scene {
 
 
 
-        this.buttonSettings = new Button(this, 100, 100, "button_shadow",
+        this.buttonCredits = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_options",0.95,
-            ()=>{
+            ()=>{this.changeToCredits();
             });
 
-        this.buttonSettings.setPosition(1920/2-150, 1080/2+75);
+        this.buttonCredits.setPosition(1920/2-150, 1080/2+75);
 
-        this.settingsText = this.add.text(1920/2-70, 1080/2+50, "Settings", {
+        this.settingsText = this.add.text(1920/2-70, 1080/2+50, "Credits", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+
+        this.creditsText = this.add.text(1920/2-200, 1080/2-50,
+            "Adrian\n" +
+            "(Product-owner)\n" +
+            "\nJanis\n" +
+            "(Developer)\n" +
+            "\nLars\n" +
+            "(M-R-manager)\n" +
+            "\nPatrick B.\n" +
+            "(D-O-engineer)",
+            {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 38, strokeThickness: 1});
+        this.creditsText.setOrigin(0.5, 0.5);
+        this.creditsText.setAlign("center");
+        this.creditsText.setVisible(false);
+
+        this.creditsText2 = this.add.text(1920/2+200, 1080/2-50,
+            "Louis\n" +
+            "(Scrum-master)\n" +
+            "\nKara\n" +
+            "(Developer)\n" +
+            "\nMax\n" +
+            "(Developer)\n" +
+            "\nPatrick R.\n" +
+            "(M-R-manager)",
+            {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 38, strokeThickness: 1});
+        this.creditsText2.setOrigin(0.5, 0.5);
+        this.creditsText2.setAlign("center");
+        this.creditsText2.setVisible(false);
+
+        this.creditsHeader = this.add.text(1920/2, 1080/2-400, "Credits", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 64, strokeThickness: 2});
+        this.creditsHeader.setOrigin(0.5);
+        this.creditsHeader.setVisible(false);
 
 
         //Buttons and Text for choose Mode
@@ -211,6 +252,12 @@ export class StartScene extends Phaser.Scene {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 32, strokeThickness: 2});
         this.backText.setOrigin(0.5);
         this.backText.setVisible(false);
+
+        this.buttonFromCreditsToMain = new Button(this, 1920/2, 1080 - 130, "button_shadow",
+            "button_bg", "button_fg", "button_back", 1, ()=>{
+                this.fromCreditsToMain();
+            });
+        this.buttonFromCreditsToMain.setInvisible();
     }
 
     update(time: number, delta: number): void {
@@ -219,13 +266,14 @@ export class StartScene extends Phaser.Scene {
             this.timeAccumulator -= this.timeUpdateTick;
 
             this.buttonStart.updateStep();
-            this.buttonSettings.updateStep();
+            this.buttonCredits.updateStep();
             this.buttonSP.updateStep();
             this.buttonMP.updateStep();
             this.buttonP1.updateStep();
             this.buttonP2.updateStep();
             this.buttonReturnMain.updateStep();
             this.buttonReturnMode.updateStep();
+            this.buttonFromCreditsToMain.updateStep();
 
         }
     }
@@ -235,8 +283,8 @@ export class StartScene extends Phaser.Scene {
         this.buttonStart.removeInteractive();
         this.buttonStart.setInvisible();
         this.startText.setVisible(false);
-        this.buttonSettings.removeInteractive();
-        this.buttonSettings.setInvisible();
+        this.buttonCredits.removeInteractive();
+        this.buttonCredits.setInvisible();
         this.settingsText.setVisible(false);
         this.buttonSP.restoreInteractive();
         this.buttonMP.restoreInteractive();
@@ -277,8 +325,8 @@ export class StartScene extends Phaser.Scene {
         this.buttonStart.restoreInteractive();
         this.buttonStart.setVisible();
         this.startText.setVisible(true);
-        this.buttonSettings.restoreInteractive();
-        this.buttonSettings.setVisible();
+        this.buttonCredits.restoreInteractive();
+        this.buttonCredits.setVisible();
         this.settingsText.setVisible(true);
         this.buttonSP.removeInteractive();
         this.buttonMP.removeInteractive();
@@ -312,5 +360,39 @@ export class StartScene extends Phaser.Scene {
         this.buttonP2.setInvisible();
         this.buttonReturnMain.setVisible();
         this.buttonReturnMain.restoreInteractive();
+    }
+
+    private changeToCredits():void{
+        this.buttonStart.setInvisible();
+        this.buttonStart.removeInteractive();
+        this.startText.setVisible(false);
+        this.titleText.setVisible(false);
+        this.buttonCredits.setInvisible();
+        this.buttonCredits.removeInteractive();
+        this.settingsText.setVisible(false);
+
+        this.buttonFromCreditsToMain.setVisible();
+        this.buttonFromCreditsToMain.restoreInteractive();
+        this.backText.setVisible(true);
+        this.creditsText.setVisible(true);
+        this.creditsText2.setVisible(true);
+        this.creditsHeader.setVisible(true);
+    }
+
+    private fromCreditsToMain():void{
+        this.creditsText.setVisible(false);
+        this.creditsText2.setVisible(false);
+        this.creditsHeader.setVisible(false);
+        this.buttonFromCreditsToMain.setInvisible();
+        this.buttonFromCreditsToMain.removeInteractive();
+        this.backText.setVisible(false);
+
+        this.buttonStart.setVisible();
+        this.buttonStart.restoreInteractive();
+        this.startText.setVisible(true);
+        this.titleText.setVisible(true);
+        this.buttonCredits.setVisible();
+        this.buttonCredits.restoreInteractive();
+        this.settingsText.setVisible(true);
     }
 }
