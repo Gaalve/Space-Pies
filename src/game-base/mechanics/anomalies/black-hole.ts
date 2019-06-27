@@ -24,6 +24,7 @@ export class BlackHole extends Anomaly {
         this.activated = false;
         this.maxCounter = 500;
         this.sinCounter = 0;
+        this.setDepth(-1);
 
         this.infobox = <Infobox> this.scene.data.get("infoboxx");
         this.infobox.addTooltipInfo(this,

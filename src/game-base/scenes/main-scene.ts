@@ -546,7 +546,7 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
             this.add.text(1315, 1080-50, "close", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
-            this.add.text(1525, 1080-50, "skip", {
+            this.add.text(1510, 1080-50, "end turn", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false)
         ];
 
@@ -559,8 +559,9 @@ export class MainScene extends Phaser.Scene {
         infobox.addTooltipInfo(this.wExt.bg, "Buy up to 3 weapons for each drone.", [() =>this.wExt.onClick(), () => {this.wExt.hovering = true; this.wExt.updateStep();}, () => {this.wExt.hovering = false; this.wExt.updateStep();}]);
         infobox.addTooltipInfo(this.wModule.bg, "Add up to 2 drones equip more weapons.", [() =>this.wModule.onClick(), () => {this.wModule.hovering = true; this.wModule.updateStep();}, () => {this.wModule.hovering = false; this.wModule.updateStep();}]);
         infobox.addTooltipInfo(this.solar.bg, "Collect +25 Energy per round.", [() =>this.solar.onClick(), () => {this.solar.hovering = true; this.solar.updateStep();}, () => {this.solar.hovering = false; this.solar.updateStep();}]);
-        infobox.addTooltipInfo(this.skip.bg, "Attack opponent with all weapons. Don't know why this is called skip though..", [() => this.skip.onClick(), () => {this.skip.hovering = true; this.skip.updateStep();}, () => {this.skip.hovering = false; this.skip.updateStep();}]);
+        infobox.addTooltipInfo(this.skip.bg, "Attack opponent with all weapons.", [() => this.skip.onClick(), () => {this.skip.hovering = true; this.skip.updateStep();}, () => {this.skip.hovering = false; this.skip.updateStep();}]);
         infobox.addTooltipInfo(this.close.bg, "Close the shop to see more of these beautiful stars.", [() =>this.close.onClick(), () => {this.close.hovering = true; this.close.updateStep();}, () => {this.close.hovering = false; this.close.updateStep();}]);
+        infobox.addTooltipInfo(this.motors.bg, "Buy new Engines to boost your Evasion.", [() => this.motors.onClick(), () => {this.motors.hovering = true; this.motors.updateStep();}, () => {this.motors.hovering = false; this.motors.updateStep();}]);
 
         /* ## Weapons ## */
 
@@ -661,7 +662,7 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
             this.add.text(615, 1080-50, "Shield", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
-            this.add.text(815, 1080-50, "Rocket", {
+            this.add.text(815, 1080-50, "Hyper", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
             this.add.text(1015, 1080-50, "Nano", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
@@ -675,7 +676,7 @@ export class MainScene extends Phaser.Scene {
         this.closeShop(this.shopS, this.shopSText, false);
 
 
-        this.infobox.addTooltipInfo(this.rocketS.bg, "[R]ocket Shields can only be destroyed by Rockets.", [() =>this.rocketS.onClick(), () => {this.rocketS.hovering = true; this.rocketS.updateStep();}, () => {this.rocketS.hovering = false; this.rocketS.updateStep();}]);
+        this.infobox.addTooltipInfo(this.rocketS.bg, "Hyper Shields can only be destroyed by [R]ockets.", [() =>this.rocketS.onClick(), () => {this.rocketS.hovering = true; this.rocketS.updateStep();}, () => {this.rocketS.hovering = false; this.rocketS.updateStep();}]);
         this.infobox.addTooltipInfo(this.shield.bg, "Laser [S]hields can be destroyed by Rockets and Projectiles.", [() => this.shield.onClick(), () => {this.shield.hovering = true; this.shield.updateStep();}, () => {this.shield.hovering = false; this.shield.updateStep();}]);
         this.infobox.addTooltipInfo(this.armor.bg, "[A]rmor Shields can be destroyed by Lasers and Projectiles.", [() =>this.armor.onClick(), () => {this.armor.hovering = true; this.armor.updateStep();}, () => {this.armor.hovering = false; this.armor.updateStep();}]);
         this.infobox.addTooltipInfo(this.nano.bg, "Nano Shields can be destroyed by all Weapons. But they are cheap!", [() =>this.nano.onClick(), () => {this.nano.hovering = true; this.nano.updateStep();}, () => {this.nano.hovering = false; this.nano.updateStep();}]);
@@ -859,8 +860,8 @@ export class MainScene extends Phaser.Scene {
         this.closeShop(this.shopT, this.shopTText, false);
 
         this.infobox.addTooltipInfo(this.rocket.bg, "Rockets. Can destroy all shields and will hardly miss.", [() =>this.rocket.onClick(), () => {this.rocket.hovering = true; this.rocket.updateStep();}, () => {this.rocket.hovering = false; this.rocket.updateStep();}]);
-        this.infobox.addTooltipInfo(this.laser.bg, "Lasers. Destroys Laser Shields, but can't attack\nArmor Shields or Rocket Shields.", [() => this.laser.onClick(), () => {this.laser.hovering = true; this.laser.updateStep();}, () => {this.laser.hovering = false; this.laser.updateStep();}]);
-        this.infobox.addTooltipInfo(this.projectile.bg, "Projectile Weapons. Destroys Armor Shields,\nbut can't attack Laser Shields or Rocket Shields.", [() =>this.projectile.onClick(), () => {this.projectile.hovering = true; this.projectile.updateStep();}, () => {this.projectile.hovering = false; this.projectile.updateStep();}]);
+        this.infobox.addTooltipInfo(this.laser.bg, "Lasers. Destroys all Shields\n except Laser Shields and Hyper Shields.", [() => this.laser.onClick(), () => {this.laser.hovering = true; this.laser.updateStep();}, () => {this.laser.hovering = false; this.laser.updateStep();}]);
+        this.infobox.addTooltipInfo(this.projectile.bg, "Projectile Weapons. Destroys all Shields\n except Armor and Hyper Shields.", [() =>this.projectile.onClick(), () => {this.projectile.hovering = true; this.projectile.updateStep();}, () => {this.projectile.hovering = false; this.projectile.updateStep();}]);
 
     }
 
@@ -1020,6 +1021,10 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false),
         ];
         this.closeShop(this.shopM, this.shopMText, false);
+        this.infobox.addTooltipInfo(this.motorL.bg, "Engine, that enhances evasion of Laser attacks", [() => this.motorL.onClick(), () => {this.motorL.hovering = true; this.motorL.updateStep();}, () => {this.motorL.hovering = false; this.motorL.updateStep();}]);
+        this.infobox.addTooltipInfo(this.motorP.bg, "Engine, that enhances evasion of Projectile attacks", [() => this.motorP.onClick(), () => {this.motorP.hovering = true; this.motorP.updateStep();}, () => {this.motorP.hovering = false; this.motorP.updateStep();}]);
+        this.infobox.addTooltipInfo(this.motorR.bg, "Engine, that enhances evasion of Rocket attacks", [() => this.motorR.onClick(), () => {this.motorR.hovering = true; this.motorR.updateStep();}, () => {this.motorR.hovering = false; this.motorR.updateStep();}]);
+
     }
 
     setButton(x : number, y : number, pic : string, scale: number, onclick: Function = ()=>{}) : Button{
@@ -1466,7 +1471,7 @@ export class MainScene extends Phaser.Scene {
 
             this.rocketS.restoreInteractive();
             this.children.remove(this.shopSText[2]);
-            this.shopSText[2] = this.add.text(820, 1080 - 250, "Rocket", {
+            this.shopSText[2] = this.add.text(820, 1080 - 250, "Hyper", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2
             }).setVisible(true);
         }
@@ -1922,7 +1927,7 @@ export class MainScene extends Phaser.Scene {
         let okBox = new Button(this, 660, 500, "button_shadow", "button_bg","button_fg", "button_resume", 0.5);
         okBox.setOnClick(()=>{
             okBox.setInvisible();
-            blackBox.destroy()
+            blackBox.destroy();
             tip.destroy();
             skip.destroy();
             this.system.start();

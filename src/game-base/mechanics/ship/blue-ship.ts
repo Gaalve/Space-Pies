@@ -50,10 +50,10 @@ export class BlueShip extends BaseShip{
             "     + ...the best cake in the universe...\n" +
             "     + ...it's way too good... almost god like...\n" +
             "     + ...one can not simply describe the taste of it in words.\n" +
-            "     + Olga's cake was stolen and Olga wants it back, at all costs!");
-        infobox.addTooltipInfo(this.wingUp.normal, "[P2] Your right wing.");
-        infobox.addTooltipInfo(this.wingDown.normal, "[P2] The left wing of your Ship.");
-        infobox.addTooltipInfo(this.hull.normal, "[P2] The hull of your ship.");
+            "     + Olga's cake was stolen and Olga wants it back, at all cost!");
+        infobox.addTooltipInfo(this.wingUp.normal, "[P2] Your right wing. Should've upgraded your ship instead of baking cake all day.");
+        infobox.addTooltipInfo(this.wingDown.normal, "[P2] The left wing of your Ship. Aren't you a bit jealous of Olaf's ship?");
+        infobox.addTooltipInfo(this.hull.normal, "[P2] The hull of your ship. An upgrade is urgently needed.");
 
         this.x =  x;
         this.y = y;
