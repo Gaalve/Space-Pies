@@ -43,6 +43,7 @@ export class Bot extends Player{
             public z2Active: boolean;
             public z3Active: boolean;
             public z4Active: boolean;
+            public nrDeadHitzones: number = 0;
 
     public wext: string = "wext";
         public las: string = "armor";
@@ -58,6 +59,7 @@ export class Bot extends Player{
     public solar: string = "solar";
     public end: string = "end";
 
+    public botBasicRegRate: number = 50;
     public botRegenRate: number;
     public botEnergy: number;
         private botShield: number;
@@ -109,7 +111,7 @@ export class Bot extends Player{
         this.botMotor = this.getEnergyCost("motor");
         this.botRocketS = this.getEnergyCost("rocket");
         this.botEnergy = this.getEnergy();
-        this.botRegenRate = 50;
+        this.botRegenRate = this.botBasicRegRate;
         this.displayedEnergy = this.botEnergy;
 
         this.active = false;
@@ -125,12 +127,14 @@ export class Bot extends Player{
         this.bubble.flipX = true;
         this.scene.add.existing(this.bubble);
         this.bubble.setVisible(false);
+        this.bubble.setDepth(2);
 
         this.bubbleText = new Phaser.GameObjects.Text(this.scene, 1920/2 + 365, 1080/2 - 185, "You win!\nThis time...",
             {fill: '#000', fontFamily: '"Roboto"', fontSize: 32, strokeThickness: 4});
         this.bubbleText.setOrigin(0.5,0.5);
         this.scene.add.existing(this.bubbleText);
         this.bubbleText.setVisible(false);
+        this.bubbleText.setDepth(3);
     }
 
     public start(): void{
@@ -158,6 +162,7 @@ export class Bot extends Player{
         }
         this.updateActiveSD();
         this.updateRegenRate();
+        this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
         this.regenEnergy();
     }
 
@@ -296,7 +301,7 @@ export class Bot extends Player{
                 this.botLog.insertLog("Finished with " + this.displayedEnergy + " Energy.");
 
             }, [], this);
-            this.scene.time.delayedCall(delay + 1500, ()=>{this.botLog.setInvisible(); this.botLog.setLogoInvisible()}, [], this);
+            this.scene.time.delayedCall(delay + 1000, ()=>{this.botLog.setInvisible(); this.botLog.setLogoInvisible()}, [], this);
             this.active = false;
             this.steps = 0;
             }
@@ -398,23 +403,23 @@ export class Bot extends Player{
         switch(type){
             case(this.n):{
                 this.botEnergy -= this.botnano;
-                return this.botnano
+                return this.botnano;
             }
             case(this.ar):{
                 this.botEnergy -= this.botShield;
-                return this.botShield
+                return this.botShield;
             }
             case(this.s):{
                 this.botEnergy -= this.botShield;
-                return this.botShield
+                return this.botShield;
             }
             case(this.ad):{
                 this.botEnergy -= this.botAdapt;
-                return this.botAdapt
+                return this.botAdapt;
             }
             case(this.r):{
                 this.botEnergy -= this.botRocketS;
-                return this.botRocketS
+                return this.botRocketS;
             }
         }
     }
@@ -423,15 +428,15 @@ export class Bot extends Player{
         switch(type){
             case(this.pro):{
                 this.botEnergy -= this.botWeapon;
-                return this.botWeapon
+                return this.botWeapon;
             }
             case(this.las):{
                 this.botEnergy -= this.botWeapon;
-                return this.botWeapon
+                return this.botWeapon;
             }
             case(this.roc): {
                 this.botEnergy -= this.botRocket;
-                return this.botRocket
+                return this.botRocket;
             }
         }
     }
@@ -455,10 +460,11 @@ export class Bot extends Player{
     }
 
     public updateHitzones(): void{
-        if(this.getHealth().zone1Bar.activeBars <= 0) this.z1Active = false;
-        if(this.getHealth().zone2Bar.activeBars <= 0) this.z2Active = false;
-        if(this.getHealth().zone3Bar.activeBars <= 0) this.z3Active = false;
-        if(this.getHealth().zone4Bar.activeBars <= 0) this.z4Active = false;
+        this.nrDeadHitzones = 0;
+        if(this.getHealth().zone1Bar.activeBars <= 0) {this.z1Active = false; this.nrDeadHitzones++;}
+        if(this.getHealth().zone2Bar.activeBars <= 0) {this.z2Active = false; this.nrDeadHitzones++;}
+        if(this.getHealth().zone3Bar.activeBars <= 0) {this.z3Active = false; this.nrDeadHitzones++;}
+        if(this.getHealth().zone4Bar.activeBars <= 0) {this.z4Active = false; this.nrDeadHitzones++;}
     }
 
     public regenEnergy(): void{
@@ -467,9 +473,16 @@ export class Bot extends Player{
     }
 
     public updateRegenRate(): void{
+        switch(this.nrDeadHitzones){
+            case(0):{this.botBasicRegRate = 50; break;}
+            case(1):{this.botBasicRegRate = 50 - 5; break;}
+            case(2):{this.botBasicRegRate = 50 - 5 - 9; break;}
+            case(3):{this.botBasicRegRate = 50 - 5 - 9 - 13; break;}
+        }
+
         let nd = 0;
         if(this.getSolarDrones()[5].visible) nd = 50;
-        this.botRegenRate = (50 + this.nrActiveSD*25 + nd);
+        this.botRegenRate = (this.botBasicRegRate + this.nrActiveSD*25 + nd);
     }
 
     public reduceDisplayedEnergy(x: number): void{
@@ -477,7 +490,7 @@ export class Bot extends Player{
     }
 
     public createBubble(): void{
-        if(this.id == "2") {
+        if(this.id == "1") {
             this.bubble.flipX = false;
             this.bubble.setPosition(1920 / 2 - 350, 1080 / 2 - 170)
             this.bubbleText.setPosition(1920 / 2 - 350, 1080 / 2 - 185);

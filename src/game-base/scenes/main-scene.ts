@@ -218,7 +218,7 @@ export class MainScene extends Phaser.Scene {
         this.buttonOption.setPosition(1880, 40);
 
         this.buttonBotLog = new Button(this, 1880, 1040, "button_shadow",
-            "button_bg", "button_fg", "button_options",
+            "button_bg", "button_fg", "botLog",
             1, ()=>{
                 if(this.gameMode == "1"){
                     this.players[1].getBotLog().changeVisible();
