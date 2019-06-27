@@ -46,15 +46,10 @@ export class MotorFlame {
         this.flameMid.setOrigin(1, 0.5);
         this.flameFront.setOrigin(1, 0.5);
     }
-    public setAngle(){
-        this.flameBack.setAngle(40);
-        this.flameMid.setAngle(40);
-        this.flameFront.setAngle(40);
-    }
-    public setAngle320(){
-        this.flameBack.setAngle(320);
-        this.flameMid.setAngle(320);
-        this.flameFront.setAngle(320);
+    public setAngle(angle: number){
+        this.flameBack.setAngle(angle);
+        this.flameMid.setAngle(angle);
+        this.flameFront.setAngle(angle);
     }
 
     public setScale(scale: number){

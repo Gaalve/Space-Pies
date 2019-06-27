@@ -93,12 +93,12 @@ export class RedShip extends BaseShip{
         this.motorRocket1 = new MotorFlame(scene);
         this.motorRocket1.tintRed();
         this.motorRocket1.flipX();
-        this.motorRocket1.setAngle320();
+        this.motorRocket1.setAngle(320);
 
         this.motorRocket2 = new MotorFlame(scene);
         this.motorRocket2.tintRed();
         this.motorRocket2.flipX();
-        this.motorRocket2.setAngle40();
+        this.motorRocket2.setAngle(40);
 
         this.motorLaser1 = new MotorFlame(scene);
         this.motorLaser1.tintBlue();
