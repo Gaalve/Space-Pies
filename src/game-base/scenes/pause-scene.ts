@@ -108,28 +108,28 @@ export class PauseScene extends Phaser.Scene {
 
         this.add.image(120,750,'ssr_weap_rock');
         this.add.image(120,800,'ssb_weap_rock');
-        this.add.text(230,750,'Rocket launchers attack armor, rocket \nand laser shields.', {
+        this.add.text(230,750,'Rocket launchers attack armor, laser \nand hyper shields.', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 24});
         this.add.image(200, 750,"armor_shield");
         this.add.image(218, 775,"rocket_shield");
         this.add.image(200, 800, "laser_shield");
 
 
-        let animationText = this.add.text(150, 75, "Animation Style #1", {
+        let animationText = this.add.text(1920/2-60, 1080/2+200, "Pi-Style: #1", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
-        this.changeAnimationButton = new Button(this, 100, 100, "button_shadow",
-            "button_bg", "button_fg", "button_skip",0.95, ()=>{
+        this.changeAnimationButton = new Button(this, 1920/2-130, 1080/2+225, "button_shadow",
+            "button_bg", "button_fg", "button_options",0.95, ()=>{
                 let anim1: boolean = this.scene.isVisible("AnimationScene");
                 if (anim1) {
                     this.scene.setVisible(false, "AnimationScene");
                     this.scene.setVisible(true, "SimplePiCalc");
-                    animationText.setText("Animation Style #1")
+                    animationText.setText("Pi-Style: #1")
                 }
                 else {
                     this.scene.setVisible(true, "AnimationScene");
                     this.scene.setVisible(false, "SimplePiCalc");
-                    animationText.setText("Animation Style #2")
+                    animationText.setText("Pi-Style: #2")
                 }
             });
 
@@ -152,7 +152,7 @@ export class PauseScene extends Phaser.Scene {
 
         this.add.image(1920-120,580,'button_rocket');
         this.add.image(1920-170,580, "rocket_shield");
-        this.add.text(1920-600,557,'Rocket shields protect against\nlaser and projectile weapons.', {
+        this.add.text(1920-600,557,'Hyper shields protect against\nlaser and projectile weapons.', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 24});
 
         this.add.image(1920-120,700,'button_nano');

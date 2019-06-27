@@ -24,14 +24,14 @@ import {NanoDrone} from "./nanoDrone";
 import {BlackHole} from "./anomalies/black-hole";
 import {BlackholeParticle} from "./animations/blackhole-particle";
 import {Motor} from "./motor";
+import {MainScene} from "../scenes/main-scene";
 import {NeutronStar} from "./anomalies/neutron-star";
 import {NeutronAnimation} from "./animations/neutron-animation";
 import {NeutronTurb} from "./animations/neutron-turb";
 import {NeutronExplosion} from "./animations/neutron-explosion";
 
 
-export class Player
-{
+export class Player {
     private nameIdentifier: string;
     private firstPlayer: boolean;
     private drones : [Drone, Drone, Drone];
@@ -47,7 +47,7 @@ export class Player
     public z2Destroyed: boolean = false;
     public z3Destroyed: boolean = false;
     public z4Destroyed: boolean = false;
-
+public ship_out: Phaser.GameObjects.Sprite;
     private health : Health;
     private energy : number;
     private shieldCost : number = 10; // cost for armor/shield/rocket shield
@@ -79,6 +79,7 @@ export class Player
     public motor: Motor;
 
     private malusEnergy: number;
+    offset: number;
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean,
                        piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar, piAnim: PiAnimSystem){
@@ -88,6 +89,8 @@ export class Player
         this.system = piSystem;
         this.drones = [new Drone(scene, x, y, this, 0, piAnim), new Drone(scene, x, y, this, 1, piAnim), new Drone(scene, x, y, this,2, piAnim)];
         this.ship = new Ship(scene, x, y, this);
+
+
         this.scene = scene;
         this.activatedDrones = 0;
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,piAnim,pem), new EnergyDrone(scene, x, y, this, 1,piAnim,pem),
@@ -127,6 +130,7 @@ export class Player
         this.drones[0].update(delta);
         this.drones[1].update(delta);
         this.drones[2].update(delta);
+        //this.ship_out.setPosition(this.ship._modularShip. + this.offset, this.ship.posY);
 
         if(this.currentAnomaly) this.currentAnomaly.update(delta);
         if(this.blackhole) this.blackhole.update(delta);
@@ -240,7 +244,7 @@ export class Player
 
     public CollectEnergyAnimation():void{
         this.collectE.collect(this.ship.posX,this.ship.posY);
-        for (let i=1;i<5;i++) {
+        for (let i=1;i<this.solarDrones.length;i++) {
             if(this.solarDrones[i].visible){
                 this.solarDrones[i].collectED.collect(this.solarDrones[i].x,this.solarDrones[i].y,this.ship.posX,this.ship.posY);
                 this.scene.time.delayedCall(500, ()=>{this.solarDrones[i].collectED.stopCollect();}, [], this);
@@ -389,7 +393,10 @@ export class Player
         // wormhole trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelInCB('anomaly'+p, '', () => {
+                    this.system.stop()
+                    if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("worm");
+                },undefined, 0.2)
                 .channelOut('wormhole'+p, '').nullProcess()
         );
 
@@ -405,7 +412,15 @@ export class Player
         // blackhole trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelInCB('anomaly'+p, '', () => {
+                    if (this.scene instanceof MainScene){
+                        if (!this.scene.blackholeExists){
+                            this.scene.blackholeExists = true;
+                            this.system.stop();
+                            this.scene.anomalyInfoBoxes("black");
+                        }
+                    }
+                },undefined, 0.2)
                 .channelOut('blackhole', '').nullProcess()
         );
 
@@ -443,7 +458,10 @@ export class Player
         // suneruption trigger
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
-                .channelIn('anomaly'+p, '', undefined, 0.2)
+                .channelInCB('anomaly'+p, '', () => {
+                    this.system.stop()
+                    if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("erupt");
+                },undefined, 0.2)
                 .channelOut('suneruption'+p, '').nullProcess());
 
         let op = this.isFirstPlayer() ? 'p2' : 'p1';

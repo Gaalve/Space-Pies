@@ -189,4 +189,5 @@ export class Ship{
     public explosion2At(offX: number, offY: number, lifeScale: number = 1, speedScale: number = 1): void{
         this.player.explosion.explosionAt(this.posX + offX, this.posY + offY, lifeScale, speedScale);
     }
+
 }

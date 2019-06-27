@@ -25,6 +25,8 @@ export class BlueShip extends BaseShip{
     private weapons: Weapon[];
     private weaponSinX: number;
     private weaponSinY: number;
+    public ship_out: Sprite;
+    offset: number;
 
     public motorRocket1: MotorFlame;
     public motorRocket2: MotorFlame;
@@ -76,6 +78,9 @@ export class BlueShip extends BaseShip{
         this.hull = new ShipPart(scene, x, y, "ssbr/ssb_hull", "ssbr/ssb_des_hull",
             -46, 0, -37, 13,2);
 
+        this.ship_out = scene.add.sprite(x-30,y,"ssb_ship").setScale(1.1,1.1).setTintFill(0xa4444ff);
+        this.ship_out.setVisible(false);
+        this.offset = -30;
 
         let infobox = <Infobox> scene.data.get("infoboxx");
         infobox.addTooltipInfo(this.back.normal, "[P2] The back of your Ship.");
@@ -85,10 +90,10 @@ export class BlueShip extends BaseShip{
             "     + ...the best cake in the universe...\n" +
             "     + ...it's way too good... almost god like...\n" +
             "     + ...one can not simply describe the taste of it in words.\n" +
-            "     + Olga's cake was stolen and Olga wants it back, at all costs!");
-        infobox.addTooltipInfo(this.wingUp.normal, "[P2] Your right wing.");
-        infobox.addTooltipInfo(this.wingDown.normal, "[P2] The left wing of your Ship.");
-        infobox.addTooltipInfo(this.hull.normal, "[P2] The hull of your ship.");
+            "     + Olga's cake was stolen and Olga wants it back, at all cost!");
+        infobox.addTooltipInfo(this.wingUp.normal, "[P2] Your right wing. Should've upgraded your ship instead of baking cake all day.");
+        infobox.addTooltipInfo(this.wingDown.normal, "[P2] The left wing of your Ship. Aren't you a bit jealous of Olaf's ship?");
+        infobox.addTooltipInfo(this.hull.normal, "[P2] The hull of your ship. An upgrade is urgently needed.");
 
         this.motorRocket1 = new MotorFlame(scene);
         this.motorRocket1.tintRed();
@@ -164,7 +169,7 @@ export class BlueShip extends BaseShip{
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x, this.hull.normal.y - 110);
         if(this.weapons[2]) this.weapons[2].setPosition((this.hull.normal.x), this.hull.normal.y + 110);
-
+        this.ship_out.setPosition(this.hull.normal.x + this.offset, this.hull.normal.y);
         this.onScreenText ? this.onScreenText.setPosition(posX + 165, posY + this.onScreenText.width/2) : null;
     }
 
@@ -211,6 +216,10 @@ export class BlueShip extends BaseShip{
 
     setOnScreenText(text){
         this.onScreenText = text;
+    }
+
+    setShipOutVisible(bool: boolean): void{
+        this.ship_out.setVisible(bool);
     }
 
 }

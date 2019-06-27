@@ -20,6 +20,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
     private simplePi : string;
     public onScreenText : Phaser.GameObjects.Text;
     private activatedWeapons: integer;
+	public back: Sprite;
 
     private readonly posX: number;
     private readonly posY: number;
@@ -28,6 +29,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
     durationY : number;
     sinX : number;
     sinY : number;
+	offset: number;
 
     private animSys: PiAnimSystem;
     private piSeq: PiAnimSequence;
@@ -51,15 +53,20 @@ export class Drone extends Phaser.GameObjects.Sprite{
         //reposition external drones
         if(index == 1){
             if(player.getNameIdentifier() == "P1"){
-                this.setPosition(x += 300, y -= 300);
-            }else{
-                this.setPosition(x -= 300, y -= 300);
+                this.back = scene.add.sprite(x + 295, y - 300, "ssr_wmod").setScale(1.2,1.1).setTintFill(0xaff4444).setVisible(false);this.setPosition(x += 300, y -= 300);
+            this.offset = -5;
+
+			}else{
+				this.back = scene.add.sprite(x - 295, y - 300, "ssb_wmod").setScale(1.2,1.1).setTintFill(0xa4444ff).setVisible(false);
+                this.setPosition(x -= 300, y -= 300);this.offset = 5;
             }
         }else if(index == 2){
             if(player.getNameIdentifier() == "P1"){
-                this.setPosition(x += 300, y += 200);
-            }else{
-                this.setPosition(x -= 300, y += 200);
+                this.back = scene.add.sprite(x + 295, y + 200, "ssr_wmod").setScale(1.2,1.1).setTintFill(0xaff4444).setVisible(false);this.setPosition(x += 300, y += 200);
+            this.offset = -5;}else{
+                this.back = scene.add.sprite(x - 295, y + 200, "ssb_wmod").setScale(1.2,1.1).setTintFill(0xa4444ff).setVisible(false);
+				this.setPosition(x -= 300, y += 200);
+				this.offset = 5;
             }
         }
 
@@ -339,6 +346,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
         this.weapons[0].update(delta);
         this.weapons[1].update(delta);
         this.weapons[2].update(delta);
+        //this.back.update(delta);
     }
 
     /**
@@ -408,7 +416,8 @@ export class Drone extends Phaser.GameObjects.Sprite{
             this.weapons[0].setPosition(this.x + this.weapons[0].posX, this.y + this.weapons[0].posY);
             this.weapons[1].setPosition(this.x + this.weapons[1].posX, this.y + this.weapons[1].posY);
             this.weapons[2].setPosition(this.x + this.weapons[2].posX, this.y + this.weapons[2].posY);
-        }
+        this.back.setPosition(this.x + this.offset, this.y);
+		}
 
         let posX = this.getPlayer().isFirstPlayer() ? this.x + this.onScreenText.width/2 :  this.x - this.onScreenText.width/2;
         this.index != 0 ? this.onScreenText.setPosition(posX, this.y + 75) : null;
@@ -457,7 +466,8 @@ export class Drone extends Phaser.GameObjects.Sprite{
             this.onScreenText.setAngle(270);
         }
         this.onScreenText.setDisplayOrigin(0.5);
-    }
+    this.onScreenText.setDepth(-1);
+	}
 
 
 
