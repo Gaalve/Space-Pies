@@ -8,6 +8,7 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
 import {PiAnimSystem} from "../mechanics/pianim/pi-anim-system";
 import {Infobox} from "../mechanics/Infobox";
+import {roundTimeBar} from "../mechanics/roundTimeBar";
 
 export class MainScene extends Phaser.Scene {
 
@@ -87,7 +88,9 @@ export class MainScene extends Phaser.Scene {
     private energyTextS: Phaser.GameObjects.Text[];
     private energyRegen: Phaser.GameObjects.Text;
     public battleTime: BattleTimeBar;
-
+    private roundTimebar: roundTimeBar;
+    private roundTimeEvent;
+    private rounddelay:number = 30000;
 
     /** Round Pi Calc Animation **/
     private roundBG: Sprite;
@@ -139,6 +142,7 @@ export class MainScene extends Phaser.Scene {
             repeat: -1
         });
         this.battleTime = new BattleTimeBar(this);
+        this.roundTimebar = new roundTimeBar(this);
         this.system = new PiSystem(this, 33,33,33,false);
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
@@ -164,6 +168,8 @@ export class MainScene extends Phaser.Scene {
                 this.switchTextures(this.turn.getCurrentPlayer());
             }
             this.changeShopColor(this.turn.getCurrentPlayer());
+            this.roundTimeEvent=this.time.addEvent({ delay:  this.rounddelay, loop: false,callback: () => {this.skip.clicked();} });
+            this.roundTimebar.setTimer(this.roundTimeEvent);
             this.displayShop(this.shop1, this.shop1Text);
             this.updateShop1(false);
             this.shop1Active = true;
@@ -291,10 +297,16 @@ export class MainScene extends Phaser.Scene {
 
     update(time: number, delta: number): void {
         this.timeAccumulator += delta;
+
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
             this.shop.updateStep();
             this.buttonOption.updateStep();
+
+            if(this.roundTimebar.active){
+                this.roundTimebar.update();
+            }
+
             if(this.shop1Active){
                 this.skip.updateStep();
                 this.close.updateStep();
@@ -619,6 +631,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_skip",0.95,
             ()=>{
                 if(this.turn.clickable){
+                    this.roundTimebar.stopTimer();
                     // this.turn.Attackturn();
                     this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
                     this.system.pushSymbol(this.system.add.channelOut(
@@ -2135,7 +2148,6 @@ export class MainScene extends Phaser.Scene {
                    "Your projectiles may not find the right way."
         }
     }
-
 
     private static getTipFontStyle()
     {
