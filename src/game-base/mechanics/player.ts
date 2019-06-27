@@ -46,7 +46,7 @@ export class Player {
     public z2Destroyed: boolean = false;
     public z3Destroyed: boolean = false;
     public z4Destroyed: boolean = false;
-
+    public ship_out: Phaser.GameObjects.Sprite;
 
     private health : Health;
     private energy : number;
@@ -81,6 +81,7 @@ export class Player {
     public motor: Motor;
 
     private malusEnergy: number;
+    offset: number;
 
 
 
@@ -92,6 +93,8 @@ export class Player {
         this.system = piSystem;
         this.drones = [new Drone(scene, x, y, this, 0, piAnim), new Drone(scene, x, y, this, 1, piAnim), new Drone(scene, x, y, this,2, piAnim)];
         this.ship = new Ship(scene, x, y, this);
+
+
         this.scene = scene;
         this.activatedDrones = 0;
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,piAnim,pem), new EnergyDrone(scene, x, y, this, 1,piAnim,pem),
@@ -182,6 +185,7 @@ export class Player {
         this.drones[0].update(delta);
         this.drones[1].update(delta);
         this.drones[2].update(delta);
+        //this.ship_out.setPosition(this.ship._modularShip. + this.offset, this.ship.posY);
 
         if(this.currentAnomaly) this.currentAnomaly.update(delta);
         if(this.blackhole) this.blackhole.update(delta);
