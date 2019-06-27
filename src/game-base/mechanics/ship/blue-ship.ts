@@ -111,9 +111,9 @@ export class BlueShip extends BaseShip{
         this.motorL1.setPosition(this.hull.normal.x + 225, this.hull.normal.y - 18).setTint(0x00BFFF);
         this.motorL2.setPosition(this.hull.normal.x + 225, this.hull.normal.y + 18).setTint(0x00BFFF);
         this.motorP1.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70).setTint(0xCD00CD);
-        this.motorP2.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 70).setTint(0xCD00CD);
+        this.motorP2.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73).setTint(0xCD00CD);
         this.motorR1.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115).setTint(0xFF0000);
-        this.motorR2.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 115).setTint(0xFF0000);
+        this.motorR2.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118).setTint(0xFF0000);
 
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x, this.hull.normal.y - 110);
@@ -127,6 +127,16 @@ export class BlueShip extends BaseShip{
           this.system.add.channelInCB('increasesizelaser22', '', () =>  {this.motorL1.setScale(1.0, 1.0), this.motorL2.setScale(1.0, 1.0)}).
           channelInCB('increasesizelaser23', '',() => {this.motorL1.setScale(1.2, 1.2), this.motorL2.setScale(1.2, 1.2)}).nullProcess()
        );
+
+        this.system.pushSymbol(
+            this.system.add.channelInCB('increasesizeprojectile22', '', () =>  {this.motorP1.setScale(1.0, 1.0), this.motorP2.setScale(1.0, 1.0)}).
+            channelInCB('increasesizeprojectile23', '',() => {this.motorP1.setScale(1.2, 1.2), this.motorP2.setScale(1.2, 1.2)}).nullProcess()
+        );
+
+        this.system.pushSymbol(
+            this.system.add.channelInCB('increasesizerocket22', '', () =>  {this.motorR1.setScale(1.0, 1.0), this.motorR2.setScale(1.0, 1.0)}).
+            channelInCB('increasesizerocket23', '',() => {this.motorR1.setScale(1.2, 1.2), this.motorR2.setScale(1.2, 1.2)}).nullProcess()
+        );
     };
     toDestroyedBack(): void {
         this.back.toDestroyedPart();

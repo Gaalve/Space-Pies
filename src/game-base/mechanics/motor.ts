@@ -61,9 +61,11 @@ export class Motor  {
                     .channelOutCB('buildmotorlaser11', '',
                         () => {this.activeMotorsLaserP1 = this.activeMotorsLaserP1 + 1})
                     .channelIn('buymotorlaser12', '', )
+                    .channelOutCB('increasesizelaser12', '', () => console.log("test"))
                     .channelOutCB('buildmotorlaser12', '',
                     () => {this.activeMotorsLaserP1 = this.activeMotorsLaserP1 + 1})
                     .channelIn('buymotorlaser13', '')
+                    .channelOut('increasesizelaser13', '')
                     .channelOutCB('buildmotorlaser13', '',
                     () => {this.activeMotorsLaserP1 = this.activeMotorsLaserP1 + 1})
                     .nullProcess()
@@ -75,9 +77,11 @@ export class Motor  {
                     .channelOutCB('buildmotorprojectile11', '',
                         () => {this.activeMotorsProjectileP1 = this.activeMotorsProjectileP1 + 1})
                     .channelIn('buymotorprojectile12', '')
+                    .channelOut('increasesizeprojectile12', '')
                     .channelOutCB('buildmotorprojectile12', '',
                     () => {this.activeMotorsProjectileP1 = this.activeMotorsProjectileP1 + 1})
                     .channelIn('buymotorprojectile13', '')
+                    .channelOut('increasesizeprojectile13', '')
                     .channelOutCB('buildmotorprojectile13', '',
                     () => {this.activeMotorsProjectileP1 = this.activeMotorsProjectileP1 + 1})
                     .nullProcess()
@@ -89,9 +93,11 @@ export class Motor  {
                     .channelOutCB('buildmotorrocket11', '',
                         () => {this.activeMotorsRocketP1 = this.activeMotorsRocketP1 + 1})
                     .channelIn('buymotorrocket12', '')
+                    .channelOut('increasesizerocket12', '')
                     .channelOutCB('buildmotorrocket12', '',
                         () => this.activeMotorsRocketP1 = this.activeMotorsRocketP1 + 1)
                     .channelIn('buymotorrocket13', '')
+                    .channelOut('increasesizerocket13', '')
                     .channelOutCB('buildmotorrocket13', '',
                         () => this.activeMotorsRocketP1 = this.activeMotorsRocketP1 + 1)
                     .nullProcess()
@@ -176,12 +182,28 @@ export class Motor  {
 
             // creating projectile motors when bought in shop for p2
             this.system.pushSymbol(
-                this.system.add.channelIn('buymotorprojectile21', '').channelOutCB('buildmotorprojectile21', '', () => this.activeMotorsProjectileP2 = this.activeMotorsProjectileP2 + 1).channelIn('buymotorprojectile22', '').channelOutCB('buildmotorprojectile22', '', () => this.activeMotorsProjectileP2 = this.activeMotorsProjectileP2 + 1).channelIn('buymotorprojectile23', '').channelOutCB('buildmotorprojectile23', '', () => this.activeMotorsProjectileP2 = this.activeMotorsProjectileP2 + 1).nullProcess()
+                this.system.add.channelIn('buymotorprojectile21', '').
+                channelOutCB('buildmotorprojectile21', '', () => this.activeMotorsProjectileP2 = this.activeMotorsProjectileP2 + 1).
+                channelIn('buymotorprojectile22', '').
+                channelOut('increasesizeprojectile22', '').
+                channelOutCB('buildmotorprojectile22', '', () => this.activeMotorsProjectileP2 = this.activeMotorsProjectileP2 + 1).
+                channelIn('buymotorprojectile23', '').
+                channelOut('increasesizeprojectile23', '').
+                channelOutCB('buildmotorprojectile23', '', () => this.activeMotorsProjectileP2 = this.activeMotorsProjectileP2 + 1).
+                nullProcess()
             );
 
             // creating rocket motors when bought in shop for p2
             this.system.pushSymbol(
-                this.system.add.channelIn('buymotorrocket21', '').channelOutCB('buildmotorrocket21', '', () => this.activeMotorsRocketP2 = this.activeMotorsRocketP2 + 1).channelIn('buymotorrocket22', '').channelOutCB('buildmotorrocket22', '', () => this.activeMotorsRocketP2 = this.activeMotorsRocketP2 + 1).channelIn('buymotorrocket23', '').channelOutCB('buildmotorrocket23', '', () => this.activeMotorsRocketP2 = this.activeMotorsRocketP2 + 1).nullProcess()
+                this.system.add.channelIn('buymotorrocket21', '').
+                channelOutCB('buildmotorrocket21', '', () => this.activeMotorsRocketP2 = this.activeMotorsRocketP2 + 1).
+                channelIn('buymotorrocket22', '').
+                channelOut('increasesizerocket22', '').
+                channelOutCB('buildmotorrocket22', '', () => this.activeMotorsRocketP2 = this.activeMotorsRocketP2 + 1).
+                channelIn('buymotorrocket23', '').
+                channelOut('increasesizerocket23', '').
+                channelOutCB('buildmotorrocket23', '', () => this.activeMotorsRocketP2 = this.activeMotorsRocketP2 + 1).
+                nullProcess()
             );
 
 
