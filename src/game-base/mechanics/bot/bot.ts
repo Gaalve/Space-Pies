@@ -76,8 +76,8 @@ export class Bot extends Player{
     private bubbleText: Phaser.GameObjects.Text;
 
 
-    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar){
-        super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt);
+    public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean, piSystem: PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar, data){
+        super(scene, x, y, nameIdentifier, isFirstPlayer, piSystem, pem, bt, data);
 
         this.weaponSlots = 2;
         this.motorLaserSlots = 2;
@@ -371,13 +371,13 @@ export class Bot extends Player{
 
         switch(type){
             case("laser"):{
-                return (3-this.motorLaserSlots).toString();
+                return (4-this.motorLaserSlots).toString();
             }
             case("projectile"):{
-                return(3-this.motorProjectileSlots).toString();
+                return(4-this.motorProjectileSlots).toString();
             }
             case("rocket"):{
-                return (3-this.motorRocketSlots).toString();
+                return (4-this.motorRocketSlots).toString();
             }
         }
     }

@@ -125,7 +125,7 @@ export class MainScene extends Phaser.Scene {
 
     }
 
-    create(data?: PiAnimSystem,): void {
+    create(data?: PiAnimSystem): void {
         this.anims.create({
             key: 'snooze',
             frames:
@@ -144,7 +144,8 @@ export class MainScene extends Phaser.Scene {
             repeat: -1
         });
 
-        this.gameMode = data.mode;
+        this.gameMode = this.scene.get("GuiScene").data.get("mode");
+        console.log(this.gameMode);
         this.battleTime = new BattleTimeBar(this);
         this.roundTimebar = new roundTimeBar(this);
         this.system = new PiSystem(this, 33,33,33,false);
@@ -161,11 +162,31 @@ export class MainScene extends Phaser.Scene {
 
         if (!data && data !instanceof  PiAnimSystem) throw new Error("No Pi Anim System");
         data.reset();
-        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
-                        new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+
+        switch(this.gameMode){
+            case("0"):{
+                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
+                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+                break;
+            }
+            case("1"):{
+                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
+                    new Bot(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+                break;
+            }
+            case("2"):{
+                this.players = [new Bot(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
+                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+                break;
+            }
+            default:{
+                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
+                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+            }
+        }
 
 
-        this.turn = new Turn(this, this.players, data);
+        this.turn = new Turn(this, this.players, data, this.gameMode);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
             if(this.turn.getCurrentRound() != 1){
@@ -254,7 +275,7 @@ export class MainScene extends Phaser.Scene {
         );
         this.buttonOption.setPosition(1880, 40);
 
-        this.buttonBotLog = new Button(this, 1880, 1040, "button_shadow",
+        this.buttonBotLog = new Button(this, 1780, 40, "button_shadow",
             "button_bg", "button_fg", "botLog",
             1, ()=>{
                 if(this.gameMode == "1"){
@@ -266,10 +287,10 @@ export class MainScene extends Phaser.Scene {
         this.buttonBotLog.setInvisible();
         this.buttonBotLog.removeInteractive();
 
-        const botLog = this.add.text(1730, 1010, "show bot\nactions", {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 24, strokeThickness: 2}).setVisible(false);
+        /*const botLog = this.add.text(1580, 10, "show bot\nactions", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 24, strokeThickness: 2}).setVisible(false);*/
         if(this.gameMode == "1" || this.gameMode == "2"){
-            botLog.setVisible(true);
+            //botLog.setVisible(true);
             this.buttonBotLog.setVisible();
             this.buttonBotLog.restoreInteractive();
         }
@@ -2177,29 +2198,6 @@ export class MainScene extends Phaser.Scene {
         okBox.setVisible();
     }
 
-    private createPlayers(): void{
-        switch(this.gameMode){
-            case("0"):{
-                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
-                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
-                break;
-            }
-            case("1"):{
-                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
-                    new Bot(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
-                break;
-            }
-            case("2"):{
-                this.players = [new Bot(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
-                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
-                break;
-            }
-            default:{
-                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime),
-                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime)];
-            }
-        }
-    }
 
 
     private getTipText(type: string){

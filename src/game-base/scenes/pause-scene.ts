@@ -86,20 +86,19 @@ export class PauseScene extends Phaser.Scene {
 
         this.buttonDebug.setPosition(1880, 1040);
 
-       this.buttonMain = new Button(this, 1920/2-130, 1080/2+225, "button_shadow",
+       this.buttonMain = new Button(this, 1920/2-130, 1080/2+375, "button_shadow",
             "button_bg", "button_fg", "button_skip",
            1, ()=> {
-               this.scene.launch("StartScene");
                this.scene.get("GuiScene").scene.sleep();
-               this.scene.get("MainScene").scene.restart();
-               this.scene.get("MainScene").scene.sleep();
-
+               this.scene.get('AnimationScene').scene.stop();
+               this.scene.get('SimplePiCalc').scene.stop();
+               this.scene.get('MainScene').scene.stop();
+               this.scene.launch('FadeScene', {shut: 'PauseScene', start: 'StartScene'});
                this.P2.resetEnergy();
                this.P1.resetEnergy();
-               this.scene.sleep();
            });
 
-        this.add.text(1920/2-60, 1080/2+200, "Back to main", {
+        this.add.text(1920/2-60, 1080/2+350, "Back to main", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
         // Weapons Hints
