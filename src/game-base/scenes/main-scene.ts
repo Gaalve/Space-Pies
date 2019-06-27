@@ -1149,6 +1149,7 @@ export class MainScene extends Phaser.Scene {
                 this.closeShop(this.shopM, this.shopMText, false);
                 this.shop_bg_back2.setVisible(false);
                 this.shopMActive = false;
+
                 this.updateShop1(false);
 
             });
