@@ -36,6 +36,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 	private animSys: PiAnimSystem;
 	private piSeq: PiAnimSequence;
+	public created: boolean;
 
 	public constructor(scene : Phaser.Scene, x : number, y : number, player : Player, index : number, animSys: PiAnimSystem){
 		super(scene, x, y, "ssr_wmod_off");
@@ -44,7 +45,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 		this.piSeq = animSys.addSequence(x, y+100, 'lock()', PiAnimAlignment.CENTER);
 		this.piSeq.addSymbol('0');
 		this.piSeq.hide();
-
+		this.created = false;
 	    if(player.getNameIdentifier() == "P2"){
 	    	this.setTexture("ssb_wmod_off");
 		}
@@ -409,6 +410,14 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 
 
+	public hidePiSeq(): void{
+		this.piSeq.hide();
+	}
+
+	public showPiSeq(): void{
+		if(this.created)
+			this.piSeq.show();
+	}
 
 
 

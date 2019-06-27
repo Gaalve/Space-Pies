@@ -58,7 +58,7 @@ export class Player
     private rocketCost : number = 40;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
     private adaptCost: number = 16; // cost for adaptive shield
-    private motorCost: number = 5;
+    private motorCost: number = 35;
 
 
 
@@ -241,6 +241,7 @@ export class Player
         this.activatedDrones = this.activatedDrones + 1;
         if(index != 0) {
             this.drones[index].setVisible(true);
+            this.drones[index].created = true;
         }
         this.drones[index].buildPiTerm();
         this.drones[index].refreshOnScreenText();
