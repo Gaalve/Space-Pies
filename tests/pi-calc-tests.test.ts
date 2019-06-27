@@ -65,7 +65,7 @@ export class PiCalcTests {
         gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum(gui, te);}, [], this);
 
         // we only want chanIns in Sum (to improve performance) so we skip this test
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum2(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSum2(gui, te);}, [], this);
 
         gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiSequentialParallel(gui, te);}, [], this);
         gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiReplication1(gui, te);}, [], this);
@@ -76,7 +76,7 @@ export class PiCalcTests {
 
         // we only want chanIns in Sum (to improve performance) so we skip this test
         // we can not rename chanIns, so this test wont work
-        // gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameSum(gui, te);}, [], this);
+        gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameSum(gui, te);}, [], this);
 
         gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiRenameConc(gui, te);}, [], this);
         gui.time.delayedCall(1,() =>{PiCalcTests.runTestPiScopeRename(gui, te);}, [], this);
@@ -86,11 +86,12 @@ export class PiCalcTests {
         gui.time.delayedCall(1,() =>{PiCalcTests.runRenamingProcessTest(gui, te);}, [], this);
 
 
-        // for (let i = 0.0; i < 20.0; i++) {
+        // for (let i = 0; i < 3; i++) {
         //     gui.time.delayedCall(1, () => {PiCalcTests.runStatisticsRandomnessManipulationStart(gui,
-        //         0, (100 - i * 5)/100, 0, 0, 10000, te)},
+        //         0, 0.4, i, 0.4, 10000, te)},
         //         [], this);
         // }
+
 
 
         te.start();
@@ -515,6 +516,8 @@ export class PiCalcTests {
             console.log('Hits: '+amountSuccess + ' / ' + tries);
             console.log('Fails: '+amountFail + ' / ' + tries);
             console.log('Base-Fail-Chance: '+failBaseResolvingChance);
+            console.log('Other-Fail-Chance: '+otherFailResolvingChance);
+            console.log('Other-Fail-Amount: '+otherFailAmount);
             test.success();
             return;
         }

@@ -1,3 +1,6 @@
+import progress = Mocha.reporters.progress;
+import Color = Phaser.Display.Color;
+
 export class roundTimeBar extends Phaser.GameObjects.Sprite{
 
 
@@ -36,7 +39,33 @@ export class roundTimeBar extends Phaser.GameObjects.Sprite{
 
 
     update(): void {
-        this.displayWidth=this.width*(1-this.timebarEvent.getProgress());
+        let progress = 1 - this.timebarEvent.getProgress();
+        this.displayWidth=this.width*(progress);
+        if(progress < 0.3){
+            let idx = progress % 0.025;
+            this.setTint(
+                Color.ObjectToColor(
+                    Color.Interpolate.RGBWithRGB(
+                        255, 255, 255,
+                        255, 55, 55,
+                        0.025, idx
+                    )
+                ).color
+            );
+        }
+        else if(progress > 0.925){
+            let idx = progress % 0.015;
+            this.setTint(
+                Color.ObjectToColor(
+                    Color.Interpolate.RGBWithRGB(
+                        255, 255, 255,
+                        85, 255, 85,
+                        0.015, idx
+                    )
+                ).color
+            );
+        }
+        else this.setTint(0xffffff);
     }
 
 }

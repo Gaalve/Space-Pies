@@ -4,34 +4,40 @@ import {BulletInfo} from "./weapon/bulletInfo";
 import {Bullet} from "./weapon/bullet";
 import {PiAnimSystem} from "./pianim/pi-anim-system";
 import {PiAnimSequence} from "./pianim/pi-anim-sequence";
+import {WeaponType} from "./weapon/weapon-type";
+import Sprite = Phaser.GameObjects.Sprite;
+import {BlueShip} from "./ship/blue-ship";
+import {RedShip} from "./ship/red-ship";
+import Text = Phaser.GameObjects.Text;
 
-export class Motor {
+
+export class Motor  {
 
     private player: Player;
     private system: PiSystem;
-    private activeMotorsLaserP1: number;
-    private activeMotorsProjectileP1: number;
-    private activeMotorsRocketP1: number;
-    private activeMotorsLaserP2: number;
-    private activeMotorsProjectileP2: number;
-    private activeMotorsRocketP2: number;
-
+    private _activeMotorsLaser: number;
+    private _activeMotorsProjectile: number;
+    private _activeMotorsRocket: number;
     private piSeqS: PiAnimSequence;
     private piSeqA: PiAnimSequence;
     private piSeqR: PiAnimSequence;
 
+    private evasionText: Text;
+    private evChanceR: Text;
+    private evChanceS: Text;
+    private evChanceA: Text;
+
+
+    //<reference path=" />
 
     //  private nameIdentifier : string;
 
     public constructor(scene: Phaser.Scene, player: Player, x: number, y: number, piAnim: PiAnimSystem) {
         this.player = player;
         this.system = this.player.getSystem();
-        this.activeMotorsLaserP1 = 0;
-        this.activeMotorsProjectileP1 = 0;
-        this.activeMotorsRocketP1 = 0;
-        this.activeMotorsLaserP2 = 0;
-        this.activeMotorsProjectileP2 = 0;
-        this.activeMotorsRocketP2 = 0;
+        this._activeMotorsLaser = 0;
+        this._activeMotorsProjectile = 0;
+        this._activeMotorsRocket = 0;
 
         let pid = player.getNameIdentifier().toLowerCase();
 
@@ -47,6 +53,21 @@ export class Motor {
         this.piSeqR.addSymbol('0');
 
 
+        let style = {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 26, strokeThickness: 3, stroke: '#000'
+        };
+        if (this.player.isFirstPlayer()){
+            this.evasionText = scene.add.text(130, 840,"Evasion Chance P1", style).setOrigin(0.5, 0.5);
+            this.evChanceR = scene.add.text(160, 1000,"R0%", style).setOrigin(0, 0.5);
+            this.evChanceS = scene.add.text(160, 900,"S0%", style).setOrigin(0, 0.5);
+            this.evChanceA = scene.add.text(160, 950,"a0%", style).setOrigin(0, 0.5);
+        }
+        else{
+            this.evasionText = scene.add.text(1790, 840,"Evasion Chance P2", style).setOrigin(0.5, 0.5);
+            this.evChanceR = scene.add.text(1700, 1000,"R0%", style).setOrigin(0, 0.5);
+            this.evChanceS = scene.add.text(1700, 900,"S0%", style).setOrigin(0, 0.5);
+            this.evChanceA = scene.add.text(1700, 950,"a0%", style).setOrigin(0, 0.5);
+        }
 
 
         if (this.player.isFirstPlayer()){
@@ -54,13 +75,13 @@ export class Motor {
             this.system.pushSymbol(
                 this.system.add.channelIn('buymotorlaser11', '')
                     .channelOutCB('buildmotorlaser11', '',
-                        () => {this.activeMotorsLaserP1 = this.activeMotorsLaserP1 + 1})
-                    .channelIn('buymotorlaser12', '')
+                        () => {this.buyMotorS()})
+                    .channelIn('buymotorlaser12', '', )
                     .channelOutCB('buildmotorlaser12', '',
-                    () => {this.activeMotorsLaserP1 = this.activeMotorsLaserP1 + 1})
+                    () => {this.buyMotorS()})
                     .channelIn('buymotorlaser13', '')
                     .channelOutCB('buildmotorlaser13', '',
-                    () => {this.activeMotorsLaserP1 = this.activeMotorsLaserP1 + 1})
+                    () => {this.buyMotorS()})
                     .nullProcess()
             );
 
@@ -68,13 +89,13 @@ export class Motor {
             this.system.pushSymbol(
                 this.system.add.channelIn('buymotorprojectile11', '')
                     .channelOutCB('buildmotorprojectile11', '',
-                        () => {this.activeMotorsProjectileP1 = this.activeMotorsProjectileP1 + 1})
+                        () => {this.buyMotorA()})
                     .channelIn('buymotorprojectile12', '')
                     .channelOutCB('buildmotorprojectile12', '',
-                    () => {this.activeMotorsProjectileP1 = this.activeMotorsProjectileP1 + 1})
+                    () => {this.buyMotorA()})
                     .channelIn('buymotorprojectile13', '')
                     .channelOutCB('buildmotorprojectile13', '',
-                    () => {this.activeMotorsProjectileP1 = this.activeMotorsProjectileP1 + 1})
+                    () => {this.buyMotorA()})
                     .nullProcess()
             );
 
@@ -82,13 +103,13 @@ export class Motor {
             this.system.pushSymbol(
                 this.system.add.channelIn('buymotorrocket11', '')
                     .channelOutCB('buildmotorrocket11', '',
-                        () => {this.activeMotorsRocketP1 = this.activeMotorsRocketP1 + 1})
+                        () => {this.buyMotorR()})
                     .channelIn('buymotorrocket12', '')
                     .channelOutCB('buildmotorrocket12', '',
-                        () => this.activeMotorsRocketP1 = this.activeMotorsRocketP1 + 1)
+                        () => this.buyMotorR())
                     .channelIn('buymotorrocket13', '')
                     .channelOutCB('buildmotorrocket13', '',
-                        () => this.activeMotorsRocketP1 = this.activeMotorsRocketP1 + 1)
+                        () => this.buyMotorR())
                     .nullProcess()
             );
             //
@@ -136,19 +157,19 @@ export class Motor {
                 this.system.add.channelIn('buildmotorrocket11', '').replication(
                     this.system.add.channelInCB('rocketP1', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0).nullProcess()));
 
             this.system.pushSymbol(
                 this.system.add.channelIn('buildmotorrocket12', '').replication(
                     this.system.add.channelInCB('rocketP1', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.2).nullProcess()));
 
             this.system.pushSymbol(
                 this.system.add.channelIn('buildmotorrocket13', '').replication(
                     this.system.add.channelInCB('rocketP1', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.2).nullProcess()));
 
         }
 
@@ -158,17 +179,35 @@ export class Motor {
 
             // creating laser motors when bought in shop for p2
             this.system.pushSymbol(
-                this.system.add.channelIn('buymotorlaser21', '').channelOutCB('buildmotorlaser21', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).channelIn('buymotorlaser22', '').channelOutCB('buildmotorlaser22', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).channelIn('buymotorlaser23', '').channelOutCB('buildmotorlaser23', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).nullProcess()
+                this.system.add.channelIn('buymotorlaser21', '').
+                channelOutCB('buildmotorlaser21', '', () => this.buyMotorS()).
+                channelIn('buymotorlaser22', '').
+                channelOutCB('buildmotorlaser22', '', () => this.buyMotorS()).
+                channelIn('buymotorlaser23', '').
+                channelOutCB('buildmotorlaser23', '', () => this.buyMotorS()).
+                nullProcess()
             );
 
             // creating projectile motors when bought in shop for p2
             this.system.pushSymbol(
-                this.system.add.channelIn('buymotorprojectile21', '').channelOutCB('buildmotorprojectile21', '', () => this.activeMotorsProjectileP2 = this.activeMotorsProjectileP2 + 1).channelIn('buymotorprojectile22', '').channelOutCB('buildmotorprojectile22', '', () => this.activeMotorsProjectileP2 = this.activeMotorsProjectileP2 + 1).channelIn('buymotorprojectile23', '').channelOutCB('buildmotorprojectile23', '', () => this.activeMotorsProjectileP2 = this.activeMotorsProjectileP2 + 1).nullProcess()
+                this.system.add.channelIn('buymotorprojectile21', '').
+                channelOutCB('buildmotorprojectile21', '', () => this.buyMotorA()).
+                channelIn('buymotorprojectile22', '').
+                channelOutCB('buildmotorprojectile22', '', () => this.buyMotorA()).
+                channelIn('buymotorprojectile23', '').
+                channelOutCB('buildmotorprojectile23', '', () => this.buyMotorA()).
+                nullProcess()
             );
 
             // creating rocket motors when bought in shop for p2
             this.system.pushSymbol(
-                this.system.add.channelIn('buymotorrocket21', '').channelOutCB('buildmotorrocket21', '', () => this.activeMotorsRocketP2 = this.activeMotorsRocketP2 + 1).channelIn('buymotorrocket22', '').channelOutCB('buildmotorrocket22', '', () => this.activeMotorsRocketP2 = this.activeMotorsRocketP2 + 1).channelIn('buymotorrocket23', '').channelOutCB('buildmotorrocket23', '', () => this.activeMotorsRocketP2 = this.activeMotorsRocketP2 + 1).nullProcess()
+                this.system.add.channelIn('buymotorrocket21', '').
+                channelOutCB('buildmotorrocket21', '', () => this.buyMotorR()).
+                channelIn('buymotorrocket22', '').
+                channelOutCB('buildmotorrocket22', '', () => this.buyMotorR()).
+                channelIn('buymotorrocket23', '').
+                channelOutCB('buildmotorrocket23', '', () => this.buyMotorR()).
+                nullProcess()
             );
 
 
@@ -216,25 +255,62 @@ export class Motor {
                 this.system.add.channelIn('buildmotorrocket21', '').replication(
                     this.system.add.channelInCB('rocketP2', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0).nullProcess()));
 
             this.system.pushSymbol(
                 this.system.add.channelIn('buildmotorrocket22', '').replication(
                     this.system.add.channelInCB('rocketP2', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.2).nullProcess()));
 
             this.system.pushSymbol(
                 this.system.add.channelIn('buildmotorrocket23', '').replication(
                     this.system.add.channelInCB('rocketP2', '',
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
-                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
+                    new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.2).nullProcess()));
 
-            ///////////////////////////////
+
         }
         this.startMotor();
 
     }
+
+    private buyMotorS(): void{
+        this._activeMotorsLaser += 1;
+        this.player.ship.modularShip.motorLsize1 = this._activeMotorsLaser/3 * 0.8 + 0.5;
+        this.player.ship.modularShip.motorLsize2 = this._activeMotorsLaser/3 * 0.8 + 0.5;
+        switch (this._activeMotorsLaser) {
+            case 0: this.evChanceS.setText("0%");break;
+            case 1: this.evChanceS.setText("30%");break;
+            case 2: this.evChanceS.setText("45%");break;
+            case 3: this.evChanceS.setText("55%");break;
+        }
+    }
+
+    private buyMotorR(): void{
+        this._activeMotorsRocket += 1;
+        this.player.ship.modularShip.motorRsize1 = this._activeMotorsRocket/3 * 0.8 + 0.5;
+        this.player.ship.modularShip.motorRsize2 = this._activeMotorsRocket/3 * 0.8 + 0.5;
+        switch (this._activeMotorsRocket) {
+            case 0: this.evChanceR.setText("0%");break;
+            case 1: this.evChanceR.setText("0%");break;
+            case 2: this.evChanceR.setText("15%");break;
+            case 3: this.evChanceR.setText("30%");break;
+        }
+    }
+
+    private buyMotorA(): void{
+        this._activeMotorsProjectile += 1;
+        this.player.ship.modularShip.motorPsize1 = this._activeMotorsProjectile/3 * 0.8 + 0.5;
+        this.player.ship.modularShip.motorPsize2 = this._activeMotorsProjectile/3 * 0.8 + 0.5;
+        switch (this._activeMotorsProjectile) {
+            case 0: this.evChanceA.setText("0%");break;
+            case 1: this.evChanceA.setText("30%");break;
+            case 2: this.evChanceA.setText("45%");break;
+            case 3: this.evChanceA.setText("55%");break;
+        }
+    }
+
 
     public startMotor() {
 
@@ -263,27 +339,17 @@ export class Motor {
             );
         }
     }
-    getactiveMotorLaserP1(): number{
-        return this.activeMotorsLaserP1;
+
+
+    get activeMotorsLaser(): number {
+        return this._activeMotorsLaser;
     }
 
-    getactiveMotorProjectileP1(): number{
-        return this.activeMotorsProjectileP1;
+    get activeMotorsProjectile(): number {
+        return this._activeMotorsProjectile;
     }
 
-    getactiveMotorRocketP1(): number{
-        return this.activeMotorsRocketP1;
-    }
-
-    getactiveMotorLaserP2(): number{
-        return this.activeMotorsLaserP2;
-    }
-
-    getactiveMotorProjectileP2(): number{
-        return this.activeMotorsProjectileP2;
-    }
-
-    getactiveMotorRocketP2(): number{
-        return this.activeMotorsRocketP2;
+    get activeMotorsRocket(): number {
+        return this._activeMotorsRocket;
     }
 }
