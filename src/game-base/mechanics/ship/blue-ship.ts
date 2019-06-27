@@ -159,7 +159,7 @@ export class BlueShip extends BaseShip{
         this.motorProj1.setScaleSin(this.motorPsize1, this.sinX*5);
 
         this.motorProj2.setPosition(this.hull.normal.x + 130, this.hull.normal.y - 70);
-        this.motorProj2.setScaleSin(this.motorPsize2, this.sinY*2.5);
+        this.motorProj2.setScaleSin(this.motorPsize2, this.sinY*3.5);
 
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x, this.hull.normal.y - 110);

@@ -150,22 +150,22 @@ export class RedShip extends BaseShip{
         this.hull.setPosition(posX, posY);
 
         this.motorRocket1.setPosition(this.hull.normal.x - 160, this.hull.normal.y + 130);
-        this.motorRocket1.setScaleSin(this.motorRsize1, this.sinX);
+        this.motorRocket1.setScaleSin(this.motorRsize1, this.sinX*3);
 
         this.motorRocket2.setPosition(this.hull.normal.x - 160, this.hull.normal.y - 130);
-        this.motorRocket2.setScaleSin(this.motorRsize2, this.sinX);
+        this.motorRocket2.setScaleSin(this.motorRsize2, this.sinY *5);
 
         this.motorLaser1.setPosition(this.hull.normal.x - 102, this.hull.normal.y + 12);
-        this.motorLaser1.setScaleSin(this.motorLsize1, this.sinX);
+        this.motorLaser1.setScaleSin(this.motorLsize1, this.sinX*2.5);
 
         this.motorLaser2.setPosition(this.hull.normal.x - 102, this.hull.normal.y - 12);
-        this.motorLaser2.setScaleSin(this.motorLsize2, this.sinX);
+        this.motorLaser2.setScaleSin(this.motorLsize2, this.sinY*4);
 
         this.motorProj1.setPosition(this.hull.normal.x - 173, this.hull.normal.y + 92);
-        this.motorProj1.setScaleSin(this.motorPsize1, this.sinX);
+        this.motorProj1.setScaleSin(this.motorPsize1, this.sinX*3.5);
 
         this.motorProj2.setPosition(this.hull.normal.x - 173, this.hull.normal.y - 92);
-        this.motorProj2.setScaleSin(this.motorPsize2, this.sinX);
+        this.motorProj2.setScaleSin(this.motorPsize2, this.sinY*4.5);
 
  /*       this.motorL1.setPosition(this.hull.normal.x - 125, this.hull.normal.y - 12).setTint(0x00BFFF).setFlip(true, false);
         this.motorL2.setPosition(this.hull.normal.x - 125, this.hull.normal.y + 12).setTint(0x00BFFF).setFlip(true, false);
