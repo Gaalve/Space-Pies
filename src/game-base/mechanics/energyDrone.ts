@@ -6,6 +6,7 @@ import {BulletInfo} from "./weapon/bulletInfo";
 import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 import {NanoDrone} from "./nanoDrone";
 import {PiAnimSystem} from "./pianim/pi-anim-system";
+import {MotorFlame} from "./ship/motor-flame";
 
 
 export class EnergyDrone extends Phaser.GameObjects.Sprite{
@@ -15,6 +16,14 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
     protected piTerm : string;
     public health : HealthbarSD;
     public collectED:collectEnergy_Drones;
+    public flame: MotorFlame;
+    private readonly posX: number;
+    private readonly posY: number;
+    durationX : number;
+    durationY : number;
+    sinX : number;
+    sinY : number;
+    private flameOffset: number;
 
 
 
@@ -72,12 +81,33 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
         this.setVisible(false);
         scene.add.existing(this);
 
+
+
+
         this.buildPiTerm();
         this.createRepsSolarDrones(this.player.getNameIdentifier().charAt(1), this.index);
         if(this.index != 0 && type == "solar"){
             this.createSolarShields(this.player.getNameIdentifier().charAt(1), this.index);
         }
 
+        this.posX = this.x;
+        this.posY = this.y;
+
+        this.durationX = 700 + 600 * Math.random();
+        this.durationY = 500 + 300 * Math.random();
+        this.sinX = 0;
+        this.sinY = 0;
+        this.flame = new MotorFlame(scene);
+        this.flame.tintBlue();
+        this.flame.setVisible(false);
+        this.flameOffset = 25;
+        if (this.player.isFirstPlayer()){
+            this.flame.flipX();
+            this.flameOffset = -25;
+        }
+
+        this.setDepth(-3);
+        this.flame.setDepth(-3);
     }
 
     /**
@@ -104,7 +134,9 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
         this.player.activatedSolarDrones--;
         this.player.raiseEnergyCost("solar",-20);
         this.player.explosion.explosionAt(this.x,this.y);
-        this.player.scene.time.delayedCall(300,()=>{this.setVisible(false); this.player.setSmallestIndexSD();},[],this);
+        this.player.scene.time.delayedCall(300,()=>{
+            this.flame.setVisible(false);
+            this.setVisible(false); this.player.setSmallestIndexSD();},[],this);
     }
 
     private createRepsSolarDrones(p : string, sd : number){
@@ -137,6 +169,23 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
         shield.symbol = term;
         system.pushSymbol(shield);
+    }
+
+    public update(delta: number): void {
+        this.sinX += delta/ this.durationX;
+        this.sinY += delta/ this.durationY;
+
+        this.sinX %= 2*Math.PI;
+        this.sinY %= 2*Math.PI;
+
+        this.setPositionSin();
+    }
+
+    private setPositionSin() {
+        this.x = (this.posX + Math.sin(this.sinX) * 10);
+        this.y =(this.posY + Math.cos(this.sinY) * 15);
+        this.flame.setPosition(this.x + this.flameOffset, this.y);
+        this.flame.setScaleSin(0.7, this.sinX*4);
     }
 
 

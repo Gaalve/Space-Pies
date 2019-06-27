@@ -115,7 +115,7 @@ public ship_out: Phaser.GameObjects.Sprite;
         this.motor = new Motor(scene, this, x, y, piAnim);
         this.malusEnergy = 0;
 
-        this.energy = 55;
+        this.energy = 555;
 
         let p = this.getNameIdentifier().charAt(1);
         this.buildLocksPi(p, bt);
@@ -130,6 +130,12 @@ public ship_out: Phaser.GameObjects.Sprite;
         this.drones[0].update(delta);
         this.drones[1].update(delta);
         this.drones[2].update(delta);
+
+        this.solarDrones[1].update(delta);
+        this.solarDrones[2].update(delta);
+        this.solarDrones[3].update(delta);
+        this.solarDrones[4].update(delta);
+        this.solarDrones[5].update(delta);
         //this.ship_out.setPosition(this.ship._modularShip. + this.offset, this.ship.posY);
 
         if(this.currentAnomaly) this.currentAnomaly.update(delta);
@@ -206,6 +212,7 @@ public ship_out: Phaser.GameObjects.Sprite;
             this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
             this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
             this.solarDrones[index].setVisible(true);
+            this.solarDrones[index].flame.setVisible(true);
             this.setSmallestIndexSD();
         }
     }
