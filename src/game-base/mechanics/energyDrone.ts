@@ -15,6 +15,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
     protected piTerm : string;
     public health : HealthbarSD;
     public collectED:collectEnergy_Drones;
+    public active:boolean = false;
 
 
 
@@ -102,6 +103,7 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
 
     public explode():void{
         this.player.activatedSolarDrones--;
+        this.active = false;
         this.player.raiseEnergyCost("solar",-20);
         this.player.explosion.explosionAt(this.x,this.y);
         this.player.scene.time.delayedCall(300,()=>{this.setVisible(false); this.player.setSmallestIndexSD();},[],this);
