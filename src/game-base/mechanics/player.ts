@@ -91,8 +91,8 @@ export class Player
         this.nameIdentifier = nameIdentifier;
         this.firstPlayer = isFirstPlayer;
         this.system = piSystem;
-        this.ship = new Ship(scene, x, y, this);
         this.drones = [new Drone(scene, x, y, this, 0, piAnim), new Drone(scene, x, y, this, 1, piAnim), new Drone(scene, x, y, this,2, piAnim)];
+        this.ship = new Ship(scene, x, y, this);
         this.scene = scene;
         this.activatedDrones = 0;
         this.solarDrones = [new EnergyDrone(scene, x, y, this, 0,piAnim,pem), new EnergyDrone(scene, x, y, this, 1,piAnim,pem),

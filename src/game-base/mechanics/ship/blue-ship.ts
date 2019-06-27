@@ -3,6 +3,7 @@ import {ShipPart} from "./ship-part";
 import {Infobox} from "../Infobox";
 import Sprite = Phaser.GameObjects.Sprite;
 import {Weapon} from "../weapon";
+import {Player} from "../player";
 import {Motor} from "../motor";
 
 
@@ -13,13 +14,6 @@ export class BlueShip extends BaseShip{
     wingUp: ShipPart;
     wingDown: ShipPart;
     hull: ShipPart;
-    motor : Motor;
-   /* motorL1: ShipPart;
-    motorL2: ShipPart;
-    motorP1: ShipPart;
-    motorP2: ShipPart;
-    motorR1: ShipPart;
-    motorR2: ShipPart; */
     x : number;
     y : number;
     durationX : number;
@@ -38,12 +32,12 @@ export class BlueShip extends BaseShip{
 
     private onScreenText: Phaser.GameObjects.Text;
 
-    public constructor(scene: Phaser.Scene,x: number, y: number){
+    public constructor(scene: Phaser.Scene,x: number, y: number, player: Player){
         super(scene, x, y);
 
 
         this.back = new ShipPart(scene, x, y, "ssbr/ssb_back", "ssbr/ssb_des_back",
-            79, 0, 36, 6,2);
+            79, 0, 36, 6,1);
 
         this.pilot = new ShipPart(scene, x, y, "ssbr/ssb_pilot", "ssbr/ssb_des_pilot",
             -149, 0, -121, 8,1);
@@ -85,15 +79,10 @@ export class BlueShip extends BaseShip{
         this.sinY = 0;
         this.weaponSinX = 0;
         this.weaponSinY = 0;
-        this.weapons = [];
-      //  this.motorCreate();
+        this.weapons = this.weapons = player.getDrones()[0].getWeapons();
         this.setAllPartPosition();
     }
 
- //   motorCreate(scene : Phaser.Scene): void{
-  //     this.motorTest = new Sprite(phase.Scene 1920/2, 300, "fire_light").setScale(0.8, 0.75);
-
-   // }
 
     toDestroyedShip(): void {
         this.back.toDestroyedPart();

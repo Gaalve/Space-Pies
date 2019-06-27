@@ -443,6 +443,10 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
 
 
+	public destroyPiCalcTexts(): void{
+		this.onScreenText.destroy();
+		this.piSeq.clearSequence(0,0,"");
+	}
 
 
 
