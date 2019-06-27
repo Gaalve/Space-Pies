@@ -241,6 +241,7 @@ export class Player
         this.activatedDrones = this.activatedDrones + 1;
         if(index != 0) {
             this.drones[index].setVisible(true);
+            this.drones[index].created = true;
         }
         this.drones[index].buildPiTerm();
         this.drones[index].refreshOnScreenText();

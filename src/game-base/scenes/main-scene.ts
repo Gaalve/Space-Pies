@@ -362,6 +362,7 @@ export class MainScene extends Phaser.Scene {
                     this.shopMActive = false;
                 }
                 this.shop_bg_back2.setVisible(true);
+                this.turn.getCurrentPlayer().getDrones()[2].hidePiSeq();
                 this.displayShop(this.shopS, this.shopSText);
                 this.updateShopS();
                 //this.shop1Active = false;
@@ -388,6 +389,7 @@ export class MainScene extends Phaser.Scene {
             }
             //this.closeShop(this.shop1, this.shop1Text, false);
             this.shop_bg_back2.setVisible(true);
+            this.turn.getCurrentPlayer().getDrones()[2].hidePiSeq();
             this.displayShop(this.shopT, this.shopTText);
             this.updateShopT();
             //this.shop1Active = false;
@@ -450,6 +452,7 @@ export class MainScene extends Phaser.Scene {
             }
             //this.closeShop(this.shop1, this.shop1Text, false);
             this.shop_bg_back2.setVisible(true);
+            this.turn.getCurrentPlayer().getDrones()[2].hidePiSeq();
             this.displayShop(this.shopM, this.shopMText);
             this.updateShopM("");
             this.shopMActive = true;
@@ -482,6 +485,7 @@ export class MainScene extends Phaser.Scene {
                     this.shopMActive = false;
                 }
                 this.shop_bg_back2.setVisible(false);
+                this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
                 this.closeShop(this.shop1, this.shop1Text, true);
                 this.openShop.setVisible(true);
                 this.shop.setVisible();
@@ -519,6 +523,7 @@ export class MainScene extends Phaser.Scene {
                         this.shopMActive = false;
                     }
                     this.shop_bg_back2.setVisible(false);
+                    this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
                     this.closeShop(this.shop1, this.shop1Text, true);
                     this.shop1Active = false;
                     this.energy.setVisible(false);
@@ -642,6 +647,7 @@ export class MainScene extends Phaser.Scene {
 
         this.closeS = this.setButton(1375, 1080-300, "button_back", 0.6,()=>{
             this.shop_bg_back2.setVisible(false);
+            this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
             this.closeShop(this.shopS, this.shopSText, false);
             //this.displayShop(this.shop1, this.shop1Text);
             this.shopSActive = false;
@@ -832,6 +838,7 @@ export class MainScene extends Phaser.Scene {
 
                 this.closeShop(this.shopT, this.shopTText, false);
                 this.shop_bg_back2.setVisible(false);
+                this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
                 //this.displayShop(this.shop1, this.shop1Text);
                 this.shopTActive = false;
                 //this.shop1Active = true;
@@ -1001,6 +1008,7 @@ export class MainScene extends Phaser.Scene {
             ()=>{
                 this.closeShop(this.shopM, this.shopMText, false);
                 this.shop_bg_back2.setVisible(false);
+                this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
                 this.shopMActive = false;
             });
 
@@ -1025,6 +1033,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     closeShop(array: Button[], text: Phaser.GameObjects.Text[],closeBg: boolean): void{
+        this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
         for(let b of array){
             b.setInvisible();
             b.removeInteractive();
@@ -1065,6 +1074,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     displayShop(array: Button[], text: Phaser.GameObjects.Text[]): void{
+
         for(let b of array){
             b.setVisible();
             b.restoreInteractive();
@@ -1219,6 +1229,7 @@ export class MainScene extends Phaser.Scene {
             if(this.shopSActive){
                 this.closeShop(this.shopS, this.shopSText, false);
                 this.shop_bg_back2.setVisible(false);
+                this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
                 this.shopSActive = false;
             }
 
