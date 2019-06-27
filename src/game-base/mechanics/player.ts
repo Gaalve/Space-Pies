@@ -550,21 +550,28 @@ public ship_out: Phaser.GameObjects.Sprite;
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "1", "e1", () =>{
                 this.createSolarDrone(1);
+                this.scene.scene.get("MainScene").events.emit("unlockS");
             }).
             channelOut("newShield" + p + "1","").
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "2", "e2", () =>{
                 this.createSolarDrone(2);
+                this.scene.scene.get("MainScene").events.emit("unlockS");
+
             }).
             channelOut("newShield" + p + "2","").
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "3", "e3", () =>{
                 this.createSolarDrone(3);
+                this.scene.scene.get("MainScene").events.emit("unlockS");
+
             }).
             channelOut("newShield" + p + "3","").
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "4", "e4", () =>{
                 this.createSolarDrone(4);
+                this.scene.scene.get("MainScene").events.emit("unlockS");
+
             }).
             channelOut("newShield" + p + "4","").
             next(drone),

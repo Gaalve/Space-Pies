@@ -437,6 +437,10 @@ export class MainScene extends Phaser.Scene {
             this.data.set("buy", "w");
             //this.updateShopW(true);
             this.updateShop1(true);
+            this.wModule.removeInteractive();
+            this.events.on("unlockW", ()=>{
+                this.updateShop1(false);
+            });
             let energy = player.getEnergy();
             let type = this.data.get("type");
                 if(this.shopTActive){
@@ -500,16 +504,20 @@ export class MainScene extends Phaser.Scene {
 
 
         this.solar = this.setButton(950, 1080-100, "ssr_solar_drone", 0.95,()=>{
-                let system = this.system;
-                let player = this.turn.getCurrentPlayer();
-                this.solar.removeInteractive();
-                player.payEnergy(player.getEnergyCost("solar"));
-                player.raiseEnergyCost("solar", 20);
-                this.updateEnergyText();
-                this.updateEnergyRate(true);
-                //this.updateShopW(false);
-                this.data.set("buy", "s");
-                this.updateShop1(true);
+            let system = this.system;
+            let player = this.turn.getCurrentPlayer();
+            this.solar.removeInteractive();
+            player.payEnergy(player.getEnergyCost("solar"));
+            player.raiseEnergyCost("solar", 20);
+            this.updateEnergyText();
+            this.updateEnergyRate(true);
+            //this.updateShopW(false);
+            this.data.set("buy", "s");
+            this.updateShop1(true);
+            this.solar.removeInteractive();
+            this.events.on("unlockS", ()=>{
+                this.updateShop1(false)
+            });
             let energy = player.getEnergy();
             let type = this.data.get("type");
             if(this.shopTActive){
@@ -2174,4 +2182,6 @@ export class MainScene extends Phaser.Scene {
             fill: '#fff', fontSize: 20, strokeThickness: 3, stroke: '#000'
         }
     }
+
+
 }
