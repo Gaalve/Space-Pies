@@ -3,6 +3,8 @@ import {ShipPart} from "./ship-part";
 import {Infobox} from "../Infobox";
 import Sprite = Phaser.GameObjects.Sprite;
 import {Weapon} from "../weapon";
+import {Motor} from "../motor";
+
 
 export class BlueShip extends BaseShip{
 
@@ -11,6 +13,13 @@ export class BlueShip extends BaseShip{
     wingUp: ShipPart;
     wingDown: ShipPart;
     hull: ShipPart;
+    motor : Motor;
+   /* motorL1: ShipPart;
+    motorL2: ShipPart;
+    motorP1: ShipPart;
+    motorP2: ShipPart;
+    motorR1: ShipPart;
+    motorR2: ShipPart; */
     x : number;
     y : number;
     durationX : number;
@@ -20,14 +29,21 @@ export class BlueShip extends BaseShip{
     private weapons: Weapon[];
     private weaponSinX: number;
     private weaponSinY: number;
+    public motorL1: Sprite;
+    public motorL2: Sprite;
+    private motorP1: Sprite;
+    private motorP2: Sprite;
+    private motorR1: Sprite;
+    private motorR2: Sprite;
 
     private onScreenText: Phaser.GameObjects.Text;
 
     public constructor(scene: Phaser.Scene,x: number, y: number){
         super(scene, x, y);
 
+
         this.back = new ShipPart(scene, x, y, "ssbr/ssb_back", "ssbr/ssb_des_back",
-            79, 0, 36, 6,1);
+            79, 0, 36, 6,2);
 
         this.pilot = new ShipPart(scene, x, y, "ssbr/ssb_pilot", "ssbr/ssb_des_pilot",
             -149, 0, -121, 8,1);
@@ -40,6 +56,13 @@ export class BlueShip extends BaseShip{
 
         this.hull = new ShipPart(scene, x, y, "ssbr/ssb_hull", "ssbr/ssb_des_hull",
             -46, 0, -37, 13,2);
+
+        this.motorL1 = scene.add.sprite (0,0, "fire_light");
+        this.motorL2 = scene.add.sprite (0,0, "fire_light");
+        this.motorP1 = scene.add.sprite (0,0, "fire_light");
+        this.motorP2 = scene.add.sprite (0,0, "fire_light");
+        this.motorR1 = scene.add.sprite (0,0, "fire_light");
+        this.motorR2 = scene.add.sprite (0,0, "fire_light");
 
         let infobox = <Infobox> scene.data.get("infoboxx");
         infobox.addTooltipInfo(this.back.normal, "[P2] The back of your Ship.");
@@ -63,9 +86,14 @@ export class BlueShip extends BaseShip{
         this.weaponSinX = 0;
         this.weaponSinY = 0;
         this.weapons = [];
+      //  this.motorCreate();
         this.setAllPartPosition();
     }
 
+ //   motorCreate(scene : Phaser.Scene): void{
+  //     this.motorTest = new Sprite(phase.Scene 1920/2, 300, "fire_light").setScale(0.8, 0.75);
+
+   // }
 
     toDestroyedShip(): void {
         this.back.toDestroyedPart();
@@ -86,6 +114,12 @@ export class BlueShip extends BaseShip{
         this.wingUp.setPosition(posX, posY);
         this.wingDown.setPosition(posX, posY);
         this.hull.setPosition(posX, posY);
+        this.motorL1.setPosition(this.hull.normal.x + 225, this.hull.normal.y - 18).setScale(0.8,0.8).setTint(0x00BFFF);
+        this.motorL2.setPosition(this.hull.normal.x + 225, this.hull.normal.y + 18).setScale(0.8,0.8).setTint(0x00BFFF);
+        this.motorP1.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70).setScale(0.8,0.8).setTint(0xCD00CD);
+        this.motorP2.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 70).setScale(0.8,0.8).setTint(0xCD00CD);
+        this.motorR1.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115).setScale(0.8,0.8).setTint(0xFF0000);
+        this.motorR2.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 115).setScale(0.8,0.8).setTint(0xFF0000);
 
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x, this.hull.normal.y - 110);
@@ -94,6 +128,12 @@ export class BlueShip extends BaseShip{
         this.onScreenText ? this.onScreenText.setPosition(posX + 165, posY + this.onScreenText.width/2) : null;
     }
 
+ //   motorIncreaseSize(){
+ //      this.system.pushSymbol(
+  //        this.system.add.channelInCB('increasesizelaser12', '', () => this.motorL1.setScale(1.0,1.0)).
+ //         channelInCB('increasesizelaser13', '',() => this.motorL1.setScale(1.2, 1.2)).nullProcess()
+  //     );
+ //   };
     toDestroyedBack(): void {
         this.back.toDestroyedPart();
     }
@@ -132,12 +172,27 @@ export class BlueShip extends BaseShip{
         this.sinX %= 2*Math.PI;
         this.sinY %= 2*Math.PI;
 
+        this.motorAnimated();
+
         this.setAllPartPosition();
     }
 
     setOnScreenText(text){
         this.onScreenText = text;
     }
+    motorAnimated(){
 
+
+    };
+
+     setMotorL11  (){
+        this.motorL1.setScale(1.0,1.0);
+    }
+    setMotorL12(){
+        this.motorL1.setScale(1.2, 1.2);
+    }
+    getMotorL2(){
+        return this.motorL2;
+    }
 
 }

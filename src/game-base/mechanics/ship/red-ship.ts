@@ -3,6 +3,7 @@ import {ShipPart} from "./ship-part";
 import {Infobox} from "../Infobox";
 import Sprite = Phaser.GameObjects.Sprite;
 import {Weapon} from "../weapon";
+import {Motor} from "../motor";
 
 export class RedShip extends BaseShip{
     backUp: ShipPart;
@@ -11,6 +12,9 @@ export class RedShip extends BaseShip{
     wingUp: ShipPart;
     wingDown: ShipPart;
     hull: ShipPart;
+    motorL: ShipPart;
+    motorP: ShipPart;
+    motorR: ShipPart;
     x : number;
     y : number;
     durationX : number;
@@ -19,6 +23,12 @@ export class RedShip extends BaseShip{
     sinY : number;
     onScreenText : Phaser.GameObjects.Text;
     private weapons: Weapon[];
+    private motorL1: Sprite;
+    private motorL2: Sprite;
+    private motorP1: Sprite;
+    private motorP2: Sprite;
+    private motorR1: Sprite;
+    private motorR2: Sprite;
 
 
     public constructor(scene: Phaser.Scene,x: number, y: number){
@@ -41,11 +51,18 @@ export class RedShip extends BaseShip{
         this.hull = new ShipPart(scene, x, y, "ssbr/ssr_hull", "ssbr/ssr_des_hull",
             11, 0, 55, 15,2);
 
+        this.motorL1 = scene.add.sprite (0,0, "fire_light");
+        this.motorL2 = scene.add.sprite (0,0, "fire_light");
+        this.motorP1 = scene.add.sprite (0,0, "fire_light");
+        this.motorP2 = scene.add.sprite (0,0, "fire_light");
+        this.motorR1 = scene.add.sprite (0,0, "fire_light");
+        this.motorR2 = scene.add.sprite (0,0, "fire_light");
+
         let infobox = <Infobox> scene.data.get("infoboxx");
-        infobox.addTooltipInfo(this.backDown.normal, "[P1] The right half of your Ship. God, how can P2 even look in the mirror ?")
-        infobox.addTooltipInfo(this.wingDown.normal, "[P1] The right half of your Ship. God, how can P2 even look in the mirror ?")
-        infobox.addTooltipInfo(this.backUp.normal, "[P1] Your left two wings. You got the latest model eh? You filthy ritch slut.");
-        infobox.addTooltipInfo(this.wingUp.normal, "[P1] Your left two wings. You got the latest model eh? You filthy ritch slut.")
+        infobox.addTooltipInfo(this.backDown.normal, "[P1] The right half of your Ship");
+        infobox.addTooltipInfo(this.wingDown.normal, "[P1] The right half of your Ship");
+        infobox.addTooltipInfo(this.backUp.normal, "[P1] Your left two wings");
+        infobox.addTooltipInfo(this.wingUp.normal, "[P1] Your left two wings");
         infobox.addTooltipInfo(this.pilot.normal, "[P1] This is Olaf\n" +
             "Bio:\n" +
             "     + renowned space ship engineer\n" +
@@ -63,10 +80,8 @@ export class RedShip extends BaseShip{
         this.sinY = 0;
         this.weapons = [];
         this.setAllPartPosition();
-
         this.setAllPartPosition();
     }
-
 
 
     toDestroyedShip(): void {
@@ -88,6 +103,13 @@ export class RedShip extends BaseShip{
         this.wingUp.setPosition(posX, posY);
         this.wingDown.setPosition(posX, posY);
         this.hull.setPosition(posX, posY);
+
+        this.motorL1.setPosition(this.hull.normal.x - 125, this.hull.normal.y - 12).setScale(0.8,0.8).setTint(0x00BFFF).setFlip(true, false);
+        this.motorL2.setPosition(this.hull.normal.x - 125, this.hull.normal.y + 12).setScale(0.8,0.8).setTint(0x00BFFF).setFlip(true, false);
+        this.motorP1.setPosition(this.hull.normal.x - 190, this.hull.normal.y - 92).setScale(0.8,0.8).setTint(0xCD00CD).setFlip(true, false);
+        this.motorP2.setPosition(this.hull.normal.x - 190, this.hull.normal.y + 92).setScale(0.8,0.8).setTint(0xCD00CD).setFlip(true, false);
+        this.motorR1.setPosition(this.hull.normal.x - 170, this.hull.normal.y - 140).setScale(0.8,0.8).setTint(0xFF0000).setFlip(true, false).setAngle(40);
+        this.motorR2.setPosition(this.hull.normal.x - 170, this.hull.normal.y + 140).setScale(0.8,0.8).setTint(0xFF0000).setFlip(true, false).setAngle(320);
 
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 124, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x + 44, this.hull.normal.y - 150);

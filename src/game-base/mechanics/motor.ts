@@ -4,8 +4,13 @@ import {BulletInfo} from "./weapon/bulletInfo";
 import {Bullet} from "./weapon/bullet";
 import {PiAnimSystem} from "./pianim/pi-anim-system";
 import {PiAnimSequence} from "./pianim/pi-anim-sequence";
+import {WeaponType} from "./weapon/weapon-type";
+import Sprite = Phaser.GameObjects.Sprite;
+import {BlueShip} from "./ship/blue-ship";
+import {RedShip} from "./ship/red-ship";
 
-export class Motor {
+
+export class Motor  {
 
     private player: Player;
     private system: PiSystem;
@@ -15,11 +20,11 @@ export class Motor {
     private activeMotorsLaserP2: number;
     private activeMotorsProjectileP2: number;
     private activeMotorsRocketP2: number;
-
     private piSeqS: PiAnimSequence;
     private piSeqA: PiAnimSequence;
     private piSeqR: PiAnimSequence;
-
+    private blueship : BlueShip;
+    //<reference path=" />
 
     //  private nameIdentifier : string;
 
@@ -55,7 +60,7 @@ export class Motor {
                 this.system.add.channelIn('buymotorlaser11', '')
                     .channelOutCB('buildmotorlaser11', '',
                         () => {this.activeMotorsLaserP1 = this.activeMotorsLaserP1 + 1})
-                    .channelIn('buymotorlaser12', '')
+                    .channelIn('buymotorlaser12', '', )
                     .channelOutCB('buildmotorlaser12', '',
                     () => {this.activeMotorsLaserP1 = this.activeMotorsLaserP1 + 1})
                     .channelIn('buymotorlaser13', '')
@@ -158,7 +163,13 @@ export class Motor {
 
             // creating laser motors when bought in shop for p2
             this.system.pushSymbol(
-                this.system.add.channelIn('buymotorlaser21', '').channelOutCB('buildmotorlaser21', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).channelIn('buymotorlaser22', '').channelOutCB('buildmotorlaser22', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).channelIn('buymotorlaser23', '').channelOutCB('buildmotorlaser23', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).nullProcess()
+                this.system.add.channelIn('buymotorlaser21', '').
+                channelOutCB('buildmotorlaser21', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).
+                channelInCB('buymotorlaser22', '', ()=> this.setmotorL12()).
+                channelOutCB('buildmotorlaser22', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).
+                channelInCB('buymotorlaser23', '', () => this.setmotorL13()).
+                channelOutCB('buildmotorlaser23', '', () => this.activeMotorsLaserP2 = this.activeMotorsLaserP2 + 1).
+                nullProcess()
             );
 
             // creating projectile motors when bought in shop for p2
@@ -230,10 +241,42 @@ export class Motor {
                         ()=>{this.piSeqR.resolveAllAndClearSequence(50, 1000, '!r'+pid+'()').addSymbol('0')},
                     new BulletInfo(true, x, y + Math.random() * 800 - 400), 0.4).nullProcess()));
 
+
         }
+  //      console.log("test");
+ //       this.motorL1 = new Sprite(scene, 500, 200, "fire_light").setScale(0.8, 0.75);
+ //       this.motorL1 = Phaser.add.sprite()
         this.startMotor();
 
     }
+
+ /*   public setMotorTexture void{
+        this.wClass = Weapon.getWeaponClass(type);
+        this._weaponType = type;
+        this.setTexture(Weapon.getWeaponTex(this.isFirst, type));
+        this.simplePi = this.wClass.charAt(0);
+        this.createPiTerm();
+
+        this.drone.getPlayer().isFirstPlayer() ? this.scene.data.get("redship").addWeapon(this) : this.scene.data.get("blueship").addWeapon(this);
+    } */
+
+  /*  private static getMotorTex(isFirstPlayer: boolean, type: WeaponType) : string{
+        if(isFirstPlayer)
+            switch (type) {
+                case WeaponType.LASER_ARMOR: return "ssr_weap_las";
+                case WeaponType.PROJECTILE_SHIELD: return "ssr_weap_pro";
+                case WeaponType.ROCKET: return "ssr_weap_rock";
+                case WeaponType.NONE: return "ssb_weap_las"; // wrong model is intended!
+            }
+        else
+            switch (type) {
+                case WeaponType.LASER_ARMOR: return "ssb_weap_las";
+                case WeaponType.PROJECTILE_SHIELD: return "ssb_weap_pro";
+                case WeaponType.ROCKET: return "ssb_weap_rock";
+                case WeaponType.NONE: return "ssr_weap_las"; // wrong model is intended!
+            }
+    } */
+
 
     public startMotor() {
 
@@ -263,7 +306,19 @@ export class Motor {
         }
     }
 
-    public setVisualMotor(){
+    public setmotorL12(){
+        this.blueship.motorL1.setScale(1.0,1.0);
+
+    }
+    public setmotorL13(){
+        this.blueship.motorL1.setScale(1.2,1.2);
+
+    }
+    public setmotorP12(){
+
+
+    }
+    public setmotorPL12(){
 
 
     }
