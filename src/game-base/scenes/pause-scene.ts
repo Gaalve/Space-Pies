@@ -115,21 +115,21 @@ export class PauseScene extends Phaser.Scene {
         this.add.image(200, 800, "laser_shield");
 
 
-        let animationText = this.add.text(150, 75, "Animation Style #1", {
+        let animationText = this.add.text(1920/2-60, 1080/2+200, "Pi-Style: #1", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
-        this.changeAnimationButton = new Button(this, 100, 100, "button_shadow",
-            "button_bg", "button_fg", "button_skip",0.95, ()=>{
+        this.changeAnimationButton = new Button(this, 1920/2-130, 1080/2+225, "button_shadow",
+            "button_bg", "button_fg", "button_options",0.95, ()=>{
                 let anim1: boolean = this.scene.isVisible("AnimationScene");
                 if (anim1) {
                     this.scene.setVisible(false, "AnimationScene");
                     this.scene.setVisible(true, "SimplePiCalc");
-                    animationText.setText("Animation Style #1")
+                    animationText.setText("Pi-Style: #1")
                 }
                 else {
                     this.scene.setVisible(true, "AnimationScene");
                     this.scene.setVisible(false, "SimplePiCalc");
-                    animationText.setText("Animation Style #2")
+                    animationText.setText("Pi-Style: #2")
                 }
             });
 
