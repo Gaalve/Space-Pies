@@ -46,6 +46,8 @@ export class WormHole extends Anomaly {
                 this.counter = 0;
                 this.setScale(1);
                 this.drone.setVisible(true);
+                this.drone.exists = true;
+                this.drone.refreshInfoBox();
             }
         }
 

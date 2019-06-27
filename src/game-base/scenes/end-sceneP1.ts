@@ -66,13 +66,12 @@ export class EndSceneP1 extends Phaser.Scene {
         this.buttonMain = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_skip",0.95,
             ()=>{
-                this.scene.get('MainScene').scene.restart();
+                this.scene.get('AnimationScene').scene.stop();
+                this.scene.get('SimplePiCalc').scene.stop();
+                this.scene.get('MainScene').scene.stop();
+                this.scene.launch('FadeScene', {shut: 'EndSceneP1', start: 'SimplePiCalc'});
                 this.P2.resetEnergy();
                 this.P1.resetEnergy();
-                //this.scene.resume('GuiScene');
-                //this.scene.bringToTop('GuiScene');
-                this.scene.stop();
-
             });
 
         this.buttonMain.setPosition(1920/2-100, 1080*2/3);

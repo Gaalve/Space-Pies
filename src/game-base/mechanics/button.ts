@@ -1,22 +1,23 @@
 import Sprite = Phaser.GameObjects.Sprite;
 import {Player} from "./player";
+import {Turn} from "./turn";
 
 export class Button{
 
-    private hovering: boolean;
+    public hovering: boolean;
     private scale: number;
-    private onClick: Function;
+    public onClick: Function;
     private func: Function;
     private active: boolean;
     private activeP2: boolean;
 
     //Textures
-    private readonly shadow: Phaser.GameObjects.Sprite;
-    private readonly bg: Phaser.GameObjects.Sprite;
-    private readonly img: Phaser.GameObjects.Sprite;
-    private readonly fg: Phaser.GameObjects.Sprite;
-    private readonly inactive: Phaser.GameObjects.Sprite;
-    private alt: Phaser.GameObjects.Sprite;
+    public readonly shadow: Phaser.GameObjects.Sprite;
+    public readonly bg: Phaser.GameObjects.Sprite;
+    public readonly img: Phaser.GameObjects.Sprite;
+    public readonly fg: Phaser.GameObjects.Sprite;
+    public readonly inactive: Phaser.GameObjects.Sprite;
+    public alt: Phaser.GameObjects.Sprite;
 
     //Color Interpolation
     private readonly startColor: Phaser.Display.Color;
@@ -120,7 +121,7 @@ export class Button{
         if(this.colorIdx < this.colorDist) this.colorIdx++;
     }
 
-    private setScale(): void{
+    public setScale(): void{
         this.shadow.setScale(this.scale, this.scale);
         this.bg.setScale(this.scale, this.scale);
         this.fg.setScale(this.scale, this.scale);
@@ -201,6 +202,85 @@ export class Button{
 
     isActive(): boolean{
         return this.active;
+    }
+
+    removeHover(){
+        this.shadow.on('pointerover', () => {this.hovering = true; this.updateStep()}) //makes it feel more reactive
+        this.shadow.on('pointerout', () => this.hovering = false)
+    }
+
+    setHover(turn : Turn){
+        this.shadow.on('pointerover', () => {this.hovering = true; this.updateStep(); turn.getCurrentPlayer().ship.modularShip.setShipOutVisible(true)}) //makes it feel more reactive
+        this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().ship.modularShip.setShipOutVisible(false)});
+    }
+
+    setHoverDrone(turn : Turn, index: number){
+        this.shadow.on('pointerover', () => {
+            this.hovering = true;
+            this.updateStep();
+            if (turn.getCurrentPlayer().getNrDrones() >= index + 1) {
+                turn.getCurrentPlayer().getDrones()[index].back.setVisible(true)
+            }
+        }); //makes it feel more reactive
+
+        this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getDrones()[index].back.setVisible(false)});
+
+    }
+
+    setHoverZone(turn: Turn, index: number){
+        switch (index) {
+            case(1):{
+                this.shadow.on('pointerover', () => {
+                    this.hovering = true;
+                    this.updateStep();
+                    if (turn.getCurrentPlayer().getHealth().zone1Bar.activeBars > 0) {
+                        turn.getCurrentPlayer().getHealth().zone1Bar.back.setVisible(true)
+                    }
+                }); //makes it feel more reactive
+
+                this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getHealth().zone1Bar.back.setVisible(false)});
+                break;
+            }
+            case(2):{
+                this.shadow.on('pointerover', () => {
+                    this.hovering = true;
+                    this.updateStep();
+                    if (turn.getCurrentPlayer().getHealth().zone2Bar.activeBars > 0) {
+                        turn.getCurrentPlayer().getHealth().zone2Bar.back.setVisible(true)
+                    }
+                }); //makes it feel more reactive
+
+                this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getHealth().zone2Bar.back.setVisible(false)});
+                break;
+            }
+
+            case(3):{
+                this.shadow.on('pointerover', () => {
+                    this.hovering = true;
+                    this.updateStep();
+                    if (turn.getCurrentPlayer().getHealth().zone3Bar.activeBars > 0) {
+                        turn.getCurrentPlayer().getHealth().zone3Bar.back.setVisible(true)
+                    }
+                }); //makes it feel more reactive
+
+                this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getHealth().zone3Bar.back.setVisible(false)});
+                break;
+            }
+
+            case(4):{
+                this.shadow.on('pointerover', () => {
+                    this.hovering = true;
+                    this.updateStep();
+                    if (turn.getCurrentPlayer().getHealth().zone4Bar.activeBars > 0) {
+                        turn.getCurrentPlayer().getHealth().zone4Bar.back.setVisible(true)
+                    }
+                }); //makes it feel more reactive
+
+                this.shadow.on('pointerout', () => {this.hovering = false; turn.getCurrentPlayer().getHealth().zone4Bar.back.setVisible(false)});
+            }
+
+        }
+
     }
 
 
