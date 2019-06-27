@@ -9,7 +9,7 @@ import {MainScene} from "../scenes/main-scene";
 import {BlueShip} from "./ship/blue-ship";
 import {RedShip} from "./ship/red-ship";
 import Sprite = Phaser.GameObjects.Sprite;
-
+import {MotorFlame} from "./motor-flame";
 import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
 import {AnimationUtilities} from "./animation/AnimationUtilites";
 import {Animation} from "./animation/Animation";
