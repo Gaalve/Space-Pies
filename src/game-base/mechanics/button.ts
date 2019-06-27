@@ -120,7 +120,7 @@ export class Button{
         if(this.colorIdx < this.colorDist) this.colorIdx++;
     }
 
-    private setScale(): void{
+    public setScale(): void{
         this.shadow.setScale(this.scale, this.scale);
         this.bg.setScale(this.scale, this.scale);
         this.fg.setScale(this.scale, this.scale);

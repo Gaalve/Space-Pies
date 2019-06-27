@@ -94,7 +94,7 @@ export class MainScene extends Phaser.Scene {
     private roundFG: Sprite;
 
     private infobox: Infobox;
-
+    public blackholeExists;
 
 
     private openShop: Phaser.GameObjects.Text;
@@ -239,6 +239,8 @@ export class MainScene extends Phaser.Scene {
         );
         this.buttonOption.setPosition(1880, 40);
 
+
+
         this.creatChooseRegen();
         this.createShop1();
         this.createChooseZones();
@@ -272,6 +274,8 @@ export class MainScene extends Phaser.Scene {
             channelIn("secondunlock2","").
             channelIn("secondunlock1","").nullProcess()
         );
+
+        this.blackholeExists = false;
 
         this.system.start();
     }
@@ -1897,5 +1901,62 @@ export class MainScene extends Phaser.Scene {
 
     }
 
+    public anomalyInfoBoxes(type: string){
 
+        let blackBox = this.add.graphics();
+        let tip = this.add.text(660, 340, this.getTipText(type), MainScene.getTipFontStyle());
+
+        tip.depth = 100;
+        blackBox.depth = 99;
+
+        let width = tip.displayWidth + 50;
+        let height = tip.displayHeight < 180 ? 180 : tip.displayHeight * 5;
+        blackBox.fillStyle(0x000000, 1);
+        blackBox.fillRoundedRect(640, 320, width, height, 32);
+
+        blackBox.alpha = 0.9;
+        blackBox.setDepth(0);
+
+        let skip = this.add.text(1180, 435, "skip", {fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2})
+
+        let okBox = new Button(this, 660, 500, "button_shadow", "button_bg","button_fg", "button_resume", 0.5);
+        okBox.setOnClick(()=>{
+            okBox.setInvisible();
+            blackBox.destroy()
+            tip.destroy();
+            skip.destroy();
+            this.system.start();
+        });
+
+        okBox.setPosition(1260,450);
+        okBox.setScale();
+        okBox.setVisible();
+    }
+
+    private getTipText(type: string){
+        if (type == "erupt"){
+            return "A sun eruption is about to come through. Be careful,\n" +
+                   "this can cause a lot of damage to your shields. Your\n" +
+                   "shields will maybe be destroyed."
+        }
+        if (type == "worm"){
+            return "A worm  hole is going to appear and leave a special \n" +
+                   "solar drone for you, called nuclear drone. For more \n" +
+                   "information about this drone, just hover your mouse \n" +
+                   "over it."
+        }
+        if (type == "black"){
+            return "A black hole will appear. It increases the number of\n" +
+                   "projectile misses. So both of you should be careful.\n" +
+                   "Your projectiles may not find the right way."
+        }
+    }
+
+
+    private static getTipFontStyle()
+    {
+        return {
+            fill: '#fff', fontSize: 20, strokeThickness: 3, stroke: '#000'
+        }
+    }
 }

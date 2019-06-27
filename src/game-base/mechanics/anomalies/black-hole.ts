@@ -1,5 +1,6 @@
 import {Player} from "../player";
 import {Anomaly} from "./anomaly";
+import {Infobox} from "../Infobox";
 
 
 export class BlackHole extends Anomaly {
@@ -9,6 +10,8 @@ export class BlackHole extends Anomaly {
     private activated: boolean;
     private readonly maxCounter: number;
     private sinCounter: number;
+    private infobox: Infobox;
+
 
     public constructor(scene : Phaser.Scene, player: Player) {
         super(scene, player, 960, 540, "black_hole", "hole");
@@ -21,6 +24,12 @@ export class BlackHole extends Anomaly {
         this.activated = false;
         this.maxCounter = 500;
         this.sinCounter = 0;
+
+        this.infobox = <Infobox> this.scene.data.get("infoboxx");
+        this.infobox.addTooltipInfo(this,
+            "Black Hole:\n" +
+            " This hole may suck in projectiles from each of you."
+        );
     }
 
     public update(delta: number): void {
@@ -44,7 +53,10 @@ export class BlackHole extends Anomaly {
             this.activated = true;
             this.counter = this.maxCounter;
             this.setScale(this.size / 10);
-            if (this.size == 0) this.destroy();
+            if (this.size == 0) {
+                this.infobox = undefined;
+                this.destroy();
+            }
         }
 
     }
