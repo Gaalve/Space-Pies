@@ -1999,10 +1999,10 @@ export class MainScene extends Phaser.Scene {
         test.alpha=0;
         switch(type){
             case("armor"):test.setTint(0x999999,0x999999,0x999999,0x999999);break;
-            case("shield"):test.setTint(0x053C8C,0x053C8C,0x053C8C,0x053C8C);break;
-            case("rocket"):test.setTint(0x700000,0x700000,0x700000,0x700000);break;
+            case("shield"):test.setTint(0x034CFA,0x034CFA,0x034CFA,0x034CFA);break;
+            case("rocket"):test.setTint(0xFD2301,0xFD2301,0xFD2301,0xDA0000);break;
             case("nano"):test.setTint(0x1B1B1B,0x1B1B1B,0x1B1B1B,0x1B1B1B);break;
-            case("adap"):test.setTint(0xF0FF00,0x700000,0x999999,0x053C8C);break;
+            case("adap"):test.setTint(0xF9F501,0xF9F501,0xF9F501,0xF9F501);break;
         }
 
 

@@ -297,7 +297,7 @@ export class Player {
 
     public CollectEnergyAnimation():void{
         this.collectE.collect(this.ship.posX,this.ship.posY);
-        for (let i=1;i<5;i++) {
+        for (let i=1;i<this.solarDrones.length;i++) {
             if(this.solarDrones[i].visible){
                 this.solarDrones[i].collectED.collect(this.solarDrones[i].x,this.solarDrones[i].y,this.ship.posX,this.ship.posY);
                 this.scene.time.delayedCall(500, ()=>{this.solarDrones[i].collectED.stopCollect();}, [], this);
