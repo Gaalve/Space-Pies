@@ -458,6 +458,7 @@ export class Drone extends Phaser.GameObjects.Sprite{
 			this.onScreenText.setAngle(270);
 		}
 		this.onScreenText.setDisplayOrigin(0.5);
+		this.onScreenText.setDepth(-1);
 	}
 
 

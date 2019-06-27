@@ -108,7 +108,7 @@ export class PauseScene extends Phaser.Scene {
 
         this.add.image(120,750,'ssr_weap_rock');
         this.add.image(120,800,'ssb_weap_rock');
-        this.add.text(230,750,'Rocket launchers attack armor, rocket \nand laser shields.', {
+        this.add.text(230,750,'Rocket launchers attack armor, laser \nand hyper shields.', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 24});
         this.add.image(200, 750,"armor_shield");
         this.add.image(218, 775,"rocket_shield");
@@ -152,7 +152,7 @@ export class PauseScene extends Phaser.Scene {
 
         this.add.image(1920-120,580,'button_rocket');
         this.add.image(1920-170,580, "rocket_shield");
-        this.add.text(1920-600,557,'Rocket shields protect against\nlaser and projectile weapons.', {
+        this.add.text(1920-600,557,'Hyper shields protect against\nlaser and projectile weapons.', {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 24});
 
         this.add.image(1920-120,700,'button_nano');

@@ -47,17 +47,17 @@ export class RedShip extends BaseShip{
         this.ship_out.setVisible(false);
         this.offset = 20;
         let infobox = <Infobox> scene.data.get("infoboxx");
-        infobox.addTooltipInfo(this.backDown.normal, "[P1] The right half of your Ship. God, how can P2 even look in the mirror ?")
-        infobox.addTooltipInfo(this.wingDown.normal, "[P1] The right half of your Ship. God, how can P2 even look in the mirror ?")
-        infobox.addTooltipInfo(this.backUp.normal, "[P1] Your left two wings. You got the latest model eh? You filthy ritch slut.");
-        infobox.addTooltipInfo(this.wingUp.normal, "[P1] Your left two wings. You got the latest model eh? You filthy ritch slut.")
+        infobox.addTooltipInfo(this.backDown.normal, "[P1] The right half of your Ship. God, how can Olga even look in the mirror ?")
+        infobox.addTooltipInfo(this.wingDown.normal, "[P1] The right half of your Ship. God, how can Olga even look in the mirror ?")
+        infobox.addTooltipInfo(this.backUp.normal, "[P1] Your left two wings. You got the latest model eh? You filthy little snob.");
+        infobox.addTooltipInfo(this.wingUp.normal, "[P1] Your left two wings. You got the latest model eh? You filthy little snob.")
         infobox.addTooltipInfo(this.pilot.normal, "[P1] This is Olaf\n" +
             "Bio:\n" +
             "     + renowned space ship engineer\n" +
-            "     + inventor of the rocket shield\n" +
+            "     + inventor of the hyper shield\n" +
             "     + cake thief\n" +
             "     + does not like tangerines");
-        infobox.addTooltipInfo(this.hull.normal, "[P1] The hull of your ship. \nAt least this one's as ugly as the others. Not as rich as you though 'eh ?")
+        infobox.addTooltipInfo(this.hull.normal, "[P1] The hull of your ship. \nAt least this one's as ugly as the others. Not as rich as you thought 'eh ?")
 
 
         this.x =  x;

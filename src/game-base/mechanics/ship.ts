@@ -20,6 +20,7 @@ export class Ship{
 
     public constructor (scene : Phaser.Scene, x: number, y: number, player : Player){
         this.scene = scene;
+
         if(player.getNameIdentifier() == "P1"){
             this.isRed = true;
             this._modularShip = new RedShip(scene, x, y, player);
