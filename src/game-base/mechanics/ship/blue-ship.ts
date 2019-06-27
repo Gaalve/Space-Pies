@@ -1,5 +1,9 @@
 import {BaseShip} from "./base-ship";
 import {ShipPart} from "./ship-part";
+import {Infobox} from "../Infobox";
+import Sprite = Phaser.GameObjects.Sprite;
+import {Weapon} from "../weapon";
+import {Player} from "../player";
 
 export class BlueShip extends BaseShip{
 
@@ -8,8 +12,19 @@ export class BlueShip extends BaseShip{
     wingUp: ShipPart;
     wingDown: ShipPart;
     hull: ShipPart;
+    x : number;
+    y : number;
+    durationX : number;
+    durationY : number;
+    sinX : number;
+    sinY : number;
+    private weapons: Weapon[];
+    private weaponSinX: number;
+    private weaponSinY: number;
 
-    public constructor(scene: Phaser.Scene,x: number, y: number){
+    private onScreenText: Phaser.GameObjects.Text;
+
+    public constructor(scene: Phaser.Scene,x: number, y: number, player: Player){
         super(scene, x, y);
 
         this.back = new ShipPart(scene, x, y, "ssbr/ssb_back", "ssbr/ssb_des_back",
@@ -26,8 +41,30 @@ export class BlueShip extends BaseShip{
 
         this.hull = new ShipPart(scene, x, y, "ssbr/ssb_hull", "ssbr/ssb_des_hull",
             -46, 0, -37, 13,2);
+
+        let infobox = <Infobox> scene.data.get("infoboxx");
+        infobox.addTooltipInfo(this.back.normal, "[P2] The back of your Ship.");
+        infobox.addTooltipInfo(this.pilot.normal, "[P2] This is Olga!\n" +
+            "Bio:\n" +
+            "     + baked a cake...\n" +
+            "     + ...the best cake in the universe...\n" +
+            "     + ...it's way too good... almost god like...\n" +
+            "     + ...one can not simply describe the taste of it in words.\n" +
+            "     + Olga's cake was stolen and Olga wants it back, at all costs!");
+        infobox.addTooltipInfo(this.wingUp.normal, "[P2] Your right wing.");
+        infobox.addTooltipInfo(this.wingDown.normal, "[P2] The left wing of your Ship.");
+        infobox.addTooltipInfo(this.hull.normal, "[P2] The hull of your ship.");
+
+        this.x =  x;
+        this.y = y;
+        this.durationX = 1250;
+        this.durationY = 750;
+        this.sinX = 0;
+        this.sinY = 0;
+        this.weaponSinX = 0;
+        this.weaponSinY = 0;
+        this.weapons = this.weapons = player.getDrones()[0].getWeapons();
         this.setAllPartPosition();
-        // this.toDestroyedShip();
     }
 
 
@@ -39,12 +76,23 @@ export class BlueShip extends BaseShip{
         this.hull.toDestroyedPart();
     }
 
+
     setAllPartPosition(): void {
-        this.back.setPosition(this.posX, this.posY);
-        this.pilot.setPosition(this.posX, this.posY);
-        this.wingUp.setPosition(this.posX, this.posY);
-        this.wingDown.setPosition(this.posX, this.posY);
-        this.hull.setPosition(this.posX, this.posY);
+        let posX = (this.posX + Math.sin(this.sinX) * 15);
+        // noinspection JSSuspiciousNameCombination
+        let posY = (this.posY + Math.cos(this.sinY) * 15);
+
+        this.back.setPosition(posX, posY);
+        this.pilot.setPosition(posX, posY);
+        this.wingUp.setPosition(posX, posY);
+        this.wingDown.setPosition(posX, posY);
+        this.hull.setPosition(posX, posY);
+
+        if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
+        if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x, this.hull.normal.y - 110);
+        if(this.weapons[2]) this.weapons[2].setPosition((this.hull.normal.x), this.hull.normal.y + 110);
+
+        this.onScreenText ? this.onScreenText.setPosition(posX + 165, posY + this.onScreenText.width/2) : null;
     }
 
     toDestroyedBack(): void {
@@ -67,12 +115,30 @@ export class BlueShip extends BaseShip{
         this.wingUp.toDestroyedPart();
     }
 
-    update(delta: number): void {
+    public addWeapon(weapon: Weapon)
+    {
+        this.weapons.push(weapon);
+    }
+
+    update(delta: number, weapon?: Weapon): void {
         this.back.update(delta);
         this.pilot.update(delta);
         this.hull.update(delta);
         this.wingUp.update(delta);
         this.wingDown.update(delta);
+
+        this.sinX += delta/ this.durationX;
+        this.sinY += delta/ this.durationY;
+
+        this.sinX %= 2*Math.PI;
+        this.sinY %= 2*Math.PI;
+
+        this.setAllPartPosition();
     }
+
+    setOnScreenText(text){
+        this.onScreenText = text;
+    }
+
 
 }

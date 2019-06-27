@@ -1,3 +1,4 @@
+import {Weapon} from "../weapon";
 
 
 export abstract class BaseShip {
@@ -27,6 +28,7 @@ export abstract class BaseShip {
     public abstract toDestroyedHull(): void;
 
     public abstract toDestroyedShip(): void;
+    public abstract addWeapon(weapon:Weapon): void;
 
     public abstract update(delta: number): void;
 }
