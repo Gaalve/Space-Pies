@@ -17,6 +17,10 @@ export class MotorFlame {
         this.flameMid.setScale(0.8);
         this.flameFront.setScale(0.6);
 
+        this.flameBack.setDepth(-3);
+        this.flameMid.setDepth(-2);
+        this.flameFront.setDepth(-1);
+
         this.flameBack.setOrigin(0, 0.5);
         this.flameMid.setOrigin(0, 0.5);
         this.flameFront.setOrigin(0, 0.5);
@@ -84,5 +88,11 @@ export class MotorFlame {
         this.flameBack.setPosition(posX, posY);
         this.flameMid.setPosition(posX, posY);
         this.flameFront.setPosition(posX, posY);
+    }
+
+    public setVisible(b: boolean){
+        this.flameBack.setVisible(b);
+        this.flameMid.setVisible(b);
+        this.flameFront.setVisible(b);
     }
 }

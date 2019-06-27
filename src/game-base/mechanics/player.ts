@@ -48,7 +48,6 @@ export class Player
     public z3Destroyed: boolean = false;
     public z4Destroyed: boolean = false;
 
-
     private health : Health;
     private energy : number;
     private shieldCost : number = 10; // cost for armor/shield/rocket shield
@@ -59,8 +58,6 @@ export class Player
     private solarCost: number = 60; // cost for solar drone
     private adaptCost: number = 16; // cost for adaptive shield
     private motorCost: number = 5;
-
-
 
     public pem: Phaser.GameObjects.Particles.ParticleEmitterManager;
     public explosion: Explosion;
@@ -82,8 +79,6 @@ export class Player
     public motor: Motor;
 
     private malusEnergy: number;
-
-
 
     public constructor(scene: Phaser.Scene, x: number, y: number, nameIdentifier: string, isFirstPlayer: boolean,
                        piSystem : PiSystem, pem: ParticleEmitterManager, bt: BattleTimeBar, piAnim: PiAnimSystem){
@@ -116,57 +111,6 @@ export class Player
 
         this.motor = new Motor(scene, this, x, y, piAnim);
         this.malusEnergy = 0;
-
-        //console.log(blackholeAppears)
-        //for (let i= 0; i < this.anomalies.length; i++){ console.log(this.anomalies[i])}
-        //this.anomalies = ["hole", "eruption", "nanodrone"];
-
-        //TODO: remove when Triebwerke ready
-      //  Motor.startMotor();
-
- /*       this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('armor'+nameIdentifier, '',
-            new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('shield'+nameIdentifier, '',
-            new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess()));
-        this.system.pushSymbol(piSystem.add.replication(piSystem.add.channelIn('rocket'+nameIdentifier, '',
-            new BulletInfo(true, x, y + Math.random()*800 - 400), 0.4).nullProcess())); */
-    //    this.system.pushSymbol(this.system.add.replication(this.system.add.channelIn(
-   //         'shotblock'+this.getNameIdentifier().charAt(1), "","", 0).nullProcess())
-    //    );
-
-
-        // z1 starts with 1 shield
-        // this.health.addToHz(piSystem, 'radap', 'z1');
-        // this.health.addToHz(piSystem, 'rshield', 'z1');
-        // this.health.addToHz(piSystem, 'rarmor', 'z1');
-        // this.health.addToHz(piSystem, 'rshield', 'z1');
-        // this.health.addToHz(piSystem, 'rarmor', 'z1');
-        // this.health.addToHz(piSystem, 'rshield', 'z1');
-        // this.health.addToHz(piSystem, 'rarmor', 'z1');
-        //
-        // // z2 starts with 1 shield
-        // this.health.addToHz(piSystem, 'rshield', 'z2');
-        // this.health.addToHz(piSystem, 'rarmor', 'z2');
-        // this.health.addToHz(piSystem, 'rarmor', 'z2');
-        //
-        // // z3 starts with 1 armor
-        // this.health.addToHz(piSystem, 'rshield', 'z3');
-        // this.health.addToHz(piSystem, 'rarmor', 'z3');
-        // this.health.addToHz(piSystem, 'rshield', 'z3');
-        // this.health.addToHz(piSystem, 'rshield', 'z3');
-        // this.health.addToHz(piSystem, 'rarmor', 'z3');
-        // this.health.addToHz(piSystem, 'rshield', 'z3');
-        // this.health.addToHz(piSystem, 'rshield', 'z3');
-        // this.health.addToHz(piSystem, 'rarmor', 'z3');
-        // this.health.addToHz(piSystem, 'rshield', 'z3');
-        // this.health.addToHz(piSystem, 'rshield', 'z3');
-        // this.health.addToHz(piSystem, 'rarmor', 'z3');
-        // this.health.addToHz(piSystem, 'rshield', 'z3');
-        //
-        // // z4 starts with 1 armor
-        // this.health.addToHz(piSystem, 'rarmor', 'z4');
-        // this.health.addToHz(piSystem, 'rarmor', 'z4');
-        // this.health.addToHz(piSystem, 'rshield', 'z4');
 
         this.energy = 55;
 
@@ -242,6 +186,7 @@ export class Player
         if(index != 0) {
             this.drones[index].setVisible(true);
             this.drones[index].created = true;
+            this.drones[index].flame.setVisible(true);
         }
         this.drones[index].buildPiTerm();
         this.drones[index].refreshOnScreenText();

@@ -277,8 +277,8 @@ export class Motor  {
 
     private buyMotorS(): void{
         this._activeMotorsLaser += 1;
-        this.player.ship.modularShip.motorLsize1 = this._activeMotorsLaser/3 * 0.8 + 0.2;
-        this.player.ship.modularShip.motorLsize2 = this._activeMotorsLaser/3 * 0.8 + 0.2;
+        this.player.ship.modularShip.motorLsize1 = this._activeMotorsLaser/3 * 0.8 + 0.5;
+        this.player.ship.modularShip.motorLsize2 = this._activeMotorsLaser/3 * 0.8 + 0.5;
         switch (this._activeMotorsLaser) {
             case 0: this.evChanceS.setText("0%");break;
             case 1: this.evChanceS.setText("30%");break;
@@ -289,8 +289,8 @@ export class Motor  {
 
     private buyMotorR(): void{
         this._activeMotorsRocket += 1;
-        this.player.ship.modularShip.motorRsize1 = this._activeMotorsRocket/3 * 0.8 + 0.2;
-        this.player.ship.modularShip.motorRsize2 = this._activeMotorsRocket/3 * 0.8 + 0.2;
+        this.player.ship.modularShip.motorRsize1 = this._activeMotorsRocket/3 * 0.8 + 0.5;
+        this.player.ship.modularShip.motorRsize2 = this._activeMotorsRocket/3 * 0.8 + 0.5;
         switch (this._activeMotorsRocket) {
             case 0: this.evChanceR.setText("0%");break;
             case 1: this.evChanceR.setText("0%");break;
@@ -301,8 +301,8 @@ export class Motor  {
 
     private buyMotorA(): void{
         this._activeMotorsProjectile += 1;
-        this.player.ship.modularShip.motorPsize1 = this._activeMotorsProjectile/3 * 0.8 + 0.2;
-        this.player.ship.modularShip.motorPsize2 = this._activeMotorsProjectile/3 * 0.8 + 0.2;
+        this.player.ship.modularShip.motorPsize1 = this._activeMotorsProjectile/3 * 0.8 + 0.5;
+        this.player.ship.modularShip.motorPsize2 = this._activeMotorsProjectile/3 * 0.8 + 0.5;
         switch (this._activeMotorsProjectile) {
             case 0: this.evChanceA.setText("0%");break;
             case 1: this.evChanceA.setText("30%");break;
