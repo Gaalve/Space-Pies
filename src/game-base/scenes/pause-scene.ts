@@ -89,18 +89,21 @@ export class PauseScene extends Phaser.Scene {
 
         this.buttonDebug.setPosition(1880, 1040);
 
-       /*this.buttonMain = new Button(this, 1920/2-130, 1080/2+225, "button_shadow",
+       this.buttonMain = new Button(this, 1920/2-130, 1080/2+225, "button_shadow",
             "button_bg", "button_fg", "button_skip",
-            ()=>{
-                this.scene.launch('FadeScene',{shut: 'MainScene',start: 'StartScene'});
-                this.scene.launch('FadeScene', {shut: 'GuiScene', start: 'StartScene'});
-                this.scene.bringToTop('StartScene');
-                this.P2.resetEnergy();
-                this.P1.resetEnergy();
-                this.scene.sleep();});
+           1, ()=> {
+               this.scene.launch("StartScene");
+               this.scene.get("GuiScene").scene.sleep();
+               this.scene.get("MainScene").scene.restart();
+               this.scene.get("MainScene").scene.sleep();
+
+               this.P2.resetEnergy();
+               this.P1.resetEnergy();
+               this.scene.sleep();
+           });
 
         this.add.text(1920/2-60, 1080/2+200, "Back to main", {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});*/
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
         // Weapons Hints
         this.add.text(120,240,'Weapon Hints:',{
@@ -171,6 +174,7 @@ export class PauseScene extends Phaser.Scene {
             this.buttonReset.updateStep();
             this.buttonResume.updateStep();
             this.buttonDebug.updateStep();
+            this.buttonMain.updateStep();
 
         }
     }
