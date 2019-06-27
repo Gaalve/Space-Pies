@@ -28,12 +28,18 @@ export class BlueShip extends BaseShip{
 
     public motorRocket1: MotorFlame;
     public motorRocket2: MotorFlame;
+    public motorRsize1: number;
+    public motorRsize2: number;
 
     public motorLaser1: MotorFlame;
     public motorLaser2: MotorFlame;
+    public motorLsize1: number;
+    public motorLsize2: number;
 
     public motorProj1: MotorFlame;
     public motorProj2: MotorFlame;
+    public motorPsize1: number;
+    public motorPsize2: number;
 
 
     private player: Player;
@@ -45,6 +51,12 @@ export class BlueShip extends BaseShip{
         super(scene, x, y);
         this.player = player;
         this.system = this.player.getSystem();
+        this.motorRsize1 = 1.0;
+        this.motorRsize2 = 1.0;
+        this.motorLsize1 = 1.0;
+        this.motorLsize2 = 1.0;
+        this.motorPsize1 = 1.0;
+        this.motorPsize2 = 1.0;
 
         this.back = new ShipPart(scene, x, y, "ssbr/ssb_back", "ssbr/ssb_des_back",
             79, 0, 36, 6,1);
@@ -80,6 +92,19 @@ export class BlueShip extends BaseShip{
 
         this.motorRocket2 = new MotorFlame(scene);
         this.motorRocket2.tintRed();
+
+        this.motorLaser1 = new MotorFlame(scene);
+        this.motorLaser1.tintBlue();
+        this.motorLaser1.setScale(1.0);
+
+        this.motorLaser2 = new MotorFlame(scene);
+        this.motorLaser2.tintBlue();
+
+        this.motorProj1 = new MotorFlame(scene);
+        this.motorProj1.tintPurple();
+
+        this.motorProj2 = new MotorFlame(scene);
+        this.motorProj2.tintPurple();
 
         this.x =  x;
         this.y = y;
@@ -117,57 +142,22 @@ export class BlueShip extends BaseShip{
 
 
         this.motorRocket1.setPosition(this.hull.normal.x + 115, this.hull.normal.y + 118);
-        this.motorRocket1.setScaleSin(1.0, this.sinX);
+        this.motorRocket1.setScaleSin(this.motorRsize1, this.sinX);
 
-        this.motorRocket2.setPosition(this.hull.normal.x + 115, this.hull.normal.y - 118);
-        this.motorRocket2.setScaleSin(1.5, this.sinX);
-        // this.motorRocket2.setScaleBack((Math.sin(this.sinX*17) + 1)/2 * 0.15 + 0.85);
-        // this.motorRocket2.setScaleMid((Math.sin(this.sinX*23) + 1)/2 * 0.15 + 0.7);
-        // this.motorRocket2.setScaleFront((Math.sin(this.sinX*27) + 1)/2 * 0.15 + 0.7);
-        // this.motorRocket2.setScaleRandom((Math.sin(this.sinX*17) + 1)/2 * 0.3 + 0.7);
+        this.motorRocket2.setPosition(this.hull.normal.x + 115, this.hull.normal.y - 116);
+        this.motorRocket2.setScaleSin(this.motorRsize2, this.sinX);
 
+        this.motorLaser1.setPosition(this.hull.normal.x + 195, this.hull.normal.y + 18);
+        this.motorLaser1.setScaleSin(this.motorLsize1, this.sinX);
 
-        // this.motorR21.setPosition(this.hull.normal.x + 250, this.hull.normal.y + 218);
-        // this.motorR22.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
-        // this.motorR23.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
-        // this.motorR24.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
-        // this.motorR25.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
-        // this.motorR26.setPosition(this.hull.normal.x + 145, this.hull.normal.y + 118);
-        //
-        // this.motorL11.setPosition(this.hull.normal.x + 213, this.hull.normal.y - 18);
-        // this.motorL12.setPosition(this.hull.normal.x + 217, this.hull.normal.y - 18);
-        // this.motorL13.setPosition(this.hull.normal.x + 222, this.hull.normal.y - 18);
-        // this.motorL14.setPosition(this.hull.normal.x + 223, this.hull.normal.y - 18);
-        // this.motorL15.setPosition(this.hull.normal.x + 224, this.hull.normal.y - 18);
-        // this.motorL16.setPosition(this.hull.normal.x + 225, this.hull.normal.y - 18);
-        //
-        // this.motorL21.setPosition(this.hull.normal.x + 213, this.hull.normal.y + 18);
-        // this.motorL22.setPosition(this.hull.normal.x + 217, this.hull.normal.y + 18);
-        // this.motorL23.setPosition(this.hull.normal.x + 222, this.hull.normal.y + 18);
-        // this.motorL24.setPosition(this.hull.normal.x + 223, this.hull.normal.y + 18);
-        // this.motorL25.setPosition(this.hull.normal.x + 224, this.hull.normal.y + 18);
-        // this.motorL26.setPosition(this.hull.normal.x + 225, this.hull.normal.y + 18);
-        //
-        // this.motorP11.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        // this.motorP12.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        // this.motorP13.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        // this.motorP14.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        // this.motorP15.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        // this.motorP16.setPosition(this.hull.normal.x + 160, this.hull.normal.y - 70);
-        //
-        // this.motorP21.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        // this.motorP22.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        // this.motorP23.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        // this.motorP24.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        // this.motorP25.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        // this.motorP26.setPosition(this.hull.normal.x + 160, this.hull.normal.y + 73);
-        //
-        // this.motorR11.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
-        // this.motorR12.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
-        // this.motorR13.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
-        // this.motorR14.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
-        // this.motorR15.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
-        // this.motorR16.setPosition(this.hull.normal.x + 145, this.hull.normal.y - 115);
+        this.motorLaser2.setPosition(this.hull.normal.x + 195, this.hull.normal.y - 18);
+        this.motorLaser2.setScaleSin(this.motorLsize2, this.sinX);
+
+        this.motorProj1.setPosition(this.hull.normal.x + 130, this.hull.normal.y + 75);
+        this.motorProj1.setScaleSin(this.motorPsize1, this.sinX);
+
+        this.motorProj2.setPosition(this.hull.normal.x + 130, this.hull.normal.y - 70);
+        this.motorProj2.setScaleSin(this.motorPsize2, this.sinX);
 
         if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x - 75, this.hull.normal.y);
         if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x, this.hull.normal.y - 110);
@@ -177,20 +167,20 @@ export class BlueShip extends BaseShip{
     }
 
     motorIncreaseSize(){
- /*      this.system.pushSymbol(
-          this.system.add.channelInCB('increasesizelaser22', '', () =>  {this.motorL11.setScale(1.0, 1.0), this.motorL2.setScale(1.0, 1.0)}).
-          channelInCB('increasesizelaser23', '',() => {this.motorL11.setScale(1.2, 1.2), this.motorL2.setScale(1.2, 1.2)}).nullProcess()
+       this.system.pushSymbol(
+          this.system.add.channelInCB('increasesizelaser22', '', () => {this.motorLsize1 = 1.2, this.motorLsize2 = 1.2}).
+          channelInCB('increasesizelaser23', '',() => {this.motorLsize2 = 1.4, this.motorLsize1 = 1.4}).nullProcess()
        );
 
         this.system.pushSymbol(
-            this.system.add.channelInCB('increasesizeprojectile22', '', () =>  {this.motorP1.setScale(1.0, 1.0), this.motorP2.setScale(1.0, 1.0)}).
-            channelInCB('increasesizeprojectile23', '',() => {this.motorP1.setScale(1.2, 1.2), this.motorP2.setScale(1.2, 1.2)}).nullProcess()
+            this.system.add.channelInCB('increasesizeprojectile22', '', () =>  {this.motorPsize1 = 1.2, this.motorPsize2 = 1.2}).
+            channelInCB('increasesizeprojectile23', '',() => {this.motorPsize1 = 1.4, this.motorPsize2 = 1.4}).nullProcess()
         );
 
         this.system.pushSymbol(
-            this.system.add.channelInCB('increasesizerocket22', '', () =>  {this.motorR1.setScale(1.0, 1.0), this.motorR2.setScale(1.0, 1.0)}).
-            channelInCB('increasesizerocket23', '',() => {this.motorR1.setScale(1.2, 1.2), this.motorR2.setScale(1.2, 1.2)}).nullProcess()
-        ); */
+            this.system.add.channelInCB('increasesizerocket22', '', () =>  {this.motorRsize1 = 1.2, this.motorRsize2 = 1.2}).
+            channelInCB('increasesizerocket23', '',() => {this.motorRsize1 = 1.4, this.motorRsize2 = 1.4}).nullProcess()
+        );
     };
     toDestroyedBack(): void {
         this.back.toDestroyedPart();

@@ -27,6 +27,16 @@ export class MotorFlame {
         this.flameMid.setTint(0xff9955);
         this.flameFront.setTint(0xffdd55);
     }
+    public tintBlue(){
+        this.flameBack.setTint(0x427ef5);
+        this.flameMid.setTint(0x42b0f5);
+        this.flameFront.setTint(0x42e6f5);
+    }
+    public tintPurple(){
+        this.flameBack.setTint(0x9642f5);
+        this.flameMid.setTint(0xec42f5);
+        this.flameFront.setTint(0xf542d1);
+    }
 
     public setScale(scale: number){
         this.setScaleBack(scale);
