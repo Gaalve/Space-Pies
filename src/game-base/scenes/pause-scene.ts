@@ -66,7 +66,7 @@ export class PauseScene extends Phaser.Scene {
         });
 
         this.buttonReset.setPosition(1920/2-130, 1080/2+75);
-        this.add.text(1920/2-60, 1080/2+50, "Reset", {
+        this.add.text(1920/2-60, 1080/2+50, "Restart", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         const debugText = this.add.text(1760, 1020, "Change Debug",{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20});
