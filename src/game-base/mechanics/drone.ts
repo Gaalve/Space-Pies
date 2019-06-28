@@ -303,9 +303,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
         // infobox.addTooltipInfo(this.onScreenText, tooltipInfo);
 
-        this.index < 1 ? infobox.addTooltipInfo(this, "[" + this.player.getNameIdentifier() +
+        this.index > 1 ? infobox.addTooltipInfo(this, "[" + this.player.getNameIdentifier() +
             "] Extension Drone " + this.index + ":\n     It will fire after the previous drone has fired.") : null;
-        this.index == 0 ? infobox.addTooltipInfo(this, "[" +
+        this.index == 1 ? infobox.addTooltipInfo(this, "[" +
             this.player.getNameIdentifier() + "] Extension Drone " + this.index + ":\n " +
             "    It will fire after the space ship has fired.") : null;
 

@@ -7,6 +7,7 @@ import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 import {NanoDrone} from "./nanoDrone";
 import {PiAnimSystem} from "./pianim/pi-anim-system";
 import {MotorFlame} from "./ship/motor-flame";
+import {Infobox} from "./Infobox";
 
 
 export class EnergyDrone extends Phaser.GameObjects.Sprite{
@@ -34,7 +35,12 @@ export class EnergyDrone extends Phaser.GameObjects.Sprite{
             this.setTexture("ssb_solar_drone");
         }
 
-        if(!type) type = "solar";
+
+        if(!type){
+            type = "solar";
+            let infobox = <Infobox> this.scene.data.get("infoboxx");
+            infobox.addTooltipInfo(this, "Collect +25 Energy");
+        }
 
         //reposition external drones
         if(index == 1){
