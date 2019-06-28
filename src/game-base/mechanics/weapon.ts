@@ -54,9 +54,9 @@ export class Weapon extends Phaser.GameObjects.Sprite{
         this.isFirst = player.isFirstPlayer();
         this._player = player;
 		if (drone.getPlayer().getNameIdentifier() == "P1") {
-            this.setX(drone.x + 70);
+            this.setX(drone.x + 35);
         }else{
-            this.setX(drone.x - 70);
+            this.setX(drone.x - 37);
         }
         this.setVisible(false);
         scene.add.existing(this);
