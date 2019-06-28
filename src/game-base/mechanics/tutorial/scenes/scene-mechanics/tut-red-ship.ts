@@ -21,7 +21,7 @@ export class TutRedShip extends BaseShip{
     sinX : number;
     sinY : number;
     onScreenText : Phaser.GameObjects.Text;
-    private drone: TutDrone;
+    public drone: TutDrone;
     private weapons: TutWeapon[];
     public ship_out: Sprite;
     offset: number;
@@ -89,13 +89,15 @@ export class TutRedShip extends BaseShip{
         this.motorProj2.tintPurple();
         this.motorProj2.flipX();
 
+        this.drone = new TutDrone(scene, 0, 0, 0, true);
+
         this.x =  x;
         this.y = y;
         this.durationX = 750;
         this.durationY = 1000;
         this.sinX = 0;
         this.sinY = 0;
-        // this.weapons = player.getDrones()[0].getWeapons(); TODO
+        this.weapons = this.drone.getWeapons();
         this.setAllPartPosition();
     }
 
@@ -139,9 +141,9 @@ export class TutRedShip extends BaseShip{
         this.motorProj2.setPosition(this.hull.normal.x - 173, this.hull.normal.y - 92);
         this.motorProj2.setScaleSin(this.motorPsize2, this.sinY*4.5);
 
-        // if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 124, this.hull.normal.y);
-        // if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x + 44, this.hull.normal.y - 150);
-        // if(this.weapons[2]) this.weapons[2].setPosition(this.hull.normal.x + 44, this.hull.normal.y + 150);
+        if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 124, this.hull.normal.y);
+        if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x + 44, this.hull.normal.y - 150);
+        if(this.weapons[2]) this.weapons[2].setPosition(this.hull.normal.x + 44, this.hull.normal.y + 150);
         this.ship_out.setPosition(this.hull.normal.x + this.offset, this.hull.normal.y);
         this.onScreenText ? this.onScreenText.setPosition(posX - 210, posY + this.onScreenText.width/2) : null;
 

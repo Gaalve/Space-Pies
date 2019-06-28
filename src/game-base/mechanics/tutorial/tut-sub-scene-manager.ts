@@ -3,6 +3,7 @@ import {TutGenericTextScene} from "./scenes/tut-generic-text-scene";
 import {TutGenericButtonScene} from "./scenes/tut-generic-button-scene";
 import {ButtonWithText} from "./scenes/scene-mechanics/button-with-text";
 import {TutRedVsDrone1} from "./scenes/tut-red-vs-drone-1";
+import {Button} from "../button";
 
 export class TutSubSceneManager {
     private scene: Phaser.Scene;
@@ -10,9 +11,18 @@ export class TutSubSceneManager {
     private idx: number;
     private time: number;
 
+    private skip: Button;
 
     public constructor(scene: Phaser.Scene){
         this.scene = scene;
+
+        this.skip = new Button(scene, 50, 50, "button_shadow",
+            "button_bg", "button_fg", "red_arrow", 0.95, ()=>{if (this.idx < 11){
+                this.subScenes[this.idx].destroy();
+                this.idx = 11;
+                this.time = 0;
+                this.subScenes[this.idx].launch();
+            }});
 
         this.subScenes = [
             new TutGenericTextScene(scene, "Welcome.", 64, 3, 1, 1),
@@ -43,6 +53,7 @@ export class TutSubSceneManager {
         if(this.idx >= this.subScenes.length){
             return;
         }
+        this.skip.updateStep();
         this.time += delta;
         let curSubScene = this.subScenes[this.idx];
         curSubScene.update(delta);

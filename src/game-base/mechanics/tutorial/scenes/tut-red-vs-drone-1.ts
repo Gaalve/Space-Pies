@@ -2,11 +2,13 @@ import Text = Phaser.GameObjects.Text;
 import {TutSubScene} from "../tut-sub-scene";
 import {ButtonWithText} from "./scene-mechanics/button-with-text";
 import {TutRedShip} from "./scene-mechanics/tut-red-ship";
+import {TutDrone} from "./scene-mechanics/tut-drone";
 
 export class TutRedVsDrone1 extends TutSubScene{
     text: Text;
     button: ButtonWithText;
     red: TutRedShip;
+    drone: TutDrone;
 
 
     constructor(scene: Phaser.Scene, text: string, fontSize: number, duration: number = 5, intro: number = 2, outro: number = 2) {
@@ -41,6 +43,9 @@ export class TutRedVsDrone1 extends TutSubScene{
 
     launch(): void {
         this.red = new TutRedShip(this.scene, 250, 1080/2);
+        this.drone = new TutDrone(this.scene, 1700, 1080/2, 1,false);
+        this.drone.addWeapon("arm");
+        this.drone.create();
         this.button.setVisible(true);
         this.scene.add.existing(this.text);
         this.text.setAlpha(0);
@@ -49,6 +54,7 @@ export class TutRedVsDrone1 extends TutSubScene{
     update(delta: number): void {
         this.red.update(delta*1000);
         this.button.update(delta);
+        this.drone.update(delta*1000);
     }
 
     setText(text: string): void{

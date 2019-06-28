@@ -47,14 +47,14 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
             if(isP1){
                 this.offset = -30;
 			}else{
-                this.setPosition(x -= 300, y -= 300);
+                // this.setPosition(x -= 300, y -= 300);
                 this.offset = 30;
             }
         }else if(index == 2){
             if(isP1){
                 this.offset = -30;
             }else{
-				this.setPosition(x -= 300, y += 200);
+				// this.setPosition(x -= 300, y += 200);
 				this.offset = 30;
             }
         }
@@ -90,6 +90,12 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
         this.flame.tintRed();
         this.flame.setVisible(false);
 
+    }
+
+    public create(): void{
+        this.setVisible(true);
+        this.flame.setVisible(true);
+        this.created = true;
     }
 
     /**
@@ -246,70 +252,71 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
      * @param drone : index of weapon mod 0/1/2
      */
     buildWeaponPi(player : number, drone : number) : void{
-        let p = player.toString();
-        let d = drone.toString();
-        // let system = this.player.getSystem(); //TODO
-
-        let system;
-
-        let weapon = system.add.term("Weapon" + p + d, undefined);
-        let droneRef: TutDrone = this;
-        let sum = system.add.sum([system.add.channelInCB("lock" + p + d,"", ()=>{
-            // this.piSeq.resolveSymbol();
-        }).
-        channelOutCB("w1","", (_, at) => {
-            droneRef.getWeapons()[0].createBullet(at);
-            // if (this.weapons[0].canShoot()) this.piSeq.resolveSymbol();
-        }).        //function for weapon animation
-        channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
-        channelOut("wait","").channelOut("wait","").
-        channelOutCB("w2", "", (_, at) => {
-            // droneRef.getWeapons()[1].createBullet(at); if (this.weapons[1].canShoot()) this.piSeq.resolveSymbol();
-        }).
-        channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
-        channelOut("wait","").channelOut("wait","").
-        channelOutCB("w3", "", (_, at) => {
-            // droneRef.getWeapons()[2].createBullet(at); this.resolveAndClearPiAnimSeq();
-        }).
-        next(weapon),
-            system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {
-                this.addWeapon(wClass);
-            }).
-            next(weapon),
-            system.add.channelInCB("wext" + p + d + "1", "w2", (wClass) => {
-                this.addWeapon(wClass);
-            }).
-            next(weapon),
-            system.add.channelInCB("wext" + p + d + "2", "w3", (wClass) => {
-                this.addWeapon(wClass);
-            }).
-            next(weapon)]);
-        weapon.symbol = sum;
-
-        system.pushSymbol(system.add.channelInCB("wmod" + p + d, "", () => {
-            // this.player.createDrone(drone);  //TODO
-            if(this.scene.scene.get("MainScene").data.get("mode") == "1" && this.isP1){
-                this.scene.scene.get("MainScene").events.emit("unlockW");
-            }
-            else if(this.scene.scene.get("MainScene").data.get("mode") == "2" && !this.isP1){
-                this.scene.scene.get("MainScene").events.emit("unlockW");
-
-            }
-            else if(this.scene.scene.get("MainScene").data.get("mode") == "0"){
-                this.scene.scene.get("MainScene").events.emit("unlockW");
-
-            }
-
-                //button.restoreInteractive();
-
-        }).
-        channelOut("newlock" + p + d, "lock" + p + d).
-        next(weapon));
+        // let p = player.toString();
+        // let d = drone.toString();
+        // // let system = this.player.getSystem(); //TODO
+        //
+        // let system;
+        //
+        // let weapon = system.add.term("Weapon" + p + d, undefined);
+        // let droneRef: TutDrone = this;
+        // let sum = system.add.sum([system.add.channelInCB("lock" + p + d,"", ()=>{
+        //     // this.piSeq.resolveSymbol();
+        // }).
+        // channelOutCB("w1","", (_, at) => {
+        //     droneRef.getWeapons()[0].createBullet(at);
+        //     // if (this.weapons[0].canShoot()) this.piSeq.resolveSymbol();
+        // }).        //function for weapon animation
+        // channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
+        // channelOut("wait","").channelOut("wait","").
+        // channelOutCB("w2", "", (_, at) => {
+        //     // droneRef.getWeapons()[1].createBullet(at); if (this.weapons[1].canShoot()) this.piSeq.resolveSymbol();
+        // }).
+        // channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
+        // channelOut("wait","").channelOut("wait","").
+        // channelOutCB("w3", "", (_, at) => {
+        //     // droneRef.getWeapons()[2].createBullet(at); this.resolveAndClearPiAnimSeq();
+        // }).
+        // next(weapon),
+        //     system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {
+        //         this.addWeapon(wClass);
+        //     }).
+        //     next(weapon),
+        //     system.add.channelInCB("wext" + p + d + "1", "w2", (wClass) => {
+        //         this.addWeapon(wClass);
+        //     }).
+        //     next(weapon),
+        //     system.add.channelInCB("wext" + p + d + "2", "w3", (wClass) => {
+        //         this.addWeapon(wClass);
+        //     }).
+        //     next(weapon)]);
+        // weapon.symbol = sum;
+        //
+        // system.pushSymbol(system.add.channelInCB("wmod" + p + d, "", () => {
+        //     // this.player.createDrone(drone);  //TODO
+        //     if(this.scene.scene.get("MainScene").data.get("mode") == "1" && this.isP1){
+        //         this.scene.scene.get("MainScene").events.emit("unlockW");
+        //     }
+        //     else if(this.scene.scene.get("MainScene").data.get("mode") == "2" && !this.isP1){
+        //         this.scene.scene.get("MainScene").events.emit("unlockW");
+        //
+        //     }
+        //     else if(this.scene.scene.get("MainScene").data.get("mode") == "0"){
+        //         this.scene.scene.get("MainScene").events.emit("unlockW");
+        //
+        //     }
+        //
+        //         //button.restoreInteractive();
+        //
+        // }).
+        // channelOut("newlock" + p + d, "lock" + p + d).
+        // next(weapon));
     }
 
     private setPositionSin() {
         this.x =(this.posX + Math.sin(this.sinX) * 15);
         this.y =(this.posY + Math.cos(this.sinY) * 15);
+
 
         this.flame.setPosition(this.x + this.flameOffset, this.y);
         this.flame.setScaleSin(0.7, this.sinX*4);
