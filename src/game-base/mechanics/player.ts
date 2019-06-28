@@ -20,6 +20,7 @@ import {SunEruption} from "./anomalies/sun-eruption";
 import {WormHole} from "./anomalies/worm-hole";
 import {NanoDrone} from "./nanoDrone";
 import {BlackHole} from "./anomalies/black-hole";
+import {Botlog} from "./bot/botlog";
 import {BlackholeParticle} from "./animations/blackhole-particle";
 import {Motor} from "./motor";
 import {MainScene} from "../scenes/main-scene";
@@ -497,10 +498,6 @@ export class Player {
                     this.system.add.channelOut('shieldp'+p, '').nullProcess()
                 ]
             ));
-
-
-
-
     }
 
     private createFirstWeapon(p : string): void{
@@ -641,4 +638,10 @@ export class Player {
     getActiveMotorR(): number{
         return this.motor.activeMotorsRocket;
     }
+
+    //Methods needed in Bot
+    public start():void{};
+    public getBotLog(): Botlog{
+        return undefined;
+    };
 }
