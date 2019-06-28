@@ -93,7 +93,6 @@ export class Botlog{
     public updateEnergy(energy: number, regen: number): void{
         this.energyText.setText("= " + energy);
 
-        this.regenText.setText("(+" + regen + ")");
         if(this.bot.botEnergy >= 100) {
             this.regenText.setX(1920 / 2 + 70);
 
@@ -103,5 +102,6 @@ export class Botlog{
         else{
             this.regenText.setX(1920 / 2 + 35);
         }
+        this.regenText.setText("(+" + regen + ")");
     }
 }
