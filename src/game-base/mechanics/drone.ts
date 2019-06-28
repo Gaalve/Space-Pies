@@ -11,6 +11,8 @@ import {AnimationUtilities} from "./animation/AnimationUtilites";
 import {Animation} from "./animation/Animation";
 import {BulletInfo} from "./weapon/bulletInfo";
 import Sprite = Phaser.GameObjects.Sprite;
+import Scene = Phaser.Scene;
+import {Button} from "./button";
 
 export class Drone extends Phaser.GameObjects.Sprite{
 
@@ -405,6 +407,9 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
         system.pushSymbol(system.add.channelInCB("wmod" + p + d, "", () => {
             this.player.createDrone(drone);
+            this.scene.scene.get("MainScene").events.emit("unlockW");
+            //button.restoreInteractive();
+
         }).
         channelOut("newlock" + p + d, "lock" + p + d).
         next(weapon));

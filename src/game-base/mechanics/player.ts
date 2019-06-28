@@ -44,17 +44,19 @@ export class Player {
     public z2Destroyed: boolean = false;
     public z3Destroyed: boolean = false;
     public z4Destroyed: boolean = false;
-public ship_out: Phaser.GameObjects.Sprite;
+    public activeNano:boolean = false;
+    public ship_out: Phaser.GameObjects.Sprite;
     private health : Health;
     private energy : number;
     private shieldCost : number = 10; // cost for armor/shield/rocket shield
     private nanoCost : number = 6;  // cost for nano shield
     private wModCost : number = 10;  // cost for wMod
     private weaponCost : number = 25; // cost for laser/projectile weapon
-    private rocketCost : number = 40;  // cost for rocket launcher
+    private rocketCost : number = 75;  // cost for rocket launcher
     private solarCost: number = 60; // cost for solar drone
     private adaptCost: number = 16; // cost for adaptive shield
     private motorCost: number = 35;
+    private hyperCost: number = 55;
 
     public pem: Phaser.GameObjects.Particles.ParticleEmitterManager;
     public explosion: Explosion;
@@ -229,9 +231,22 @@ public ship_out: Phaser.GameObjects.Sprite;
     getRegenRate(): number
     {
         let rate = 50 - this.malusEnergy;
-        if(this.activatedSolarDrones-1 >= 0){
-            rate += (this.activatedSolarDrones-1)*25;
+        if(this.solarDrones[1].active){
+            rate += 25;
         }
+        if(this.solarDrones[2].active){
+            rate += 25;
+        }
+        if(this.solarDrones[3].active){
+            rate += 25;
+        }
+        if(this.solarDrones[3].active){
+            rate += 25;
+        }
+        if(this.solarDrones[5].active){
+            rate += 50;
+        }
+
         return rate;
     }
 
@@ -265,7 +280,7 @@ public ship_out: Phaser.GameObjects.Sprite;
             return this.shieldCost;
         }
         case("rocket"):{
-            return this.shieldCost;
+            return this.hyperCost;
         }
         case("nano"):{
             return this.nanoCost;
@@ -408,6 +423,7 @@ public ship_out: Phaser.GameObjects.Sprite;
         this.system.pushSymbol(
             this.system.add.channelInCB('wormhole' + p, '', () => {
                 this.currentAnomaly = new WormHole(this.scene, this, this.solarDrones[5]);
+                this.solarDrones[5].active = true;
             })
                 .channelOut("newnano" + p, "solar" + p + "5")
                 .nullProcess()
@@ -554,26 +570,45 @@ public ship_out: Phaser.GameObjects.Sprite;
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "1", "e1", () =>{
                 this.createSolarDrone(1);
+                this.scene.scene.get("MainScene").events.emit("unlockS");
+                this.solarDrones[1].active = true;
+
             }).
             channelOut("newShield" + p + "1","").
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "2", "e2", () =>{
                 this.createSolarDrone(2);
+                this.scene.scene.get("MainScene").events.emit("unlockS");
+                this.solarDrones[2].active = true;
+
+
             }).
             channelOut("newShield" + p + "2","").
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "3", "e3", () =>{
                 this.createSolarDrone(3);
+                this.scene.scene.get("MainScene").events.emit("unlockS");
+                this.solarDrones[3].active = true;
+
+
             }).
             channelOut("newShield" + p + "3","").
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "4", "e4", () =>{
                 this.createSolarDrone(4);
+                this.scene.scene.get("MainScene").events.emit("unlockS");
+                this.solarDrones[4].active = true;
+
+
             }).
             channelOut("newShield" + p + "4","").
             next(drone),
             this.system.add.channelInCB("newnano" + p, "nano5", () => {
                 this.createNanoDrone();
+                this.activeNano = true;
+                this.solarDrones[5].active = true;
+
+
             }).
             channelOut("newShield" + p + "5","").
             next(drone),
