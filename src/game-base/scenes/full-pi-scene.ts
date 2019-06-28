@@ -156,7 +156,6 @@ export class FullPiScene extends Phaser.Scene {
             "################################\n" +
             "#### Triggering Symbols     ####\n" +
             "################################\n\n";
-
         for (let i = 0; i < 15; i++)
             if (this.fullPiText3.height > 700)
                 break
