@@ -92,7 +92,7 @@ export class MainScene extends Phaser.Scene {
     public buttonBotLog: Button;
     private roundTimebar: roundTimeBar;
     private roundTimeEvent;
-    private rounddelay:number = 30000;
+    private rounddelay:number = 60000;
 
     /** Round Pi Calc Animation **/
     private roundBG: Sprite;
