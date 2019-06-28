@@ -2,6 +2,7 @@ import {TutSubScene} from "./tut-sub-scene";
 import {TutGenericTextScene} from "./scenes/tut-generic-text-scene";
 import {TutGenericButtonScene} from "./scenes/tut-generic-button-scene";
 import {ButtonWithText} from "./scenes/scene-mechanics/button-with-text";
+import {TutRedVsDrone1} from "./scenes/tut-red-vs-drone-1";
 
 export class TutSubSceneManager {
     private scene: Phaser.Scene;
@@ -16,20 +17,21 @@ export class TutSubSceneManager {
         this.subScenes = [
             new TutGenericTextScene(scene, "Welcome.", 64, 3, 1, 1),
             new TutGenericButtonScene(scene, "Are you ready for the tutorial?", [
-                new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2, 1080/2),
-                new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2, 1080/2+100),
-                new ButtonWithText(scene, "blue_arrow", "Definitely!", ()=>{this.unblockScene();},1920/2, 1080/2+200),
-                new ButtonWithText(scene, "blue_arrow", "...no.", ()=>{this.dontExitRandom();},1920/2, 1080/2+300),
+                new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2 - 100, 1080/2),
+                new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2+100),
+                new ButtonWithText(scene, "blue_arrow", "Definitely!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2+200),
+                new ButtonWithText(scene, "blue_arrow", "...no.", ()=>{this.dontExitRandom();},1920/2 - 100, 1080/2+300),
             ]),
-            new TutGenericTextScene(scene, "This is a tutorial.", 64, 3, 1, 1),
-            new TutGenericTextScene(scene, "Be ready!", 64, 3, 1, 1),
+            new TutGenericTextScene(scene, "This is a tutorial.", 64, 1, 1, 1),
+            new TutGenericTextScene(scene, "Be ready!", 64, 1, 1, 1),
             new TutGenericTextScene(scene, "It starts...", 64, 1, 1, 1),
             new TutGenericTextScene(scene, "in...", 64, 1, 1, 1),
             new TutGenericTextScene(scene, "3", 92, 0.5, 0.25, 0.25),
             new TutGenericTextScene(scene, "2", 92, 0.5, 0.25, 0.25),
             new TutGenericTextScene(scene, "1", 92, 0.5, 0.25, 0.25),
-            new TutGenericTextScene(scene, "Too bad.", 64, 3, 1, 1),
-            new TutGenericTextScene(scene, "It's not yet implemented.", 64, 3, 1, 1),
+            new TutGenericTextScene(scene, "Too bad.", 64, 1, 1, 1),
+            new TutGenericTextScene(scene, "It's not yet implemented.", 64, 1, 1, 1),
+            new TutRedVsDrone1(scene, "Projectile.", 64, 3, 1, 1),
         ];
 
         this.idx = 0;

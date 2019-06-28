@@ -1,14 +1,13 @@
-import {BaseShip} from "./base-ship";
-import {ShipPart} from "./ship-part";
-import {Infobox} from "../Infobox";
+import {BaseShip} from "../../../ship/base-ship";
+import {ShipPart} from "../../../ship/ship-part";
+import {Weapon} from "../../../weapon";
 import Sprite = Phaser.GameObjects.Sprite;
-import {Weapon} from "../weapon";
-import {Player} from "../player";
-import {PiSystem} from "../picalc/pi-system";
-import {MotorFlame} from "./motor-flame";
+import {MotorFlame} from "../../../ship/motor-flame";
+import {TutDrone} from "./tut-drone";
+import {TutWeapon} from "./tut-weapon";
 
 
-export class RedShip extends BaseShip{
+export class TutRedShip extends BaseShip{
     backUp: ShipPart;
     backDown: ShipPart;
     pilot: ShipPart;
@@ -22,18 +21,16 @@ export class RedShip extends BaseShip{
     sinX : number;
     sinY : number;
     onScreenText : Phaser.GameObjects.Text;
-    private weapons: Weapon[];
+    private drone: TutDrone;
+    private weapons: TutWeapon[];
     public ship_out: Sprite;
     offset: number;
 
 
 
-    private player: Player;
 
-
-    public constructor(scene: Phaser.Scene, x: number, y: number, player: Player){
+    public constructor(scene: Phaser.Scene, x: number, y: number){
         super(scene, x, y);
-        this.player = player;
 
         this.motorRsize1 = 1.0;
         this.motorRsize2 = 1.0;
@@ -65,18 +62,6 @@ export class RedShip extends BaseShip{
         this.ship_out.setDepth(-4);
         this.ship_out.setVisible(false);
         this.offset = 15;
-        let infobox = <Infobox> scene.data.get("infoboxx");
-        infobox.addTooltipInfo(this.backDown.normal, "[P1] The right half of your Ship. God, how can Olga even look in the mirror ?")
-        infobox.addTooltipInfo(this.wingDown.normal, "[P1] The right half of your Ship. God, how can Olga even look in the mirror ?")
-        infobox.addTooltipInfo(this.backUp.normal, "[P1] Your left two wings. You got the latest model eh? You filthy little snob.");
-        infobox.addTooltipInfo(this.wingUp.normal, "[P1] Your left two wings. You got the latest model eh? You filthy little snob.")
-        infobox.addTooltipInfo(this.pilot.normal, "[P1] This is Olaf\n" +
-            "Bio:\n" +
-            "     + renowned space ship engineer\n" +
-            "     + inventor of the hyper shield\n" +
-            "     + cake thief\n" +
-            "     + does not like tangerines");
-        infobox.addTooltipInfo(this.hull.normal, "[P1] The hull of your ship. \nAt least this one's as ugly as the others. Not as rich as you thought 'eh ?")
 
         this.motorRocket1 = new MotorFlame(scene);
         this.motorRocket1.tintRed();
@@ -110,7 +95,7 @@ export class RedShip extends BaseShip{
         this.durationY = 1000;
         this.sinX = 0;
         this.sinY = 0;
-        this.weapons = player.getDrones()[0].getWeapons();
+        // this.weapons = player.getDrones()[0].getWeapons(); TODO
         this.setAllPartPosition();
     }
 
@@ -154,9 +139,9 @@ export class RedShip extends BaseShip{
         this.motorProj2.setPosition(this.hull.normal.x - 173, this.hull.normal.y - 92);
         this.motorProj2.setScaleSin(this.motorPsize2, this.sinY*4.5);
 
-        if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 124, this.hull.normal.y);
-        if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x + 44, this.hull.normal.y - 150);
-        if(this.weapons[2]) this.weapons[2].setPosition(this.hull.normal.x + 44, this.hull.normal.y + 150);
+        // if(this.weapons[0]) this.weapons[0].setPosition(this.hull.normal.x + 124, this.hull.normal.y);
+        // if(this.weapons[1]) this.weapons[1].setPosition(this.hull.normal.x + 44, this.hull.normal.y - 150);
+        // if(this.weapons[2]) this.weapons[2].setPosition(this.hull.normal.x + 44, this.hull.normal.y + 150);
         this.ship_out.setPosition(this.hull.normal.x + this.offset, this.hull.normal.y);
         this.onScreenText ? this.onScreenText.setPosition(posX - 210, posY + this.onScreenText.width/2) : null;
 
@@ -183,10 +168,6 @@ export class RedShip extends BaseShip{
         this.wingUp.toDestroyedPart();
     }
 
-    addWeapon(weapon: Weapon): void
-    {
-        this.weapons.push(weapon);
-    }
 
     update(delta: number): void {
         this.backUp.update(delta);
@@ -213,12 +194,12 @@ export class RedShip extends BaseShip{
         this.setAllPartPosition();
     }
 
-    setOnScreenText(text){
-        this.onScreenText = text;
-    }
 
     setShipOutVisible(bool: boolean): void{
         this.ship_out.setVisible(bool);
+    }
+
+    addWeapon(weapon: Weapon): void {
     }
 
 }

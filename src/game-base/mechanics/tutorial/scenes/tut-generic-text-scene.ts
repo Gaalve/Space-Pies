@@ -1,6 +1,5 @@
 import Text = Phaser.GameObjects.Text;
 import {TutSubScene} from "../tut-sub-scene";
-import Scene = Phaser.Scene;
 
 export class TutGenericTextScene extends TutSubScene{
     text: Text;
@@ -30,7 +29,7 @@ export class TutGenericTextScene extends TutSubScene{
     }
 
     launch(): void {
-        this.text = new Text(this.scene, 1920/2, 1080/2, "OPERT", {
+        this.text = new Text(this.scene, 1920/2, 1080/2, this.strText, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: this.fontSize, fontStyle: 'bold', strokeThickness: 2});
         this.text.setShadow(0,6,'#000', 10);
         this.text.setOrigin(0.5, 0.5);
