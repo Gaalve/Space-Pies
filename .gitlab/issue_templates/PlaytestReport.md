@@ -15,7 +15,7 @@ Danke, dass du unser Spiel getestet hast!
 
 
 ### Lösung
-(Wenn du eine Idee hast, wie wir das Spiel verbesser könnten, dann ist hier der richtige Platz dafür.)
+(Wenn du eine Idee hast, wie wir das Spiel verbessern könnten, dann ist hier der richtige Platz dafür.)
 
 
 
