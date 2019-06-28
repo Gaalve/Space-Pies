@@ -2152,8 +2152,8 @@ export class MainScene extends Phaser.Scene {
     private getTipText(type: string){
         if (type == "erupt"){
             return "A sun eruption is about to come through. Be careful,\n" +
-                   "this can cause a lot of damage to your shields. Your\n" +
-                   "shields will maybe be destroyed."
+                   "this can deal a lot of damage to your shields. Your\n" +
+                   "shields could be destroyed."
         }
         if (type == "worm"){
             return "A worm  hole is going to appear and leave a special \n" +
@@ -2165,6 +2165,13 @@ export class MainScene extends Phaser.Scene {
             return "A black hole will appear. It increases the number of\n" +
                    "projectile misses. So both of you should be careful.\n" +
                    "Your projectiles may not find the right way."
+        }
+        if (type == "end"){
+            return  "A neutron star appears. In such a situation it would\n" +
+                    "be best if you flee quickly, but since you are in a\n" +
+                    "fight there is no such option. Both ships will be\n"+
+                    "slowly destroyed. End this fight quickly and try\n"+
+                    "to hold your shield count up.\n"
         }
     }
 

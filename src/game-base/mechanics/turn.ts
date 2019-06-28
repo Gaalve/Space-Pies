@@ -6,6 +6,7 @@ import {PiAnimAlignment} from "./pianim/pi-anim-alignment";
 import {NeutronStar} from "./anomalies/neutron-star";
 import {BulletInfo} from "./weapon/bulletInfo";
 import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
+import {MainScene} from "../scenes/main-scene";
 
 export class Turn {
     private refScene: Phaser.Scene;
@@ -112,14 +113,17 @@ export class Turn {
 
 
         let symb = this.system.add.channelIn('sdanomaly', '');
-        for (let i = 0; i < 18; i++) { // set amount of Rounds here!!
+        for (let i = 0; i < 12; i++) { // set amount of Rounds here!! (length + 1) * 2
             symb = symb.channelIn('sdanomaly', '');
         }
         this.system.pushSymbol(symb.channelOut('suddendeath', '').nullProcess());
 
         this.system.pushSymbol(
             this.system.add.channelInCB('suddendeath', '',
-                () => this.endGameAnomaly = new NeutronStar(refScene, players[0], players[1]))
+                () => {this.endGameAnomaly = new NeutronStar(refScene, players[0], players[1]);
+                    this.system.stop();
+                (<MainScene>this.refScene).anomalyInfoBoxes("end");
+            })
                 .concurrent(
                     [
 
@@ -245,26 +249,6 @@ export class Turn {
 
         this.awaitInput = true; //nächster Spieler
         }
-    }
-
-    public Attackturn():void{
-        if (!this.awaitInput) return;
-        this.clickable = false;
-
-
-        //TODO: DEBUG STUFF REMOVE
-        // this.currentPlayer.getSystem().pushSymbol(
-        //     this.currentPlayer.getSystem().add.channelOut(
-        //         'unlock'+this.currentPlayer.getNameIdentifier().charAt(1), '').nullProcess());
-        // this.currentPlayer.getSystem().pushSymbol(
-        //     this.currentPlayer.getSystem().add.channelIn(
-        //         'attackp'+this.currentPlayer.getNameIdentifier().charAt(1) + 'end', '').nullProcess());
-        // this.refScene.data.set('turnAction', 'Battle Phase');
-        //  this.setAttackTurn()
-        // this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
-        //  this.endAttackTurn()
-        // this.system.pushSymbol(this.system.add.channelOut("startephase"+this.currentPlayer.getNameIdentifier().charAt(1), "").nullProcess())
-        //
     }
     public setShopTurn(){
         this.refScene.data.set('turnAction', 'Shopping Phase');

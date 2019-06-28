@@ -14,9 +14,7 @@ import {HealthType} from "./health/health-type";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {BulletInfo} from "./weapon/bulletInfo";
 import {BattleTimeBar} from "./battleTimeBar";
-import get = Reflect.get;
 import {PiAnimSystem} from "./pianim/pi-anim-system";
-import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 import {Anomaly} from "./anomalies/anomaly";
 import {SunEruption} from "./anomalies/sun-eruption";
 import {WormHole} from "./anomalies/worm-hole";
@@ -25,7 +23,6 @@ import {BlackHole} from "./anomalies/black-hole";
 import {BlackholeParticle} from "./animations/blackhole-particle";
 import {Motor} from "./motor";
 import {MainScene} from "../scenes/main-scene";
-import {NeutronStar} from "./anomalies/neutron-star";
 import {NeutronAnimation} from "./animations/neutron-animation";
 import {NeutronTurb} from "./animations/neutron-turb";
 import {NeutronExplosion} from "./animations/neutron-explosion";
@@ -401,8 +398,8 @@ public ship_out: Phaser.GameObjects.Sprite;
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
                 .channelInCB('anomaly'+p, '', () => {
-                    this.system.stop()
-                    if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("worm");
+                    this.system.stop();
+                    (<MainScene>this.scene).anomalyInfoBoxes("worm");
                 },undefined, 0.2)
                 .channelOut('wormhole'+p, '').nullProcess()
         );
