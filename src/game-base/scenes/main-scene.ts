@@ -168,7 +168,9 @@ export class MainScene extends Phaser.Scene {
                 this.switchTextures(this.turn.getCurrentPlayer());
             }
             this.changeShopColor(this.turn.getCurrentPlayer());
-            this.roundTimeEvent=this.time.addEvent({ delay:  this.rounddelay, loop: false,callback: () => {this.skip.clicked();} });
+            this.roundTimeEvent=this.time.addEvent({ delay:  this.rounddelay, loop: false,callback: () => {
+                this.shop.clicked();
+                this.skip.clicked();} });
             this.roundTimebar.setTimer(this.roundTimeEvent);
             this.displayShop(this.shop1, this.shop1Text);
             this.updateShop1(false);
