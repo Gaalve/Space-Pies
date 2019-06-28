@@ -24,7 +24,7 @@ export class Botlog{
 
         this.bg = new Phaser.GameObjects.Sprite(this.bot.scene, 1920/2, 1080/2-10, "shop_bg_back");
         this.bot.scene.add.existing(this.bg);
-        this.bg.setAlpha(0.6);
+        this.bg.setAlpha(0.8);
         this.bg.setScale(0.4, 2.0);
         this.bg.setDepth(-1);
 
@@ -93,10 +93,10 @@ export class Botlog{
     public updateEnergy(energy: number, regen: number): void{
         this.energyText.setText("= " + energy);
 
-        if(this.bot.botEnergy >= 100) {
+        if(energy >= 100) {
             this.regenText.setX(1920 / 2 + 70);
 
-        }else if(this.bot.botEnergy >= 1000){
+        }else if(energy >= 1000){
             this.regenText.setX(1920 / 2 + 110);
         }
         else{

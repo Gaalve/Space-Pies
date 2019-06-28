@@ -478,10 +478,6 @@ public ship_out: Phaser.GameObjects.Sprite;
                     this.system.add.channelOut('shieldp'+p, '').nullProcess()
                 ]
             ));
-
-
-
-
     }
 
     private createFirstWeapon(p : string): void{

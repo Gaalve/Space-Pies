@@ -235,8 +235,7 @@ export class Bot extends Player{
             let nr = mod.toString() + (3-this.droneSlots[mod]).toString();
             this.droneSlots[mod]--;
             this.weaponSlots--;
-            console.log(this.droneSlots);
-            console.log(mod);
+
             let x = this.buyWeapon(weapon);
 
             this.scene.time.delayedCall(delay, ()=> {
@@ -288,7 +287,7 @@ export class Bot extends Player{
             this.updateRegenRate();
 
             this.scene.time.delayedCall(delay, ()=> {
-                system.pushSymbol(system.add.channelOut("newsolar" + this.id + nr, "").nullProcess());
+                system.pushSymbol(system.add.channelOut("newsolar" + this.id + nr, "solar" + this.id + nr).nullProcess());
                 this.botLog.insertLog(s + ". I built a solar drone. (-" + x + " E.)");
                 this.reduceDisplayedEnergy(x);
                 this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
@@ -361,9 +360,9 @@ export class Bot extends Player{
 
     public chooseMotorType(): string{
 
-        if(this.motorRocketSlots < 3) this.possibleActions.push(this.mroc);
-        if(this.motorProjectileSlots < 3) this.possibleActions.push(this.mpro);
-        if(this.motorLaserSlots < 3) this.possibleActions.push(this.mlas);
+        if(this.motorRocketSlots > 0) this.possibleActions.push(this.mroc);
+        if(this.motorProjectileSlots > 0) this.possibleActions.push(this.mpro);
+        if(this.motorLaserSlots > 0) this.possibleActions.push(this.mlas);
 
         let x = Phaser.Math.Between(0, this.possibleActions.length-1);
         return this.possibleActions[x];
