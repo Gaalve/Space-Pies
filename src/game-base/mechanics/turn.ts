@@ -46,7 +46,7 @@ export class Turn {
 
         this.roundSeq = piAnim.addSequence(960, 110, "upgradep1<>", PiAnimAlignment.CENTER);
         this.roundSeq.addSymbol("upgradep1end()");
-        this.roundSeq.addSymbol("ernergyp1()");
+        this.roundSeq.addSymbol("energyp1()");
         this.roundSeq.addSymbol("player2<>");
         this.roundSeq.addSymbol("0");
 
@@ -211,7 +211,7 @@ export class Turn {
         other.addSymbol("upgradep2()");
         other.addSymbol("upgradep2end()");
         other.addSymbol("anomaly<>");
-        other.addSymbol("ernergyp2()");
+        other.addSymbol("energyp2()");
         other.addSymbol("atkp2<>");
         other.addSymbol("atkp2end()");
         other.addSymbol("player1<>");
@@ -223,7 +223,7 @@ export class Turn {
         other.addSymbol("upgradep1()");
         other.addSymbol("upgradep1end()");
         other.addSymbol("anomaly<>");
-        other.addSymbol("ernergyp1()");
+        other.addSymbol("energyp1()");
         other.addSymbol("atkp1<>");
         other.addSymbol("atkp1end()");
         other.addSymbol("player2<>");
