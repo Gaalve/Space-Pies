@@ -368,6 +368,7 @@ export class Bot extends Player{
         return this.possibleActions[x];
     }
 
+
     public getMotorNr(type: string): string{
 
         switch(type){

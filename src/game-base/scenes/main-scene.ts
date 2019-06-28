@@ -93,7 +93,7 @@ export class MainScene extends Phaser.Scene {
     public buttonBotLog: Button;
     private roundTimebar: roundTimeBar;
     private roundTimeEvent;
-    private rounddelay:number = 30000;
+    private rounddelay:number = 60000;
 
     /** Round Pi Calc Animation **/
     private roundBG: Sprite;
@@ -169,6 +169,7 @@ export class MainScene extends Phaser.Scene {
         });
 
         this.gameMode = this.scene.get("GuiScene").data.get("mode");
+        this.data.set("mode", this.gameMode);
         console.log(this.gameMode);
         this.battleTime = new BattleTimeBar(this);
         this.roundTimebar = new roundTimeBar(this);
