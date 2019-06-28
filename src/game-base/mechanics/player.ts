@@ -573,16 +573,34 @@ export class Player {
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "1", "e1", () =>{
                 this.createSolarDrone(1);
-                this.scene.scene.get("MainScene").events.emit("unlockS");
-                this.solarDrones[1].active = true;
+                if(this.scene.scene.get("MainScene").data.get("mode") == "1" && this.getNameIdentifier() == "P1"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+                }
+                else if(this.scene.scene.get("MainScene").data.get("mode") == "2" && this.getNameIdentifier() == "P2"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+
+                }
+                else if(this.scene.scene.get("MainScene").data.get("mode") == "0"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+
+                }                this.solarDrones[1].active = true;
 
             }).
             channelOut("newShield" + p + "1","").
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "2", "e2", () =>{
                 this.createSolarDrone(2);
-                this.scene.scene.get("MainScene").events.emit("unlockS");
-                this.solarDrones[2].active = true;
+                if(this.scene.scene.get("MainScene").data.get("mode") == "1" && this.getNameIdentifier() == "P1"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+                }
+                else if(this.scene.scene.get("MainScene").data.get("mode") == "2" && this.getNameIdentifier() == "P2"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+
+                }
+                else if(this.scene.scene.get("MainScene").data.get("mode") == "0"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+
+                }                this.solarDrones[2].active = true;
 
 
             }).
@@ -590,8 +608,17 @@ export class Player {
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "3", "e3", () =>{
                 this.createSolarDrone(3);
-                this.scene.scene.get("MainScene").events.emit("unlockS");
-                this.solarDrones[3].active = true;
+                if(this.scene.scene.get("MainScene").data.get("mode") == "1" && this.getNameIdentifier() == "P1"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+                }
+                else if(this.scene.scene.get("MainScene").data.get("mode") == "2" && this.getNameIdentifier() == "P2"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+
+                }
+                else if(this.scene.scene.get("MainScene").data.get("mode") == "0"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+
+                }                this.solarDrones[3].active = true;
 
 
             }).
@@ -599,8 +626,17 @@ export class Player {
             next(drone),
             this.system.add.channelInCB("newsolar" + p + "4", "e4", () =>{
                 this.createSolarDrone(4);
-                this.scene.scene.get("MainScene").events.emit("unlockS");
-                this.solarDrones[4].active = true;
+                if(this.scene.scene.get("MainScene").data.get("mode") == "1" && this.getNameIdentifier() == "P1"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+                }
+                else if(this.scene.scene.get("MainScene").data.get("mode") == "2" && this.getNameIdentifier() == "P2"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+
+                }
+                else if(this.scene.scene.get("MainScene").data.get("mode") == "0"){
+                    this.scene.scene.get("MainScene").events.emit("unlockS");
+
+                }                this.solarDrones[4].active = true;
 
 
             }).
