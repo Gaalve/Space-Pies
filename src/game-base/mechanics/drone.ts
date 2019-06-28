@@ -13,6 +13,7 @@ import {BulletInfo} from "./weapon/bulletInfo";
 import Sprite = Phaser.GameObjects.Sprite;
 import Scene = Phaser.Scene;
 import {Button} from "./button";
+import {MainScene} from "../scenes/main-scene";
 
 export class Drone extends Phaser.GameObjects.Sprite{
 
@@ -407,8 +408,19 @@ export class Drone extends Phaser.GameObjects.Sprite{
 
         system.pushSymbol(system.add.channelInCB("wmod" + p + d, "", () => {
             this.player.createDrone(drone);
-            this.scene.scene.get("MainScene").events.emit("unlockW");
-            //button.restoreInteractive();
+            if(this.scene.scene.get("MainScene").data.get("mode") == "1" && this.player.getNameIdentifier() == "P1"){
+                this.scene.scene.get("MainScene").events.emit("unlockW");
+            }
+            else if(this.scene.scene.get("MainScene").data.get("mode") == "2" && this.player.getNameIdentifier() == "P2"){
+                this.scene.scene.get("MainScene").events.emit("unlockW");
+
+            }
+            else if(this.scene.scene.get("MainScene").data.get("mode") == "0"){
+                this.scene.scene.get("MainScene").events.emit("unlockW");
+
+            }
+
+                //button.restoreInteractive();
 
         }).
         channelOut("newlock" + p + d, "lock" + p + d).

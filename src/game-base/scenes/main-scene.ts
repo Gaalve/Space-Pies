@@ -145,6 +145,7 @@ export class MainScene extends Phaser.Scene {
         });
 
         this.gameMode = this.scene.get("GuiScene").data.get("mode");
+        this.data.set("mode", this.gameMode);
         console.log(this.gameMode);
         this.battleTime = new BattleTimeBar(this);
         this.roundTimebar = new roundTimeBar(this);
