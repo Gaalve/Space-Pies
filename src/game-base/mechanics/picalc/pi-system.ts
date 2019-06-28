@@ -8,6 +8,7 @@ import {PiReplication} from "./pi-replication";
 import {PiResolvable} from "./pi-resolvable";
 import {PiAction} from "./pi-action";
 import {PiProcess} from "./pi-process";
+import {FullPiScene} from "../../scenes/full-pi-scene";
 
 export class PiSystem {
 
@@ -385,28 +386,47 @@ export class PiSystem {
         let allActiveSymbols: PiSymbol[] = [];
         allActiveSymbols = allActiveSymbols.concat(this.curActiveSymbols,
             this.curReplications, this.curChannelIn, this.curChannelOut, this.curSums);
+
+        let fullPiScene = <FullPiScene> this.scene.scene.get("FullPiScene");
+        fullPiScene.addToPiOutput1("#### Current Active Symbols ####")
+
         console.log('#### Current Active Symbols ####');
         for(let idx in allActiveSymbols){
             console.log(allActiveSymbols[idx].getSymbolSequence());
+            fullPiScene.addToPiOutput1(allActiveSymbols[idx].getSymbolSequence());
+
         }
+        fullPiScene.addToPiOutput1("################################");
         console.log('################################');
     }
 
     private logPhase2(){
         if(!this.phase2changed || !this.enableDebugLogging)return;
+        let fullPiScene = <FullPiScene> this.scene.scene.get("FullPiScene");
+        fullPiScene.addToPiOutput2("#### Potentially Resolving ####")
+
         console.log('#### Potentially Resolving ####');
         for(let idx in this.potentiallyResolving){
             console.log(this.potentiallyResolving[idx].left.getFullName() + " => " + this.potentiallyResolving[idx].right.getFullName());
+            fullPiScene.addToPiOutput2(this.potentiallyResolving[idx].left.getFullName() + " => " + this.potentiallyResolving[idx].right.getFullName())
+
         }
+        fullPiScene.addToPiOutput2("################################")
+
         console.log('################################');
     }
 
     private logPhase3(){
         if(!this.phase3changed || !this.enableDebugLogging)return;
+        let fullPiScene = <FullPiScene> this.scene.scene.get("FullPiScene");
+        fullPiScene.addToPiOutput3("#### Triggering Symbols ####")
         console.log('#### Triggering Symbols ####');
         for(let idx in this.curActiveSymbols){
             console.log(this.curActiveSymbols[idx].getFullName());
+            fullPiScene.addToPiOutput3(this.curActiveSymbols[idx].getFullName())
+
         }
+        fullPiScene.addToPiOutput3("################################")
         console.log('################################');
     }
 

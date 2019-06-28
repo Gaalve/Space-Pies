@@ -547,6 +547,16 @@
       },
       {
         "type": "image",
+        "key": "resetbutton",
+        "url": "assets/sprites/resetbutton.png"
+      },
+      {
+        "type": "image",
+        "key": "fullpiscreen",
+        "url": "assets/sprites/fullpiscreen.png"
+      },
+      {
+        "type": "image",
         "key": "button_blocked",
         "url": "assets/sprites/button_blocked.png"
       },

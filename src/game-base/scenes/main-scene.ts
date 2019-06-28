@@ -8,6 +8,7 @@ import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
 import {PiAnimSystem} from "../mechanics/pianim/pi-anim-system";
 import {Infobox} from "../mechanics/Infobox";
+import {FullPiScene} from "./full-pi-scene";
 
 export class MainScene extends Phaser.Scene {
 
@@ -121,6 +122,29 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(data?: PiAnimSystem): void {
+
+        this.system = new PiSystem(this, 33,33,33,true);
+        this.data.set("system", this.system);
+        this.scene.launch("FullPiScene");
+        let scene = this;
+        this.input.keyboard.on('keydown-' + 'W', function (event) {
+            let piScene = <FullPiScene> scene.scene.get("FullPiScene");
+           piScene.background.setVisible(true);
+           piScene.fullPiText1.setVisible(true);
+           piScene.fullPiText2.setVisible(true);
+           piScene.fullPiText3.setVisible(true);
+            piScene.resetButton.setVisible(true);
+
+        });
+        this.input.keyboard.on('keyup-' + 'W', function (event) {
+            let piScene = <FullPiScene> scene.scene.get("FullPiScene");
+            piScene.background.setVisible(false);
+            piScene.fullPiText1.setVisible(false);
+            piScene.fullPiText2.setVisible(false);
+            piScene.fullPiText3.setVisible(false);
+            piScene.resetButton.setVisible(false);
+        });
+
         this.anims.create({
             key: 'snooze',
             frames:
@@ -139,8 +163,6 @@ export class MainScene extends Phaser.Scene {
             repeat: -1
         });
         this.battleTime = new BattleTimeBar(this);
-        this.system = new PiSystem(this, 33,33,33,false);
-        this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
 
