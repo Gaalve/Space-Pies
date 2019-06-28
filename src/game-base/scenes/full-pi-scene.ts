@@ -1,6 +1,5 @@
 import {Space} from "../mechanics/space/space";
 import Sprite = Phaser.GameObjects.Sprite;
-import rexUI from '../rexPlugins/plugins/dist/rexuiplugin.min.js';
 import GeometryMask = Phaser.Display.Masks.GeometryMask;
 import Graphics = Phaser.GameObjects.Graphics;
 import {PiSystem} from "../mechanics/picalc/pi-system";
