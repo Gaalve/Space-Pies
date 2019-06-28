@@ -1,11 +1,11 @@
 import {Turn} from "../mechanics/turn";
 import {Player} from "../mechanics/player";
 import {Button} from "../mechanics/button";
-
 import {PiSystem} from "../mechanics/picalc/pi-system";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import Sprite = Phaser.GameObjects.Sprite;
 import {BattleTimeBar} from "../mechanics/battleTimeBar";
+import {Bot} from "../mechanics/bot/bot";
 import {PiAnimSystem} from "../mechanics/pianim/pi-anim-system";
 import {Infobox} from "../mechanics/Infobox";
 import {roundTimeBar} from "../mechanics/roundTimeBar";
@@ -27,6 +27,7 @@ export class MainScene extends Phaser.Scene {
     private shop_bg_back2: Sprite;//Phaser.GameObjects.Graphics;
     private shop_bg_out2: Sprite;
     // private energy_bg: Phaser.GameObjects.Rectangle;
+    private gameMode: string;
 
     private shop1: [Button, Button, Button, Button, Button, Button, Button];
     private shopZ: [Button, Button, Button, Button, Button];
@@ -88,6 +89,7 @@ export class MainScene extends Phaser.Scene {
     private energyTextS: Phaser.GameObjects.Text[];
     private energyRegen: Phaser.GameObjects.Text;
     public battleTime: BattleTimeBar;
+    public buttonBotLog: Button;
     private roundTimebar: roundTimeBar;
     private roundTimeEvent;
     private rounddelay:number = 30000;
@@ -141,6 +143,9 @@ export class MainScene extends Phaser.Scene {
             frameRate: 8,
             repeat: -1
         });
+
+        this.gameMode = this.scene.get("GuiScene").data.get("mode");
+        console.log(this.gameMode);
         this.battleTime = new BattleTimeBar(this);
         this.roundTimebar = new roundTimeBar(this);
         this.system = new PiSystem(this, 33,33,33,false);
@@ -157,11 +162,31 @@ export class MainScene extends Phaser.Scene {
 
         if (!data && data !instanceof  PiAnimSystem) throw new Error("No Pi Anim System");
         data.reset();
-        this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
-                        new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+
+        switch(this.gameMode){
+            case("0"):{
+                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
+                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+                break;
+            }
+            case("1"):{
+                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
+                    new Bot(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+                break;
+            }
+            case("2"):{
+                this.players = [new Bot(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
+                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+                break;
+            }
+            default:{
+                this.players = [new Player(this, 300, 540, "P1", true, this.system, this.pem, this.battleTime, data),
+                    new Player(this, 1620, 540, "P2", false, this.system, this.pem, this.battleTime, data)];
+            }
+        }
 
 
-        this.turn = new Turn(this, this.players, data);
+        this.turn = new Turn(this, this.players, data, this.gameMode);
         let system = this.system;
         let startShop = system.add.replication(system.add.channelIn('shopp1','*').process('ShopP1', () =>{
             if(this.turn.getCurrentRound() != 1){
@@ -219,6 +244,11 @@ export class MainScene extends Phaser.Scene {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         this.energyRegen = this.add.text(1920/2+20, 470, "(+"+this.turn.getCurrentPlayer().getRegenRate()+ ")", {
             fill: '#15ff31', fontFamily: '"Roboto"', fontSize: 35, stroke:'#15ff31',  strokeThickness: 2});
+
+        this.energy.setVisible(false);
+        this.energyT.setVisible(false);
+        this.energyRegen.setVisible(false);
+
         this.shop = new Button(this, 1920/2, 1080-100, "button_shadow",
             "button_bg", "button_fg", "button_shop",0.95,
             ()=>{
@@ -249,7 +279,25 @@ export class MainScene extends Phaser.Scene {
         );
         this.buttonOption.setPosition(1880, 40);
 
+        this.buttonBotLog = new Button(this, 1780, 40, "button_shadow",
+            "button_bg", "button_fg", "botLog",
+            1, ()=>{
+                if(this.gameMode == "1"){
+                    this.players[1].getBotLog().changeVisible();
+                }else if(this.gameMode == "2"){
+                    this.players[0].getBotLog().changeVisible();
+                }
+            });
+        this.buttonBotLog.setInvisible();
+        this.buttonBotLog.removeInteractive();
 
+        /*const botLog = this.add.text(1580, 10, "show bot\nactions", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 24, strokeThickness: 2}).setVisible(false);*/
+        if(this.gameMode == "1" || this.gameMode == "2"){
+            //botLog.setVisible(true);
+            this.buttonBotLog.setVisible();
+            this.buttonBotLog.restoreInteractive();
+        }
 
         this.creatChooseRegen();
         this.createShop1();
@@ -306,6 +354,7 @@ export class MainScene extends Phaser.Scene {
             this.timeAccumulator -= this.timeUpdateTick;
             this.shop.updateStep();
             this.buttonOption.updateStep();
+            this.buttonBotLog.updateStep();
 
             if(this.roundTimebar.active){
                 this.roundTimebar.update();
@@ -2186,6 +2235,8 @@ export class MainScene extends Phaser.Scene {
         okBox.setScale();
         okBox.setVisible();
     }
+
+
 
     private getTipText(type: string){
         if (type == "erupt"){

@@ -11,8 +11,9 @@ export class GuiScene extends Phaser.Scene {
         })
     }
 
-    create(): void {
+    create(data: {mode: string}): void {
         this.data.set("infoboxx",new Infobox(this));
+        this.data.set("mode", data.mode);
 
         this.scene.launch('SimplePiCalc');
 
