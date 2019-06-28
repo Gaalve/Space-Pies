@@ -247,7 +247,7 @@ export class Player {
         if(this.solarDrones[3].active){
             rate += 25;
         }
-        if(this.solarDrones[3].active){
+        if(this.solarDrones[4].active){
             rate += 25;
         }
         if(this.solarDrones[5].active){
