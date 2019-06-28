@@ -650,6 +650,26 @@
       },
       {
         "type": "image",
+        "key": "singleplayer",
+        "url": "assets/sprites/singleplayer.png"
+      },
+      {
+        "type": "image",
+        "key": "multiplayer",
+        "url": "assets/sprites/multiplayer.png"
+      },
+      {
+        "type": "image",
+        "key": "red_arrow",
+        "url": "assets/sprites/red_arrow_left.png"
+      },
+      {
+        "type": "image",
+        "key": "blue_arrow",
+        "url": "assets/sprites/blue_arrow_right.png"
+      },
+      {
+        "type": "image",
         "key": "motorL",
         "url": "assets/sprites/motorL.png"
       },
@@ -702,6 +722,11 @@
         "type": "image",
         "key": "pixel8",
         "url": "assets/sprites/pixel8.png"
+      },
+      {
+        "type": "image",
+        "key": "botLog",
+        "url": "assets/sprites/botLog.png"
       }
     ]
   }
