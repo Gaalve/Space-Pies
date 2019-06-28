@@ -626,7 +626,6 @@ export class MainScene extends Phaser.Scene {
                     this.shopMActive = false;
                 }
                 this.shop_bg_back2.setVisible(false);
-                this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
                 this.closeShop(this.shop1, this.shop1Text, true);
                 this.openShop.setVisible(true);
                 this.shop.setVisible();
@@ -1207,7 +1206,6 @@ export class MainScene extends Phaser.Scene {
     }
 
     closeShop(array: Button[], text: Phaser.GameObjects.Text[],closeBg: boolean): void{
-        this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
         for(let b of array){
             b.setInvisible();
             b.removeInteractive();
