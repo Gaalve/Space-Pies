@@ -7,6 +7,7 @@ import {NeutronStar} from "./anomalies/neutron-star";
 import {BulletInfo} from "./weapon/bulletInfo";
 import {ScenePiAnimation} from "../scenes/ScenePiAnimation";
 import {MainScene} from "../scenes/main-scene";
+import {FullPiScene} from "../scenes/full-pi-scene";
 
 export class Turn {
     private refScene: Phaser.Scene;
@@ -225,7 +226,8 @@ export class Turn {
         animationScene.reinitialize();
         this.resetOnScreenTexts(this.players[0]);
         this.resetOnScreenTexts(this.players[1]);
-        this.playerInput()
+        (<FullPiScene>this.refScene.scene.get("FullPiScene")).refresh();
+        this.playerInput();
             //this.refScene.time.delayedCall(1250, () => (this.playerInput()), [], this); //hier dauer der attackturn bestimmen
     }
 

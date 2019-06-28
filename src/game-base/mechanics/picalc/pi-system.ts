@@ -16,7 +16,7 @@ export class PiSystem {
     private findResolvingTimeOut: number;
     private resolveTimeOut: number;
     private cleanUpTimeOut: number;
-
+    public fullPiScene : FullPiScene;
     private reservedNames: string[][];
 
     // private existing: PiSymbol[];                   // all existing symbols; may get delete later
@@ -51,6 +51,7 @@ export class PiSystem {
         this.resolveTimeOut = resolveTimeOut;
         this.cleanUpTimeOut = cleanUpTimeOut;
 
+        this.fullPiScene = <FullPiScene>this.scene.scene.get("FullPiScene")
         // this.existing = [];
         this.curChannelIn = [];
         this.curChannelOut = [];
@@ -82,6 +83,8 @@ export class PiSystem {
 
         this.deadlock = false;
         this.onDeadlockFunction = ()=>{};
+
+
     }
 
     private indexOfReservedName(name: string): number{
@@ -386,47 +389,36 @@ export class PiSystem {
         let allActiveSymbols: PiSymbol[] = [];
         allActiveSymbols = allActiveSymbols.concat(this.curActiveSymbols,
             this.curReplications, this.curChannelIn, this.curChannelOut, this.curSums);
-
-        let fullPiScene = <FullPiScene> this.scene.scene.get("FullPiScene");
-        fullPiScene.addToPiOutput1("#### Current Active Symbols ####")
-
         console.log('#### Current Active Symbols ####');
         for(let idx in allActiveSymbols){
-            console.log(allActiveSymbols[idx].getSymbolSequence());
-            fullPiScene.addToPiOutput1(allActiveSymbols[idx].getSymbolSequence());
-
+            let sequence = allActiveSymbols[idx].getSymbolSequence();
+            console.log(sequence);
+            this.fullPiScene.addToPiOutput1(sequence);
         }
-        fullPiScene.addToPiOutput1("################################");
         console.log('################################');
     }
 
     private logPhase2(){
         if(!this.phase2changed || !this.enableDebugLogging)return;
-        let fullPiScene = <FullPiScene> this.scene.scene.get("FullPiScene");
-        fullPiScene.addToPiOutput2("#### Potentially Resolving ####")
-
         console.log('#### Potentially Resolving ####');
         for(let idx in this.potentiallyResolving){
-            console.log(this.potentiallyResolving[idx].left.getFullName() + " => " + this.potentiallyResolving[idx].right.getFullName());
-            fullPiScene.addToPiOutput2(this.potentiallyResolving[idx].left.getFullName() + " => " + this.potentiallyResolving[idx].right.getFullName())
-
+            let sequence = this.potentiallyResolving[idx].left.getFullName() + " => " + this.potentiallyResolving[idx].right.getFullName();
+            console.log(sequence);
+            this.fullPiScene.addToPiOutput2(sequence)
         }
-        fullPiScene.addToPiOutput2("################################")
-
         console.log('################################');
     }
 
     private logPhase3(){
         if(!this.phase3changed || !this.enableDebugLogging)return;
-        let fullPiScene = <FullPiScene> this.scene.scene.get("FullPiScene");
-        fullPiScene.addToPiOutput3("#### Triggering Symbols ####")
+
         console.log('#### Triggering Symbols ####');
         for(let idx in this.curActiveSymbols){
-            console.log(this.curActiveSymbols[idx].getFullName());
-            fullPiScene.addToPiOutput3(this.curActiveSymbols[idx].getFullName())
+            let sequence =  this.curActiveSymbols[idx].getFullName()
+                console.log(sequence);
+            this.fullPiScene.addToPiOutput3(sequence)
 
         }
-        fullPiScene.addToPiOutput3("################################")
         console.log('################################');
     }
 

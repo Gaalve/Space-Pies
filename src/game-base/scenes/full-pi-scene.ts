@@ -47,7 +47,7 @@ export class FullPiScene extends Phaser.Scene {
         this.resetButton = this.add.sprite(1775, 910, "resetbutton");
 
         this.piSystem = this.data.get("system");
-
+        // this.piSystem.fullPiScene = this;
         let maskArea1 = new Graphics(this);
         maskArea1.fillRect(200, 150,500,775);
 
@@ -124,6 +124,48 @@ export class FullPiScene extends Phaser.Scene {
 
     }
 
+    refresh()
+    {
+        let text1 =
+            "################################\n" +
+            "#### Current Active Symbols ####\n" +
+            "################################\n\n";
+
+        for (let i = 0; i < 15; i++)
+            if (this.fullPiText1.height > 700)
+                break
+            else
+                text1 += this.fullPiCache1[i].toString() + "\n"
+
+        this.fullPiText1.setText(text1);
+
+        let text2 =
+            "################################\n" +
+            "#### Potentially Resolving  ####\n" +
+            "################################\n\n";
+
+        for (let i = 0; i < 15; i++)
+            if (this.fullPiText2.height > 700)
+                break
+            else
+                text2 += this.fullPiCache2[i].toString() + "\n"
+
+        this.fullPiText2.setText(text2);
+
+        let text3 =
+            "################################\n" +
+            "#### Triggering Symbols     ####\n" +
+            "################################\n\n";
+
+        for (let i = 0; i < 15; i++)
+            if (this.fullPiText3.height > 700)
+                break
+            else
+                text3 += this.fullPiCache3[i].toString() + "\n"
+
+        this.fullPiText3.setText(text3);
+    }
+
     private setMouseMoveListener(object: Phaser.GameObjects.Sprite)
     {
         object.setInteractive({ draggable: true });
@@ -138,44 +180,24 @@ export class FullPiScene extends Phaser.Scene {
 
     addToPiOutput1(string : String, scrollAction? : Boolean)
     {
-        if (!string)
-            return;
-        let wordWrappedString = this.fullPiText1.runWordWrap(string.toString());
-        if (this.fullPiText1.height > 700 && !scrollAction)
-            this.fullPiCache1.length > 50 ? this.fullPiCache1 = new Array<string>() : this.fullPiCache1.push(wordWrappedString);
-        else
-            this.fullPiText1.setText(this.fullPiText1.text + wordWrappedString + "\n\n");
+            this.fullPiCache1.length > 1000 ? this.fullPiCache1 = new Array<string>() : this.fullPiCache1.push(string.toString());
     }
 
     addToPiOutput2(string : String, scrollAction? : Boolean)
     {
-        if (!string)
-            return;
-        let wordWrappedString = this.fullPiText2.runWordWrap(string.toString());
-        if (this.fullPiText2.height > 700 && !scrollAction)
-            this.fullPiCache2.length > 50 ? this.fullPiCache2 = new Array<string>() : this.fullPiCache2.push(wordWrappedString);
-
-        else
-            this.fullPiText2.setText(this.fullPiText2.text + wordWrappedString + "\n\n");
+            this.fullPiCache2.length > 1000 ? this.fullPiCache2 = new Array<string>() : this.fullPiCache2.push(string.toString());
     }
 
     addToPiOutput3(string : String, scrollAction? : Boolean)
     {
-        if (!string)
-            return;
-        let wordWrappedString = this.fullPiText3.runWordWrap(string.toString());
-        if (this.fullPiText3.height > 700 && !scrollAction)
-            this.fullPiCache3.length > 50 ? this.fullPiCache3 = new Array<string>() : this.fullPiCache3.push(wordWrappedString);
-
-        else
-            this.fullPiText3.setText(this.fullPiText3.text + wordWrappedString + "\n\n");
+            this.fullPiCache3.length > 1000 ? this.fullPiCache3 = new Array<string>() : this.fullPiCache3.push(string.toString());
     }
 
 
 
     update(time: number, delta: number): void {
-        if (this.game.input.activePointer.isDown)
-            this.scrollText(this.game.input.activePointer);
+        // if (this.game.input.activePointer.isDown)
+        //     this.scrollText(this.game.input.activePointer);
     }
 
     private scrollText(pointer: Pointer)
@@ -205,7 +227,16 @@ export class FullPiScene extends Phaser.Scene {
         }
     }
 
+    initialize()
+    {
+        this.fullPiText1.text = ""
+        this.fullPiText2.text = ""
+        this.fullPiText3.text = ""
 
+        this.fullPiCache1 = new Array<string>();
+        this.fullPiCache2 = new Array<string>();
+        this.fullPiCache3 = new Array<string>();
+    }
 }
 
 

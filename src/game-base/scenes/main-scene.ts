@@ -123,14 +123,14 @@ export class MainScene extends Phaser.Scene {
 
         this.load.spritesheet('bleedingbar', 'assets/sprites/bleedingbar.png', { frameWidth: 19, frameHeight: 42, spacing: 5, startFrame: 0, endFrame: 42, margin: 0});
 
-
+        this.scene.launch("FullPiScene");
     }
 
     create(data?: PiAnimSystem): void {
 
         this.system = new PiSystem(this, 33,33,33,true);
         this.data.set("system", this.system);
-        this.scene.launch("FullPiScene");
+
         let scene = this;
         this.input.keyboard.on('keydown-' + 'W', function (event) {
             let piScene = <FullPiScene> scene.scene.get("FullPiScene");
@@ -743,6 +743,7 @@ export class MainScene extends Phaser.Scene {
             "button_bg", "button_fg", "button_skip",0.95,
             ()=>{
                 if(this.turn.clickable){
+                    // (<FullPiScene>this.scene.get("FullPiScene")).initialize();
                     this.roundTimebar.stopTimer();
                     // this.turn.Attackturn();
                     this.system.pushSymbol(this.system.add.channelOut("closeshop", "*").nullProcess());
