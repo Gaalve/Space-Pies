@@ -283,5 +283,15 @@ export class Button{
 
     }
 
+    public destroy(): void{
+        this.shadow.destroy();
+        this.bg.destroy();
+        this.fg.destroy();
+        this.img.destroy();
+        this.inactive.destroy();
+        this.alt.destroy();
+        this.onClick = null;
+        this.func = null;
+    }
 
 }
