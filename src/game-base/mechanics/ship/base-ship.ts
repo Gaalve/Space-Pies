@@ -48,4 +48,14 @@ export abstract class BaseShip {
 
     public abstract update(delta: number): void;
     public abstract setShipOutVisible(bool: boolean): void;
+
+    public hideMotorFlames(): void{
+        this.motorRocket1.setVisible(false);
+        this.motorRocket2.setVisible(false);
+        this.motorLaser1.setVisible(false);
+        this.motorLaser2.setVisible(false);
+        this.motorProj1.setVisible(false);
+        this.motorProj2.setVisible(false);
+
+    }
 }

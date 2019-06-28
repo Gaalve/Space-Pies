@@ -95,4 +95,10 @@ export class MotorFlame {
         this.flameMid.setVisible(b);
         this.flameFront.setVisible(b);
     }
+
+    public setDepth(d: number){
+        this.flameBack.setDepth(d + -3);
+        this.flameMid.setDepth(d + -2);
+        this.flameFront.setDepth(d + -1);
+    }
 }

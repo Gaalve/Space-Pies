@@ -14,9 +14,7 @@ import {HealthType} from "./health/health-type";
 import ParticleEmitterManager = Phaser.GameObjects.Particles.ParticleEmitterManager;
 import {BulletInfo} from "./weapon/bulletInfo";
 import {BattleTimeBar} from "./battleTimeBar";
-import get = Reflect.get;
 import {PiAnimSystem} from "./pianim/pi-anim-system";
-import {collectEnergy_Drones} from "./animations/collectEnergy_Drones";
 import {Anomaly} from "./anomalies/anomaly";
 import {SunEruption} from "./anomalies/sun-eruption";
 import {WormHole} from "./anomalies/worm-hole";
@@ -26,7 +24,6 @@ import {Botlog} from "./bot/botlog";
 import {BlackholeParticle} from "./animations/blackhole-particle";
 import {Motor} from "./motor";
 import {MainScene} from "../scenes/main-scene";
-import {NeutronStar} from "./anomalies/neutron-star";
 import {NeutronAnimation} from "./animations/neutron-animation";
 import {NeutronTurb} from "./animations/neutron-turb";
 import {NeutronExplosion} from "./animations/neutron-explosion";
@@ -133,6 +130,12 @@ export class Player {
         this.drones[0].update(delta);
         this.drones[1].update(delta);
         this.drones[2].update(delta);
+
+        this.solarDrones[1].update(delta);
+        this.solarDrones[2].update(delta);
+        this.solarDrones[3].update(delta);
+        this.solarDrones[4].update(delta);
+        this.solarDrones[5].update(delta);
         //this.ship_out.setPosition(this.ship._modularShip. + this.offset, this.ship.posY);
 
         if(this.currentAnomaly) this.currentAnomaly.update(delta);
@@ -209,6 +212,7 @@ export class Player {
             this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
             this.solarDrones[index].health.addBar(HealthType.ShieldBarSmall);
             this.solarDrones[index].setVisible(true);
+            this.solarDrones[index].flame.setVisible(true);
             this.setSmallestIndexSD();
         }
     }
@@ -410,8 +414,8 @@ export class Player {
         this.system.pushSymbol(
             this.system.add.channelIn('anomaly'+p, '')
                 .channelInCB('anomaly'+p, '', () => {
-                    this.system.stop()
-                    if (this.scene instanceof MainScene) this.scene.anomalyInfoBoxes("worm");
+                    this.system.stop();
+                    (<MainScene>this.scene).anomalyInfoBoxes("worm");
                 },undefined, 0.2)
                 .channelOut('wormhole'+p, '').nullProcess()
         );

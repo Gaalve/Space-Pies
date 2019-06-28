@@ -215,7 +215,9 @@ export class MainScene extends Phaser.Scene {
                 this.switchTextures(this.turn.getCurrentPlayer());
             }
             this.changeShopColor(this.turn.getCurrentPlayer());
-            this.roundTimeEvent=this.time.addEvent({ delay:  this.rounddelay, loop: false,callback: () => {this.skip.clicked();} });
+            this.roundTimeEvent=this.time.addEvent({ delay:  this.rounddelay, loop: false,callback: () => {
+                this.shop.clicked();
+                this.skip.clicked();} });
             this.roundTimebar.setTimer(this.roundTimeEvent);
             this.displayShop(this.shop1, this.shop1Text);
             this.updateShop1(false);
@@ -729,7 +731,6 @@ export class MainScene extends Phaser.Scene {
                     this.shopMActive = false;
                 }
                 this.shop_bg_back2.setVisible(false);
-                this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
                 this.closeShop(this.shop1, this.shop1Text, true);
                 this.openShop.setVisible(true);
                 this.shop.setVisible();
@@ -1312,7 +1313,6 @@ export class MainScene extends Phaser.Scene {
     }
 
     closeShop(array: Button[], text: Phaser.GameObjects.Text[],closeBg: boolean): void{
-        this.turn.getCurrentPlayer().getDrones()[2].showPiSeq();
         for(let b of array){
             b.setInvisible();
             b.removeInteractive();
@@ -2263,8 +2263,8 @@ export class MainScene extends Phaser.Scene {
     private getTipText(type: string){
         if (type == "erupt"){
             return "A sun eruption is about to come through. Be careful,\n" +
-                   "this can cause a lot of damage to your shields. Your\n" +
-                   "shields will maybe be destroyed."
+                   "this can deal a lot of damage to your shields. Your\n" +
+                   "shields could be destroyed."
         }
         if (type == "worm"){
             return "A worm  hole is going to appear and leave a special \n" +
@@ -2276,6 +2276,13 @@ export class MainScene extends Phaser.Scene {
             return "A black hole will appear. It increases the number of\n" +
                    "projectile misses. So both of you should be careful.\n" +
                    "Your projectiles may not find the right way."
+        }
+        if (type == "end"){
+            return  "A neutron star appears. In such a situation it would\n" +
+                    "be best if you flee quickly, but since you are in a\n" +
+                    "fight there is no such option. Both ships will be\n"+
+                    "slowly destroyed. End this fight quickly and try\n"+
+                    "to hold your shield count up.\n"
         }
     }
 
