@@ -2,8 +2,8 @@ import {TutSubScene} from "./tut-sub-scene";
 import {TutGenericTextScene} from "./scenes/tut-generic-text-scene";
 import {TutGenericButtonScene} from "./scenes/tut-generic-button-scene";
 import {ButtonWithText} from "./scenes/scene-mechanics/button-with-text";
-import {TutRedVsDrone1} from "./scenes/tut-red-vs-drone-1";
 import {Button} from "../button";
+import {LifePrep} from "./scenes/tut-life/life-prep";
 
 export class TutSubSceneManager {
     private scene: Phaser.Scene;
@@ -40,8 +40,9 @@ export class TutSubSceneManager {
             new TutGenericTextScene(scene, "2", 92, 0.5, 0.25, 0.25),
             new TutGenericTextScene(scene, "1", 92, 0.5, 0.25, 0.25),
             new TutGenericTextScene(scene, "Too bad.", 64, 1, 1, 1),
-            new TutGenericTextScene(scene, "It's not yet implemented.", 64, 1, 1, 1),
-            new TutRedVsDrone1(scene, "Projectile.", 64, 3, 1, 1),
+            new TutGenericTextScene(scene, "It's not yet implemented.", 64, 1, 1, 1), //skipped via button
+            new TutGenericTextScene(scene, "Basics: #Life", 64, 3, 1, 1),
+            new LifePrep(scene),
         ];
 
         this.idx = 0;

@@ -21,11 +21,13 @@ export class TutorialScene extends Phaser.Scene {
 
     create(): void {
         this.data.set("infoboxx",new Infobox(this));
-        this.mgr = new TutSubSceneManager(this);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
         this.animationContainer = new TutAnimationContainer(this.pem);
         this.data.set("animCont", this.animationContainer);
+
+
+        this.mgr = new TutSubSceneManager(this);
     }
 
 

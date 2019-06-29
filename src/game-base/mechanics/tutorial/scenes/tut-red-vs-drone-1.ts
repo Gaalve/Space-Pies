@@ -9,7 +9,7 @@ export class TutRedVsDrone1 extends TutSubScene{
     text: Text;
     button: ButtonWithText;
     red: TutRedShip;
-    drone: TutDrone;
+    blue: TutDrone;
 
 
     constructor(scene: Phaser.Scene, text: string, fontSize: number, duration: number = 5, intro: number = 2, outro: number = 2) {
@@ -44,10 +44,10 @@ export class TutRedVsDrone1 extends TutSubScene{
 
     launch(): void {
         this.red = new TutRedShip(this.scene, 250, 1080/2);
-        this.drone = new TutDrone(this.scene, 1700, 1080/2, 1,false);
-        this.drone.addWeapon("arm"); //arm shi roc
+        this.blue = new TutDrone(this.scene, 1700, 1080/2, 1,false);
+        this.blue.addWeapon("arm"); //arm shi roc
         this.red.drone.addWeapon("shi");
-        this.drone.create();
+        this.blue.create();
         this.button.setVisible(true);
         this.scene.add.existing(this.text);
         this.text.setAlpha(0);
@@ -56,7 +56,7 @@ export class TutRedVsDrone1 extends TutSubScene{
     update(delta: number): void {
         this.red.update(delta*1000);
         this.button.update(delta);
-        this.drone.update(delta*1000);
+        this.blue.update(delta*1000);
     }
 
     setText(text: string): void{
@@ -67,7 +67,7 @@ export class TutRedVsDrone1 extends TutSubScene{
 
     private shootP(): void{
         this.red.drone.getWeapons()[0].createBullet(new BulletInfo(
-            false, this.drone.x - 20, this.drone.y
+            false, this.blue.x - 20, this.blue.y
         ))
     }
 }
