@@ -59,6 +59,8 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
             }
         }
 
+        this.setOrigin(0.5, 0.5);
+
         this.index = index;
         this.setVisible(false);
         scene.add.existing(this);

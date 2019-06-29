@@ -67,7 +67,7 @@ export class TutRedVsDrone1 extends TutSubScene{
 
     private shootP(): void{
         this.red.drone.getWeapons()[0].createBullet(new BulletInfo(
-            false, this.drone.x, this.drone.y
+            false, this.drone.x - 20, this.drone.y
         ))
     }
 }
