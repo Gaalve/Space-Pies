@@ -4,7 +4,7 @@ import {TutAnimationContainer} from "./tut-animation-container";
 import Vector2 = Phaser.Math.Vector2;
 
 
-export class Bullet extends Sprite{
+export class TutBullet extends Sprite{
 
     private speedX: number;
     private speedY: number;
@@ -13,15 +13,21 @@ export class Bullet extends Sprite{
     private weaponType: WeaponType;
     private animationContainer: TutAnimationContainer;
 
+    private toX: number;
+    private toY: number;
+
     constructor(scene: Phaser.Scene, x: number, y: number, isFirstPlayer: boolean, type: WeaponType, hit: boolean,
                 toX: number, toY: number) {
-        super(scene, x, y, Bullet.getBulletTex(type));
+        super(scene, x, y, TutBullet.getBulletTex(type));
         this.weaponType = type;
         scene.add.existing(this);
         this.setDepth(10); //TODO
         this.hit = hit;
         this.isFirst = isFirstPlayer;
         let speed = 4;
+
+        this.toX = toX;
+        this.toY = toY;
 
         this.animationContainer = scene.data.get("animCont");
 
@@ -67,24 +73,65 @@ export class Bullet extends Sprite{
 
     public checkHit(): boolean{
         if(!this.hit) return false;
-        if(!this.isFirst && this.x < 400){
-            return true;
+
+        if (this.speedX > 0){
+            if (this.speedY>0){
+                if(this.x > this.toX && this.y > this.toY){
+                    return true
+                }
+            }
+            else {
+                if(this.x > this.toX && this.y <= this.toY){
+                    return true
+                }
+            }
         }
-        else if(this.isFirst && this.x > 1520){
-            return true;
+        else {
+            if (this.speedY>0){
+                if(this.x <= this.toX && this.y > this.toY){
+                    return true
+                }
+            }
+            else {
+                if(this.x <= this.toX && this.y <= this.toY){
+                    return true
+                }
+            }
         }
+
         return false
     }
 
     public hasHit(): boolean{
         if(!this.hit) return false;
-        if(!this.isFirst && this.x < 400){
-            this.playHitAnimation();
-            return true;
+
+        if (this.speedX > 0){
+            if (this.speedY>0){
+                if(this.x > this.toX && this.y > this.toY){
+                    this.playHitAnimation();
+                    return true
+                }
+            }
+            else {
+                if(this.x > this.toX && this.y <= this.toY){
+                    this.playHitAnimation();
+                    return true
+                }
+            }
         }
-        else if(this.isFirst && this.x > 1520){
-            this.playHitAnimation();
-            return true;
+        else {
+            if (this.speedY>0){
+                if(this.x <= this.toX && this.y > this.toY){
+                    this.playHitAnimation();
+                    return true
+                }
+            }
+            else {
+                if(this.x <= this.toX && this.y <= this.toY){
+                    this.playHitAnimation();
+                    return true
+                }
+            }
         }
         return false
     }

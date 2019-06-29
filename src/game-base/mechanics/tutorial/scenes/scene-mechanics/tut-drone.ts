@@ -202,7 +202,7 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
             "    It will fire after the space ship has fired.") : null;
 
 
-        this.index == 0 ? this.isP1 ? this.scene.data.get("redship").setOnScreenText(this.onScreenText) :this.scene.data.get("blueship").setOnScreenText(this.onScreenText) : null;
+        // this.index == 0 ? this.isP1 ? this.scene.data.get("redship").setOnScreenText(this.onScreenText) :this.scene.data.get("blueship").setOnScreenText(this.onScreenText) : null;
 
     }
 

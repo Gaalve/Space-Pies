@@ -172,6 +172,7 @@ export class TutRedShip extends BaseShip{
 
 
     update(delta: number): void {
+        this.drone.update(delta);
         this.backUp.update(delta);
         this.backDown.update(delta);
         this.pilot.update(delta);

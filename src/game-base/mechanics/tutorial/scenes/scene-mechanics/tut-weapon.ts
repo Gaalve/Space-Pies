@@ -1,9 +1,9 @@
 import {WeaponType} from "../../../weapon/weapon-type";
 import {TutDrone} from "./tut-drone";
 import {HitMissNotification} from "../../../weapon/hit-miss-notification";
-import {Bullet} from "../../../weapon/bullet";
 import {Infobox} from "../../../Infobox";
 import {BulletInfo} from "../../../weapon/bulletInfo";
+import {TutBullet} from "./tut-bullet";
 
 
 export class TutWeapon extends Phaser.GameObjects.Sprite{
@@ -24,7 +24,7 @@ export class TutWeapon extends Phaser.GameObjects.Sprite{
     private wNr : number;
     private piTerm : string;
     private notification: HitMissNotification;
-    private bullet: Bullet;
+    private bullet: TutBullet;
     private _weaponType: WeaponType;
 	private isFirst: boolean;
     private simplePi : string;
@@ -204,6 +204,7 @@ export class TutWeapon extends Phaser.GameObjects.Sprite{
 	public createBullet(info?: BulletInfo): void{
         if(this._weaponType == WeaponType.NONE) return;
     	this.removeBullet();
+    	this.removeNotification();
     	let toX = this.isFirst ? 1620 : 300;
     	let toY = 540;
     	let hit: boolean = !info;
@@ -212,8 +213,7 @@ export class TutWeapon extends Phaser.GameObjects.Sprite{
     		toY = info.toY;
 			hit = !info.miss;
 		}
-    	// TODO: global player for animations
-    	// this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this._weaponType, hit, this._player, toX, toY);
+    	this.bullet = new TutBullet(this.scene, this.x, this.y, this.isFirst, this._weaponType, hit, toX, toY);
 		this.notification = new HitMissNotification(this.scene, this.x, this.y, hit, this.isFirst);
 	}
 

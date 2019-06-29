@@ -3,6 +3,7 @@ import {TutSubScene} from "../tut-sub-scene";
 import {ButtonWithText} from "./scene-mechanics/button-with-text";
 import {TutRedShip} from "./scene-mechanics/tut-red-ship";
 import {TutDrone} from "./scene-mechanics/tut-drone";
+import {BulletInfo} from "../../weapon/bulletInfo";
 
 export class TutRedVsDrone1 extends TutSubScene{
     text: Text;
@@ -19,7 +20,7 @@ export class TutRedVsDrone1 extends TutSubScene{
         this.text.setOrigin(0.5, 0.5);
         this.text.setDepth(1);
         this.blockMainScene = true;
-        this.button = new ButtonWithText(scene, "blue_arrow", "Shoot Projectile", ()=>{}, 1920/2, 1080/2 + 400);
+        this.button = new ButtonWithText(scene, "blue_arrow", "Shoot Projectile", ()=>{this.shootP()}, 1920/2, 1080/2 + 400);
         this.button.setVisible(false);
 
     }
@@ -44,7 +45,8 @@ export class TutRedVsDrone1 extends TutSubScene{
     launch(): void {
         this.red = new TutRedShip(this.scene, 250, 1080/2);
         this.drone = new TutDrone(this.scene, 1700, 1080/2, 1,false);
-        this.drone.addWeapon("arm");
+        this.drone.addWeapon("arm"); //arm shi roc
+        this.red.drone.addWeapon("shi");
         this.drone.create();
         this.button.setVisible(true);
         this.scene.add.existing(this.text);
@@ -64,6 +66,8 @@ export class TutRedVsDrone1 extends TutSubScene{
 
 
     private shootP(): void{
-
+        this.red.drone.getWeapons()[0].createBullet(new BulletInfo(
+            false, this.drone.x, this.drone.y
+        ))
     }
 }
