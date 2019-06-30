@@ -34,6 +34,7 @@ export class NanoDrone extends EnergyDrone {
 
     public explode():void{
         this.player.explosion.explosionAt(this.x,this.y);
+        this.active = false;
         this.player.scene.time.delayedCall(300,()=>{this.setVisible(false)},[],this);
     }
 
