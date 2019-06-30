@@ -4,6 +4,7 @@ import {TutWeapon} from "./tut-weapon";
 import {BulletInfo} from "../../../weapon/bulletInfo";
 import {Infobox} from "../../../Infobox";
 import {PiAnimAlignment} from "../../../pianim/pi-anim-alignment";
+import {TutAnimationContainer} from "./tut-animation-container";
 
 export class TutDrone extends Phaser.GameObjects.Sprite{
 
@@ -384,6 +385,16 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
     public destroyPiCalcTexts(): void{
         this.onScreenText.destroy();
         // this.piSeq.clearSequence(0,0,"");
+    }
+
+    public explode(): void{
+        let animationContainer: TutAnimationContainer = this.scene.data.get("animCont");
+        animationContainer.explosion.explosionAt(this.x, this.y, 0.7, 2.4);
+        this.destroy();
+        this.flame.setVisible(false);
+        for (let w of this.weapons){
+            w.destroy();
+        }
     }
 
 

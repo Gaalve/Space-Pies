@@ -27,4 +27,12 @@ export class TutHealth {
         this.shipBar.addBar(HealthType.HitZoneBar);
 
     }
+
+    public destroy(): void{
+        this.shipBar.destroy();
+        this.zone1Bar.destroy();
+        this.zone2Bar.destroy();
+        this.zone3Bar.destroy();
+        this.zone4Bar.destroy();
+    }
 }

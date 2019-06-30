@@ -205,4 +205,23 @@ export class TutRedShip extends BaseShip{
     addWeapon(weapon: Weapon): void {
     }
 
+
+    public destroy(): void{
+        this.drone.explode();
+        this.backUp.destroy();
+        this.backDown.destroy();
+        this.pilot.destroy();
+        this.hull.destroy();
+        this.wingUp.destroy();
+        this.wingDown.destroy();
+        this.motorProj2.setVisible(false);
+        this.motorProj1.setVisible(false);
+
+        this.motorLaser2.setVisible(false);
+        this.motorLaser1.setVisible(false);
+
+        this.motorRocket1.setVisible(false);
+        this.motorRocket2.setVisible(false);
+    }
+
 }

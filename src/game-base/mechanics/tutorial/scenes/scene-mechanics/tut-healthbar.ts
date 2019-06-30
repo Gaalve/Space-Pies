@@ -53,6 +53,7 @@ export class TutHealthbar {
         sprite.destroy();
         this.updateTextViaResolve();
         this.activeBars--;
+        if (this.bars.length == 0) this.symbol.destroy();
     }
 
     private updateTextViaResolve(): void{
@@ -115,13 +116,9 @@ export class TutHealthbar {
         return str;
     }
 
-    public removeBar() : void {
-        let sprite = this.bars.pop().sprite;
-        this.scene.time.delayedCall(500,()=>{sprite.destroy()}, [],this);
-        this.activeBars--;
-    }
-
-    public getBars() : number{
-        return this.bars.length;
+    public destroy(): void{
+        this.bars.forEach(v => v.destroy());
+        this.symbol.destroy();
+        this.bars = [];
     }
 }

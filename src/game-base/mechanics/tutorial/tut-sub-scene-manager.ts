@@ -4,6 +4,10 @@ import {TutGenericButtonScene} from "./scenes/tut-generic-button-scene";
 import {ButtonWithText} from "./scenes/scene-mechanics/button-with-text";
 import {Button} from "../button";
 import {LifePrep} from "./scenes/tut-life/life-prep";
+import {Life1} from "./scenes/tut-life/life-1";
+import {Life2} from "./scenes/tut-life/life-2";
+import {Life3} from "./scenes/tut-life/life-3";
+import {Life4} from "./scenes/tut-life/life-4";
 
 export class TutSubSceneManager {
     private scene: Phaser.Scene;
@@ -42,8 +46,15 @@ export class TutSubSceneManager {
             new TutGenericTextScene(scene, "Too bad.", 64, 1, 1, 1),
             new TutGenericTextScene(scene, "It's not yet implemented.", 64, 1, 1, 1), //skipped via button
             new TutGenericTextScene(scene, "Basics: #Life", 64, 3, 1, 1),
-            new LifePrep(scene),
         ];
+        let lifePrep = new LifePrep(scene);
+        /* ### Life Basics ### */
+        this.subScenes.push(lifePrep);
+        this.subScenes.push(new Life1(scene, lifePrep));
+        this.subScenes.push(new Life2(scene, lifePrep));
+        this.subScenes.push(new Life3(scene, lifePrep));
+        this.subScenes.push(new Life4(scene, lifePrep));
+        this.subScenes.push(new TutGenericTextScene(scene, "Basics: #Shields and Weapons", 64, 3, 1, 1));
 
         this.idx = 0;
         this.time = 0;
