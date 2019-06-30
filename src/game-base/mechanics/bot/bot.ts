@@ -151,6 +151,8 @@ export class Bot extends Player{
 
         while(this.active) {
             if(this.isDead){
+                this.botLog.setLogoInvisible();
+                this.botLog.setInvisible();
                 this.active = false;
                 this.createBubble();
                 break;

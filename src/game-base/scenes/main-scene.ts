@@ -146,7 +146,6 @@ export class MainScene extends Phaser.Scene {
 
         this.gameMode = this.scene.get("GuiScene").data.get("mode");
         this.data.set("mode", this.gameMode);
-        console.log(this.gameMode);
         this.battleTime = new BattleTimeBar(this);
         this.roundTimebar = new roundTimeBar(this);
         this.system = new PiSystem(this, 33,33,33,false);
@@ -301,6 +300,8 @@ export class MainScene extends Phaser.Scene {
             this.buttonBotLog.setVisible();
             this.buttonBotLog.restoreInteractive();
         }
+        this.data.set("buttonBotLog", this.buttonBotLog);
+        this.data.set("buttonOptions", this.buttonOption);
 
         this.creatChooseRegen();
         this.createShop1();
