@@ -222,6 +222,8 @@ export class Bot extends Player{
                     this.botLog.insertLog(s + ". I built an adaptive shield on hitzone " + hz + ". (-" + x + " E.)");
                 } else if (shield == "armor") {
                     this.botLog.insertLog(s + ". I built an armor shield on hitzone " + hz + ". (-" + x + " E.)");
+                } else if(shield == "rocket"){
+                    this.botLog.insertLog(s + ". I built a hyper shield on hitzone " + hz + ". (-" + x + " E.)");
                 } else {
                     this.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ". (-" + x + " E.)");
                 }
@@ -233,6 +235,13 @@ export class Bot extends Player{
             let weapon = this.chooseWeaponType();
             this.clearPosActions();
             let mod = this.chooseWeaponMod();
+            let wmodText;
+            if(mod == 0){
+                wmodText = "the ship";
+            }else{
+                wmodText = "wMod " + mod;
+            }
+
             this.clearPosActions();
             let nr = mod.toString() + (3-this.droneSlots[mod]).toString();
             this.droneSlots[mod]--;
@@ -245,7 +254,7 @@ export class Bot extends Player{
 
                 let w = "rocket launcher";
                 if(weapon != "rocket") w = weapon == "armor" ? "laser weapon" : "projectile weapon";
-                this.botLog.insertLog(s + ". I built a " + w + " on wmod " + mod + ". (-" + x + " E.)");
+                this.botLog.insertLog(s + ". I built a " + w + " on " + wmodText + ". (-" + x + " E.)");
                 this.reduceDisplayedEnergy(x);
                 this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             },[], this);
