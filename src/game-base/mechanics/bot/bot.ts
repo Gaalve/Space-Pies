@@ -138,6 +138,7 @@ export class Bot extends Player{
     }
 
     public start(): void{
+        this.changeColor();
         this.updateActiveSD();
         this.updateRegenRate();
         this.updateHitzones();
@@ -151,6 +152,8 @@ export class Bot extends Player{
 
         while(this.active) {
             if(this.isDead){
+                this.botLog.setLogoInvisible();
+                this.botLog.setInvisible();
                 this.active = false;
                 this.createBubble();
                 break;
@@ -220,6 +223,8 @@ export class Bot extends Player{
                     this.botLog.insertLog(s + ". I built an adaptive shield on hitzone " + hz + ". (-" + x + " E.)");
                 } else if (shield == "armor") {
                     this.botLog.insertLog(s + ". I built an armor shield on hitzone " + hz + ". (-" + x + " E.)");
+                } else if(shield == "rocket"){
+                    this.botLog.insertLog(s + ". I built a hyper shield on hitzone " + hz + ". (-" + x + " E.)");
                 } else {
                     this.botLog.insertLog(s + ". I built a " + shield + " shield on hitzone " + hz + ". (-" + x + " E.)");
                 }
@@ -231,6 +236,13 @@ export class Bot extends Player{
             let weapon = this.chooseWeaponType();
             this.clearPosActions();
             let mod = this.chooseWeaponMod();
+            let wmodText;
+            if(mod == 0){
+                wmodText = "the ship";
+            }else{
+                wmodText = "wMod " + mod;
+            }
+
             this.clearPosActions();
             let nr = mod.toString() + (3-this.droneSlots[mod]).toString();
             this.droneSlots[mod]--;
@@ -243,7 +255,7 @@ export class Bot extends Player{
 
                 let w = "rocket launcher";
                 if(weapon != "rocket") w = weapon == "armor" ? "laser weapon" : "projectile weapon";
-                this.botLog.insertLog(s + ". I built a " + w + " on wmod " + mod + ". (-" + x + " E.)");
+                this.botLog.insertLog(s + ". I built a " + w + " on " + wmodText + ". (-" + x + " E.)");
                 this.reduceDisplayedEnergy(x);
                 this.botLog.updateEnergy(this.displayedEnergy, this.botRegenRate);
             },[], this);
@@ -314,7 +326,7 @@ export class Bot extends Player{
             this.possibleActions.push(this.ar);
             this.possibleActions.push(this.s);
         }
-        if(this.botShield <= this.botEnergy) this.possibleActions.push(this.r);
+        if(this.botRocketS <= this.botEnergy) this.possibleActions.push(this.r);
         if(this.botAdapt <= this.botEnergy) this.possibleActions.push(this.ad);
 
         let x = Phaser.Math.Between(0, this.possibleActions.length-1);
@@ -499,5 +511,23 @@ export class Bot extends Player{
         }
         this.bubble.setVisible(true);
         this.bubbleText.setVisible(true);
+    }
+
+    public changeColor():void{
+        let shopBG = this.scene.data.get("shopBG");
+        let roundFG = this.scene.data.get("roundFG");
+        if(this.id == "1"){
+            // this.shop_bg.lineStyle(5, 0xAA2222);
+            // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
+            shopBG.setTint(0xa02c2c);
+            roundFG.setTint(0xa02c2c);
+
+        }
+        else{
+            // this.shop_bg.lineStyle(5, 0x2222AA);
+            // this.shop_bg.strokeRoundedRect(260, 1080-220, 1400, 250, 32);
+            shopBG.setTint(0x214478);
+            roundFG.setTint(0x214478);
+        }
     }
 }

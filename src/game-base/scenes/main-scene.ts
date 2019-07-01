@@ -146,14 +146,12 @@ export class MainScene extends Phaser.Scene {
 
         this.gameMode = this.scene.get("GuiScene").data.get("mode");
         this.data.set("mode", this.gameMode);
-        console.log(this.gameMode);
         this.battleTime = new BattleTimeBar(this);
         this.roundTimebar = new roundTimeBar(this);
         this.system = new PiSystem(this, 33,33,33,false);
         this.data.set("system", this.system);
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
-
 
         this.input.enabled = true;
 
@@ -208,7 +206,6 @@ export class MainScene extends Phaser.Scene {
             this.energy.setVisible(true);
             this.energyT.setVisible(true);
             this.energyRegen.setVisible(true);
-
 
 
         }));
@@ -301,6 +298,8 @@ export class MainScene extends Phaser.Scene {
             this.buttonBotLog.setVisible();
             this.buttonBotLog.restoreInteractive();
         }
+        this.data.set("buttonBotLog", this.buttonBotLog);
+        this.data.set("buttonOptions", this.buttonOption);
 
         this.creatChooseRegen();
         this.createShop1();
@@ -345,6 +344,8 @@ export class MainScene extends Phaser.Scene {
         );
 
         this.blackholeExists = false;
+        this.data.set("shopBG", this.shop_bg_out);
+        this.data.set("roundFG", this.roundFG);
 
         this.system.start();
     }
