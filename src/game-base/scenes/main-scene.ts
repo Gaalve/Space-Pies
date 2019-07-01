@@ -153,7 +153,6 @@ export class MainScene extends Phaser.Scene {
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
 
-
         this.input.enabled = true;
 
         this.infobox = <Infobox> this.scene.get('GuiScene').data.get("infoboxx");
@@ -207,7 +206,6 @@ export class MainScene extends Phaser.Scene {
             this.energy.setVisible(true);
             this.energyT.setVisible(true);
             this.energyRegen.setVisible(true);
-
 
 
         }));
@@ -346,6 +344,8 @@ export class MainScene extends Phaser.Scene {
         );
 
         this.blackholeExists = false;
+        this.data.set("shopBG", this.shop_bg_out);
+        this.data.set("roundFG", this.roundFG);
 
         this.system.start();
     }

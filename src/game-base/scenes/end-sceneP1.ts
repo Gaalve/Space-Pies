@@ -109,6 +109,13 @@ export class EndSceneP1 extends Phaser.Scene {
         botLog.removeInteractive();
         botLog.setInvisible();
 
+        let gM = this.scene.get("GuiScene").data.get("mode");
+        if(gM == "1"){
+            this.P2.getBotLog().setInvisible();
+        }else if(gM == "2"){
+            this.P1.getBotLog().setInvisible();
+        }
+
     }
 
     update(time: number, delta: number): void {
