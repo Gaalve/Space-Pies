@@ -8,6 +8,10 @@ import {Life1} from "./scenes/tut-life/life-1";
 import {Life2} from "./scenes/tut-life/life-2";
 import {Life3} from "./scenes/tut-life/life-3";
 import {Life4} from "./scenes/tut-life/life-4";
+import {WeapPrep} from "./scenes/tut-weapons/weap-prep";
+import {Weap1} from "./scenes/tut-weapons/weap-1";
+import {Weap2} from "./scenes/tut-weapons/weap-2";
+import {Weap3} from "./scenes/tut-weapons/weap-3";
 
 export class TutSubSceneManager {
     private scene: Phaser.Scene;
@@ -23,7 +27,7 @@ export class TutSubSceneManager {
         this.skip = new Button(scene, 50, 50, "button_shadow",
             "button_bg", "button_fg", "red_arrow", 0.95, ()=>{if (this.idx < 11){
                 this.subScenes[this.idx].destroy();
-                this.idx = 11;
+                this.idx = 15; // 9 for Health; 15 for Weapons
                 this.time = 0;
                 this.subScenes[this.idx].launch();
             }});
@@ -31,10 +35,10 @@ export class TutSubSceneManager {
         this.subScenes = [
             new TutGenericTextScene(scene, "Welcome.", 64, 3, 1, 1),
             new TutGenericButtonScene(scene, "Are you ready for the tutorial?", [
-                new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2 - 100, 1080/2),
-                new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2+100),
-                new ButtonWithText(scene, "blue_arrow", "Definitely!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2+200),
-                new ButtonWithText(scene, "blue_arrow", "...no.", ()=>{this.dontExitRandom();},1920/2 - 100, 1080/2+300),
+                new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-200),
+                new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-100),
+                new ButtonWithText(scene, "blue_arrow", "Definitely!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2),
+                new ButtonWithText(scene, "blue_arrow", "...no.", ()=>{this.dontExitRandom();},1920/2 - 100, 1080/2+100),
             ]),
             new TutGenericTextScene(scene, "This is a tutorial.", 64, 1, 1, 1),
             new TutGenericTextScene(scene, "Be ready!", 64, 1, 1, 1),
@@ -43,8 +47,8 @@ export class TutSubSceneManager {
             new TutGenericTextScene(scene, "3", 92, 0.5, 0.25, 0.25),
             new TutGenericTextScene(scene, "2", 92, 0.5, 0.25, 0.25),
             new TutGenericTextScene(scene, "1", 92, 0.5, 0.25, 0.25),
-            new TutGenericTextScene(scene, "Too bad.", 64, 1, 1, 1),
-            new TutGenericTextScene(scene, "It's not yet implemented.", 64, 1, 1, 1), //skipped via button
+            // new TutGenericTextScene(scene, "Too bad.", 64, 1, 1, 1),
+            // new TutGenericTextScene(scene, "It's not yet implemented.", 64, 1, 1, 1), //skipped via button
             new TutGenericTextScene(scene, "Basics: #Life", 64, 3, 1, 1),
         ];
         let lifePrep = new LifePrep(scene);
@@ -55,6 +59,18 @@ export class TutSubSceneManager {
         this.subScenes.push(new Life3(scene, lifePrep));
         this.subScenes.push(new Life4(scene, lifePrep));
         this.subScenes.push(new TutGenericTextScene(scene, "Basics: #Shields and Weapons", 64, 3, 1, 1));
+        this.subScenes.push(new TutGenericButtonScene(scene, "Are you ready for #Shields and Weapons?", [
+            new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-200),
+            new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-100),
+            new ButtonWithText(scene, "blue_arrow", "Definitely!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2),
+            new ButtonWithText(scene, "blue_arrow", "...no.", ()=>{this.dontExitRandom();},1920/2 - 100, 1080/2+100),
+        ]));
+
+        let weapPrep = new WeapPrep(scene);
+        this.subScenes.push(weapPrep);
+        this.subScenes.push(new Weap1(scene, weapPrep));
+        this.subScenes.push(new Weap2(scene, weapPrep));
+        this.subScenes.push(new Weap3(scene, weapPrep));
 
         this.idx = 0;
         this.time = 0;
@@ -117,9 +133,11 @@ export class TutSubSceneManager {
         let rand:number = Math.random();
         const reasons:string[] = [
             "There is no escape.",
-            "Why would you want to leave.",
+            "Why would you want to leave?",
             "Did you really think this button would end the tutorial?",
-            "STAY WITH ME!",
+            "YOU SHALL NOT LEAVE!",
+            "[INSERT TEXT HERE]",
+            "Let's not do this again...",
             "Please don't click this button again.",
             "This is a tutorial, you must not leave.",
             "Maybe if you try it one more time it will work...",
@@ -128,8 +146,8 @@ export class TutSubSceneManager {
             "This button will not let you leave. Change my mind.",
             "You pressed the leave button, but did not leave the game.\nYou: *suprised_pikachu.jpg*",
             "You can't be fooled again if you don't press the button again.",
-            'Hard to swallow pills: "This button will not let you leave the tutorial"',
-            "Who would win? You persisting to press this useless button : the useless button",
+            'Hard to swallow pills: "This button will not let you leave this tutorial"',
+            "Who would win? You, persisting to press this useless button : the useless button",
             "Maybe you should just press F5...",
         ];
 

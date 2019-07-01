@@ -6,11 +6,11 @@ import {TutDrone} from "../scene-mechanics/tut-drone";
 import {BulletInfo} from "../../../weapon/bulletInfo";
 import {TutHealth} from "../scene-mechanics/tut-health";
 import {TutAnimationContainer} from "../scene-mechanics/tut-animation-container";
-import {HealthType} from "../../../health/health-type";
 import {TutHealthbar} from "../scene-mechanics/tut-healthbar";
-import {LifePrep} from "./life-prep";
 import Scene = Phaser.Scene;
 import Sprite = Phaser.GameObjects.Sprite;
+import {WeapPrep} from "./weap-prep";
+import {WeapUtils} from "./weap-utils";
 
 
 /***
@@ -27,9 +27,8 @@ import Sprite = Phaser.GameObjects.Sprite;
  * + Blue - Life with all being laser shields
  */
 
-export class Life3 extends TutSubScene{
+export class Weap3 extends TutSubScene{
     tutHeadline: Text;
-    button: ButtonWithText;
     red: TutRedShip;
     redHealth: TutHealth;
     blue: TutDrone;
@@ -39,17 +38,18 @@ export class Life3 extends TutSubScene{
     tutText: Text;
     tutArrow: Sprite;
 
-    lifePrep: LifePrep;
+    weapPrep: WeapPrep;
 
     continueButton: ButtonWithText;
 
-    constructor(scene: Scene, subScene: LifePrep) {
-        super(scene, 1, 1, 1);
+    constructor(scene: Scene, subScene: WeapPrep) {
+        super(scene, 1, 6, 1);
 
-        this.lifePrep = subScene;
+        this.weapPrep = subScene;
 
         let str =
-            "Now kill the enemy drone by destroying all HitZones.";
+            "You can not hit your enemy.\n\n" +
+            "But your enemy can also not hit you!";
 
         this.tutText = new Text(this.scene, 1920/2, 300, str, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 38, fontStyle: 'bold', strokeThickness: 4, stroke: "#000"});
@@ -62,12 +62,6 @@ export class Life3 extends TutSubScene{
         this.tutText.setDepth(10);
         this.tutArrow.setDepth(10);
         this.blockMainScene = true;
-
-        let block = false;
-        this.button = new ButtonWithText(scene, "sym_zone", "Shoot Projectile", ()=>{if(!block){
-            this.shootP(); this.scene.time.delayedCall(1500, ()=>block = false, [], this); block = true;
-        }}, 1920/2, 1080/2 + 400);
-        this.button.setVisible(false);
     }
 
     subIntro(delta: number): void {
@@ -78,28 +72,26 @@ export class Life3 extends TutSubScene{
     subScene(delta: number): void {
         this.tutText.setAlpha(1);
         // this.tutArrow.setAlpha(1);
-        // this.continueButton.setVisible(true);
+
     }
 
     subOutro(delta: number): void {
-        this.button.setVisible(true);
-        // this.tutText.setAlpha(1);
+        this.continueButton.setVisible(true);
     }
 
     destroy(): void {
         this.tutArrow.destroy();
         this.tutText.destroy();
         this.continueButton.destroy();
-        this.button.setVisible(false);
     }
 
     launch(): void {
-        this.tutHeadline = this.lifePrep.tutHeadline;
-        this.red = this.lifePrep.red;
-        this.blue = this.lifePrep.blue;
-        this.redHealth = this.lifePrep.redHealth;
-        this.blueHealth = this.lifePrep.blueHealth;
-        this.animationContainer = this.lifePrep.animationContainer;
+        this.tutHeadline = this.weapPrep.tutHeadline;
+        this.red = this.weapPrep.red;
+        this.blue = this.weapPrep.blue;
+        this.redHealth = this.weapPrep.redHealth;
+        this.blueHealth = this.weapPrep.blueHealth;
+        this.animationContainer = this.weapPrep.animationContainer;
         this.scene.add.existing(this.tutText);
         let block = false;
         this.continueButton = new ButtonWithText(this.scene, "blue_arrow", "Continue", ()=>{if(!block){
@@ -111,33 +103,22 @@ export class Life3 extends TutSubScene{
         this.tutText.setVisible(true);
         this.tutText.setAlpha(0);
         this.tutArrow.setAlpha(0);
+
+        let sCounter = 0;
+        this.shootE(sCounter);
     }
 
     update(delta: number): void {
         this.red.update(delta*1000);
-        this.button.update(delta);
         this.blue.update(delta*1000);
         this.continueButton.update(delta);
     }
 
 
-    private shootP(): void{
-        this.red.drone.getWeapons()[0].createBullet(new BulletInfo(
-            false, this.blue.x - 20, this.blue.y
-        ));
-        let activeHealth: TutHealthbar[] = [];
-        if (this.blueHealth.zone1Bar.bars.length > 0) activeHealth.push(this.blueHealth.zone1Bar);
-        if (this.blueHealth.zone2Bar.bars.length > 0) activeHealth.push(this.blueHealth.zone2Bar);
-        if (this.blueHealth.zone3Bar.bars.length > 0) activeHealth.push(this.blueHealth.zone3Bar);
-        if (this.blueHealth.zone4Bar.bars.length > 0) activeHealth.push(this.blueHealth.zone4Bar);
-        if(activeHealth.length > 0){
-            activeHealth[Math.floor(activeHealth.length * Math.random())].destroyBar();
-            this.blueHealth.shipBar.destroyBar();
-            if (activeHealth.length == 1){
-                this.scene.time.delayedCall(280, ()=>{this.blue.explode()}, [], this);
-                this.scene.time.delayedCall(2500, ()=>{this.blockMainScene = false;}, [], this)
-            }
-        }
+    private shootE(counter: number): void{
+        WeapUtils.shoot(this.scene, this.blue, this.redHealth, this.blue.x, this.blue.y);
+        this.scene.time.delayedCall(1800, this.shootE, [++counter], this);
     }
+
 
 }
