@@ -8,14 +8,15 @@ import Graphics = Phaser.GameObjects.Graphics;
 
 export class Infobox
 {
-    private tooltipStrings: Map<GameObject, string>;
+    private tooltipStrings: Map<any, string>;
     private scene: Scene;
     private tooltip: Text;
     private box: Graphics;
-
+    private tempStorage: Map<any, string>;
     constructor(scene: Scene)
     {
-        this.tooltipStrings = new Map<GameObject, string>();
+        this.tooltipStrings = new Map<any, string>();
+        this.tempStorage = new Map<any, string>();
         this.scene = scene;
         this.box = this.scene.add.graphics();
         this.tooltip = this.scene.add.text(-100, -100, "No Description", Infobox.getTooltipFontStyle());
@@ -26,15 +27,30 @@ export class Infobox
         this.tooltip.setDepth(100);
     }
 
-    public addTooltipInfo(object: GameObject, info: string , callbacks?: (()=>void)[])
+    public hideInfobox(object: GameObject, id?: string)
+    {
+            id ? this.tempStorage.set(id,this.tooltipStrings.get(id)) : this.tempStorage.set(object,this.tooltipStrings.get(object));
+            id ? this.tooltipStrings.delete(id) : this.tooltipStrings.delete(object);
+            this.tooltip.text = "";
+    }
+
+    public unhideInfobox(object: GameObject, id?: string)
+    {
+        id ? this.tooltipStrings.set(id,this.tempStorage.get(id)) : this.tooltipStrings.set(object,this.tempStorage.get(object));
+        id ? this.tempStorage.delete(id) : this.tempStorage.delete(object);
+    }
+
+    public addTooltipInfo(object: GameObject, info: string , callbacks?: (()=>void)[], id?: String)
     {
         object.setInteractive();
-        this.tooltipStrings.set(object, info);
+        id ? this.tooltipStrings.set(id,info) : this.tooltipStrings.set(object, info);
         let textWidth = this.calculateTextWidth(info);
 
         let xFix = 50;
         object.on('pointermove', (pointer: Phaser.Input.Pointer) =>
         {
+            if (!this.getTooltipText(object))
+                return;
             let x = pointer.x < 1920/2 ? pointer.x + 20 : pointer.x - textWidth - xFix;
             let y = pointer.y + 20;
             this.tooltip.setPosition(x + 20, y + 20);
@@ -44,6 +60,8 @@ export class Infobox
         });
         object.on('pointerover', (pointer: Phaser.Input.Pointer) =>
         {
+            if (!this.getTooltipText(object))
+                return;
             this.executeCallback(callbacks, 1);
             if (this.tooltip.text.toString() == this.getTooltipText(object).toString()) return;
 
@@ -68,6 +86,7 @@ export class Infobox
         {
             this.tooltip.setPosition(2500, 2500);
             this.box.setPosition(2500, 2500);
+            this.tooltip.text = "";
 
             this.executeCallback(callbacks, 2);
         })
@@ -95,7 +114,7 @@ export class Infobox
         return textWidth;
     }
 
-    public getTooltipText(object: any)
+    public getTooltipText(object: GameObject)
     {
         return this.tooltipStrings.get(object);
     }

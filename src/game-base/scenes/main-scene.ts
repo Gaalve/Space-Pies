@@ -252,6 +252,14 @@ export class MainScene extends Phaser.Scene {
         this.shop = new Button(this, 1920/2, 1080-100, "button_shadow",
             "button_bg", "button_fg", "button_shop",0.95,
             ()=>{
+                (<Infobox>this.data.get("infoboxx")).unhideInfobox(this.energySym[0]);
+                (<Infobox>this.data.get("infoboxx")).unhideInfobox(this.energySym[1]);
+                (<Infobox>this.data.get("infoboxx")).unhideInfobox(this.energySym[2]);
+                (<Infobox>this.data.get("infoboxx")).unhideInfobox(this.energySym[3]);
+                (<Infobox>this.data.get("infoboxx")).unhideInfobox(this.energyCostText[0], "energyCostText0");
+                (<Infobox>this.data.get("infoboxx")).unhideInfobox(this.energyCostText[1], "energyCostText1");
+                (<Infobox>this.data.get("infoboxx")).unhideInfobox(this.energyCostText[2], "energyCostText2");
+                (<Infobox>this.data.get("infoboxx")).unhideInfobox(this.energyCostText[3], "energyCostText3");
                 this.displayShop(this.shop1, this.shop1Text);
                 this.shop.removeInteractive();
                 this.shop.setInvisible();
@@ -689,6 +697,15 @@ export class MainScene extends Phaser.Scene {
         this.close = new Button(this, 1350, 1080-100, "button_shadow",
             "button_bg", "button_fg", "button_cancel_black",0.95,
             ()=>{
+                (<Infobox>this.data.get("infoboxx")).hideInfobox(this.energySym[0]);
+                (<Infobox>this.data.get("infoboxx")).hideInfobox(this.energySym[1]);
+                (<Infobox>this.data.get("infoboxx")).hideInfobox(this.energySym[2]);
+                (<Infobox>this.data.get("infoboxx")).hideInfobox(this.energySym[3]);
+                (<Infobox>this.data.get("infoboxx")).hideInfobox(this.energyCostText[0], "energyCostText0");
+                (<Infobox>this.data.get("infoboxx")).hideInfobox(this.energyCostText[1], "energyCostText1");
+                (<Infobox>this.data.get("infoboxx")).hideInfobox(this.energyCostText[2], "energyCostText2");
+                (<Infobox>this.data.get("infoboxx")).hideInfobox(this.energyCostText[3], "energyCostText3");
+
                 this.close.removeInteractive();
                 if(this.shopSActive){
                     this.closeShop(this.shopS, this.shopSText, false);
@@ -710,6 +727,8 @@ export class MainScene extends Phaser.Scene {
                     this.closeShop(this.shopM, this.shopMText, false);
                     this.shopMActive = false;
                 }
+
+
                 this.shop_bg_back2.setVisible(false);
                 this.closeShop(this.shop1, this.shop1Text, true);
                 this.openShop.setVisible(true);
@@ -802,10 +821,10 @@ export class MainScene extends Phaser.Scene {
         infobox.addTooltipInfo(this.energySym[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.");
         infobox.addTooltipInfo(this.energySym[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.");
         infobox.addTooltipInfo(this.energySym[3], "The cheapest part costs " + this.energyCostText[3].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energyCostText[0], "The cheapest part costs " + this.energyCostText[0].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energyCostText[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energyCostText[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energyCostText[3], "The cheapest part costs " + this.energyCostText[3].text.toString() + " energy.");
+        infobox.addTooltipInfo(this.energyCostText[0], "The cheapest part costs " + this.energyCostText[0].text.toString() + " energy.",null, "energyCostText0");
+        infobox.addTooltipInfo(this.energyCostText[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.", null, "energyCostText1");
+        infobox.addTooltipInfo(this.energyCostText[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.", null, "energyCostText2");
+        infobox.addTooltipInfo(this.energyCostText[3], "The cheapest part costs " + this.energyCostText[3].text.toString() + " energy.", null, "energyCostText3");
 
 
         this.closeShop(this.shop1, this.shop1Text, true);
@@ -1309,11 +1328,9 @@ export class MainScene extends Phaser.Scene {
         if(array == this.shop1) {
             for (let i of this.energySym) {
                 i.setVisible(false);
-                i.removeInteractive()
             }
             for (let t of this.energyCostText) {
                 t.setVisible(false);
-                t.removeInteractive()
             }
         }
         else if(array == this.shopT) {
