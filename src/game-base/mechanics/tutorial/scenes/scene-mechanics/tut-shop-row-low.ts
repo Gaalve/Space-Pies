@@ -22,7 +22,7 @@ export class TutShopRowLow {
     protected setPositions(): void{
         let amount = this.buttons.length;
         let offset = 150;
-        let startX = 1920/2 - amount/2 * offset;
+        let startX = 1920/2 - (amount - 1)/2 * offset;
         this.buttons.forEach((b, idx)=>b.setPosition(idx*offset+startX, this.yButPos));
     }
 

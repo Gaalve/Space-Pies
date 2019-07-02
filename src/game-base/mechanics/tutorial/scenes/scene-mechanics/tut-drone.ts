@@ -1,9 +1,6 @@
 import {MotorFlame} from "../../../ship/motor-flame";
 import {WeaponType} from "../../../weapon/weapon-type";
 import {TutWeapon} from "./tut-weapon";
-import {BulletInfo} from "../../../weapon/bulletInfo";
-import {Infobox} from "../../../Infobox";
-import {PiAnimAlignment} from "../../../pianim/pi-anim-alignment";
 import {TutAnimationContainer} from "./tut-animation-container";
 
 export class TutDrone extends Phaser.GameObjects.Sprite{
@@ -173,61 +170,9 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
      will be called when adding a weapon.. and for some reason every turn.........
      */
     refreshOnScreenText() : void{
-        this.onScreenText.setText(this.simplePi);
-        // this.onScreenText.setText(this.simplePi);
-
-        let infobox = <Infobox> this.scene.data.get("infoboxx");
-        // let splitTerm = this.simplePi.split(".");
-        // let equippedWeapons = "";
-        // for (let i = 0; i < splitTerm.length; i++)
-        // 	if (i != 0 && i != splitTerm.length-1)
-        // 		equippedWeapons += splitTerm[i] + ", ";
-        // equippedWeapons = equippedWeapons ? equippedWeapons.substr(0, equippedWeapons.length-2) : "none yet";
-
-
-        // let tooltipInfo =
-        // 	"[" + this.getPlayer().getNameIdentifier() + "] This is the pi-term of this drone. \n"
-        // 	+ "     <> : output channel (resolves with corresponding () - channel)\n"
-        // 	+ "     () : input channel (waits for incoming <> - channel)\n"
-        // 	+ "     0 : null process (resolves itself) \n\n"
-        // 	+ "current term:         " + this.simplePi + "\n"
-        // 	+ "currently active:     " + this.simplePi.split(".")[0] + "\n"
-        // 	+ "will be resolved by:  " + Infobox.getOppositeTerm(this.simplePi.split(".")[0], this.player.getNameIdentifier()) + "\n\n"
-        // 	+ "The enclosing \"lock()\" - channel is literally a weapon lock. \n"
-        // 	+ "As soon as you hit attack, a replication \"!(lock<>)\" will be pushed into \nthe pi-system, which continiously emits \"lock<>\" - terms.\n"
-        // 	+ "Then, all equipped weapons (" + equippedWeapons + ") will fire in sequential order.\n"
-
-        // infobox.addTooltipInfo(this.onScreenText, tooltipInfo);
-
-        this.index > 1 ? infobox.addTooltipInfo(this, "[" + this.isP1 ? "P1" : "P2" +
-            "] Extension Drone " + this.index + ":\n     It will fire after the previous drone has fired.") : null;
-        this.index == 1 ? infobox.addTooltipInfo(this, "[" +
-        this.isP1 ? "P1" : "P2" + "] Extension Drone " + this.index + ":\n " +
-            "    It will fire after the space ship has fired.") : null;
-
-
-        // this.index == 0 ? this.isP1 ? this.scene.data.get("redship").setOnScreenText(this.onScreenText) :this.scene.data.get("blueship").setOnScreenText(this.onScreenText) : null;
-
     }
 
     public updatePiAnimSeq(): void{
-    //     this.piSeq.show();
-    //
-    //     this.piSeq.clearSequence(this.posX, this.posY + 80, 'lock'+this.player.getNameIdentifier().toLowerCase()+'()',
-    //         PiAnimAlignment.CENTER);
-    //     if (this.weapons[0].canShoot()) this.piSeq.addSymbol(this.weapons[0].getSimplePi()+'<>');
-    //     if (this.weapons[1].canShoot()) this.piSeq.addSymbol(this.weapons[1].getSimplePi()+'<>');
-    //     if (this.weapons[2].canShoot()) this.piSeq.addSymbol(this.weapons[2].getSimplePi()+'<>');
-    //     this.piSeq.addSymbol('Weapon'+this.player.getNameIdentifier()+'N'+(this.index + 1));
-    }
-
-    private resolveAndClearPiAnimSeq(): void{
-        // let other = this.piSeq.resolveAllAndClearSequence(this.x, this.y + 80, 'lock'+this.player.getNameIdentifier().toLowerCase()+'()',
-        //     PiAnimAlignment.CENTER);
-        // if (this.weapons[0].canShoot()) other.addSymbol(this.weapons[0].getSimplePi()+'<>');
-        // if (this.weapons[1].canShoot()) other.addSymbol(this.weapons[1].getSimplePi()+'<>');
-        // if (this.weapons[2].canShoot()) other.addSymbol(this.weapons[2].getSimplePi()+'<>');
-        // other.addSymbol('Weapon'+this.player.getNameIdentifier()+'N'+(this.index + 1));
     }
 
 
@@ -256,65 +201,6 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
      * @param drone : index of weapon mod 0/1/2
      */
     buildWeaponPi(player : number, drone : number) : void{
-        // let p = player.toString();
-        // let d = drone.toString();
-        // // let system = this.player.getSystem(); //TODO
-        //
-        // let system;
-        //
-        // let weapon = system.add.term("Weapon" + p + d, undefined);
-        // let droneRef: TutDrone = this;
-        // let sum = system.add.sum([system.add.channelInCB("lock" + p + d,"", ()=>{
-        //     // this.piSeq.resolveSymbol();
-        // }).
-        // channelOutCB("w1","", (_, at) => {
-        //     droneRef.getWeapons()[0].createBullet(at);
-        //     // if (this.weapons[0].canShoot()) this.piSeq.resolveSymbol();
-        // }).        //function for weapon animation
-        // channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
-        // channelOut("wait","").channelOut("wait","").
-        // channelOutCB("w2", "", (_, at) => {
-        //     // droneRef.getWeapons()[1].createBullet(at); if (this.weapons[1].canShoot()) this.piSeq.resolveSymbol();
-        // }).
-        // channelOut("wait","").channelOut("wait","").channelOut("wait","").channelOut("wait","").
-        // channelOut("wait","").channelOut("wait","").
-        // channelOutCB("w3", "", (_, at) => {
-        //     // droneRef.getWeapons()[2].createBullet(at); this.resolveAndClearPiAnimSeq();
-        // }).
-        // next(weapon),
-        //     system.add.channelInCB("wext" + p + d + "0", "w1", (wClass) => {
-        //         this.addWeapon(wClass);
-        //     }).
-        //     next(weapon),
-        //     system.add.channelInCB("wext" + p + d + "1", "w2", (wClass) => {
-        //         this.addWeapon(wClass);
-        //     }).
-        //     next(weapon),
-        //     system.add.channelInCB("wext" + p + d + "2", "w3", (wClass) => {
-        //         this.addWeapon(wClass);
-        //     }).
-        //     next(weapon)]);
-        // weapon.symbol = sum;
-        //
-        // system.pushSymbol(system.add.channelInCB("wmod" + p + d, "", () => {
-        //     // this.player.createDrone(drone);  //TODO
-        //     if(this.scene.scene.get("MainScene").data.get("mode") == "1" && this.isP1){
-        //         this.scene.scene.get("MainScene").events.emit("unlockW");
-        //     }
-        //     else if(this.scene.scene.get("MainScene").data.get("mode") == "2" && !this.isP1){
-        //         this.scene.scene.get("MainScene").events.emit("unlockW");
-        //
-        //     }
-        //     else if(this.scene.scene.get("MainScene").data.get("mode") == "0"){
-        //         this.scene.scene.get("MainScene").events.emit("unlockW");
-        //
-        //     }
-        //
-        //         //button.restoreInteractive();
-        //
-        // }).
-        // channelOut("newlock" + p + d, "lock" + p + d).
-        // next(weapon));
     }
 
     private setPositionSin() {
@@ -399,5 +285,15 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
     }
 
 
+
+    public deleteWeapons(): void{
+        this.weapons[0].setWeapon(WeaponType.NONE);
+        this.weapons[1].setWeapon(WeaponType.NONE);
+        this.weapons[2].setWeapon(WeaponType.NONE);
+        this.weapons[0].setVisible(false);
+        this.weapons[1].setVisible(false);
+        this.weapons[2].setVisible(false);
+        this.activatedWeapons = 0;
+    }
 
 }

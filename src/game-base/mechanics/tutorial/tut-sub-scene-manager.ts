@@ -13,6 +13,8 @@ import {Weap1} from "./scenes/tut-weapons/weap-1";
 import {Weap2} from "./scenes/tut-weapons/weap-2";
 import {Weap3} from "./scenes/tut-weapons/weap-3";
 import {Weap4} from "./scenes/tut-weapons/weap-4";
+import {Weap5} from "./scenes/tut-weapons/weap-5";
+import {Weap6} from "./scenes/tut-weapons/weap-6";
 
 export class TutSubSceneManager {
     private scene: Phaser.Scene;
@@ -73,6 +75,8 @@ export class TutSubSceneManager {
         this.subScenes.push(new Weap2(scene, weapPrep));
         this.subScenes.push(new Weap3(scene, weapPrep));
         this.subScenes.push(new Weap4(scene, weapPrep));
+        this.subScenes.push(new Weap5(scene, weapPrep));
+        this.subScenes.push(new Weap6(scene, weapPrep));
 
         this.idx = 0;
         this.time = 0;

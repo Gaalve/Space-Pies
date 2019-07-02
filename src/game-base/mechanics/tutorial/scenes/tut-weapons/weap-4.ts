@@ -49,11 +49,11 @@ export class Weap4 extends TutSubScene{
         this.weapPrep = subScene;
 
         let str =
-            "You can not hit your enemy.\n\n" +
-            "But your enemy can also not hit you!";
+            "To destroy this enemy you will have to equip new weapons.\n" +
+            "Buy a laser weapon!";
 
         this.tutText = new Text(this.scene, 1920/2, 300, str, {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 38, fontStyle: 'bold', strokeThickness: 4, stroke: "#000"});
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 34, fontStyle: 'bold', strokeThickness: 4, stroke: "#000", align: "center"});
         this.tutText.setOrigin(0.5, 0.5);
 
         this.tutText.setVisible(false);
