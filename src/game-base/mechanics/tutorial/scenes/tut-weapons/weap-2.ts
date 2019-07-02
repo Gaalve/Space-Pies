@@ -123,9 +123,8 @@ export class Weap2 extends TutSubScene{
 
 
     private shootP(counter: number): void{
-        if(counter < 3)
-            WeapUtils.shoot(this.scene, this.red.drone, this.blueHealth, this.blue.x, this.blue.y);
-        else this.blockMainScene = false;
+        WeapUtils.shoot(this.scene, this.red.drone, this.blueHealth, this.blue.x, this.blue.y);
+        if(counter >= 3) this.blockMainScene = false;
     }
 
 }

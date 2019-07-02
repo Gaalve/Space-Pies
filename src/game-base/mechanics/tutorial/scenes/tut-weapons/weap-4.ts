@@ -1,16 +1,17 @@
 import Text = Phaser.GameObjects.Text;
-import {TutSubScene} from "../../tut-sub-scene";
-import {ButtonWithText} from "../scene-mechanics/button-with-text";
-import {TutRedShip} from "../scene-mechanics/tut-red-ship";
-import {TutDrone} from "../scene-mechanics/tut-drone";
-import {BulletInfo} from "../../../weapon/bulletInfo";
-import {TutHealth} from "../scene-mechanics/tut-health";
-import {TutAnimationContainer} from "../scene-mechanics/tut-animation-container";
-import {TutHealthbar} from "../scene-mechanics/tut-healthbar";
 import Scene = Phaser.Scene;
 import Sprite = Phaser.GameObjects.Sprite;
+import {TutSubScene} from "../../tut-sub-scene";
+import {TutRedShip} from "../scene-mechanics/tut-red-ship";
+import {TutDrone} from "../scene-mechanics/tut-drone";
+import {TutHealth} from "../scene-mechanics/tut-health";
+import {TutAnimationContainer} from "../scene-mechanics/tut-animation-container";
 import {WeapPrep} from "./weap-prep";
 import {WeapUtils} from "./weap-utils";
+import {TutShop} from "../scene-mechanics/tut-shop";
+import {TutShopRowHigh} from "../scene-mechanics/tut-shop-row-high";
+import {ButtonWithTextCD} from "../scene-mechanics/button-with-text-cd";
+import {WeaponType} from "../../../weapon/weapon-type";
 
 
 /***
@@ -27,7 +28,7 @@ import {WeapUtils} from "./weap-utils";
  * + Blue - Life with all being laser shields
  */
 
-export class Weap3 extends TutSubScene{
+export class Weap4 extends TutSubScene{
     tutHeadline: Text;
     red: TutRedShip;
     redHealth: TutHealth;
@@ -40,10 +41,10 @@ export class Weap3 extends TutSubScene{
 
     weapPrep: WeapPrep;
 
-    continueButton: ButtonWithText;
+    shop: TutShop;
 
     constructor(scene: Scene, subScene: WeapPrep) {
-        super(scene, 1, 1, 5);
+        super(scene, 1, 6, 1);
 
         this.weapPrep = subScene;
 
@@ -62,6 +63,22 @@ export class Weap3 extends TutSubScene{
         this.tutText.setDepth(10);
         this.tutArrow.setDepth(10);
         this.blockMainScene = true;
+
+
+        let weapRow = new TutShopRowHigh(scene, [
+            new ButtonWithTextCD(scene, "ssb_weap_las", "Laser", ()=>this.buyWeapon(WeaponType.LASER_ARMOR),0,0)
+        ]);
+
+        let endTurn = ()=>this.endRound();
+
+        this.shop = new class extends TutShop {
+            public constructor(){
+                super(scene, [
+                    new ButtonWithTextCD(scene, "button_wext", "Weapons", ()=>weapRow.setVisible(true), 0,0),
+                    new ButtonWithTextCD(scene, "button_skip", "End Turn", ()=>endTurn(), 0,0)
+                ], [weapRow]);
+            }
+        };
     }
 
     subIntro(delta: number): void {
@@ -76,13 +93,12 @@ export class Weap3 extends TutSubScene{
     }
 
     subOutro(delta: number): void {
-        this.continueButton.setVisible(true);
     }
 
     destroy(): void {
         this.tutArrow.destroy();
         this.tutText.destroy();
-        this.continueButton.destroy();
+        this.blue.explode();
     }
 
     launch(): void {
@@ -93,33 +109,56 @@ export class Weap3 extends TutSubScene{
         this.blueHealth = this.weapPrep.blueHealth;
         this.animationContainer = this.weapPrep.animationContainer;
         this.scene.add.existing(this.tutText);
-        let block = false;
-        this.continueButton = new ButtonWithText(this.scene, "blue_arrow", "Continue", ()=>{if(!block){
-            this.blockMainScene = false; this.scene.time.delayedCall(2000, ()=>block = false, [], this); block = true;
-        }}, 1920/2, 1080/2 + 400);
-        this.continueButton.setVisible(false);
 
         this.tutArrow.setVisible(true);
         this.tutText.setVisible(true);
         this.tutText.setAlpha(0);
         this.tutArrow.setAlpha(0);
-
-        let sCounter = 0;
-        this.shootE(sCounter);
+        this.shop.setVisible(true);
     }
 
     update(delta: number): void {
         this.red.update(delta*1000);
         this.blue.update(delta*1000);
-        this.continueButton.update(delta);
+        this.shop.update(delta);
     }
 
 
-    private shootE(counter: number): void{
-        if (counter > 3)return;
-        WeapUtils.shoot(this.scene, this.blue, this.redHealth, this.blue.x, this.blue.y);
-        this.scene.time.delayedCall(1800, this.shootE, [++counter], this);
+    private buyWeapon(type: WeaponType): void{
+        if (this.red.drone.getNrWeapons() == 3) return;
+        switch (type){
+            case WeaponType.LASER_ARMOR:
+                this.red.drone.addWeapon("arm");
+                break;
+            case WeaponType.PROJECTILE_SHIELD:
+                this.red.drone.addWeapon("shi");
+                break;
+            case WeaponType.ROCKET:
+                this.red.drone.addWeapon("roc");
+                break;
+            case WeaponType.NONE:
+                break;
+        }
     }
 
+    private endRound(): void{
+        this.shop.setVisible(false);
+        this.scene.time.delayedCall(200, ()=>this.shootP(), [], this);
+        this.scene.time.delayedCall(2800, ()=>{
+            if (this.blueHealth.shipBar.bars.length > 0) this.shootE();
+        }, [], this);
+        this.scene.time.delayedCall(5400, ()=>{
+            if (this.blueHealth.shipBar.bars.length == 0) this.blockMainScene = false;
+            else this.shop.setVisible(true)}, [], this);
+    }
+
+
+    private shootE(): void{
+        WeapUtils.shoot(this.scene, this.blue, this.redHealth, this.red.x, this.red.y);
+    }
+
+    private shootP(): void{
+        WeapUtils.shoot(this.scene, this.red.drone, this.blueHealth, this.blue.x, this.blue.y);
+    }
 
 }

@@ -13,8 +13,8 @@ export class WeapUtils {
 
     static shoot(scene: Scene, yourDrone: TutDrone, enemyHealth: TutHealth, enemyX: number, enemyY: number){
         scene.time.delayedCall(0, WeapUtils.shootWeapon, [scene, yourDrone.getWeapons()[0], enemyHealth, enemyX, enemyY], this);
-        scene.time.delayedCall(150, WeapUtils.shootWeapon, [scene, yourDrone.getWeapons()[1], enemyHealth, enemyX, enemyY], this);
-        scene.time.delayedCall(300, WeapUtils.shootWeapon, [scene, yourDrone.getWeapons()[2], enemyHealth, enemyX, enemyY], this);
+        scene.time.delayedCall(800, WeapUtils.shootWeapon, [scene, yourDrone.getWeapons()[1], enemyHealth, enemyX, enemyY], this);
+        scene.time.delayedCall(1600, WeapUtils.shootWeapon, [scene, yourDrone.getWeapons()[2], enemyHealth, enemyX, enemyY], this);
     }
 
     private static shootWeapon(scene: Scene, weapon: TutWeapon, enemyHealth: TutHealth, enemyX: number, enemyY: number){
@@ -24,7 +24,8 @@ export class WeapUtils {
         else {
             let randIdx = Math.floor(Math.random() * zones.length);
             weapon.createBullet(new BulletInfo(false, enemyX, enemyY));
-            scene.time.delayedCall(280, zones[randIdx].destroyBar, [], this);
+            scene.time.delayedCall(280, ()=>{zones[randIdx].destroyBar();
+                if(zones[randIdx].bars.length == 0) enemyHealth.shipBar.destroyBar(); }, [], this);
         }
     }
 

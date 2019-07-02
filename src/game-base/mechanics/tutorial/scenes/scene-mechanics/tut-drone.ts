@@ -106,7 +106,7 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
      */
     addWeapon(weapon : string) : void{
         let w = this.weapons[this.getNrWeapons()];
-        weapon = weapon.substr(0, 3)
+        weapon = weapon.substr(0, 3);
         if(weapon == "arm"){
             w.setWeapon(WeaponType.LASER_ARMOR);
         }else if(weapon == "shi") {
@@ -121,6 +121,7 @@ export class TutDrone extends Phaser.GameObjects.Sprite{
         this.updatePiAnimSeq();
         this.activatedWeapons = this.activatedWeapons + 1;
     }
+
 
     /**
      get number of installed weapons
