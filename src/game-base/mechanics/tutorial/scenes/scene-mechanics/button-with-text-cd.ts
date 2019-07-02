@@ -13,8 +13,8 @@ export class ButtonWithTextCD {
         this.button = new Button(scene, x, y, "button_shadow",
             "button_bg", "button_fg", img, 0.95, onClick);
 
-        this.text = new Text(scene, x, y + 80, text, {
-            fill: '#fff', fontFamily: '"Roboto"', fontSize: 22, fontStyle: 'bold', strokeThickness: 2});
+        this.text = new Text(scene, x, y + 60, text, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 22, fontStyle: 'bold', strokeThickness: 2, align: "center"});
         this.text.setShadow(0,6,'#000', 10);
         this.text.setOrigin(0.5, 0.5);
         scene.add.existing(this.text);
@@ -26,6 +26,14 @@ export class ButtonWithTextCD {
             this.timeAccumulator -= this.timeUpdateTick;
             this.button.updateStep();
         }
+    }
+
+    public setOnClick(fct: ()=>any){
+        this.button.setOnClick(fct);
+    }
+
+    public getOnClick(): ()=>any{
+        return this.button.onClick;
     }
 
     public setVisible(value: boolean): void{

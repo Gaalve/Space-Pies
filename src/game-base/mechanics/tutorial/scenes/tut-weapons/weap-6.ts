@@ -62,6 +62,12 @@ export class Weap6 extends TutSubScene{
 
     weapPrep: WeapPrep;
 
+    energy: number;
+    energyText: Text;
+    energySprite: Sprite;
+
+    popUpText: Text;
+    popUpCounter: number;
 
     constructor(scene: Scene, subScene: WeapPrep) {
         super(scene, 1, 6, 1);
@@ -69,7 +75,7 @@ export class Weap6 extends TutSubScene{
         this.weapPrep = subScene;
 
         let str =
-            "Now try to defeat this powerful enemy.\nYou will regenerate 30 Energy per turn.";
+            "Now try to defeat this powerful enemy.\nYou will regenerate 50 Energy per turn.";
 
         this.tutText = new Text(this.scene, 1920/2, 180, str, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 38, fontStyle: 'bold', strokeThickness: 4, stroke: "#000", align: "center"});
@@ -82,29 +88,45 @@ export class Weap6 extends TutSubScene{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 38, fontStyle: 'bold', strokeThickness: 4, stroke: "#000", align: "right"});
 
 
-        str =
-            "None";
+        str = "None";
 
         this.none = new Text(this.scene, 1200, 370, str, {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 24, fontStyle: 'bold', strokeThickness: 4, stroke: "#000", align: "right"});
 
+        str = "Text Missing!";
+
+        this.popUpText = new Text(this.scene, 1920/2, 370, str, {
+            fill: '#ff4444', fontFamily: '"Roboto"', fontSize: 24, fontStyle: 'bold', strokeThickness: 4, stroke: "#000", align: "right"});
+
+        str = "= 60";
+
+        this.energyText = new Text(this.scene, 1000, 550, str, {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 48, fontStyle: 'bold', strokeThickness: 4, stroke: "#000", align: "right"});
+
+        this.energySprite = new Sprite(scene, 920, 550, "energy_icon");
+
+
         this.none.setOrigin(0.5, 0.5);
+        this.energyText.setOrigin(0.5, 0.5);
+        this.popUpText.setOrigin(0.5, 0.5);
 
         this.tutText.setOrigin(0.5, 0.5);
         this.tutText.setVisible(false);
 
         this.blockMainScene = true;
 
+        this.popUpCounter = 0;
+
         let weapRow = new TutShopRowHigh(scene, [
-            new ButtonWithTextCD(scene, "ssb_weap_las", "Laser", ()=>this.buyWeapon(WeaponType.LASER_ARMOR),0,0),
-            new ButtonWithTextCD(scene, "ssb_weap_pro", "Projectile", ()=>this.buyWeapon(WeaponType.PROJECTILE_SHIELD),0,0),
-            new ButtonWithTextCD(scene, "ssb_weap_rock", "Rocket", ()=>this.buyWeapon(WeaponType.ROCKET),0,0)
+            new ButtonWithTextCD(scene, "ssb_weap_las", "Laser\n(25 Energy)", ()=>this.buyWeapon(WeaponType.LASER_ARMOR, 25),0,0),
+            new ButtonWithTextCD(scene, "ssb_weap_pro", "Projectile\n(25 Energy)", ()=>this.buyWeapon(WeaponType.PROJECTILE_SHIELD, 25),0,0),
+            new ButtonWithTextCD(scene, "ssb_weap_rock", "Rocket\n(75 Energy)", ()=>this.buyWeapon(WeaponType.ROCKET, 75),0,0)
         ]);
 
         let shieRow = new TutShopRowHigh(scene, [
-            new ButtonWithTextCD(scene, "button_shield", "Laser Shield", ()=>this.buyShield(HealthType.ShieldBar),0,0),
-            new ButtonWithTextCD(scene, "button_armor", "Armor Shield", ()=>this.buyShield(HealthType.ArmorBar),0,0),
-            new ButtonWithTextCD(scene, "button_rocket", "Hyper Shield", ()=>this.buyShield(HealthType.RocketBar),0,0)
+            new ButtonWithTextCD(scene, "button_shield", "Laser Shield\n(10 Energy)", ()=>this.buyShield(HealthType.ShieldBar, 10),0,0),
+            new ButtonWithTextCD(scene, "button_armor", "Armor Shield\n(10 Energy)", ()=>this.buyShield(HealthType.ArmorBar, 10),0,0),
+            new ButtonWithTextCD(scene, "button_rocket", "Hyper Shield\n(55 Energy)", ()=>this.buyShield(HealthType.RocketBar, 55),0,0)
         ]);
 
         let endTurn = ()=>this.endRound();
@@ -137,7 +159,27 @@ export class Weap6 extends TutSubScene{
     }
 
     destroy(): void {
+        this.tutHeadline.destroy();
         this.tutText.destroy();
+        this.energyText.destroy();
+        this.energySprite.destroy();
+        this.hintText.destroy();
+
+        this.weapL.destroy();
+        this.weapP.destroy();
+        this.weapR.destroy();
+
+        this.shiL.destroy();
+        this.shiA.destroy();
+        this.shiH2.destroy();
+        this.shiH1.destroy();
+
+        this.none.destroy();
+        this.shop.setVisible(false);
+        this.red.destroy();
+        this.blueHealth.destroy();
+        this.redHealth.destroy();
+        this.popUpText.destroy();
     }
 
     launch(): void {
@@ -158,6 +200,15 @@ export class Weap6 extends TutSubScene{
         this.scene.add.existing(this.none);
         this.none.setVisible(true);
         this.none.setAlpha(1);
+
+        this.scene.add.existing(this.popUpText);
+        this.popUpText.setVisible(true);
+        this.popUpText.setAlpha(0);
+
+        this.scene.add.existing(this.energyText);
+        this.energyText.setVisible(true);
+        this.energyText.setAlpha(1);
+        this.scene.add.existing(this.energySprite);
 
         this.weapL = this.scene.add.sprite(800,330, "ssr_weap_las");
         this.weapP = this.scene.add.sprite(1000,330, "ssr_weap_pro");
@@ -201,6 +252,19 @@ export class Weap6 extends TutSubScene{
 
         this.red.drone.deleteWeapons();
         this.shop.setVisible(true);
+
+        this.blueHealth = new TutHealth(this.scene, "P2", -1);
+        this.blueHealth.zone1Bar.addBar(HealthType.ShieldBar);
+        this.blueHealth.zone1Bar.addBar(HealthType.ArmorBar);
+
+        this.blueHealth.zone2Bar.addBar(HealthType.ShieldBar);
+
+        this.blueHealth.zone3Bar.addBar(HealthType.ArmorBar);
+
+        this.blueHealth.zone4Bar.addBar(HealthType.ArmorBar);
+        this.blueHealth.zone4Bar.addBar(HealthType.ShieldBar);
+
+        this.energy = 60;
     }
 
     update(delta: number): void {
@@ -213,8 +277,15 @@ export class Weap6 extends TutSubScene{
     }
 
 
-    private buyWeapon(type: WeaponType): void{
-        if (this.red.drone.getNrWeapons() == 3) return;
+    private buyWeapon(type: WeaponType, costs: number): void{
+        if (costs > this.energy){
+            this.createPopUpText("Not enough energy!");
+            return
+        }
+        if (this.red.drone.getNrWeapons() == 3){
+            this.createPopUpText("Can not build more weapons!");
+            return;
+        }
         switch (type){
             case WeaponType.LASER_ARMOR:
                 this.red.drone.addWeapon("arm");
@@ -228,16 +299,23 @@ export class Weap6 extends TutSubScene{
             case WeaponType.NONE:
                 break;
         }
+        this.energy -= costs;
+        this.energyText.setText("= "+this.energy);
     }
 
-    private buyShield(type: HealthType): void{
-        if (this.red.drone.getNrWeapons() == 3) return;
+    private buyShield(type: HealthType, costs: number): void{
+        if (costs > this.energy){
+            this.createPopUpText("Not enough energy!");
+            return
+        }
         switch (type){
             case HealthType.HitZoneBar:
                 break;
             case HealthType.ShieldBar:
+                this.redHealth.zone1Bar.addBar(type);
                 break;
             case HealthType.ArmorBar:
+                this.redHealth.zone1Bar.addBar(type);
                 break;
             case HealthType.AdaptiveBar:
                 break;
@@ -246,23 +324,43 @@ export class Weap6 extends TutSubScene{
             case HealthType.NanoBar:
                 break;
             case HealthType.RocketBar:
+                this.redHealth.zone1Bar.addBar(type);
                 break;
             case HealthType.ArmorBarSmall:
                 break;
             case HealthType.ShieldBarSmall:
                 break;
         }
+        this.energy -= costs;
+        this.energyText.setText("= "+this.energy);
     }
 
     private endRound(): void{
         this.shop.setVisible(false);
+        this.energySprite.setVisible(false);
+        this.energyText.setVisible(false);
         this.scene.time.delayedCall(200, ()=>this.shootP(), [], this);
         this.scene.time.delayedCall(2800, ()=>{
             if (this.blueHealth.shipBar.bars.length > 0) this.shootE();
+            else{
+                this.blue1.explode();
+                this.blue2.explode();
+                this.blue3.explode();
+                this.blue4.explode();
+            }
         }, [], this);
         this.scene.time.delayedCall(11400, ()=>{
-            if (this.blueHealth.shipBar.bars.length == 0) this.blockMainScene = false;
-            else this.shop.setVisible(true)}, [], this);
+            if (this.blueHealth.shipBar.bars.length == 0){
+                this.blockMainScene = false;
+            }
+            else {
+                this.shop.setVisible(true);
+                this.energySprite.setVisible(true);
+                this.energyText.setVisible(true);
+                if (this.redHealth.shipBar.bars.length == 0)this.retry();
+            }}, [], this);
+        this.energy += 50;
+        this.energyText.setText("= "+this.energy);
     }
 
 
@@ -275,6 +373,68 @@ export class Weap6 extends TutSubScene{
 
     private shootP(): void{
         WeapUtils.shoot(this.scene, this.red.drone, this.blueHealth, this.blue1.x, this.blue1.y);
+    }
+
+
+    private retry(): void{
+        this.createPopUpText("You lost. Try again!");
+        this.blueHealth.destroy();
+        this.redHealth.destroy();
+
+        this.blueHealth = new TutHealth(this.scene, "P2", -1);
+        this.blueHealth.zone1Bar.addBar(HealthType.ShieldBar);
+        this.blueHealth.zone1Bar.addBar(HealthType.ArmorBar);
+
+        this.blueHealth.zone2Bar.addBar(HealthType.ShieldBar);
+
+        this.blueHealth.zone3Bar.addBar(HealthType.ArmorBar);
+
+        this.blueHealth.zone4Bar.addBar(HealthType.ArmorBar);
+        this.blueHealth.zone4Bar.addBar(HealthType.ShieldBar);
+
+        this.redHealth = new TutHealth(this.scene, "P1", 1);
+
+        this.redHealth.zone1Bar.addBar(HealthType.ShieldBar);
+        this.redHealth.zone1Bar.addBar(HealthType.ShieldBar);
+        this.redHealth.zone1Bar.addBar(HealthType.ShieldBar);
+        this.redHealth.zone1Bar.addBar(HealthType.ShieldBar);
+
+        this.redHealth.zone2Bar.addBar(HealthType.ShieldBar);
+        this.redHealth.zone3Bar.addBar(HealthType.ShieldBar);
+        this.redHealth.zone4Bar.addBar(HealthType.ShieldBar);
+
+        this.redHealth.zone3Bar.destroyBar();
+        this.redHealth.zone2Bar.destroyBar();
+        this.redHealth.zone4Bar.destroyBar();
+
+        this.redHealth.shipBar.destroyBar();
+        this.redHealth.shipBar.destroyBar();
+        this.redHealth.shipBar.destroyBar();
+
+        this.red.drone.deleteWeapons();
+
+        this.energy = 60;
+        this.energyText.setText("= "+this.energy)
+    }
+
+    private createPopUpText(text: string): void{
+        this.popUpText.setText(text);
+        this.popUpCounter = 60;
+        this.fadePopUpText();
+    }
+
+    private fadePopUpText(): void{
+        console.log("fade: "+this.popUpCounter);
+        if (this.popUpCounter < 1)return;
+        this.popUpCounter--;
+        this.popUpText.setAlpha(1);
+        if (this.popUpCounter >= 50){
+            this.popUpText.setPosition(1920/2, 540 - (this.popUpCounter - 50)*3);
+        }
+        else if (this.popUpCounter < 20){
+            this.popUpText.setAlpha(this.popUpCounter/20);
+        }
+        this.scene.time.delayedCall(0, ()=>this.fadePopUpText(), [], this);
     }
 
 }

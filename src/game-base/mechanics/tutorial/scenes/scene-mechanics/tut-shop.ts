@@ -10,9 +10,24 @@ export abstract class TutShop {
     private rowHigh: TutShopRowHigh[];
 
     protected constructor(scene: Scene, buttonsLow: ButtonWithTextCD[], rowHigh: TutShopRowHigh[]) {
+
+        buttonsLow.forEach(b=>{
+            let f = b.getOnClick();
+            b.setOnClick(
+                ()=> {
+                    this.hideRowHigh();
+                    f();
+                    }
+        )});
+
         this.rowLow = new TutShopRowLow(scene, buttonsLow);
         this.rowHigh = rowHigh;
         this.setVisible(false);
+
+    }
+
+    private hideRowHigh(): void{
+        this.rowHigh.forEach(r=>r.setVisible(false));
     }
 
     public setVisible(value: boolean): void{

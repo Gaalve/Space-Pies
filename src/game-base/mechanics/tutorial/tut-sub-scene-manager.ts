@@ -77,7 +77,7 @@ export class TutSubSceneManager {
         this.subScenes.push(new Weap4(scene, weapPrep));
         this.subScenes.push(new Weap5(scene, weapPrep));
         this.subScenes.push(new Weap6(scene, weapPrep));
-
+        this.subScenes.push(new TutGenericTextScene(scene, "Basics: #Pi Calculus", 64, 3, 1, 1));
         this.idx = 0;
         this.time = 0;
         this.subScenes[this.idx].launch();

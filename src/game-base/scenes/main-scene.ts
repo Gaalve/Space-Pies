@@ -1284,7 +1284,7 @@ export class MainScene extends Phaser.Scene {
 
     }
 
-    setButton(x : number, y : number, pic : string, scale: number, onclick: Function = ()=>{}) : Button{
+    setButton(x : number, y : number, pic : string, scale: number, onclick: ()=>any = ()=>{}) : Button{
         return new Button(this, x, y, "button_shadow",
             "button_bg", "button_fg", pic, scale, onclick);
 

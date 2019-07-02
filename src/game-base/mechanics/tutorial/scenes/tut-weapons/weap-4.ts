@@ -98,7 +98,7 @@ export class Weap4 extends TutSubScene{
     destroy(): void {
         this.tutArrow.destroy();
         this.tutText.destroy();
-        this.blue.explode();
+
     }
 
     launch(): void {
@@ -146,6 +146,7 @@ export class Weap4 extends TutSubScene{
         this.scene.time.delayedCall(200, ()=>this.shootP(), [], this);
         this.scene.time.delayedCall(2800, ()=>{
             if (this.blueHealth.shipBar.bars.length > 0) this.shootE();
+            else this.blue.explode();
         }, [], this);
         this.scene.time.delayedCall(5400, ()=>{
             if (this.blueHealth.shipBar.bars.length == 0) this.blockMainScene = false;
