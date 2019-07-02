@@ -22,26 +22,17 @@ export class TutSubSceneManager {
     private idx: number;
     private time: number;
 
-    private skip: Button;
 
     public constructor(scene: Phaser.Scene){
         this.scene = scene;
-
-        this.skip = new Button(scene, 50, 50, "button_shadow",
-            "button_bg", "button_fg", "red_arrow", 0.95, ()=>{if (this.idx < 11){
-                this.subScenes[this.idx].destroy();
-                this.idx = 15; // 9 for Health; 15 for Weapons
-                this.time = 0;
-                this.subScenes[this.idx].launch();
-            }});
-
         this.subScenes = [
             new TutGenericTextScene(scene, "Welcome.", 64, 3, 1, 1),
-            new TutGenericButtonScene(scene, "Are you ready for the tutorial?", [
+            new TutGenericButtonScene(scene, "Are you ready for the tutorial?\nBasics: #Life", [
                 new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-200),
                 new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-100),
                 new ButtonWithText(scene, "blue_arrow", "Definitely!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2),
-                new ButtonWithText(scene, "blue_arrow", "...no.", ()=>{this.dontExitRandom();},1920/2 - 100, 1080/2+100),
+                new ButtonWithText(scene, "blue_arrow", "Skip.", ()=>{this.skip(15);},1920/2 - 100, 1080/2+100),
+                new ButtonWithText(scene, "blue_arrow", "...no.", ()=>{this.exit();},1920/2 - 100, 1080/2+200),
             ]),
             new TutGenericTextScene(scene, "This is a tutorial.", 64, 1, 1, 1),
             new TutGenericTextScene(scene, "Be ready!", 64, 1, 1, 1),
@@ -50,8 +41,6 @@ export class TutSubSceneManager {
             new TutGenericTextScene(scene, "3", 92, 0.5, 0.25, 0.25),
             new TutGenericTextScene(scene, "2", 92, 0.5, 0.25, 0.25),
             new TutGenericTextScene(scene, "1", 92, 0.5, 0.25, 0.25),
-            // new TutGenericTextScene(scene, "Too bad.", 64, 1, 1, 1),
-            // new TutGenericTextScene(scene, "It's not yet implemented.", 64, 1, 1, 1), //skipped via button
             new TutGenericTextScene(scene, "Basics: #Life", 64, 3, 1, 1),
         ];
         let lifePrep = new LifePrep(scene);
@@ -66,7 +55,8 @@ export class TutSubSceneManager {
             new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-200),
             new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-100),
             new ButtonWithText(scene, "blue_arrow", "Definitely!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2),
-            new ButtonWithText(scene, "blue_arrow", "...no.", ()=>{this.dontExitRandom();},1920/2 - 100, 1080/2+100),
+            new ButtonWithText(scene, "blue_arrow", "Skip.", ()=>{this.skip(24);},1920/2 - 100, 1080/2+100),
+            new ButtonWithText(scene, "blue_arrow", "Exit.", ()=>{this.exit()},1920/2 - 100, 1080/2+200),
         ]));
 
         let weapPrep = new WeapPrep(scene);
@@ -77,7 +67,13 @@ export class TutSubSceneManager {
         this.subScenes.push(new Weap4(scene, weapPrep));
         this.subScenes.push(new Weap5(scene, weapPrep));
         this.subScenes.push(new Weap6(scene, weapPrep));
-        this.subScenes.push(new TutGenericTextScene(scene, "Basics: #Pi Calculus", 64, 3, 1, 1));
+        this.subScenes.push(new TutGenericTextScene(scene, "That's all. Thanks for playing this tutorial.", 64, 3, 1, 1));
+        this.subScenes.push(new TutGenericButtonScene(scene, "Are you ready to end this Tutorial?", [
+            new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.exit();},1920/2 - 100, 1080/2-200),
+            new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.exit();},1920/2 - 100, 1080/2-100),
+            new ButtonWithText(scene, "blue_arrow", "Definitely!", ()=>{this.exit();},1920/2 - 100, 1080/2),
+            new ButtonWithText(scene, "blue_arrow", "Exit.", ()=>{this.exit()},1920/2 - 100, 1080/2+100),
+        ]));
         this.idx = 0;
         this.time = 0;
         this.subScenes[this.idx].launch();
@@ -87,7 +83,6 @@ export class TutSubSceneManager {
         if(this.idx >= this.subScenes.length){
             return;
         }
-        this.skip.updateStep();
         this.time += delta;
         let curSubScene = this.subScenes[this.idx];
         curSubScene.update(delta);
@@ -175,4 +170,16 @@ export class TutSubSceneManager {
         }
         this.subScenes[this.idx].blockMainScene = false;
     }
+
+    private exit(): void{
+        this.scene.scene.launch('FadeScene', {shut: 'TutorialScene', start: 'StartScene'});
+    }
+
+    private skip(idx: number): void{
+        this.subScenes[this.idx].destroy();
+        this.idx = idx;
+        this.time = 0;
+        this.subScenes[this.idx].launch();
+    }
+
 }
