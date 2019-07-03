@@ -8,15 +8,12 @@ import Graphics = Phaser.GameObjects.Graphics;
 
 export class Infobox
 {
-    private tooltipStrings: Map<any, string>;
+    private tooltipStrings: Map<GameObject, string>;
     private scene: Scene;
     private tooltip: Text;
     private box: Graphics;
-    private tempStorage: Map<any, string>;
-    constructor(scene: Scene)
-    {
-        this.tooltipStrings = new Map<any, string>();
-        this.tempStorage = new Map<any, string>();
+    constructor(scene: Scene) {
+        this.tooltipStrings = new Map<GameObject, string>();
         this.scene = scene;
         this.box = this.scene.add.graphics();
         this.tooltip = this.scene.add.text(-100, -100, "No Description", Infobox.getTooltipFontStyle());
@@ -27,23 +24,9 @@ export class Infobox
         this.tooltip.setDepth(100);
     }
 
-    public hideInfobox(object: GameObject, id?: string)
-    {
-            id ? this.tempStorage.set(id,this.tooltipStrings.get(id)) : this.tempStorage.set(object,this.tooltipStrings.get(object));
-            id ? this.tooltipStrings.delete(id) : this.tooltipStrings.delete(object);
-            this.tooltip.text = "";
-    }
-
-    public unhideInfobox(object: GameObject, id?: string)
-    {
-        id ? this.tooltipStrings.set(id,this.tempStorage.get(id)) : this.tooltipStrings.set(object,this.tempStorage.get(object));
-        id ? this.tempStorage.delete(id) : this.tempStorage.delete(object);
-    }
-
-    public addTooltipInfo(object: GameObject, info: string , callbacks?: (()=>void)[], id?: String)
-    {
+    public addTooltipInfo(object: GameObject, info: string , callbacks?: (()=>void)[]) {
         object.setInteractive();
-        id ? this.tooltipStrings.set(id,info) : this.tooltipStrings.set(object, info);
+        this.tooltipStrings.set(object, info);
         let textWidth = this.calculateTextWidth(info);
 
         let xFix = 50;
@@ -86,7 +69,6 @@ export class Infobox
         {
             this.tooltip.setPosition(2500, 2500);
             this.box.setPosition(2500, 2500);
-            this.tooltip.text = "";
 
             this.executeCallback(callbacks, 2);
         })
