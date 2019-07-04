@@ -85,6 +85,8 @@ export class MainScene extends Phaser.Scene {
     private energyCostText: Phaser.GameObjects.Text[];
     private energyShopT: Phaser.GameObjects.Image[];
     private energyCostT: Phaser.GameObjects.Text[];
+    private energyShopM: Phaser.GameObjects.Image[];
+    private energyCostM: Phaser.GameObjects.Text[];
     private energyShopS: Phaser.GameObjects.Image[];
     private energyTextS: Phaser.GameObjects.Text[];
     private energyRegen: Phaser.GameObjects.Text;
@@ -1131,10 +1133,15 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("buy", "s");
                 this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
-                this.displayShop(this.shopT, this.shopTText);
-                this.updateShopT();
+                if(player.getEnergy() < 25){
+                    this.shop_bg_back2.setVisible(false);
+                }
+                else{
+                    this.displayShop(this.shopT, this.shopTText);
+                    this.updateShopT();
+                    this.shopTActive = true;
+                }
                 this.updateShop1(false);
-                this.shopTActive = true;
                 this.shopWActive = false;
                 //system.pushSymbol(createWMod)
         });
@@ -1154,10 +1161,15 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("buy", "d1");
                 this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
-                this.displayShop(this.shopT, this.shopTText);
-                this.updateShopT();
+                if(player.getEnergy() < 25){
+                    this.shop_bg_back2.setVisible(false);
+                }
+                else{
+                    this.displayShop(this.shopT, this.shopTText);
+                    this.updateShopT();
+                    this.shopTActive = true;
+                }
                 this.updateShop1(false);
-                this.shopTActive = true;
                 this.shopWActive = false;
         });
 
@@ -1177,10 +1189,15 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("buy", "d2");
                 this.system.pushSymbol(this.system.add.channelOut(term, this.data.get("type")+this.getOpponentNr(player)).nullProcess());
                 this.closeShop(this.shopW, this.shopWText,false);
-                this.displayShop(this.shopT, this.shopTText);
-                this.updateShopT();
+                if(player.getEnergy() < 25){
+                    this.shop_bg_back2.setVisible(false);
+                }
+                else{
+                    this.displayShop(this.shopT, this.shopTText);
+                    this.updateShopT();
+                    this.shopTActive = true;
+                }
                 this.updateShop1(false);
-                this.shopTActive = true;
                 this.shopWActive = false;
         });
         this.close2 = new Button(this, 1300, 1080-300, "button_shadow",
@@ -1220,7 +1237,14 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("buy", "motorL");
                 this.system.pushSymbol(this.system.add.channelOut(term ,'').nullProcess());
                 this.updateShop1(false);
-                this.updateShopM("L");
+                if(player.getEnergy() < player.getEnergyCost("motor")){
+                    this.closeShop(this.shopM, this.shopMText, false);
+                    this.shop_bg_back2.setVisible(false);
+                }
+                else{
+                    this.updateShopM("L");
+
+                }
 
                 //system.pushSymbol(createWMod)
             });
@@ -1236,8 +1260,14 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("buy", "motorP");
                 this.system.pushSymbol(this.system.add.channelOut(term, '').nullProcess());
                 this.updateShop1(false);
-                this.updateShopM("P");
+                if(player.getEnergy() < player.getEnergyCost("motor")){
+                    this.closeShop(this.shopM, this.shopMText, false);
+                    this.shop_bg_back2.setVisible(false);
+                }
+                else{
+                    this.updateShopM("P");
 
+                }
             });
 
         this.motorR = new Button(this, 1050, 1080-300, "button_shadow",
@@ -1252,8 +1282,14 @@ export class MainScene extends Phaser.Scene {
                 this.data.set("buy", "motorR");
                 this.system.pushSymbol(this.system.add.channelOut(term, "").nullProcess());
                 this.updateShop1(false);
-                this.updateShopM("R");
-            });
+                if(player.getEnergy() < player.getEnergyCost("motor")){
+                    this.closeShop(this.shopM, this.shopMText, false);
+                    this.shop_bg_back2.setVisible(false);
+                }
+                else{
+                    this.updateShopM("R");
+
+                }            });
 
         this.backM = new Button(this, 1300, 1080-300, "button_shadow",
             "button_bg", "button_fg", "button_back", 0.6,
@@ -1279,6 +1315,8 @@ export class MainScene extends Phaser.Scene {
             this.add.text(1300-30, 1080-250, "back", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false),
         ];
+        this.energyShopM = this.createEnergyCostIconsT();
+        this.energyCostM = this.createEnergyCostTextM();
         this.closeShop(this.shopM, this.shopMText, false);
         this.infobox.addTooltipInfo(this.motorL.bg, "Engine, that enhances evasion of Laser attacks", [() => this.motorL.onClick(), () => {this.motorL.hovering = true; this.motorL.updateStep();}, () => {this.motorL.hovering = false; this.motorL.updateStep();}]);
         this.infobox.addTooltipInfo(this.motorP.bg, "Engine, that enhances evasion of Projectile attacks", [() => this.motorP.onClick(), () => {this.motorP.hovering = true; this.motorP.updateStep();}, () => {this.motorP.hovering = false; this.motorP.updateStep();}]);
@@ -1332,6 +1370,15 @@ export class MainScene extends Phaser.Scene {
                 t.setVisible(false);
             }
         }
+
+        else if(array == this.shopM){
+            for (let i of this.energyShopM) {
+                i.setVisible(false);
+            }
+            for (let t of this.energyCostM) {
+                t.setVisible(false);
+            }
+        }
     }
 
     displayShop(array: Button[], text: Phaser.GameObjects.Text[]): void{
@@ -1367,6 +1414,14 @@ export class MainScene extends Phaser.Scene {
                 i.setVisible(true);
             }
             for (let t of this.energyTextS) {
+                t.setVisible(true);
+            }
+        }
+        else if(array == this.shopM){
+            for (let i of this.energyShopM) {
+                i.setVisible(true);
+            }
+            for (let t of this.energyCostM) {
                 t.setVisible(true);
             }
         }
@@ -2069,6 +2124,17 @@ export class MainScene extends Phaser.Scene {
             this.add.text(800, 1080-380, "x "+this.turn.getCurrentPlayer().getEnergyCost("weapon"), {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
             this.add.text(1050, 1080-380, "x "+this.turn.getCurrentPlayer().getEnergyCost("rocketl"), {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
+        ]
+    }
+
+    createEnergyCostTextM(): Phaser.GameObjects.Text[]{
+        return [
+            this.add.text(550, 1080-380, "x "+this.turn.getCurrentPlayer().getEnergyCost("motor"), {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
+            this.add.text(800, 1080-380, "x "+this.turn.getCurrentPlayer().getEnergyCost("motor"), {
+                fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}),
+            this.add.text(1050, 1080-380, "x "+this.turn.getCurrentPlayer().getEnergyCost("motor"), {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2})
         ]
     }
