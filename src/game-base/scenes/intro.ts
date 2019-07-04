@@ -24,6 +24,8 @@ export class Intro extends Phaser.Scene {
             "assets/atlas/particles/pack.png",
             "assets/atlas/particles/pack.json"
         )
+        this.load.spritesheet('bleedingbar', 'assets/sprites/bleedingbar.png', { frameWidth: 16, frameHeight: 42, spacing: 5, startFrame: 0, endFrame: 42, margin: 0});
+
     }
 
     private fadeText(): void{

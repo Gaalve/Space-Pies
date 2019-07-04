@@ -12,6 +12,7 @@ import {SimplePiCalc} from "./scenes/simple-pi-calc";
 import {ScenePiAnimation} from "./scenes/ScenePiAnimation";
 import {FullPiScene} from "./scenes/full-pi-scene";
 
+import {TutorialScene} from "./scenes/tutorial-scene";
 
 
 
@@ -26,7 +27,7 @@ const config: GameConfig = {
 
     render: {batchSize: 4096},
 
-    scene: [Intro, Background, MainScene, StartScene,  SimplePiCalc, ScenePiAnimation, GuiScene, PauseScene, EndSceneP1,  FadeScene, FullPiScene],
+    scene: [Intro, Background, MainScene, TutorialScene, StartScene,  SimplePiCalc, ScenePiAnimation, GuiScene, PauseScene, EndSceneP1,  FadeScene, FullPiScene],
     //scene: [Background, MainScene,  GuiScene, ShopSceneP1, ShopSceneP2, chooseSceneP1,ChooseTypeSceneP2, ChooseTypeSceneP1,chooseSceneP2, PauseScene, ChooseZoneSceneP1, ChooseZoneSceneP2],
 
     physics: {
@@ -41,6 +42,5 @@ export class Game extends Phaser.Game {
 }
 
 window.addEventListener("load", () => {
-   var game = new Game(config);
-
+    new Game(config);
 });

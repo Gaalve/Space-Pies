@@ -1,25 +1,13 @@
-import {Drone} from "./drone";
-import {WeaponType} from "./weapon/weapon-type";
-import {Bullet} from "./weapon/bullet";
-import {Player} from "./player";
-import {HitMissNotification} from "./weapon/hit-miss-notification";
-import {BulletInfo} from "./weapon/bulletInfo";
-import {Infobox} from "./Infobox";
-import {BlueShip} from "./ship/blue-ship";
-import {RedShip} from "./ship/red-ship";
+import {WeaponType} from "../../../weapon/weapon-type";
+import {TutDrone} from "./tut-drone";
+import {HitMissNotification} from "../../../weapon/hit-miss-notification";
+import {Infobox} from "../../../Infobox";
+import {BulletInfo} from "../../../weapon/bulletInfo";
+import {TutBullet} from "./tut-bullet";
 
 
-export class Weapon extends Phaser.GameObjects.Sprite{
+export class TutWeapon extends Phaser.GameObjects.Sprite{
 
-    get player(): Player
-    {
-        return this._player;
-    }
-
-    set player(value: Player)
-    {
-        this._player = value;
-    }
 
     get weaponType(): WeaponType
 	{
@@ -32,14 +20,13 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	}
 
 	private wClass : string;					//projectile or laser
-	private drone : Drone;						//which drone the weapon belongs to
+	private drone : TutDrone;						//which drone the weapon belongs to
     private wNr : number;
     private piTerm : string;
     private notification: HitMissNotification;
-    private bullet: Bullet;
+    private bullet: TutBullet;
     private _weaponType: WeaponType;
 	private isFirst: boolean;
-	private _player: Player;
     private simplePi : string;
 	posX : number;
 	posY : number;
@@ -48,19 +35,18 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	sinX : number;
 	sinY : number;
 
-	public constructor(scene : Phaser.Scene, drone : Drone, type: WeaponType, player: Player, wNr: number) {
-        super(scene, drone.x, drone.y, Weapon.getWeaponTex(player.isFirstPlayer(), type));
+	public constructor(scene : Phaser.Scene, drone : TutDrone, type: WeaponType, wNr: number, isP1: boolean) {
+        super(scene, drone.x, drone.y, TutWeapon.getWeaponTex(isP1, type));
         this._weaponType = type;
-        this.isFirst = player.isFirstPlayer();
-        this._player = player;
-		if (drone.getPlayer().getNameIdentifier() == "P1") {
+        this.isFirst = isP1;
+		if (isP1) {
             this.setX(drone.x + 35);
         }else{
             this.setX(drone.x - 37);
         }
         this.setVisible(false);
         scene.add.existing(this);
-		this.wClass = Weapon.getWeaponClass(type);
+		this.wClass = TutWeapon.getWeaponClass(type);
 		this.simplePi = this.wClass.charAt(0);
 		this.drone = drone;
 		this.wNr = wNr;
@@ -93,7 +79,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	graphical Repositioning of Weapons on ships
 	 */
 	repositionWeapons() : void{
-		if(this.drone.getPlayer().isFirstPlayer()){
+		if(this.isFirst){
 			if(this.wNr == 1){
 				this.setX(this.x - 15);
 				this.setY(this.y + 180);
@@ -118,9 +104,9 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	}
 
 	public setWeapon(type: WeaponType): void{
-		this.wClass = Weapon.getWeaponClass(type);
+		this.wClass = TutWeapon.getWeaponClass(type);
 		this._weaponType = type;
-		this.setTexture(Weapon.getWeaponTex(this.isFirst, type));
+		this.setTexture(TutWeapon.getWeaponTex(this.isFirst, type));
         this.simplePi = this.wClass.charAt(0);
 		this.createPiTerm();
 
@@ -132,7 +118,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     }
 
 	public getWeapon() : string {
-		return Weapon.getWeaponClass(this._weaponType);
+		return TutWeapon.getWeaponClass(this._weaponType);
 	}
 
 	private static getWeaponClass(type: WeaponType) : string{
@@ -166,7 +152,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	number of the opposing player
 	 */
     createPiTerm() : void{
-    	if(this.drone.getPlayer().getNameIdentifier() == "P1") {
+    	if(this.isFirst) {
 			this.piTerm = this.wClass + "p2";
 			this.simplePi = this.simplePi + "p2";
 		}else{
@@ -174,9 +160,9 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     		this.simplePi = this.simplePi + "p1";
 		}
 		let infobox = <Infobox> this.scene.data.get("infoboxx");
-		infobox.addTooltipInfo(this, "[" + this._player.getNameIdentifier() + "] Weapon Type:    "
+		infobox.addTooltipInfo(this, "[P1] Weapon Type:    "
 			+ this.simplePi + "<>" +
-			"    (" + Infobox.weaponTypeToString(this._weaponType) + ")\n" + "     destroys:       " + Infobox.weaponTypeTargetsPiTerm(this._weaponType, this._player) +
+			"    (" + Infobox.weaponTypeToString(this._weaponType) + ")\n" + "     destroys:       " + Infobox.weaponTypeTargetsPiTerm2(this._weaponType, this.isFirst) +
 			"    (" + Infobox.weaponTypeTargetsToString(this._weaponType) + ")");
 
     }
@@ -218,6 +204,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
 	public createBullet(info?: BulletInfo): void{
         if(this._weaponType == WeaponType.NONE) return;
     	this.removeBullet();
+    	this.removeNotification();
     	let toX = this.isFirst ? 1620 : 300;
     	let toY = 540;
     	let hit: boolean = !info;
@@ -226,7 +213,7 @@ export class Weapon extends Phaser.GameObjects.Sprite{
     		toY = info.toY;
 			hit = !info.miss;
 		}
-    	this.bullet = new Bullet(this.scene, this.x, this.y, this.isFirst, this._weaponType, hit, this._player, toX, toY);
+    	this.bullet = new TutBullet(this.scene, this.x, this.y, this.isFirst, this._weaponType, hit, toX, toY);
 		this.notification = new HitMissNotification(this.scene, this.x, this.y, hit, this.isFirst);
 	}
 

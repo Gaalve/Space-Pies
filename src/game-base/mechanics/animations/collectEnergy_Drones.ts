@@ -18,10 +18,11 @@ export class collectEnergy_Drones {
             frame: "particle_1",
             moveToX:0,
             moveToY:0,
-            tint: 0xffd42a,
+            tint: [0xffcc00, 0xffd42a, 0xffdd55],
             scale: {start: 0.6, end: 0},
-            quantity: 3,
-            frequency:140,
+            lifespan: {min: 320, max: 1100},
+            quantity: 1,
+            frequency:20,
             on: false,
             emitZone: { source: this.circle }
             //deathZone:{ type: 'onEnter', source: source }
@@ -42,7 +43,7 @@ export class collectEnergy_Drones {
     }
 
     private setCollectConfig(sx:number,sy:number,ex:number,ey:number):void{
-        this.circle = this.circle = new Phaser.Geom.Circle(sx,sy,40);
+        this.circle = this.circle = new Phaser.Geom.Circle(sx,sy,80);
         this.collectEmit.fromJSON({
                 moveToX: ex,
                 moveToY: ey,

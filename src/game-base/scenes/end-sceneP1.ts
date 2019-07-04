@@ -12,10 +12,12 @@ export class EndSceneP1 extends Phaser.Scene {
 
 
     private buttonMain: Button;
+    private buttonRestart: Button;
     //private buttonCredits: Button;
     private background;
     private titleText;
     private reseText;
+    private mainText;
     private P1: Player;
     private P2: Player;
 
@@ -42,7 +44,6 @@ export class EndSceneP1 extends Phaser.Scene {
         this.P2 = this.scene.get('MainScene').data.get("P2");
 
 
-
         this.background = new Sprite(this, 960, 540, "button_bg");
         this.background.setScale(500);
         this.background.setTint(0x000000);
@@ -63,7 +64,7 @@ export class EndSceneP1 extends Phaser.Scene {
 
 
 
-        this.buttonMain = new Button(this, 100, 100, "button_shadow",
+        this.buttonRestart = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_skip",0.95,
             ()=>{
                 this.scene.get('AnimationScene').scene.stop();
@@ -74,17 +75,46 @@ export class EndSceneP1 extends Phaser.Scene {
                 this.P1.resetEnergy();
             });
 
-        this.buttonMain.setPosition(1920/2-100, 1080*2/3);
+        this.buttonRestart.setPosition(1920/2-100, 1080*2/3);
+        this.buttonRestart.removeInteractive();
+        this.buttonRestart.setInvisible();
+
+        this.buttonMain = new Button(this, 1920/2-100, 1080*2/3 + 200, "button_shadow",
+            "button_bg", "button_fg", "button_skip",0.95,
+            ()=>{
+                this.scene.get("GuiScene").scene.sleep();
+                this.scene.get('AnimationScene').scene.stop();
+                this.scene.get('SimplePiCalc').scene.stop();
+                this.scene.get('MainScene').scene.stop();
+                this.scene.launch('FadeScene', {shut: 'EndSceneP1', start: 'StartScene'});
+                this.P2.resetEnergy();
+                this.P1.resetEnergy();
+            });
+
         this.buttonMain.removeInteractive();
         this.buttonMain.setInvisible();
-
-
-
-
 
         this.reseText = this.add.text(1920/2, 1080*2/3-25, "Restart", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         this.reseText.alpha=0;
+
+        this.mainText = this.add.text(1920/2, 1080*2/3+175, "Back to main", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+        this.mainText.alpha=0;
+
+        let options = this.scene.get("MainScene").data.get("buttonOptions");
+        options.removeInteractive();
+        options.setInvisible();
+        let botLog = this.scene.get("MainScene").data.get("buttonBotLog");
+        botLog.removeInteractive();
+        botLog.setInvisible();
+
+        let gM = this.scene.get("GuiScene").data.get("mode");
+        if(gM == "1"){
+            this.P2.getBotLog().setInvisible();
+        }else if(gM == "2"){
+            this.P1.getBotLog().setInvisible();
+        }
 
     }
 
@@ -101,6 +131,9 @@ export class EndSceneP1 extends Phaser.Scene {
                 this.background.setAlpha(0.5);
                 this.titleText.alpha=1;
                 this.reseText.alpha=1;
+                this.mainText.alpha=1;
+                this.buttonRestart.restoreInteractive();
+                this.buttonRestart.setVisible();
                 this.buttonMain.restoreInteractive();
                 this.buttonMain.setVisible();
                 setvis=true;
@@ -109,6 +142,7 @@ export class EndSceneP1 extends Phaser.Scene {
 
         while (this.timeAccumulator >= this.timeUpdateTick) {
             this.timeAccumulator -= this.timeUpdateTick;
+            this.buttonRestart.updateStep();
             this.buttonMain.updateStep();
             //this.buttonCredits.updateStep();
 

@@ -27,6 +27,7 @@ import {MainScene} from "../scenes/main-scene";
 import {NeutronAnimation} from "./animations/neutron-animation";
 import {NeutronTurb} from "./animations/neutron-turb";
 import {NeutronExplosion} from "./animations/neutron-explosion";
+import {DustAnimation} from "./animations/dust-animation";
 
 
 export class Player {
@@ -68,6 +69,7 @@ export class Player {
     public bulletTrail: BulletTrail;
     public collectE: collectEnergy_ship;
     public blackholeParticles: BlackholeParticle;
+    public dustAnimation: DustAnimation;
 
     public neutronParticles: NeutronAnimation;
     public neutronTurb: NeutronTurb;
@@ -111,11 +113,12 @@ export class Player {
         this.neutronParticles = new NeutronAnimation(pem);
         this.neutronTurb = new NeutronTurb(pem);
         this.neutronExplosion = new NeutronExplosion(pem);
+        this.dustAnimation = new DustAnimation(pem);
 
         this.motor = new Motor(scene, this, x, y, piAnim);
         this.malusEnergy = 0;
 
-        this.energy = 55;
+        this.energy = 555;
 
         let p = this.getNameIdentifier().charAt(1);
         this.buildLocksPi(p, bt);
@@ -194,9 +197,12 @@ export class Player {
     createDrone(index : number) : void{
         this.activatedDrones = this.activatedDrones + 1;
         if(index != 0) {
-            this.drones[index].setVisible(true);
-            this.drones[index].created = true;
-            this.drones[index].flame.setVisible(true);
+            let drone = this.drones[index];
+            drone.setVisible(true);
+            drone.created = true;
+            drone.flame.setVisible(true);
+            this.dustAnimation.at(drone.x, drone.y, 75, 250);
+
         }
         this.drones[index].buildPiTerm();
         this.drones[index].refreshOnScreenText();
@@ -241,7 +247,7 @@ export class Player {
         if(this.solarDrones[3].active){
             rate += 25;
         }
-        if(this.solarDrones[3].active){
+        if(this.solarDrones[4].active){
             rate += 25;
         }
         if(this.solarDrones[5].active){
@@ -267,7 +273,7 @@ export class Player {
         for (let i=1;i<this.solarDrones.length;i++) {
             if(this.solarDrones[i].visible){
                 this.solarDrones[i].collectED.collect(this.solarDrones[i].x,this.solarDrones[i].y,this.ship.posX,this.ship.posY);
-                this.scene.time.delayedCall(500, ()=>{this.solarDrones[i].collectED.stopCollect();}, [], this);
+                this.scene.time.delayedCall(900, ()=>{this.solarDrones[i].collectED.stopCollect();}, [], this);
             }
         }
     }

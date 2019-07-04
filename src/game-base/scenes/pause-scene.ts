@@ -16,6 +16,7 @@ export class PauseScene extends Phaser.Scene {
     private changeAnimationButton: Button;
     private P1: Player;
     private P2: Player;
+    private title;
 
 
     preload(): void {
@@ -42,9 +43,11 @@ export class PauseScene extends Phaser.Scene {
         this.P2 = this.scene.get('MainScene').data.get("P2");
 
         //this.add.image(1920/2, 1080/2, "background_space")
-        this.add.text(1920/2-130, 200, 'Pause!', {
+        this.title = this.add.text(1920/2, 100, 'Pause!', {
             fill: '#f0f1ff', fontFamily: '"Roboto"', fontSize: 60, fontStyle: 'bold', strokeThickness: 2
         });
+        this.title.setOrigin(0.5);
+
         this.buttonResume = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_resume", 0.95,
             ()=>{
@@ -52,8 +55,8 @@ export class PauseScene extends Phaser.Scene {
             this.scene.sleep();}
             //this.scene.setVisible(false,"PauseScene")}
         );
-        this.buttonResume.setPosition(1920/2-130, 1080/2-75);
-        this.add.text(1920/2-60, 1080/2-100, "Resume", {
+        this.buttonResume.setPosition(1920/2-130, 1080/2-200);
+        this.add.text(1920/2-60, 1080/2-220, "Resume", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         this.buttonReset = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_skip",0.95,
@@ -66,8 +69,8 @@ export class PauseScene extends Phaser.Scene {
                 this.P1.resetEnergy();
         });
 
-        this.buttonReset.setPosition(1920/2-130, 1080/2+75);
-        this.add.text(1920/2-60, 1080/2+50, "Restart", {
+        this.buttonReset.setPosition(1920/2-130, 1080/2-50);
+        this.add.text(1920/2-60, 1080/2-70, "Restart", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
         const debugText = this.add.text(1760, 1020, "Change Debug",{
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 20});
@@ -86,7 +89,7 @@ export class PauseScene extends Phaser.Scene {
 
         this.buttonDebug.setPosition(1880, 1040);
 
-       this.buttonMain = new Button(this, 1920/2-130, 1080/2+375, "button_shadow",
+       this.buttonMain = new Button(this, 1920/2-130, 1080/2+250, "button_shadow",
             "button_bg", "button_fg", "button_skip",
            1, ()=> {
                this.scene.get("GuiScene").scene.sleep();
@@ -98,7 +101,7 @@ export class PauseScene extends Phaser.Scene {
                this.P1.resetEnergy();
            });
 
-        this.add.text(1920/2-60, 1080/2+350, "Back to main", {
+        this.add.text(1920/2-60, 1080/2+230, "Back to main", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
         // Weapons Hints
@@ -129,10 +132,10 @@ export class PauseScene extends Phaser.Scene {
         this.add.image(200, 800, "laser_shield");
 
 
-        let animationText = this.add.text(1920/2-60, 1080/2+200, "Pi-Style: #1", {
+        let animationText = this.add.text(1920/2-60, 1080/2+80, "Pi-Style: #1", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
-        this.changeAnimationButton = new Button(this, 1920/2-130, 1080/2+225, "button_shadow",
+        this.changeAnimationButton = new Button(this, 1920/2-130, 1080/2+100, "button_shadow",
             "button_bg", "button_fg", "button_options",0.95, ()=>{
                 let anim1: boolean = this.scene.isVisible("AnimationScene");
                 if (anim1) {

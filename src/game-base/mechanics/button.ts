@@ -6,8 +6,8 @@ export class Button{
 
     public hovering: boolean;
     private scale: number;
-    public onClick: Function;
-    private func: Function;
+    public onClick: ()=>any;
+    private func: ()=>any;
     private active: boolean;
     private activeP2: boolean;
 
@@ -27,7 +27,7 @@ export class Button{
 
     public constructor(scene: Phaser.Scene, x: number, y: number, shadowTex: string,
                        bgText: string, imgTex: string, fgTex: string, scale:number,
-                       onClick: Function = ()=>{}) {
+                       onClick: ()=>any = ()=>{}) {
         this.scale = scale;
         this.shadow = new Sprite(scene, x, y, shadowTex);
         this.bg = new Sprite(scene, x, y, bgText);
@@ -67,7 +67,7 @@ export class Button{
         this.onClick();
     }
 
-    public setOnClick(onClick: Function){
+    public setOnClick(onClick: ()=>any){
         this.onClick = onClick;
     }
 
@@ -283,5 +283,15 @@ export class Button{
 
     }
 
+    public destroy(): void{
+        this.shadow.destroy();
+        this.bg.destroy();
+        this.fg.destroy();
+        this.img.destroy();
+        this.inactive.destroy();
+        this.alt.destroy();
+        this.onClick = null;
+        this.func = null;
+    }
 
 }

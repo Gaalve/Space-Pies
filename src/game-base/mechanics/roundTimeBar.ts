@@ -41,8 +41,8 @@ export class roundTimeBar extends Phaser.GameObjects.Sprite{
     update(): void {
         let progress = 1 - this.timebarEvent.getProgress();
         this.displayWidth=this.width*(progress);
-        if(progress < 0.3){
-            let idx = progress % 0.025;
+        if(progress < 0.15){
+            let idx = progress % 0.0125;
             this.setTint(
                 Color.ObjectToColor(
                     Color.Interpolate.RGBWithRGB(
@@ -53,8 +53,8 @@ export class roundTimeBar extends Phaser.GameObjects.Sprite{
                 ).color
             );
         }
-        else if(progress > 0.925){
-            let idx = progress % 0.015;
+        else if(progress > 0.955){
+            let idx = progress % 0.0075;
             this.setTint(
                 Color.ObjectToColor(
                     Color.Interpolate.RGBWithRGB(
