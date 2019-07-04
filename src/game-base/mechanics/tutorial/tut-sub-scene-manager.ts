@@ -26,7 +26,7 @@ export class TutSubSceneManager {
     public constructor(scene: Phaser.Scene){
         this.scene = scene;
         this.subScenes = [
-            new TutGenericTextScene(scene, "Welcome.", 64, 1, 0.5, 0.5),
+            new TutGenericTextScene(scene, "Welcome.", 64, 3, 0.5, 0.5),
             new TutGenericButtonScene(scene, "Are you ready for the tutorial?\nBasics: #Life", [
                 new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-200),
                 new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-100),
@@ -50,7 +50,7 @@ export class TutSubSceneManager {
         this.subScenes.push(new Life2(scene, lifePrep));
         this.subScenes.push(new Life3(scene, lifePrep));
         this.subScenes.push(new Life4(scene, lifePrep));
-        this.subScenes.push(new TutGenericTextScene(scene, "Basics: #Shields and Weapons", 64, 1, 0.5, 0.5));
+        this.subScenes.push(new TutGenericTextScene(scene, "Basics: #Shields and Weapons", 64, 3, 0.5, 0.5));
         this.subScenes.push(new TutGenericButtonScene(scene, "Are you ready for #Shields and Weapons?", [
             new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-200),
             new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-100),
@@ -67,7 +67,7 @@ export class TutSubSceneManager {
         this.subScenes.push(new Weap4(scene, weapPrep));
         this.subScenes.push(new Weap5(scene, weapPrep));
         this.subScenes.push(new Weap6(scene, weapPrep));
-        this.subScenes.push(new TutGenericTextScene(scene, "That's all. Thanks for playing this tutorial.", 64, 1, 0.5, 0.5));
+        this.subScenes.push(new TutGenericTextScene(scene, "That's all. Thanks for playing this tutorial.", 64, 3, 0.5, 0.5));
         this.subScenes.push(new TutGenericButtonScene(scene, "Are you ready to end this Tutorial?", [
             new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.exit();},1920/2 - 100, 1080/2-200),
             new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.exit();},1920/2 - 100, 1080/2-100),
