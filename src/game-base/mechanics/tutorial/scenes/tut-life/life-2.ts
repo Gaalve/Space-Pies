@@ -43,7 +43,7 @@ export class Life2 extends TutSubScene{
     continueButton: ButtonWithText;
 
     constructor(scene: Scene, subScene: LifePrep) {
-        super(scene, 4, 1, 1);
+        super(scene, 3, 1, 1);
 
         this.lifePrep = subScene;
 

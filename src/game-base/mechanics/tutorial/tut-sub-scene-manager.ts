@@ -26,7 +26,7 @@ export class TutSubSceneManager {
     public constructor(scene: Phaser.Scene){
         this.scene = scene;
         this.subScenes = [
-            new TutGenericTextScene(scene, "Welcome.", 64, 3, 1, 1),
+            new TutGenericTextScene(scene, "Welcome.", 64, 1, 0.5, 0.5),
             new TutGenericButtonScene(scene, "Are you ready for the tutorial?\nBasics: #Life", [
                 new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-200),
                 new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-100),
@@ -34,14 +34,14 @@ export class TutSubSceneManager {
                 new ButtonWithText(scene, "blue_arrow", "Skip.", ()=>{this.skip(15);},1920/2 - 100, 1080/2+100),
                 new ButtonWithText(scene, "blue_arrow", "...no.", ()=>{this.exit();},1920/2 - 100, 1080/2+200),
             ]),
-            new TutGenericTextScene(scene, "This is a tutorial.", 64, 1, 1, 1),
-            new TutGenericTextScene(scene, "Be ready!", 64, 1, 1, 1),
-            new TutGenericTextScene(scene, "It starts...", 64, 1, 1, 1),
-            new TutGenericTextScene(scene, "in...", 64, 1, 1, 1),
+            new TutGenericTextScene(scene, "This is a tutorial.", 64, 1, 0.5, 0.5),
+            new TutGenericTextScene(scene, "Be ready!", 64, 1, 0.5, 0.5),
+            new TutGenericTextScene(scene, "It starts...", 64, 1, 0.5, 0.5),
+            new TutGenericTextScene(scene, "in...", 64, 1, 0.5, 0.5),
             new TutGenericTextScene(scene, "3", 92, 0.5, 0.25, 0.25),
             new TutGenericTextScene(scene, "2", 92, 0.5, 0.25, 0.25),
             new TutGenericTextScene(scene, "1", 92, 0.5, 0.25, 0.25),
-            new TutGenericTextScene(scene, "Basics: #Life", 64, 3, 1, 1),
+            new TutGenericTextScene(scene, "Basics: #Life", 64, 1, 0.5, 0.5),
         ];
         let lifePrep = new LifePrep(scene);
         /* ### Life Basics ### */
@@ -50,7 +50,7 @@ export class TutSubSceneManager {
         this.subScenes.push(new Life2(scene, lifePrep));
         this.subScenes.push(new Life3(scene, lifePrep));
         this.subScenes.push(new Life4(scene, lifePrep));
-        this.subScenes.push(new TutGenericTextScene(scene, "Basics: #Shields and Weapons", 64, 3, 1, 1));
+        this.subScenes.push(new TutGenericTextScene(scene, "Basics: #Shields and Weapons", 64, 1, 0.5, 0.5));
         this.subScenes.push(new TutGenericButtonScene(scene, "Are you ready for #Shields and Weapons?", [
             new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-200),
             new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.unblockScene();},1920/2 - 100, 1080/2-100),
@@ -67,7 +67,7 @@ export class TutSubSceneManager {
         this.subScenes.push(new Weap4(scene, weapPrep));
         this.subScenes.push(new Weap5(scene, weapPrep));
         this.subScenes.push(new Weap6(scene, weapPrep));
-        this.subScenes.push(new TutGenericTextScene(scene, "That's all. Thanks for playing this tutorial.", 64, 3, 1, 1));
+        this.subScenes.push(new TutGenericTextScene(scene, "That's all. Thanks for playing this tutorial.", 64, 1, 0.5, 0.5));
         this.subScenes.push(new TutGenericButtonScene(scene, "Are you ready to end this Tutorial?", [
             new ButtonWithText(scene, "blue_arrow", "Yes.", ()=>{this.exit();},1920/2 - 100, 1080/2-200),
             new ButtonWithText(scene, "blue_arrow", "Yes!!!", ()=>{this.exit();},1920/2 - 100, 1080/2-100),
