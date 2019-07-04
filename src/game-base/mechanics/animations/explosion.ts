@@ -41,19 +41,19 @@ export class Explosion {
 
     private setExplosionConfig(lifeScale: number = 1, speedScale: number = 1): void{
         this.explosionSmoke.fromJSON({
-            x: 0, y: 0,  tint: 0xff1a1a1a, speed: {min: 5*speedScale, max: 120*speedScale},radial: true,
+            x: 0, y: 0,  tint: 0xff1a1a1a, speed: {min: 1*speedScale, max: 120*speedScale},radial: true,
             scale: (particle, key, t) => t > 0.8 ? 1-(t - 0.8)*5 : 1,
             lifespan: {min: 1800*lifeScale, max: 2000*lifeScale}, on: false});
         this.explosionRed.fromJSON({
-            x: 0, y: 0,  tint: 0xffd40000, speed: {min: 5*speedScale, max: 90*speedScale}, radial: true,
+            x: 0, y: 0,  tint: 0xffd40000, speed: {min: 1*speedScale, max: 90*speedScale}, radial: true,
             scale: (particle, key, t) => t > 0.8 ? 1-(t - 0.8)*5 : 1,
             lifespan: {min: 1600*lifeScale, max: 1800*lifeScale}, on: false});
         this.explosionOrange.fromJSON({
-            x: 0, y: 0,  tint: 0xffff6600, speed: {min: 5*speedScale, max: 70*speedScale}, radial: true,
+            x: 0, y: 0,  tint: 0xffff6600, speed: {min: 1*speedScale, max: 70*speedScale}, radial: true,
             scale: (particle, key, t) => t > 0.8 ? 1-(t - 0.8)*5 : 1,
             lifespan: {min: 1400*lifeScale, max: 1600*lifeScale}, on: false});
         this.explosionYellow.fromJSON({
-            x: 0, y: 0, tint: 0xffffcc00, speed: {min: 5*speedScale, max: 50*speedScale}, radial: true,
+            x: 0, y: 0, tint: 0xffffcc00, speed: {min: 1*speedScale, max: 50*speedScale}, radial: true,
             scale: (particle, key, t) => t > 0.8 ? 1-(t - 0.8)*5 : 1,
             lifespan: {min: 1200*lifeScale, max: 1400*lifeScale}, on: false});
     }

@@ -55,4 +55,9 @@ export class ShipPart {
         this.destroyed.x += (this.offX *0+ this.desOffX) / 5500 * delta;
         this.destroyed.y += (this.offY *0+ this.desOffY)/ 5500 * delta;
     }
+
+    public destroy(): void{
+        this.destroyed.destroy();
+        this.normal.destroy();
+    }
 }

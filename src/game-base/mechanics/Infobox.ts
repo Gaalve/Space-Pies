@@ -161,6 +161,17 @@ export class Infobox
         }
     }
 
+    static weaponTypeTargetsPiTerm2(type: WeaponType, isP1: boolean)
+    {
+        let targetPlayer = !isP1 ? "p2" : "p1";
+        switch (type) {
+            case WeaponType.LASER_ARMOR: return "a" + targetPlayer + "()";
+            case WeaponType.PROJECTILE_SHIELD: return "s" + targetPlayer + "()";
+            case WeaponType.ROCKET: return "a" + targetPlayer + "(), s" + targetPlayer + "(), r"+ targetPlayer + "()";
+            case WeaponType.NONE: return "none"; // wrong model is intended!
+        }
+    }
+
     private static getTooltipFontStyle()
     {
         return {

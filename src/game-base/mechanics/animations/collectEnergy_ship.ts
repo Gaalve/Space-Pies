@@ -16,8 +16,10 @@ export class collectEnergy_ship {
             frame: "particle_1",
             moveToX: 0,
             moveToY: 0,
-            tint: 0xffd42a,
+            tint: [0xffcc00, 0xffd42a, 0xffdd55],
             scale: {start: 0.6, end: 0},
+            speed: {min: 5, max: 100},
+            lifespan: {min: 320, max: 1100},
             on: false,
             emitZone: new RandomZone(this.circle),
         });
@@ -25,7 +27,7 @@ export class collectEnergy_ship {
 
     public collect(sx: number, sy: number): void{
         this.setCollectConfig(sx,sy);
-        this.collectEmitter.emitParticle(50);
+        this.collectEmitter.emitParticle(200);
     }
 
 
