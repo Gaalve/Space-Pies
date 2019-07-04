@@ -9,6 +9,7 @@ import {Bot} from "../mechanics/bot/bot";
 import {PiAnimSystem} from "../mechanics/pianim/pi-anim-system";
 import {Infobox} from "../mechanics/Infobox";
 import {roundTimeBar} from "../mechanics/roundTimeBar";
+import {FullPiCalcScene} from "./full-pi-calc-scene";
 
 export class MainScene extends Phaser.Scene {
 
@@ -20,7 +21,7 @@ export class MainScene extends Phaser.Scene {
     private buttonEndTurn: Button;
     private buttonOption: Button;
     private shop: Button;
-    private system: PiSystem;
+    public system: PiSystem;
     private pem: ParticleEmitterManager;
     private shop_bg_back: Sprite;//Phaser.GameObjects.Graphics;
     private shop_bg_out: Sprite;
@@ -103,6 +104,8 @@ export class MainScene extends Phaser.Scene {
     private infobox: Infobox;
     public blackholeExists;
 
+    private pi: Button;
+
 
     private openShop: Phaser.GameObjects.Text;
 
@@ -153,7 +156,19 @@ export class MainScene extends Phaser.Scene {
         this.pem = this.add.particles("parts");
         this.pem.setDepth(5);
 
+        this.scene.launch("FullPiCalcScene");
+
+        this.pi = new Button(this, 40, 40, "button_shadow",
+            "button_bg", "button_fg", "pi", 0.95, ()=>{
+                (<FullPiCalcScene>this.scene.get('FullPiCalcScene')).showPi();
+                this.scene.pause();
+            });
+
+
+
         this.input.enabled = true;
+
+
 
         this.infobox = <Infobox> this.scene.get('GuiScene').data.get("infoboxx");
         this.data.set("infoboxx", this.infobox);
@@ -359,6 +374,7 @@ export class MainScene extends Phaser.Scene {
             this.shop.updateStep();
             this.buttonOption.updateStep();
             this.buttonBotLog.updateStep();
+            this.pi.updateStep();
 
             if(this.roundTimebar.active){
                 this.roundTimebar.update();

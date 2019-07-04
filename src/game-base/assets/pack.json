@@ -717,6 +717,11 @@
         "type": "image",
         "key": "botLog",
         "url": "assets/sprites/botLog.png"
+      },
+      {
+        "type": "image",
+        "key": "pi",
+        "url": "assets/sprites/pi.png"
       }
     ]
   }

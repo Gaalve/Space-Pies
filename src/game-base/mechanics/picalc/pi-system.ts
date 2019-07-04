@@ -8,6 +8,7 @@ import {PiReplication} from "./pi-replication";
 import {PiResolvable} from "./pi-resolvable";
 import {PiAction} from "./pi-action";
 import {PiProcess} from "./pi-process";
+import {PiAnimFull} from "../pianim/pi-anim-full";
 
 export class PiSystem {
 
@@ -43,6 +44,8 @@ export class PiSystem {
     private deadlock: boolean;
     private onDeadlockFunction: Function;
 
+    public fullAnim: PiAnimFull;
+
     public constructor(scene: Phaser.Scene, findResolvingTimeOut: number,
                        resolveTimeOut: number, cleanUpTimeOut: number, enableDebugLogging: boolean){
         this.scene = scene;
@@ -62,6 +65,8 @@ export class PiSystem {
         this.pushedSymbols = [];
 
         this.reservedNames = [];
+
+        this.fullAnim = new PiAnimFull();
 
         /**
          * Blocking
@@ -381,7 +386,15 @@ export class PiSystem {
     }
 
     private logPhase1(){
-        if(!this.phase1changed || !this.enableDebugLogging)return;
+        if(!this.phase1changed) return;
+        this.fullAnim.reset();
+        this.curReplications.forEach(r=>this.fullAnim.addReplication(r.getSymbolSequence()));
+        this.curSums.forEach(r=>this.fullAnim.addReplication(r.getSymbolSequence()));
+        this.curChannelIn.forEach(r=>this.fullAnim.addReplication(r.getSymbolSequence()));
+        this.curChannelOut.forEach(r=>this.fullAnim.addReplication(r.getSymbolSequence()));
+        this.curActiveSymbols.forEach(r=>this.fullAnim.addReplication(r.getSymbolSequence()));
+        this.fullAnim.end();
+        if(!this.enableDebugLogging)return;
         let allActiveSymbols: PiSymbol[] = [];
         allActiveSymbols = allActiveSymbols.concat(this.curActiveSymbols,
             this.curReplications, this.curChannelIn, this.curChannelOut, this.curSums);
