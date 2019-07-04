@@ -122,8 +122,6 @@ export class MainScene extends Phaser.Scene {
             "preload"
         );
 
-        this.load.spritesheet('bleedingbar', 'assets/sprites/bleedingbar.png', { frameWidth: 19, frameHeight: 42, spacing: 5, startFrame: 0, endFrame: 42, margin: 0});
-
 
     }
 
@@ -266,9 +264,9 @@ export class MainScene extends Phaser.Scene {
         this.shop.removeInteractive();
         this.shop.setInvisible();
 
-        this.openShop = this.add.text(1920/2-50, 1080-50, "shop", {
+        this.openShop = this.add.text(1920/2, 1080-52, "Upgrades", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2}).setVisible(false);
-
+        this.openShop.setOrigin(0.5, this.openShop.originY);
 
         this.buttonOption = new Button(this, 100, 100, "button_shadow",
             "button_bg", "button_fg", "button_options", 0.95,
@@ -776,9 +774,9 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
             this.add.text(1115, 1080-50, "Engine", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
-            this.add.text(1315, 1080-50, "close", {
+            this.add.text(1315, 1080-50, "Close", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
-            this.add.text(1510-5, 1080-50, "end turn", {
+            this.add.text(1510-5, 1080-50, "End Turn", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false)
         ];
 
@@ -908,7 +906,7 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
             this.add.text(1200, 1080-50, "Adaptive", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
-            this.add.text(1345, 1080-250, "back", {
+            this.add.text(1345, 1080-250, "Back", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false)
         ];
         this.energyShopS = this.createEnergyCostIconsS();
@@ -1028,7 +1026,7 @@ export class MainScene extends Phaser.Scene {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
                 this.add.text(1160, 1080-50, "Hitzone4", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
-                this.add.text(1330, 1080-250, "back", {
+                this.add.text(1330, 1080-250, "Back", {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false)
             ];
 
@@ -1101,7 +1099,7 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false),
             this.add.text(1100-30, 1080-250, "Rocket", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false),
-            this.add.text(1300-20, 1080-250, "back", {
+            this.add.text(1300-20, 1080-250, "Back", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false)
 
         ];
@@ -1217,7 +1215,7 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
             this.add.text(1100-30, 1080-50, "drone 2", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2}).setVisible(false),
-            this.add.text(1300-30, 1080-250, "back", {
+            this.add.text(1300-30, 1080-250, "Back", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false),
         ];
         this.closeShop(this.shopW, this.shopWText, false);
@@ -1312,7 +1310,7 @@ export class MainScene extends Phaser.Scene {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false),
             this.add.text(1050-30, 1080-250, "Rocket", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false),
-            this.add.text(1300-30, 1080-250, "back", {
+            this.add.text(1300-30, 1080-250, "Back", {
                 fill: '#fff', fontFamily: '"Roboto"', fontSize: 20, strokeThickness: 2}).setVisible(false),
         ];
         this.energyShopM = this.createEnergyCostIconsT();
@@ -1324,7 +1322,7 @@ export class MainScene extends Phaser.Scene {
 
     }
 
-    setButton(x : number, y : number, pic : string, scale: number, onclick: Function = ()=>{}) : Button{
+    setButton(x : number, y : number, pic : string, scale: number, onclick: ()=>any = ()=>{}) : Button{
         return new Button(this, x, y, "button_shadow",
             "button_bg", "button_fg", pic, scale, onclick);
 

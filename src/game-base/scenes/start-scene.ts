@@ -7,6 +7,7 @@ export class StartScene extends Phaser.Scene {
     private timeAccumulator = 0.0;
     private timeUpdateTick = 1000/60;
 
+    private buttonTutorial: Button;
     private buttonStart: Button;
     private buttonCredits: Button;
 
@@ -22,6 +23,7 @@ export class StartScene extends Phaser.Scene {
 
 
     private titleText: Phaser.GameObjects.Text;
+    private tutorialText: Phaser.GameObjects.Text;
     private startText: Phaser.GameObjects.Text;
     private settingsText: Phaser.GameObjects.Text;
     private chooseModeText: Phaser.GameObjects.Text;
@@ -40,7 +42,6 @@ export class StartScene extends Phaser.Scene {
     private Radius=150;
     private path;
     private path2;
-    private graphics;
     private ship;
     private ship2;
 
@@ -66,14 +67,14 @@ export class StartScene extends Phaser.Scene {
         // creat path 1
         this.path = new Phaser.Curves.Path(this.Player1start.x+this.Radius-25, 1900);
         this.path.lineTo(this.Player1start.x+this.Radius-25, this.Player1start.y-this.Radius);
-        this.path.ellipseTo(this.Radius, this.Radius, 0, 90, true);
+        this.path.ellipseTo(this.Radius, this.Radius, 0, 90, true, 0);
         this.path.lineTo(this.Player1start.x-5, this.Player1start.y);
         this.path.lineTo(this.Player1start.x, this.Player1start.y);
 
         // creat path 2
         this.path2 = new Phaser.Curves.Path(this.Player2start.x-this.Radius+25, 1900);
         this.path2.lineTo(this.Player2start.x-this.Radius+25, this.Player2start.y-this.Radius);
-        this.path2.ellipseTo(-this.Radius, -this.Radius, 0, 270, false);
+        this.path2.ellipseTo(-this.Radius, -this.Radius, 0, 270, false, 0);
         this.path2.lineTo(this.Player2start.x+15, this.Player2start.y);
         this.path2.lineTo(this.Player2start.x, this.Player2start.y);
 
@@ -122,6 +123,18 @@ export class StartScene extends Phaser.Scene {
         this.buttonStart.setPosition(1920/2-150, 1080/2-75);
 
         this.startText = this.add.text(1920/2-70, 1080/2-110, "Start Game", {
+            fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
+
+
+        this.buttonTutorial = new Button(this, 100, 100, "button_shadow",
+            "button_bg", "button_fg", "button_resume",0.95,
+            ()=>{
+                this.scene.launch('FadeScene', {shut: 'StartScene', start: 'TutorialScene', mode: '0'});
+            });
+
+        this.buttonTutorial.setPosition(1920/2-150, 1080/2-175);
+
+        this.tutorialText = this.add.text(1920/2-70, 1080/2-210, "Noob? Tutorial!", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
 
@@ -193,7 +206,6 @@ export class StartScene extends Phaser.Scene {
         this.buttonMP = new Button(this, 1920/2-280, 1080/2+75, "button_shadow",
             "button_bg", "button_fg", "multiplayer", 1, ()=>{
                 this.scene.launch('FadeScene', {shut: 'StartScene', start: 'GuiScene', mode: '0'});
-                this.scene.bringToTop('FadeScene')
             });
         this.multiText = this.add.text(1920/2-200, 1080/2+50, "Play against a human friend", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
@@ -266,6 +278,7 @@ export class StartScene extends Phaser.Scene {
             this.timeAccumulator -= this.timeUpdateTick;
 
             this.buttonStart.updateStep();
+            this.buttonTutorial.updateStep();
             this.buttonCredits.updateStep();
             this.buttonSP.updateStep();
             this.buttonMP.updateStep();
@@ -280,6 +293,8 @@ export class StartScene extends Phaser.Scene {
 
     private changeToMode(): void{
         this.titleText.setVisible(false);
+        this.buttonTutorial.removeInteractive();
+        this.buttonTutorial.setInvisible();
         this.buttonStart.removeInteractive();
         this.buttonStart.setInvisible();
         this.startText.setVisible(false);
@@ -322,6 +337,9 @@ export class StartScene extends Phaser.Scene {
 
     private returnToMain(): void{
         this.titleText.setVisible(true);
+        this.buttonTutorial.restoreInteractive();
+        this.buttonTutorial.setVisible();
+        this.tutorialText.setVisible(true);
         this.buttonStart.restoreInteractive();
         this.buttonStart.setVisible();
         this.startText.setVisible(true);
@@ -363,6 +381,9 @@ export class StartScene extends Phaser.Scene {
     }
 
     private changeToCredits():void{
+        this.buttonTutorial.setInvisible();
+        this.buttonTutorial.removeInteractive();
+        this.tutorialText.setVisible(false);
         this.buttonStart.setInvisible();
         this.buttonStart.removeInteractive();
         this.startText.setVisible(false);
@@ -387,6 +408,9 @@ export class StartScene extends Phaser.Scene {
         this.buttonFromCreditsToMain.removeInteractive();
         this.backText.setVisible(false);
 
+        this.buttonTutorial.setVisible();
+        this.buttonTutorial.restoreInteractive();
+        this.tutorialText.setVisible(true);
         this.buttonStart.setVisible();
         this.buttonStart.restoreInteractive();
         this.startText.setVisible(true);

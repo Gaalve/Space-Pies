@@ -952,10 +952,10 @@ export class ScenePiAnimation extends Phaser.Scene {
         animation.resetParams();
         animation.id = this.generateGUID();
         animation.duration = 200;
-        animation.fromX = animation.text.x;
-        animation.fromY = animation.text.y;
-        animation.toX = animation.text.x;
-        animation.toY = animation.text.y;
+        animation.fromX = animation.tutHeadline.x;
+        animation.fromY = animation.tutHeadline.y;
+        animation.toX = animation.tutHeadline.x;
+        animation.toY = animation.tutHeadline.y;
         animation.duration = 200;
         animation.vanish = true;
         animation.move = false;
