@@ -54,7 +54,7 @@ export class FullPiCalcScene extends Phaser.Scene {
         this.background.setDepth(-1);
 
 
-        let style = {fill: '#fff', fontFamily: '"Roboto"', fontSize: 24};
+        let style = {fill: '#fff', fontFamily: '"Roboto"', fontSize: 28};
         this.hint = this.add.text(1600, 50, "Scroll with W, S", style);
 
         this.close = new Button(this, 1860, 60, "button_shadow",
@@ -84,34 +84,35 @@ export class FullPiCalcScene extends Phaser.Scene {
         this.reset();
         if(!this.scene.isVisible())return;
         let y = 50;
-        let style = {fill: '#fff', fontFamily: '"Roboto"', fontSize: 16};
+        let style = {fill: '#fff', fontFamily: '"Roboto"', fontSize: 19};
         this.piAnimFull.replications.forEach(r=>{
             let maxSize = 150;
             if(r.length>maxSize){
                 while(r.length > maxSize) {
+
                     let idx = r.lastIndexOf('.', maxSize);
                     let sr = r.substr(0, idx);
                     r = '   ' + r.substr(idx);
                     let text = this.add.text(50, y, sr, style);
                     this.curTexts.push(text);
-                    y += 24;
                     text.setData("y", y);
+                    y += 24;
                 }
             }
             let text = this.add.text(50,y, r, style);
             this.curTexts.push(text);
-            y += 24;
             text.setData("y", y);
+            y += 38;
         });
         this.curMaxY = y;
     }
 
     public scrollDown(): void{
-        this.scroll(this.scrollY-0.01);
+        this.scroll(this.scrollY-0.008);
     }
 
     public scrollUp(): void{
-        this.scroll(this.scrollY+0.01);
+        this.scroll(this.scrollY+0.008);
     }
 
     public scroll(y: number){ //between 0 and 1
