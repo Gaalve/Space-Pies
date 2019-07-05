@@ -12,9 +12,7 @@ export class Infobox
     private scene: Scene;
     private tooltip: Text;
     private box: Graphics;
-
-    constructor(scene: Scene)
-    {
+    constructor(scene: Scene) {
         this.tooltipStrings = new Map<GameObject, string>();
         this.scene = scene;
         this.box = this.scene.add.graphics();
@@ -26,8 +24,7 @@ export class Infobox
         this.tooltip.setDepth(100);
     }
 
-    public addTooltipInfo(object: GameObject, info: string , callbacks?: (()=>void)[])
-    {
+    public addTooltipInfo(object: GameObject, info: string , callbacks?: (()=>void)[]) {
         object.setInteractive();
         this.tooltipStrings.set(object, info);
         let textWidth = this.calculateTextWidth(info);
@@ -35,6 +32,8 @@ export class Infobox
         let xFix = 50;
         object.on('pointermove', (pointer: Phaser.Input.Pointer) =>
         {
+            if (!this.getTooltipText(object))
+                return;
             let x = pointer.x < 1920/2 ? pointer.x + 20 : pointer.x - textWidth - xFix;
             let y = pointer.y + 20;
             this.tooltip.setPosition(x + 20, y + 20);
@@ -44,6 +43,8 @@ export class Infobox
         });
         object.on('pointerover', (pointer: Phaser.Input.Pointer) =>
         {
+            if (!this.getTooltipText(object))
+                return;
             this.executeCallback(callbacks, 1);
             if (this.tooltip.text.toString() == this.getTooltipText(object).toString()) return;
 
@@ -95,7 +96,7 @@ export class Infobox
         return textWidth;
     }
 
-    public getTooltipText(object: any)
+    public getTooltipText(object: GameObject)
     {
         return this.tooltipStrings.get(object);
     }

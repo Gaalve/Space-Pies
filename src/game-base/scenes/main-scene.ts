@@ -689,6 +689,7 @@ export class MainScene extends Phaser.Scene {
         this.close = new Button(this, 1350, 1080-100, "button_shadow",
             "button_bg", "button_fg", "button_cancel_black",0.95,
             ()=>{
+
                 this.close.removeInteractive();
                 if(this.shopSActive){
                     this.closeShop(this.shopS, this.shopSText, false);
@@ -710,6 +711,8 @@ export class MainScene extends Phaser.Scene {
                     this.closeShop(this.shopM, this.shopMText, false);
                     this.shopMActive = false;
                 }
+
+
                 this.shop_bg_back2.setVisible(false);
                 this.closeShop(this.shop1, this.shop1Text, true);
                 this.openShop.setVisible(true);
@@ -793,20 +796,8 @@ export class MainScene extends Phaser.Scene {
         infobox.addTooltipInfo(this.close.bg, "Close the shop to see more of these beautiful stars.", [() =>this.close.onClick(), () => {this.close.hovering = true; this.close.updateStep();}, () => {this.close.hovering = false; this.close.updateStep();}]);
         infobox.addTooltipInfo(this.motors.bg, "Buy new Engines to boost your Evasion.", [() => this.motors.onClick(), () => {this.motors.hovering = true; this.motors.updateStep();}, () => {this.motors.hovering = false; this.motors.updateStep();}]);
 
-        /* ## Weapons ## */
-
-        /* ## Shields ## */
-
-
-        infobox.addTooltipInfo(this.energySym[0], "The cheapest part costs " + this.energyCostText[0].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energySym[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energySym[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energySym[3], "The cheapest part costs " + this.energyCostText[3].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energyCostText[0], "The cheapest part costs " + this.energyCostText[0].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energyCostText[1], "The cheapest part costs " + this.energyCostText[1].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energyCostText[2], "The cheapest part costs " + this.energyCostText[2].text.toString() + " energy.");
-        infobox.addTooltipInfo(this.energyCostText[3], "The cheapest part costs " + this.energyCostText[3].text.toString() + " energy.");
-
+        this.energySym.forEach((e, idx)=>infobox.addTooltipInfo(e, "The cheapest part costs " + this.energyCostText[idx].text + " energy."))
+        this.energyCostText.forEach((e)=>infobox.addTooltipInfo(e, "The cheapest part costs " + e.text + " energy."))
 
         this.closeShop(this.shop1, this.shop1Text, true);
 
@@ -1345,11 +1336,9 @@ export class MainScene extends Phaser.Scene {
         if(array == this.shop1) {
             for (let i of this.energySym) {
                 i.setVisible(false);
-                i.removeInteractive()
             }
             for (let t of this.energyCostText) {
                 t.setVisible(false);
-                t.removeInteractive()
             }
         }
         else if(array == this.shopT) {
@@ -2157,6 +2146,7 @@ export class MainScene extends Phaser.Scene {
     updateEnergyCostText(): void{
         let type = "";
         for(let i = 0; i < 5; i++){
+            this.infobox.removeTooltipInfo(this.energyCostText[i]);
             this.children.remove(this.energyCostText[i]);
             switch (i) {
                 case(0): type = "nano"; break;
@@ -2169,13 +2159,14 @@ export class MainScene extends Phaser.Scene {
             if(this.turn.getCurrentPlayer().getEnergy() < this.turn.getCurrentPlayer().getEnergyCost(type)){
                 this.energyCostText[i] = this.add.text(350+(200*i), 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(type), {
                     fill: '#be0120', fontFamily: '"Roboto"', fontSize: 25, stroke:'#be0120', strokeThickness: 2});
+
             }
             else if(this.turn.getCurrentPlayer().getEnergy() >= this.turn.getCurrentPlayer().getEnergyCost(type)){
 
                 this.energyCostText[i] = this.add.text(350+(200*i), 1080-200, "x "+this.turn.getCurrentPlayer().getEnergyCost(type), {
                     fill: '#fff', fontFamily: '"Roboto"', fontSize: 25, strokeThickness: 2});
             }
-
+            this.infobox.addTooltipInfo(this.energyCostText[i], "The cheapest part costs " + this.energyCostText[i].text.toString() + " energy.", null);
         }
     }
     regShield(type):void{

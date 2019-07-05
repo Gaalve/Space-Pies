@@ -19,7 +19,7 @@ export class Button{
     public readonly inactive: Phaser.GameObjects.Sprite;
     public alt: Phaser.GameObjects.Sprite;
 
-    //Color Interpolation
+    //Color Interpolation s
     private readonly startColor: Phaser.Display.Color;
     private readonly endColor: Phaser.Display.Color;
     private colorIdx: integer;
