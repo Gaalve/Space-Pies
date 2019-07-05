@@ -295,6 +295,7 @@ export class StartScene extends Phaser.Scene {
         this.titleText.setVisible(false);
         this.buttonTutorial.removeInteractive();
         this.buttonTutorial.setInvisible();
+        this.tutorialText.setVisible(false);
         this.buttonStart.removeInteractive();
         this.buttonStart.setInvisible();
         this.startText.setVisible(false);
