@@ -372,6 +372,8 @@ export class MainScene extends Phaser.Scene {
         this.data.set("roundFG", this.roundFG);
 
         this.system.start();
+
+
     }
 
 

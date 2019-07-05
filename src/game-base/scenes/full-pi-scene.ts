@@ -90,29 +90,28 @@ export class FullPiScene extends Phaser.Scene {
             piScene.fullPiText1.y =  piScene.fullPiText1.y - 100;
             piScene.fullPiText2.y =  piScene.fullPiText2.y - 100;
             piScene.fullPiText3.y =  piScene.fullPiText3.y - 100;
-            for ( let i = 0; i < 15 && i < scene.fullPiCache1.length; i++)
-                piScene.addToPiOutput1(piScene.fullPiCache1.shift(), true);
-            for ( let i = 0; i < 15 && i < scene.fullPiCache2.length; i++)
-                piScene.addToPiOutput2(piScene.fullPiCache2.shift(), true);
-            for ( let i = 0; i < 15 && i < scene.fullPiCache3.length; i++)
-                piScene.addToPiOutput3(piScene.fullPiCache3.shift(), true);
-        });
-        this.input.keyboard.on('keyup-' + 'E', function (event) {
-            let piScene = scene
+            // for ( let i = 0; i < 15 && i < scene.fullPiCache1.length; i++)
+            //     piScene.fullPiCache1.shift()
+            // for ( let i = 0; i < 15 && i < scene.fullPiCache2.length; i++)
+            //     piScene.fullPiCache2.shift()
+            // for ( let i = 0; i < 15 && i < scene.fullPiCache3.length; i++)
+            //     piScene.fullPiCache3.shift()
 
+            // this.refresh();
         });
+
 
         this.input.keyboard.on('keydown-' + 'Q', function (event) {
             let piScene = scene
             piScene.fullPiText1.y =  piScene.fullPiText1.y + 100;
             piScene.fullPiText2.y =  piScene.fullPiText2.y + 100;
             piScene.fullPiText3.y =  piScene.fullPiText3.y + 100;
-            for ( let i = 0; i < 15 && i < scene.fullPiCache1.length; i++)
-                piScene.addToPiOutput1(piScene.fullPiCache1.shift(), true);
-            for ( let i = 0; i < 15 && i < scene.fullPiCache2.length; i++)
-                piScene.addToPiOutput2(piScene.fullPiCache2.shift(), true);
-            for ( let i = 0; i < 15 && i < scene.fullPiCache3.length; i++)
-                piScene.addToPiOutput3(piScene.fullPiCache3.shift(), true);
+            // for ( let i = 0; i < 15 && i < scene.fullPiCache1.length; i++)
+            //     piScene.addToPiOutput1(piScene.fullPiCache1.shift(), true);
+            // for ( let i = 0; i < 15 && i < scene.fullPiCache2.length; i++)
+            //     piScene.addToPiOutput2(piScene.fullPiCache2.shift(), true);
+            // for ( let i = 0; i < 15 && i < scene.fullPiCache3.length; i++)
+            //     piScene.addToPiOutput3(piScene.fullPiCache3.shift(), true);
         });
         this.input.keyboard.on('keyup-' + 'Q', function (event) {
             let piScene = scene
@@ -121,6 +120,11 @@ export class FullPiScene extends Phaser.Scene {
 
 
 
+        this.background.setVisible(false);
+        this.fullPiText1.setVisible(false);
+        this.fullPiText2.setVisible(false);
+        this.fullPiText3.setVisible(false);
+        this.resetButton.setVisible(false);
     }
 
     refresh()
