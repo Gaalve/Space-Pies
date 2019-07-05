@@ -118,7 +118,7 @@ export class Player {
         this.motor = new Motor(scene, this, x, y, piAnim);
         this.malusEnergy = 0;
 
-        this.energy = 555;
+        this.energy = 55;
 
         let p = this.getNameIdentifier().charAt(1);
         this.buildLocksPi(p, bt);
