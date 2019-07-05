@@ -34,6 +34,7 @@ export class FullPiCalcScene extends Phaser.Scene {
     public showPi(){
         this.scene.setVisible(true);
         this.background.setInteractive();
+        this.close.setInvisible();
         this.drawPi();
     }
 
@@ -41,6 +42,7 @@ export class FullPiCalcScene extends Phaser.Scene {
         this.scene.resume("MainScene");
         this.scene.setVisible(false);
         this.background.removeInteractive();
+        this.close.setVisible();
         this.reset();
     }
 
