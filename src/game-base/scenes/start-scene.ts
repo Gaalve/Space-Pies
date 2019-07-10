@@ -45,6 +45,7 @@ export class StartScene extends Phaser.Scene {
     private ship;
     private ship2;
 
+
     preload(): void {
         this.load.pack(
             "preload",
