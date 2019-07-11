@@ -45,6 +45,7 @@ export class StartScene extends Phaser.Scene {
     private ship;
     private ship2;
 
+
     preload(): void {
         this.load.pack(
             "preload",
@@ -120,9 +121,9 @@ export class StartScene extends Phaser.Scene {
             this.changeToMode();
         });
 
-        this.buttonStart.setPosition(1920/2-150, 1080/2-75);
+        this.buttonStart.setPosition(1920/2-150, 1080/2-225);
 
-        this.startText = this.add.text(1920/2-70, 1080/2-110, "Start Game", {
+        this.startText = this.add.text(1920/2-70, 1080/2-260, "Start Game", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
 
@@ -132,9 +133,9 @@ export class StartScene extends Phaser.Scene {
                 this.scene.launch('FadeScene', {shut: 'StartScene', start: 'TutorialScene', mode: '0'});
             });
 
-        this.buttonTutorial.setPosition(1920/2-150, 1080/2-175);
+        this.buttonTutorial.setPosition(1920/2-150, 1080/2-75);
 
-        this.tutorialText = this.add.text(1920/2-70, 1080/2-210, "Noob? Tutorial!", {
+        this.tutorialText = this.add.text(1920/2-70, 1080/2-110, "Noob? Tutorial!", {
             fill: '#fff', fontFamily: '"Roboto"', fontSize: 42, strokeThickness: 2});
 
 
